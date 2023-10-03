@@ -50,7 +50,7 @@ const ItemList = props => {
             alignItems: 'center',
             marginBottom: 10
           }}>
-          Price: {data.item.weight}
+          Weight: {data.item.weight}
         </Text>
       </View>
     </View>
