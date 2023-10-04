@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, LogBox, Image, } from 'react-native';
+import GoogleLogin from './src/googleLogin/googleLogin';
+
 
 
 const App = () => {
 
   return (
     <View>
-      <Text>App</Text>
+      <GoogleLogin/>
     </View>
   );
 };
