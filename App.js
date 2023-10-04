@@ -1,15 +1,12 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, LogBox, Image, } from 'react-native';
-import GoogleLogin from './src/googleLogin/googleLogin';
-
+import Screen1 from './src/animation/Screen1';
 
 
 const App = () => {
 
   return (
-    <View>
-      <GoogleLogin/>
-    </View>
+    <Screen1/>
   );
 };
 
