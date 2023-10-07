@@ -9,13 +9,13 @@ import {Provider} from './src/hooks/CounterContext';
 
 const App = () => {
   return (
-    <GoogleLogin />
+    //<GoogleLogin />
     //Hook ---->
-    //   <Provider>
-    //   <View style={styles.container}>
-    //     <Counter />
-    //   </View>
-    // </Provider>
+      <Provider>
+      <View style={styles.container1}>
+        <Counter />
+      </View>
+    </Provider>
     // <----Hook
   );
 };
