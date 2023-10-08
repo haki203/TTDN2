@@ -59,10 +59,10 @@ const Screen1 = () => {
           {
             (heightView < 60) ?
               (
-                <View style={{ backgroundColor: '#668cff', height: 70, padding: 10, borderRadius: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <View style={{ justifyContent: 'center' }}>
-                    <Text style={{ fontSize: 18, }}>Đắc nhân tâm</Text>
-                    <Text style={{ fontSize: 14, }}>Napoleon Hill</Text>
+                <View style={{ backgroundColor: '#FFEDCC', height: 70, padding: 10, borderRadius: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <View style={{ justifyContent: 'center',paddingLeft:20 }}>
+                    <Text style={{ fontSize: 20,color:'black',fontWeight:'bold' }}>Đắc nhân tâm</Text>
+                    <Text style={{ fontSize: 16, color:'black'}}>Napoleon Hill</Text>
                   </View>
                 </View>
               ) :

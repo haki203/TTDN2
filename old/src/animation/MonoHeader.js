@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   header: {
     position: 'absolute',
     width: '100%',
-    backgroundColor: '#AF0C6E',
+    backgroundColor: '#3E7490',
   },
   upperHeader: {
     flexDirection: 'row',
