@@ -12,7 +12,9 @@ import FavouriteScreen from '../components/FavouriteScreen';
 import LibraryScreen from '../components/LibraryScreen';
 import DetailScreen from '../components/DetailScreen';
 import SearchScreen from '../components/SearchScreen';
-
+import SignUpScreen from '../components/SignUpScreen';
+import CategoryFilterScreen from '../components/CategoryFilterScreen';
+import ReadyGoScreen from '../components/ReadyGoScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Users = () => {
@@ -33,6 +35,17 @@ const Mains = () => {
 
     )
 }
+const ManChao = () => {
+    return (
+        <Stack.Navigator initialRouteName='Sign' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Sign" component={SignUpScreen} />
+            <Stack.Screen name='Filter' component={CategoryFilterScreen} />
+            <Stack.Screen name='Go' component={ReadyGoScreen} />
+        </Stack.Navigator>
+
+    )
+}
+
 
 const Home = ({ scrollY }) => {
     const isTabVisibleRedux = useSelector(state => state.scroll.isTabVisible);
@@ -143,6 +156,13 @@ const Play = () => {
                     </ScreenWrapper>
                 )}
             </Stack.Screen>
+            <Stack.Screen name="SignUp">
+                {(props) => (
+                    <ScreenWrapper>
+                        <SignUpScreen navigation={props.navigation} />
+                    </ScreenWrapper>
+                )}
+            </Stack.Screen>
         </Stack.Navigator>
     );
 };
@@ -150,7 +170,7 @@ const AppNavigator = () => {
 
     return (
         <>
-            <Home />
+            <ManChao />
         </>
     )
 }
