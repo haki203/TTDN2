@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import store from './store/store';
 
 import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
 import AppNavigator from './navigation/AppNavigator';
 
 
