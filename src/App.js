@@ -7,17 +7,20 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import AppNavigator from './navigation/AppNavigator';
+import Detail from './tranthuc/Detail';
+import BookDetail from './tranthuc/BookDetail';
 
 
 const App = () => {
 
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <AppNavigator />
-      </NavigationContainer>
-    </Provider>
-
+    // <Provider store={store}>
+    //   <NavigationContainer>
+    //     <AppNavigator />
+    //   </NavigationContainer>
+    // </Provider>
+    //<Detail/>
+    <BookDetail/>
   );
 };
 

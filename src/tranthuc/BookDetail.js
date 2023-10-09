@@ -1,0 +1,322 @@
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native'
+import React, { useState } from 'react';
+import Icon_1 from 'react-native-vector-icons/Ionicons';
+import Icon_2 from 'react-native-vector-icons/FontAwesome';
+import Icon_3 from 'react-native-vector-icons/MaterialIcons';
+
+const BookDetail = () => {
+    const [isHearted, setIsHearted] = useState(false);
+
+    const handleHeartPress = () => {
+        setIsHearted(!isHearted);
+    };
+    return (
+        <ScrollView>
+            <View style={styles.Container} >
+                <View style={styles.Icon_Container}>
+                    <TouchableOpacity>
+                        <Icon_1 name="chevron-back" size={30} color="black" />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleHeartPress}>
+                        <Icon_2 name={isHearted ? 'bookmark' : 'bookmark-o'} size={30} color="red" />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.Image_Container}>
+                    <View>
+                        <Image style={styles.View_Image} source={require('../assets/images/bookdetail.png')} />
+                    </View>
+                    <View>
+                        <Text style={styles.View_Text1}>Catcher in the Rye</Text>
+                        <Text style={styles.View_Text2}>J.D. Salinger</Text>
+                    </View>
+                    <View style={styles.View_Danhgia}>
+                        <Icon_2 style={styles.Star_Danhgia} name="star" size={20} color="#272956" />
+                        <Icon_2 style={styles.Star_Danhgia} name="star" size={20} color="#272956" />
+                        <Icon_2 style={styles.Star_Danhgia} name="star" size={20} color="#272956" />
+                        <Icon_2 style={styles.Star_Danhgia} name="star" size={20} color="#272956" />
+                        <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={20} color="#272956" />
+                        <Text style={styles.Text_DanhGia}>4.5</Text>
+                    </View>
+                </View>
+                <View style={styles.View_MoTa}>
+                    <View>
+                        <Text style={styles.Text_MoTa1}>About the author</Text>
+                        <Text style={styles.Text_MoTa2}>J.D. Salinger was an American writer, best known for his 1951 novel The Catcher in the Rye. Before its publi cation, Salinger published several short stories in Story magazine</Text>
+                    </View>
+                    <View style={styles.View_Text3}>
+                        <Text style={styles.Text_MoTa1}>Overview</Text>
+                        <Text style={styles.Text_MoTa2}>The Catcher in the Rye is a novel by J. D. Salinger, partially published in serial form in 1945–1946 and as a novel in 1951. It was originally intended for adu lts but is often read by adolescents for its theme of angst, alienation and as a critique......</Text>
+                    </View>
+                </View>
+                <View style={styles.View_Click}>
+                    <TouchableOpacity style={styles.View_Click1}>
+                        <Icon_1 name="document-text" size={16} color="white" />
+                        <Text style={styles.Text_Click}>Đọc</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.View_Click1}>
+                        <Icon_1 name="play-circle" size={16} color="white" />
+                        <Text style={styles.Text_Click}>Nghe</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.View_BinhLuan}>
+                    <Text style={styles.Text_BinhLuan}>Bình luận</Text>
+                    <View style={styles.View_Cmt}>
+                        <Image style={styles.View_ImageBook} source={require('../assets/images/bookdetail.png')} />
+                        <View style={styles.View_Cmt_DocGia}>
+                            <View style={styles.View_Cmt_Star}>
+                                <Text style={styles.Text_Cmt}>4.5</Text>
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={20} color="#272956" />
+                                <Text style={styles.Text_Cmt}>(30)</Text>
+                            </View>
+                            <View style={styles.View_NoiDung}>
+                                <View>
+                                    <Text style={styles.Text_Danhgia1}>4.5/5.0</Text>
+                                    <Text style={styles.Text_Danhgia1}>NỘI DUNG</Text>
+                                </View>
+                                <View style={styles.verticalLine}></View>
+                                <View>
+                                    <Text style={styles.Text_Danhgia1}>4.5/5.0</Text>
+                                    <Text style={styles.Text_Danhgia1}>NỘI DUNG</Text>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={styles.View_DocGia}>
+                        <Text style={styles.Text_DocGia}>Bởi Trần Thức ngày 09/10/2023</Text>
+                        <View style={styles.View_NoiDung_DocGia}>
+                            <Text style={styles.Text_NoiDung_DocGia}>Nội dung:</Text>
+                            <View style={styles.Star}>
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={20} color="#272956" />
+                            </View>
+                        </View>
+                        <View style={styles.View_NoiDung_DocGia}>
+                            <Text style={styles.Text_NoiDung_DocGia}>Giọng đọc:</Text>
+                            <View style={styles.Star1}>
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={20} color="#272956" />
+                            </View>
+                        </View>
+                        <View>
+                            <Text style={styles.Text_Review}>Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.</Text>
+                        </View>
+                    </View>
+                    <TouchableOpacity style={styles.Xem_All}>
+                        <Text style={styles.Xem_All_Cmt}>Xem tất cả 136 đánh giá</Text>
+                        <Icon_3 style={styles.Next} name="navigate-next" size={30} color="white" />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </ScrollView>
+    )
+}
+
+export default BookDetail
+
+const styles = StyleSheet.create({
+    Container: {
+        flex: 1,
+        backgroundColor: 'white',
+    },
+    Icon_Container: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 20,
+    },
+    Image_Container: {
+        alignItems: 'center',
+    },
+    View_Image: {
+        width: 220,
+        height: 320,
+        borderRadius: 20,
+    },
+    View_Text1: {
+        fontFamily: 'Poppins',
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#272956',
+    },
+    View_Text2: {
+        paddingTop: 5,
+        fontFamily: 'Poppins',
+        fontSize: 18,
+        color: '#9D9D9D',
+        textAlign: 'center',
+    },
+    View_Danhgia: {
+        flexDirection: 'row',
+    },
+    Star_Danhgia: {
+        paddingTop: 5,
+        paddingLeft: 5,
+    },
+    Text_DanhGia: {
+        fontSize: 18,
+        paddingLeft: 10,
+        paddingTop: 5,
+        color: '#272956',
+        fontWeight: 'bold',
+        fontFamily: 'Poppins',
+    },
+    View_MoTa: {
+        padding: 20,
+    },
+    View_Text3: {
+        paddingTop: 10,
+    },
+    Text_MoTa1: {
+        fontFamily: 'Poppins',
+        color: '#272956',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    Text_MoTa2: {
+        fontFamily: 'Poppins',
+        color: '#9D9D9D',
+        fontSize: 16,
+        paddingTop: 10,
+    },
+    View_Click1: {
+        backgroundColor: '#D45555',
+        borderRadius: 10,
+        width: 160,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row'
+    },
+    Text_Click: {
+        color: '#FFFFFF',
+        fontSize: 16,
+        paddingTop: 16,
+        paddingBottom: 16,
+        paddingLeft: 7,
+        fontWeight: 'bold',
+        fontFamily: 'Poppins',
+    },
+    View_Click: {
+        paddingLeft: 20,
+        paddingRight: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+    },
+    View_BinhLuan: {
+        padding: 20,
+    },
+    Text_BinhLuan: {
+        fontWeight: 'bold',
+        fontFamily: 'Poppins',
+        color: '#272956',
+        fontSize: 18,
+    },
+    View_ImageBook: {
+        width: 80,
+        height: 122,
+        borderRadius: 10,
+    },
+    View_Cmt: {
+        paddingTop: 15,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    View_Cmt_DocGia: {
+        flexDirection: 'column',
+        backgroundColor: '#F4F4F4',
+        width: 260,
+        height: 117,
+        borderRadius: 10,
+    },
+    View_Cmt_Star: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        paddingTop: 10,
+    },
+    View_NoiDung: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        padding: 20,
+    },
+    Text_Cmt: {
+        fontWeight: 'bold',
+        fontFamily: 'Poppins',
+        color: '#272956',
+        fontSize: 16,
+        paddingLeft: 5,
+    },
+    Star_Danhgia1: {
+        paddingLeft: 5,
+    },
+    verticalLine: {
+        marginLeft: 15,
+        marginRight: 15,
+        width: 1,
+        height: '100%',
+        backgroundColor: 'black',
+    },
+    Text_Danhgia1: {
+        fontSize: 14,
+        fontFamily: 'Poppins',
+        color: '#272956',
+        textAlign: 'center'
+    },
+    View_DocGia: {
+        borderRadius: 10,
+        marginTop: 15,
+        backgroundColor: '#F4F4F4',
+        padding: 15,
+    },
+    Text_DocGia: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        fontFamily: 'Poppins',
+        color: '#272956'
+    },
+    Text_Review: {
+        paddingTop: 10,
+        fontSize: 16,
+        fontFamily: 'Poppins',
+        color: '#9D9DA1'
+    },
+    Xem_All_Cmt: {
+        paddingTop: 10,
+        fontSize: 18,
+        fontFamily: 'Poppins',
+        color: '#272956',
+        fontWeight: 'bold'
+    },
+    Xem_All: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    View_NoiDung_DocGia: {
+        flexDirection: 'row',
+    },
+    Star: {
+        flexDirection: 'row',
+        paddingLeft: 20,
+    },
+    Star1: {
+        flexDirection: 'row',
+        paddingLeft: 12,
+    },
+    Next: {
+        paddingTop: 6,
+        color: '#272956',
+    },
+    Text_NoiDung_DocGia: {
+        fontSize: 16,
+        fontFamily: 'Poppins',
+        color: '#272956',
+    },
+})
