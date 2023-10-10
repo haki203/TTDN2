@@ -7,7 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import AppNavigator from './navigation/AppNavigator';
-
+import ItemListView from './components/ItemListView';
 
 const App = () => {
 
