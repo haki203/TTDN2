@@ -41,6 +41,7 @@ const ManChao = () => {
             <Stack.Screen name="Sign" component={SignUpScreen} />
             <Stack.Screen name='Filter' component={CategoryFilterScreen} />
             <Stack.Screen name='Go' component={ReadyGoScreen} />
+            <Stack.Screen name='Search' component={SearchScreen} />
         </Stack.Navigator>
 
     )
