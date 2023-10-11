@@ -7,15 +7,18 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import AppNavigator from './navigation/AppNavigator';
+import PlayScreen from './components/play/PlayScreen';
+console.disableYellowBox = true;
 
 
 const App = () => {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
+      {/* <NavigationContainer>
         <AppNavigator />
-      </NavigationContainer>
+      </NavigationContainer> */}
+      <PlayScreen/>
     </Provider>
 
   );

@@ -12,6 +12,7 @@ import FavouriteScreen from '../components/FavouriteScreen';
 import LibraryScreen from '../components/LibraryScreen';
 import DetailScreen from '../components/DetailScreen';
 import SearchScreen from '../components/SearchScreen';
+import PlayScreen from '../components/play/PlayScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -64,7 +65,7 @@ const Home = ({ scrollY }) => {
                 }}
             >
                 {() => (
-                    <HomeScreen />
+                    <PlayScreen />
                 )}
             </Tab.Screen>
             <Tab.Screen
