@@ -167,7 +167,7 @@ const SearchScreen = (props) => {
         </View>
       </View>
       <View style={styles.listContainer}>
-        <ScrollView>
+
           <Text style={styles.content}>{latestText}</Text>
           <FlatList
             data={filteredData}
@@ -176,7 +176,6 @@ const SearchScreen = (props) => {
             showsVerticalScrollIndicator={false}
             disableVirtualization={true} // Thêm thuộc tính này
           />
-        </ScrollView>
       </View>
     </View>
   )
@@ -190,7 +189,7 @@ const styles = StyleSheet.create({
     backgroundColor: backroundContainer
   },
   hearderContainer: {
-    height: height * 0.25,
+    height: height * 0.22,
   },
   listContainer: {
     height: height * 0.75,

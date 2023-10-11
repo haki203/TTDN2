@@ -1,15 +1,15 @@
-import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity,Dimensions } from 'react-native'
 import React, { useState } from 'react'
 import ItemFilter from './ItemFilter'
 import ItemButtonFilter from './ItemButtonFilter'
 import ItemSearch from './ItemSearch'
-
+const { width, height } = Dimensions.get('window');
 const CategoryFilterScreen = (props) => {
     const { navigation } = props;
     return (
         <View style={styles.container}>
             <View>
-                <Image source={require('../assets/images/Study.png')}></Image>
+                <Image style={{height:height/2.2}} source={require('../assets/images/Study.png')}></Image>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 38, marginHorizontal: 170 }}>
                 <View style={{ width: 15, height: 6, backgroundColor: 'rgba(213, 85, 85, 0.15)', borderRadius: 3 }} />
@@ -22,10 +22,12 @@ const CategoryFilterScreen = (props) => {
                     renderItem={({ item }) => <ItemButtonFilter product={item} />}
                     keyExtractor={item => item._id}
                     showsVerticalScrollIndicator={false}
+                    scrollEnabled={false}
                     horizontal={true}
                 />
                 <FlatList style={{marginTop: 8}}
                     data={dataNe1}
+                    scrollEnabled={false}
                     renderItem={({ item }) => <ItemButtonFilter product={item} />}
                     keyExtractor={item => item._id}
                     showsVerticalScrollIndicator={false}
@@ -33,6 +35,7 @@ const CategoryFilterScreen = (props) => {
                 />
                 <FlatList style={{marginTop: 8}}
                     data={dataNe2}
+                    scrollEnabled={false}
                     renderItem={({ item }) => <ItemButtonFilter product={item} />}
                     keyExtractor={item => item._id}
                     showsVerticalScrollIndicator={false}
@@ -40,6 +43,7 @@ const CategoryFilterScreen = (props) => {
                 />
                 <FlatList style={{marginTop: 8}}
                     data={dataNe3}
+                    scrollEnabled={false}
                     renderItem={({ item }) => <ItemButtonFilter product={item} />}
                     keyExtractor={item => item._id}
                     showsVerticalScrollIndicator={false}
@@ -49,6 +53,7 @@ const CategoryFilterScreen = (props) => {
             <View style={styles.filter}>
                 <FlatList
                     data={data}
+                    scrollEnabled={false}
                     renderItem={({ item }) => <ItemFilter products={item} />}
                     keyExtractor={item => item._id}
                     showsVerticalScrollIndicator={false}

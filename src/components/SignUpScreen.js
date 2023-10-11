@@ -1,16 +1,17 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity,Dimensions } from 'react-native'
 import React from 'react'
 import CategoryFilterScreen from './CategoryFilterScreen';
 import { Svg } from 'react-native-svg';
 const backroundContainer = '#FDFDFD';
 const ColorContent = '#272956';
 const ColorContent_1 = '#9D9D9D';
+const { width, height } = Dimensions.get('window');
 const SignUpScreen = (props) => {
   const { navigation } = props;
   return (
     <View style={styles.container}>
       <View>
-        <Image source={require('../assets/images/Study.png')}></Image>
+        <Image style={{height:height/2.2}} source={require('../assets/images/Study.png')}></Image>
       </View>
       <View style={{ flexDirection: 'row', marginTop: 38, marginHorizontal: 170}}>
         <View style={{ width: 26, height: 6, backgroundColor: '#D55555', borderRadius: 3 }} />
@@ -38,18 +39,16 @@ const styles = StyleSheet.create({
     backgroundColor: backroundContainer
   },
   content: {
-    marginHorizontal: 80.5,
     color: ColorContent,
     textAlign: 'center',
     fontSize: 20,
     fontWeight: '700',
     fontStyle: 'normal',
     lineHeight: 24,
-    marginTop: 110,
+    marginTop: height*0.1,
     fontFamily: 'Poppins'
   },
   content_1: {
-    width: 300,
     color: ColorContent_1,
     textAlign: 'center',
     marginHorizontal: 54,
@@ -61,18 +60,17 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins'
   },
   button: {
-    paddingVertical: 17,
-    paddingHorizontal: 69,
+    padding:15,
     backgroundColor: '#D45555',
-    display: 'flex',
     borderRadius: 10,
-    marginTop: 63,
+    marginTop: height*0.05,
+    width:140,
+    alignItems:'center'
   },
   textButton: {
     color: '#FFFFFF',
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: '700',
-    fontStyle: 'normal',
-    lineHeight: 18
+    
   }
 })

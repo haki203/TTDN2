@@ -1,19 +1,19 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity ,Dimensions} from 'react-native'
 import React from 'react'
-
+const { width, height } = Dimensions.get('window');
 const ReadyGoScreen = (props) => {
   const {navigation} = props
   return (
     <View style={styles.container}>
       <View>
-        <Image source={require('../assets/images/Study.png')}></Image>
+        <Image style={{height:height/2.2}} source={require('../assets/images/Study.png')}></Image>
       </View>
       <View style={{ flexDirection: 'row', marginTop: 38, marginHorizontal: 170 }}>
         <View style={{ width: 15, height: 6,backgroundColor: 'rgba(213, 85, 85, 0.15)' , borderRadius: 3 }} />
         <View style={{ marginLeft: 4, width: 15, height: 6,backgroundColor: 'rgba(213, 85, 85, 0.15)' , borderRadius: 3 }} />
         <View style={{ marginLeft: 4, width: 26, height: 6, backgroundColor: '#D55555', borderRadius: 3 }} />
       </View>
-      <View>
+      <View style={{alignItems:'center'}}>
         <Text style={styles.content}>You are ready to go!</Text>
         <Text style={styles.content_1}>Congratulation, any interesting topics will be shortly in your hands.</Text>
       </View>
@@ -34,22 +34,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#FDFDFD'
   },
   content: {
-    marginHorizontal: 130,
+    textAlign:'center',
     color: '#2E2E5D',
     fontSize: 16,
     fontWeight: '700',
     fontStyle: 'normal',
     lineHeight: 18,
-    marginTop: 110,
+    marginTop: height*0.1,
     alignSelf: 'stretch',
-    width: 287,
+    width: width,
     fontFamily: 'Poppins'
   },
   content_1: {
     width: 250,
     color: '#2E2E5D',
     textAlign: 'center',
-    marginHorizontal: 80,
     marginTop: 10,
     fontSize: 14,
     fontStyle: 'normal',
