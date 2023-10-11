@@ -1,15 +1,27 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, } from 'react-native'
 import React, { useState } from 'react';
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/FontAwesome';
 import Icon_3 from 'react-native-vector-icons/MaterialIcons';
 
 const BookDetail = () => {
+    const [showMore, setShowMore] = useState(false);
+
+    const toggleShowMore = () => {
+        setShowMore(prevShowMore => !prevShowMore);
+    };
+
     const [isHearted, setIsHearted] = useState(false);
 
     const handleHeartPress = () => {
         setIsHearted(!isHearted);
     };
+
+    const imageData = [
+        { id: '1', name1: 'Đắc Nhân Tâm', name2: 'Dale Carnegie', source: require('../assets/images/Dac-Nhan-Tam.jpg') },
+        { id: '2', name1: 'Hoàng Tử Bé', name2: 'Antoine de Saint-Exupéry', source: require('../assets/images/image.webp') },
+        { id: '3', name1: 'The CATCHER in the RYE', name2: 'J.D.Salinger', source: require('../assets/images/bookdetail.png') },
+    ];
     return (
         <ScrollView>
             <View style={styles.Container} >
@@ -21,6 +33,7 @@ const BookDetail = () => {
                         <Icon_2 name={isHearted ? 'bookmark' : 'bookmark-o'} size={30} color="red" />
                     </TouchableOpacity>
                 </View>
+                <View style={styles.Separator}></View>
                 <View style={styles.Image_Container}>
                     <View>
                         <Image style={styles.View_Image} source={require('../assets/images/bookdetail.png')} />
@@ -108,13 +121,41 @@ const BookDetail = () => {
                             </View>
                         </View>
                         <View>
-                            <Text style={styles.Text_Review}>Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.</Text>
+                            <Text style={styles.Text_Review}>Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.
+                                {showMore && (
+                                    <Text>
+                                        {' '}
+                                        Đó là 1 quyển sách tuyệt vời.
+                                    </Text>
+                                )}
+                                <TouchableOpacity onPress={toggleShowMore} style={styles.toggleButton}>
+                                    <Text style={styles.toggleButtonText_1}> {showMore ? 'Thu gọn' : 'Xem thêm'} </Text>
+                                </TouchableOpacity>
+                            </Text>
                         </View>
                     </View>
                     <TouchableOpacity style={styles.Xem_All}>
-                        <Text style={styles.Xem_All_Cmt}>Xem tất cả 136 đánh giá</Text>
+                        <Text style={styles.Xem_All_Cmt}>Xem tất cả 30 đánh giá</Text>
                         <Icon_3 style={styles.Next} name="navigate-next" size={30} color="white" />
                     </TouchableOpacity>
+                </View>
+                <View style={styles.Separator}></View>
+                <View style={styles.View_SachLienQuan}>
+                    <Text style={styles.Text_BinhLuan}>Những sách liên quan</Text>
+                    <FlatList
+                        data={imageData}
+                        keyExtractor={(item) => item.id}
+                        horizontal={true}
+                        renderItem={({ item }) => (
+                            <View style={styles.FlatList_View}>
+                                <TouchableOpacity>
+                                    <Image source={item.source} style={styles.FlatList_Image} />
+                                    <Text style={styles.FlatList_Name1}>{item.name1}</Text>
+                                    <Text style={styles.FlatList_Name2}>{item.name2}</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+                    />
                 </View>
             </View>
         </ScrollView>
@@ -190,7 +231,7 @@ const styles = StyleSheet.create({
     View_Click1: {
         backgroundColor: '#D45555',
         borderRadius: 10,
-        width: 160,
+        width: '45%',
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row'
@@ -221,20 +262,21 @@ const styles = StyleSheet.create({
     },
     View_ImageBook: {
         width: 80,
-        height: 122,
+        height: 120,
         borderRadius: 10,
     },
     View_Cmt: {
         paddingTop: 15,
+        paddingBottom: 15,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     View_Cmt_DocGia: {
         flexDirection: 'column',
         backgroundColor: '#F4F4F4',
-        width: 260,
-        height: 117,
+        width: '75%',
+        height: '100%',
         borderRadius: 10,
     },
     View_Cmt_Star: {
@@ -272,7 +314,6 @@ const styles = StyleSheet.create({
     },
     View_DocGia: {
         borderRadius: 10,
-        marginTop: 15,
         backgroundColor: '#F4F4F4',
         padding: 15,
     },
@@ -318,5 +359,49 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: 'Poppins',
         color: '#272956',
+    },
+    Separator: {
+        borderBottomColor: '#272956',
+        borderBottomWidth: 0.5,
+        marginBottom: 16,
+        marginRight: 20,
+        marginLeft: 20,
+    },
+    View_SachLienQuan: {
+        paddingLeft: 20,
+        paddingRight: 20,
+    },
+    toggleButtonText_1: {
+        fontWeight: 'bold',
+        fontSize: 16,
+        fontFamily: 'Poppins',
+        color: 'black',
+    },
+    toggleButton: {
+        flexDirection: 'row',
+    },
+    FlatList_Image: {
+        marginTop: 10,
+        width: 145,
+        height: 210,
+        borderRadius: 10,
+    },
+    FlatList_Name1: {
+        paddingTop: 10,
+        fontWeight: 'bold',
+        fontSize: 16,
+        fontFamily: 'Poppins',
+        textAlign: 'center',
+        width: 145,
+        color: '#272956'
+    },
+    FlatList_Name2: {
+        paddingTop: 10,
+        fontWeight: 'bold',
+        fontSize: 14,
+        fontFamily: 'Poppins',
+        textAlign: 'center',
+        width: 145,
+        color: '#272956'
     },
 })

@@ -7,8 +7,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import AppNavigator from './navigation/AppNavigator';
-import Detail from './tranthuc/Detail';
 import BookDetail from './tranthuc/BookDetail';
+import DialogBook from './tranthuc/DialogBook';
 
 
 const App = () => {
@@ -19,8 +19,8 @@ const App = () => {
     //     <AppNavigator />
     //   </NavigationContainer>
     // </Provider>
-    //<Detail/>
-    <BookDetail/>
+  <BookDetail/>
+    //<DialogBook/>
   );
 };
 
