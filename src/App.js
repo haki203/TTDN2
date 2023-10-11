@@ -8,6 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import AppNavigator from './navigation/AppNavigator';
 import PlayScreen from './components/play/PlayScreen';
+import LibraryScreen from './components/LibraryScreen';
 console.disableYellowBox = true;
 
 
@@ -18,7 +19,7 @@ const App = () => {
       {/* <NavigationContainer>
         <AppNavigator />
       </NavigationContainer> */}
-      <PlayScreen/>
+      <LibraryScreen/>
     </Provider>
 
   );

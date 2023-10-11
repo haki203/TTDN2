@@ -11,7 +11,6 @@ const LibraryScreen = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.leftHeader}>
-
           <Image style={styles.imagemenuic} source={require('../../src/assets/images/menuic.png')} />
           <Text style={styles.textLibrary}> LIBRARY</Text>
         </View>
@@ -24,8 +23,7 @@ const LibraryScreen = () => {
         <View style={styles.body}>
           <View style={styles.textAllNumberSort}>
             <View style={styles.textAllNumber}>
-              <Text style={styles.textAll} >All</Text>
-              <Text style={styles.textNumber}>(1)</Text>
+              <Text style={styles.textAll} >All (1)</Text>
             </View>
             <View style={styles.sort}>
               <Image source={require('../../src/assets/images/icsort.png')} />
@@ -40,10 +38,10 @@ const LibraryScreen = () => {
               <Text style={styles.nameAuthor}> Tên tác giả</Text>
               <View style={{ alignItems: 'flex-start' }}>
                 <View style={styles.doneprocess}>
-                  <Text style={{ marginStart:7, marginTop:15, color:'#272956', fontWeight:"500" }}>Đã đọc</Text>
-                <View style={styles.process}>
-                  <Text style={{color:'#272956', fontWeight:"500" }}>50%</Text>
-                </View>
+                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
+                  <View style={styles.process}>
+                    <Text style={{ color: '#272956', fontWeight: "500" }}>50%</Text>
+                  </View>
                 </View>
 
                 <View style={styles.processbar}>
@@ -54,23 +52,88 @@ const LibraryScreen = () => {
                     borderRadius: 5
                   }} />
                   <View style={styles.processbar2}>
-                  <View style={{
-                    height: 10,
-                    width: '35%',
-                    borderRadius: 5,
-                    backgroundColor: '#D44445'
-                  
-                  }} />
+                    <View style={{
+                      height: 10,
+                      width: '35%',
+                      borderRadius: 5,
+                      backgroundColor: '#D44445'
+
+                    }} />
+                  </View>
                 </View>
-                </View>
-                
+
 
 
               </View>
             </View>
             <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
           </View>
+          <View style={styles.book}>
+            <Image style={styles.imagebook} source={require('../../src/assets/images/Dac-Nhan-Tam.jpg')} />
+            <View style={styles.in4book}>
+              <Text style={styles.nameBook}> Tên Sách</Text>
+              <Text style={styles.nameAuthor}> Tên tác giả</Text>
+              <View style={{ alignItems: 'flex-start' }}>
+                <View style={styles.doneprocess}>
+                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
+                  <View style={styles.process}>
+                    <Text style={{ color: '#272956', fontWeight: "500" }}>50%</Text>
+                  </View>
+                </View>
+                <View style={styles.processbar}>
+                  <View style={{ // Thanh màu xám
+                    height: 10,
+                    width: '70%',
+                    backgroundColor: '#cdcdcd',
+                    borderRadius: 5
+                  }} />
+                  <View style={styles.processbar2}>
+                    <View style={{
+                      height: 10,
+                      width: '35%',
+                      borderRadius: 5,
+                      backgroundColor: '#D44445'
 
+                    }} />
+                  </View>
+                </View>
+              </View>
+            </View>
+            <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
+          </View>
+          <View style={styles.book}>
+            <Image style={styles.imagebook} source={require('../../src/assets/images/Dac-Nhan-Tam.jpg')} />
+            <View style={styles.in4book}>
+              <Text style={styles.nameBook}> Tên Sách</Text>
+              <Text style={styles.nameAuthor}> Tên tác giả</Text>
+              <View style={{ alignItems: 'flex-start' }}>
+                <View style={styles.doneprocess}>
+                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
+                  <View style={styles.process}>
+                    <Text style={{ color: '#272956', fontWeight: "500" }}>50%</Text>
+                  </View>
+                </View>
+                <View style={styles.processbar}>
+                  <View style={{ // Thanh màu xám
+                    height: 10,
+                    width: '70%',
+                    backgroundColor: '#cdcdcd',
+                    borderRadius: 5
+                  }} />
+                  <View style={styles.processbar2}>
+                    <View style={{
+                      height: 10,
+                      width: '35%',
+                      borderRadius: 5,
+                      backgroundColor: '#D44445'
+
+                    }} />
+                  </View>
+                </View>
+              </View>
+            </View>
+            <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
+          </View>
         </View>
       </View>
     </View>
@@ -108,20 +171,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: 25,
-    marginStart: 15,
-    marginBottom: 20,
-    marginEnd: 15,
-    backgroundColor: '#ffffff',
+    padding:25,
   },
 
   container: {
-    backgroundColor: '#ffffff'
+    backgroundColor: '#ffffff',
+    flex:1,
   },
   bodyContainer: {
-    backgroundColor: '#EBEBEB',
-    borderRadius: 20,
-    overflow: 'hidden'
+    backgroundColor: '#e6e6e6',
+    borderTopLeftRadius:30,
+    borderTopRightRadius:30,
+    overflow: 'hidden',
+    flex:1,
+    padding:10
   },
   body: {
 
@@ -140,8 +203,8 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontWeight: 'bold',
   },
-  doneprocess:{
-flexDirection:'row',
+  doneprocess: {
+    flexDirection: 'row',
   },
   textAllNumber: {
     flexDirection: 'row',
@@ -152,8 +215,11 @@ flexDirection:'row',
 
   },
   book: {
-    marginTop:10,
-    flexDirection: 'row'
+    marginTop: 15,
+    flexDirection: 'row',
+    borderBottomWidth:1,
+    paddingBottom:15,
+    borderBottomColor:'#D9D9D9'
   },
 
   sort: {
@@ -174,14 +240,13 @@ flexDirection:'row',
     fontSize: 17,
     color: '#4838D1',
     fontWeight: '500',
-    marginTop: 15
 
   },
   process: {
-     
-    fontWeight:"500",
+
+    fontWeight: "500",
     marginTop: 15,
-    marginStart:3
+    marginStart: 3
 
   },
   in4book: {
@@ -201,7 +266,7 @@ flexDirection:'row',
   processbar2: {
     position: 'absolute',
     left: 0,
-    top: 0, 
+    top: 0,
     width: '100%'
   },
 
