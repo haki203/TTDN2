@@ -1,14 +1,99 @@
-import { Image, StyleSheet, Text, View, TextInput } from 'react-native'
+import { Image, StyleSheet, Text, View, TextInput, FlatList, ScrollView  } from 'react-native'
 import React from 'react'
 import Icon from "react-native-vector-icons/Feather"
 import Icon2 from "react-native-vector-icons/AntDesign"
 import Icon3 from "react-native-vector-icons/FontAwesome"
+import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import Screen1 from './tab_view/Screen1'
+import Screen2 from './tab_view/Screen2'
+
+
+
 
 const color_txt1 = "#9D9D9D";
 const color_txt2 = "#272956";
 const colorsearch = "#F2F2F2";
 const icon_color = "#C4C4C4";
-const HomeScreen = () => {
+const namebook_color = "#272956";
+
+const HomeScreen = (props) => {
+
+  const NovelRoute = () => (
+    <ScrollView>
+      <Screen1 />
+    </ScrollView>
+    
+  );
+  const SelfRoute = () => (
+    <ScrollView>
+    <Screen1 />
+  </ScrollView>
+  );
+  const ScienceRoute = () => (
+    <ScrollView>
+      <Screen1 />
+    </ScrollView>
+
+  );
+  const RomanceRoute = () => (
+    <ScrollView>
+      <Screen1 />
+    </ScrollView>
+
+  );
+  const CrimeRoute = () => (
+    <ScrollView>
+    <Screen1 />
+  </ScrollView>
+
+  );
+  const renderScene = SceneMap({
+    Novel: NovelRoute,
+    Self: SelfRoute,
+    Science: ScienceRoute,
+    Romance: RomanceRoute,
+    Crime: CrimeRoute,
+  });
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { key: 'Novel', title: 'Novel' },
+    { key: 'Self', title: 'Self-love' },
+    { key: 'Science', title: 'Science' },
+    { key: 'Romance', title: 'Romance' },
+    { key: 'Crime', title: 'Crime' },
+  ]);
+
+
+  const { navigation } = props;
+
+
+  const renderTabBar = props => (
+
+    <TabBar
+      {...props}
+      indicatorStyle={{ backgroundColor: '#FF5E00', height: 3 }}
+      style={{ backgroundColor: 'transparent' }}
+      scrollEnabled={true}
+      gap={10}
+      tabStyle={{ width: "auto" }}
+      onLayout={event => {
+        const { width } = event.nativeEvent.layout;
+        props.setTabBarWidth(props.navigationState.index, width);
+      }}
+      renderLabel={({ route, focused }) => {
+        return (
+          <Text
+            style={[styles.label, focused ? styles.activeLabel : styles.label]}
+          >
+            {route.title}
+          </Text>
+        );
+      }}
+      pressColor={'transparent'}
+
+    />
+
+  );
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -25,7 +110,14 @@ const HomeScreen = () => {
         <Icon2 style={styles.icon} name='search1' size={18} />
         <TextInput style={styles.txtsearch} placeholder='Search' placeholderTextColor={icon_color}></TextInput>
         <Icon3 style={styles.icon} name='microphone' size={18} />
-      </View>
+      </View>  
+      <TabView
+        style={styles.tab}
+        navigationState={{ index, routes }}
+        onIndexChange={setIndex}
+        renderScene={renderScene}
+        renderTabBar={renderTabBar}
+      />
     </View>
   )
 }
@@ -35,13 +127,12 @@ export default HomeScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
   }, header: {
     width: '100%',
     height: 70,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 21
+    padding: 21,
   },
   tok: {
     marginLeft: 190
@@ -54,15 +145,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     backgroundColor: colorsearch,
-    borderRadius: 10
+    borderRadius: 10,
+
 
   }, txtsearch: {
     width: 300,
     color: icon_color,
-  
+
   },
   icon: {
     marginTop: 14,
     color: icon_color
+  },tab:{
+    marginLeft:20,
+    height:'auto',
+
   }
+ 
 })
+
