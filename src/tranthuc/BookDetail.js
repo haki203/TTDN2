@@ -23,7 +23,6 @@ const BookDetail = () => {
         { id: '3', name1: 'The CATCHER in the RYE', name2: 'J.D.Salinger', source: require('../assets/images/bookdetail.png') },
     ];
     return (
-        <ScrollView>
             <View style={styles.Container} >
                 <View style={styles.Icon_Container}>
                     <TouchableOpacity>
@@ -34,6 +33,7 @@ const BookDetail = () => {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.Separator}></View>
+                <ScrollView>
                 <View style={styles.Image_Container}>
                     <View>
                         <Image style={styles.View_Image} source={require('../assets/images/bookdetail.png')} />
@@ -157,8 +157,8 @@ const BookDetail = () => {
                         )}
                     />
                 </View>
+                </ScrollView>
             </View>
-        </ScrollView>
     )
 }
 
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
     Separator: {
         borderBottomColor: '#272956',
         borderBottomWidth: 0.5,
-        marginBottom: 16,
+        marginBottom: 5,
         marginRight: 20,
         marginLeft: 20,
     },
