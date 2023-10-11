@@ -5,6 +5,7 @@ import store from './store/store';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AppNavigator from './navigation/AppNavigator';
+import ItemListView from './components/ItemListView';
 import PlayScreen from './components/play/PlayScreen';
 import LibraryScreen from './components/LibraryScreen';
 console.disableYellowBox = true;
