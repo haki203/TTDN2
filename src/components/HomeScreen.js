@@ -15,6 +15,7 @@ const color_txt2 = "#272956";
 const colorsearch = "#F2F2F2";
 const icon_color = "#C4C4C4";
 const namebook_color = "#272956";
+const color_search = "black";
 
 const HomeScreen = (props) => {
 
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
 
   }, txtsearch: {
     width: 300,
-    color: icon_color,
+    color: color_search,
 
   },
   icon: {
