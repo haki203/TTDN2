@@ -20,6 +20,9 @@ import CategoryFilterScreen from '../components/CategoryFilterScreen';
 import ReadyGoScreen from '../components/ReadyGoScreen';
 import Welcome from '../components/Welcome';
 import BookDetail from '../tranthuc/BookDetail';
+import Read from '../components/Read';
+import SettingScreen from '../components/SettingScreen';
+import ProfileScreen from '../components/ProfileScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Users = () => {
@@ -37,10 +40,37 @@ const Mains = () => {
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name='Detail' component={BookDetail} />
             <Stack.Screen name='Play' component={PlayScreen} />
-            <Stack.Screen name='Search' component={SearchScreen} />
-
+            <Stack.Screen name='Read' component={Read} />
+            <Stack.Screen name='Setting' component={SettingScreen} />
+            <Stack.Screen name='SearchScreen' component={SearchScreen} />
+            <Stack.Screen name='Profile' component={ProfileScreen} />
+            <Stack.Screen name='Welcome' component={ManChao} />
         </Stack.Navigator>
 
+    )
+}
+const Favourite = () => {
+    return (
+        <Stack.Navigator initialRouteName='Favourite' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='FavouriteScreen' component={FavouriteScreen} />
+            <Stack.Screen name="SearchScreen" component={SearchScreen} />
+        </Stack.Navigator>
+    )
+}
+const Hot = () => {
+    return (
+        <Stack.Navigator initialRouteName='HotScreen' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='HotScreen' component={HotScreen} />
+            <Stack.Screen name="SearchScreen" component={SearchScreen} />
+        </Stack.Navigator>
+    )
+}
+const Library = () => {
+    return (
+        <Stack.Navigator initialRouteName='LibraryScreen' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='LibraryScreen' component={LibraryScreen} />
+            <Stack.Screen name="SearchScreen" component={SearchScreen} />
+        </Stack.Navigator>
     )
 }
 const ManChao = () => {
@@ -102,7 +132,7 @@ const Home = ({ scrollY }) => {
                 }}
             >
                 {() => (
-                    <FavouriteScreen />
+                    <Favourite/>
                 )}
             </Tab.Screen>
             <Tab.Screen
@@ -115,7 +145,7 @@ const Home = ({ scrollY }) => {
                 }}
             >
                 {() => (
-                    <HotScreen />
+                    <Hot />
                 )}
             </Tab.Screen>
 
@@ -129,7 +159,7 @@ const Home = ({ scrollY }) => {
                 }}
             >
                 {() => (
-                    <LibraryScreen />
+                    <Library />
                 )}
             </Tab.Screen>
 

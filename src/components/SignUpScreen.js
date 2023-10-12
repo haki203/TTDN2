@@ -22,7 +22,7 @@ const SignUpScreen = (props) => {
         <Text style={styles.content}>Read your favourite books</Text>
         <Text style={styles.content_1}>All your favourites book in one place, read any book, staying at home, on travelling, or anywhere else</Text>
       </View>
-      <View style={{ alignItems: 'center' }}>
+      <View style={{ alignItems: 'center',position:'absolute',end:'50%',bottom:height*0.08,start:'50%' }}>
         <TouchableOpacity onPress={() => navigation.navigate('Filter')} style={styles.button}>
           <Text style={styles.textButton}>Sign Up</Text>
         </TouchableOpacity>
@@ -36,7 +36,8 @@ export default SignUpScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: backroundContainer
+    backgroundColor: backroundContainer,
+    marginTop: 25
   },
   content: {
     color: ColorContent,
@@ -63,7 +64,6 @@ const styles = StyleSheet.create({
     padding:15,
     backgroundColor: '#D45555',
     borderRadius: 10,
-    marginTop: height*0.05,
     width:140,
     alignItems:'center'
   },

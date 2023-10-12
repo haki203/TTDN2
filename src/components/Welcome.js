@@ -11,7 +11,7 @@ const Welcome = (props) => {
       <ImageBackground style={{position:'absolute',width:width,height:height}} source={require('../assets/images/bg_welcome.png')}/>
       <ImageBackground style={styles.image} source={require('../assets/images/logo-athens.png')}/>
       <View style={styles.textView}>
-        <Text style={styles.textView_1}>Athens</Text>
+        <Text style={styles.textView_1}>Authens</Text>
         <Text style={styles.textView_2}>
           AudioBox allowing you to listen to your favourite books anytime,
           anywhere

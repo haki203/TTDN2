@@ -6,11 +6,12 @@ const color_arrow = "#2E2E5D";
 const color_view = "#4838D1";
 const bgcolor = "#FFFFFF";
 const log_outcolor = "#F77A55";
-const ProfileScreen = () => {
+const ProfileScreen = (props) => {
+    const {navigation} = props;
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Icon style={styles.icon_arrow} name='arrowleft' color={color_arrow} />
+                <Icon onPress={() => navigation.goBack()} style={styles.icon_arrow} name='arrowleft' color={color_arrow} />
                 <Text style={styles.txt_settings}>Settings</Text>
                 <Text style={{color:color_view}}>Save</Text>
             </View>

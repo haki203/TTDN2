@@ -199,7 +199,9 @@ const PlayScreen = () => {
                 <View style={styles.playContainer}>
                     <Image style={{ width: 240, height: 320, borderRadius: 20 }} source={require(baseImgPath + 'Dac-Nhan-Tam.jpg')} />
                 </View>
-
+                <View style={{height:40,justifyContent:'center',alignItems:'center'}}>
+                    <Text style={{fontWeight:'700',fontFamily:'Poppins',fontSize:18,color:'#272956'}}>Salinger was an American writer.</Text>
+                </View>
                 <View style={styles.progressContainer}>
                     <View style={{ width: '80%' }}>
                         <View style={{ height: 30 }}>
@@ -284,7 +286,7 @@ const PlayScreen = () => {
 
                 <View style={styles.footerContainer}>
                     <View style={{
-                        marginTop: 70,
+                        marginTop: height*0.08,
                         flexDirection: 'row',
                         alignItems: 'center',
                         justifyContent: 'space-between',
@@ -337,12 +339,14 @@ const styles = StyleSheet.create({
     playContainer: {
         flexDirection: 'column',
         alignItems: 'center',
-        padding: 10
+        padding: 10,
+        marginTop:10,
     },
     progressContainer: {
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop:10,
     },
     progressText: {
         color: colorProgressText,
@@ -352,7 +356,8 @@ const styles = StyleSheet.create({
         marginTop: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingBottom: 20
+        paddingBottom: 20,
+        marginTop:30,
     },
     footerContainer: {
         alignItems: 'center',

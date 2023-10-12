@@ -1,9 +1,10 @@
-import { Image, StyleSheet, Text, View, TextInput, FlatList, useWindowDimensions,TouchableOpacity } from 'react-native'
+import { Image, StyleSheet, Text, View, TextInput,Dimensions, FlatList, useWindowDimensions,TouchableOpacity } from 'react-native'
 import React from 'react'
 import Icon from "react-native-vector-icons/Feather"
 import Icon2 from "react-native-vector-icons/AntDesign"
 import Icon3 from "react-native-vector-icons/FontAwesome"
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+const { width, height } = Dimensions.get('window');
 
 const color_txt1 = "#9D9D9D";
 const color_txt2 = "#272956";
@@ -50,11 +51,11 @@ const Screen1 = ({navigation}) => {
 
     const { id, book_name, author_name, img } = item;
     return (
-      <TouchableOpacity onPress={() => navigation.navigate('Detail')} style={styles.containername}>
+      <TouchableOpacity onPress={() => navigation.navigate('Detail')} style={{}}>
         {/* Image */}
         <Image
           source={img}
-          style={[styles.renderImagePopularDeals, { alignSelf: 'center', marginTop: 15 }]}
+          style={[styles.renderImagePopularDeals, {marginTop: 15 }]}
           shadowColor="black"
           shadowOffset={[5, 5]}
           shadowOpacity={1}
@@ -74,16 +75,16 @@ const Screen1 = ({navigation}) => {
   return (
     <View style={styles.container}>
       <FlatList
-        style={{  flexGrow: 0, height: 340,with:'auto' }}
+        style={{  flexGrow: 0, height: 340, }}
         data={dataImagePopularDeals}
         renderItem={({ item }) => renderItemPopularDeals({ item, navigation })}
         keyExtractor={item => item.id}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
       />
-      <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, }}>New Arrivals</Text>
+      <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2,marginLeft:20 }}>New Arrivals</Text>
       <FlatList
-        style={{ flexGrow: 0, height: 340 ,with:'auto'}}
+        style={{ flexGrow: 0, height: 340 ,}}
         data={dataImagePopularDeals}
         renderItem={({ item }) => renderItemPopularDeals({ item, navigation })}
         keyExtractor={item => item.id}
@@ -98,10 +99,10 @@ export default Screen1
 
 const styles = StyleSheet.create({
   container: {
-    height:'auto'
+    flex:1,
   },
   containerText: {
-
+    marginLeft:16,
     marginTop: -10
   }, rendername: {
     color: namebook_color,

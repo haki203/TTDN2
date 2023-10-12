@@ -48,7 +48,11 @@ const HomeScreen = (props) => {
 
   );
   const search = () => (
-    navigation.navigate('Search')
+    navigation.navigate('SearchScreen')
+
+  );
+  const settings = () => (
+    navigation.navigate('Setting')
 
   );
   const RomanceRoute = () => (
@@ -120,7 +124,9 @@ const HomeScreen = (props) => {
           <TouchableOpacity onPress={search}>
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
           </TouchableOpacity>
+          <TouchableOpacity onPress={settings}>
           <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.title}>

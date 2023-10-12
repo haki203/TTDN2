@@ -9,8 +9,13 @@ const BookDetail = (props) => {
     const [showMore, setShowMore] = useState(false);
     const {navigation}= props;
     const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+    const Read = () => {
+        navigation.navigate('Read')
+    }
+    const Back = () => {
+        navigation.goBack();
+    }
     useEffect(() => {
-    
         const unsubscribe = navigation.addListener('focus', () => {
           setIsTabVisible(true)
         });
@@ -35,14 +40,14 @@ const BookDetail = (props) => {
     return (
             <View style={styles.Container} >
                 <View style={styles.Icon_Container}>
-                    <TouchableOpacity>
-                        <Icon_1 name="chevron-back" size={30} color="black" />
+                    <TouchableOpacity onPress={Back}>
+                        <Icon_1  name="chevron-back" size={30} color="black" />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={handleHeartPress}>
                         <Icon_2 name={isHearted ? 'bookmark' : 'bookmark-o'} size={30} color="red" />
                     </TouchableOpacity>
                 </View>
-                <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.Image_Container}>
                     <View>
                         <Image style={styles.View_Image} source={require('../assets/images/bookdetail.png')} />
@@ -71,7 +76,7 @@ const BookDetail = (props) => {
                     </View>
                 </View>
                 <View style={styles.View_Click}>
-                    <TouchableOpacity style={styles.View_Click1}>
+                    <TouchableOpacity onPress={Read} style={styles.View_Click1}>
                         <Icon_1 name="document-text" size={16} color="white" />
                         <Text style={styles.Text_Click}>Đọc</Text>
                     </TouchableOpacity>
@@ -152,6 +157,7 @@ const BookDetail = (props) => {
                 <View style={styles.View_SachLienQuan}>
                     <Text style={styles.Text_BinhLuan}>Những sách liên quan</Text>
                     <FlatList
+                        showsHorizontalScrollIndicator ={false}
                         data={imageData}
                         keyExtractor={(item) => item.id}
                         horizontal={true}

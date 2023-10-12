@@ -19,7 +19,7 @@ const ReadyGoScreen = (props) => {
         <Text style={styles.content}>You are ready to go!</Text>
         <Text style={styles.content_1}>Congratulation, any interesting topics will be shortly in your hands.</Text>
       </View>
-      <View style={{ alignItems: 'center' }}>
+      <View style={{ alignItems: 'center',position:'absolute',end:'50%',bottom:height*0.08,start:'50%' }}>
         <TouchableOpacity onPress={() => setIsLogin(true)} style={styles.button}>
           <Text style={styles.textButton}>Next</Text>
         </TouchableOpacity>
@@ -33,7 +33,8 @@ export default ReadyGoScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FDFDFD'
+    backgroundColor: '#FDFDFD',
+    marginTop: 25
   },
   content: {
     textAlign:'center',
@@ -59,12 +60,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins'
   },
   button: {
-    paddingVertical: 17,
-    paddingHorizontal: 69,
+    padding:15,
     backgroundColor: '#D45555',
-    display: 'flex',
     borderRadius: 10,
-    marginTop: 93,
+    width:140,
+    alignItems:'center'
   },
   textButton: {
     color: '#FFFFFF',

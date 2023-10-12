@@ -1,276 +1,138 @@
-import { Button, StyleSheet, Text, View, Switch, Image, Dimensions } from 'react-native';
-import React, { useState } from 'react';
-
-const HotScreen = () => {
-
-  const [isEnabled, setIsEnabled] = useState(false);
-  const width = Dimensions.get('window').width;
-  const height = Dimensions.get('window').height;
-
+import {
+  StyleSheet, Text,
+  View, Image, ScrollView,
+  FlatList, Animated, TouchableOpacity
+} from 'react-native'
+import React from 'react'
+import ItemListView2 from './ItemListView2';
+const color_text = "#272956";
+const color_view = "#4838D1";
+const bgcolor = "#FFFFFF";
+const pluscolor = "#CDCDCD";
+const color_logo = '#272956';
+const HotScreen = (props) => {
+  const { navigation } = props;
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.leftHeader}>
-          <Image style={styles.imagemenuic} source={require('../../src/assets/images/menuic.png')} />
-          <Text style={styles.textLibrary}> HOT</Text>
-        </View>
-        <View style={styles.rightHeader}>
-          <Switch style={styles.switch} trackColor={styles.trackColor} thumbColor={styles.thumbColor(isEnabled)} onValueChange={setIsEnabled} value={isEnabled} />
-          <Image style={styles.imageprofile} source={require('../../src/assets/images/user-setting.png')} />
+      <View style={[styles.Headers]}>
+        <View style={styles.header}>
+          <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
+            <Text style={styles.authen}>Hots</Text>
+          </View>
+
+          <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
+            <TouchableOpacity >
+              <Image style={styles.tok} source={require('../assets/images/search.png')} />
+            </TouchableOpacity>
+            <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
+          </View>
         </View>
       </View>
-      <View View style={styles.bodyContainer}>
-        <View style={styles.body}>
-          <View style={styles.textAllNumberSort}>
-            <View style={styles.textAllNumber}>
-              <Text style={styles.textAll} >All (1)</Text>
-            </View>
-            <View style={styles.sort}>
-              <Image source={require('../../src/assets/images/icsort.png')} />
-              <Text>Sort</Text>
-            </View>
-
-          </View>
-          <View style={styles.book}>
-            <Image style={styles.imagebook} source={require('../../src/assets/images/Dac-Nhan-Tam.jpg')} />
-            <View style={styles.in4book}>
-              <Text style={styles.nameBook}> Tên Sách</Text>
-              <Text style={styles.nameAuthor}> Tên tác giả</Text>
-              <View style={{ alignItems: 'flex-start' }}>
-                <View style={styles.doneprocess}>
-                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-                  <View style={styles.process}>
-                    <Text style={{ color: '#272956', fontWeight: "500" }}>50%</Text>
-                  </View>
-                </View>
-
-                <View style={styles.processbar}>
-                  <View style={{ // Thanh màu xám
-                    height: 10,
-                    width: '70%',
-                    backgroundColor: '#cdcdcd',
-                    borderRadius: 5
-                  }} />
-                  <View style={styles.processbar2}>
-                    <View style={{
-                      height: 10,
-                      width: '35%',
-                      borderRadius: 5,
-                      backgroundColor: '#D44445'
-
-                    }} />
-                  </View>
-                </View>
-
-
-
-              </View>
-            </View>
-            <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
-          </View>
-          <View style={styles.book}>
-            <Image style={styles.imagebook} source={require('../../src/assets/images/Dac-Nhan-Tam.jpg')} />
-            <View style={styles.in4book}>
-              <Text style={styles.nameBook}> Tên Sách</Text>
-              <Text style={styles.nameAuthor}> Tên tác giả</Text>
-              <View style={{ alignItems: 'flex-start' }}>
-                <View style={styles.doneprocess}>
-                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-                  <View style={styles.process}>
-                    <Text style={{ color: '#272956', fontWeight: "500" }}>50%</Text>
-                  </View>
-                </View>
-                <View style={styles.processbar}>
-                  <View style={{ // Thanh màu xám
-                    height: 10,
-                    width: '70%',
-                    backgroundColor: '#cdcdcd',
-                    borderRadius: 5
-                  }} />
-                  <View style={styles.processbar2}>
-                    <View style={{
-                      height: 10,
-                      width: '35%',
-                      borderRadius: 5,
-                      backgroundColor: '#D44445'
-
-                    }} />
-                  </View>
-                </View>
-              </View>
-            </View>
-            <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
-          </View>
-          <View style={styles.book}>
-            <Image style={styles.imagebook} source={require('../../src/assets/images/Dac-Nhan-Tam.jpg')} />
-            <View style={styles.in4book}>
-              <Text style={styles.nameBook}> Tên Sách</Text>
-              <Text style={styles.nameAuthor}> Tên tác giả</Text>
-              <View style={{ alignItems: 'flex-start' }}>
-                <View style={styles.doneprocess}>
-                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-                  <View style={styles.process}>
-                    <Text style={{ color: '#272956', fontWeight: "500" }}>50%</Text>
-                  </View>
-                </View>
-                <View style={styles.processbar}>
-                  <View style={{ // Thanh màu xám
-                    height: 10,
-                    width: '70%',
-                    backgroundColor: '#cdcdcd',
-                    borderRadius: 5
-                  }} />
-                  <View style={styles.processbar2}>
-                    <View style={{
-                      height: 10,
-                      width: '35%',
-                      borderRadius: 5,
-                      backgroundColor: '#D44445'
-
-                    }} />
-                  </View>
-                </View>
-              </View>
-            </View>
-            <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
-          </View>
-        </View>
+      <View style={styles.body}>
+        <FlatList 
+          data={DATAne}
+          renderItem={({ item }) => <ItemListView2 dulieu={item} navigation={navigation} />}
+          keyExtractor={item => item._id}
+          showsVerticalScrollIndicator={false}
+        />
       </View>
     </View>
-  );
+  )
 }
 
+export default HotScreen
+
 const styles = StyleSheet.create({
-  trackColor: {
-    false: '#000000',
-    true: '#ffffff',
-  },
-  thumbColor: isEnabled => isEnabled ? '#000000' : '#ffffff',
-
-  leftHeader: {
+  container: { flex: 1 },
+  Headers: {
     flexDirection: 'row',
-    alignItems: 'center'
+    height:80,
   },
-
-
-
-  textLibrary: {
+  hot: {
+    color: "#FFFFFF",
     fontSize: 30,
-    fontWeight: 'bold',
-    color: '#000000',
+    fontFamily: "Poppins-Medium",
+    marginTop: 20,
     marginLeft: 20
-  },
-  switch: {
-    marginEnd: 20
-  },
-  rightHeader: {
+  }, icon: {
+    marginLeft: 10,
+    width: "60%",
     flexDirection: 'row',
-    alignItems: 'center'
+    justifyContent: 'flex-end',
+  }, search: {
+    width: 40,
+    height: 40,
+    marginTop: 16,
+    marginRight: 10
+  }
+  , profile: {
+    width: 30,
+    height: 30,
+    marginTop: 20,
+    marginRight: 20
+  }, body: {
+    flexDirection: 'column',
+    borderTopLeftRadius:50,
+    borderTopRightRadius:50,
+    width:'100%',
+    paddingTop:10,
+    
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding:25,
-  },
-
-  container: {
-    backgroundColor: '#ffffff',
-    flex:1,
-  },
-  bodyContainer: {
-    backgroundColor: '#e6e6e6',
-    borderTopLeftRadius:30,
-    borderTopRightRadius:30,
-    overflow: 'hidden',
-    flex:1,
-    padding:10
-  },
-  body: {
-
-    marginStart: 15
-
-  },
-
-  imagebook: {
-    height: 140,
-    width: 90,
-    borderRadius: 20
-  },
-  textAll: {
-    fontSize: 23,
-
-    color: '#000000',
-    fontWeight: 'bold',
-  },
-  doneprocess: {
-    flexDirection: 'row',
-  },
-  textAllNumber: {
-    flexDirection: 'row',
-  },
-  textNumber: {
-    marginTop: 3,
-    fontSize: 18,
-
-  },
-  book: {
-    marginTop: 15,
-    flexDirection: 'row',
-    borderBottomWidth:1,
-    paddingBottom:15,
-    borderBottomColor:'#D9D9D9'
-  },
-
-  sort: {
-    marginTop: 5,
-    flexDirection: 'row',
-  },
-  textAllNumberSort: {
+    width: '100%',
+    height: 70,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginEnd: 15
   },
-  nameBook: {
-    fontSize: 20,
-    color: '#2E2E5D',
-    fontWeight: '700'
+  tok: {
+    width: 40,
+    height: 40,
+    marginRight: 8
+  }, profile: {
+    width: 40,
+    height: 40
   },
-  nameAuthor: {
-    fontSize: 17,
-    color: '#4838D1',
-    fontWeight: '500',
+  authen: {
+    marginLeft: 8,
+    fontSize: 24,
+    fontStyle: 'normal',
+    fontWeight: '700',
+    fontFamily: 'Poppins',
+    color: color_logo,
+    letterSpacing: 0.5
 
-  },
-  process: {
+  }
+})
 
-    fontWeight: "500",
-    marginTop: 15,
-    marginStart: 3
-
-  },
-  in4book: {
-    marginStart: 20
-  },
-  image3cham: {
-    position: 'absolute',
-    right: 27,
-    top: 45
-
-  },
-  processbar: {
-    flexDirection: 'row',
-    marginLeft: 7,
-    marginTop: 7
-  },
-  processbar2: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    width: '100%'
-  },
-
-
-});
-
-export default HotScreen;
+const DATAne = [
+  {
+    "id": 1,
+    "bookname": "Đắc Nhân Tâm - Quyển 1",
+    "author": "Nhiều Tác Giả",
+    "content": "Tham gia vào chuyến phiêu lưu đặc biệt: tới thăm xứ Chín Tầng Mây để tìm tung tích của người Sưu Tầm Gối, hay đi theo những tiếng gọi",
+    "category": "SÁCH NÓI MỚI",
+    "image": "https://nhasachmienphi.com/images/thumbnail/nhasachmienphi-dac-nhan-tam.jpg"
+  }, {
+    "id": 2,
+    "bookname": "Trên Đường Băng - Quyển 1",
+    "author": "Nhiều Tác Giả",
+    "content": "Cuốn sách Trên đường băng hướng tới đối tượng là độc giả trẻ, là tập hợp những câu chuyện được đăng tải trên fanpage facebook của Tony Buổi Sáng. Nhưng nội dung được tác giả chọn lọc một cách có chủ đích, khác hoàn toàn với loại tản văn thông thường. ",
+    "category": "SÁCH TÓM TẮT MỚI",
+    "image": "https://docsach24.co/filemanager/data-images/T%C3%A2m%20L%C3%BD%20-%20K%E1%BB%B9%20N%C4%83ng%20S%E1%BB%91ng/tony-buoi-sang-tren-duong-bang.jpg"
+  }, {
+    "id": 3,
+    "bookname": "Người Nam Châm - Bí Mật Của Luật Hấp Dẫn",
+    "author": "Nhiều Tác Giả",
+    "content": "“Người Nam Châm- Bí Mật Của Luật Hấp Dẫn” là chìa khóa mở ra cánh cửa chứa nhiều bài học và giá trị lớn lao để đạt được mục tiêu sống cho những bạn đã, đang và sẽ đi theo “luật hấp dẫn”, quy luật sống khá quen thuộc với mọi người. ",
+    "category": "SÁCH TÓM TẮT MỚI",
+    "image": "https://docsach24.co/filemanager/data-images/T%C3%A2m%20L%C3%BD%20-%20K%E1%BB%B9%20N%C4%83ng%20S%E1%BB%91ng/Nguoi-nam-cham---Bi-mat-cua-luat-hap-dan.jpg"
+  }
+  , {
+    "id": 4,
+    "bookname": "20 Giờ Đầu Tiên",
+    "author": "Nhiều Tác Giả",
+    "content": "Việc cảm thấy 24h một ngày là không đủ cũng là chuyện dĩ nhiên trong cuộc sống hiện đại ngày nay. Giải quyết vấn đề này ra sao? Có thực sự nhiều việc đến thế? Bắt tay vào làm như thế nào? Điều gì gây khó khăn cho bạn?...là hàng loạt những câu hỏi đặt ra mà 20 giờ đầu tiên sẽ giúp bạn giải quyết! ",
+    "category": "SÁCH TÓM TẮT MỚI",
+    "image": "https://docsach24.co/filemanager/data-images/tam-ly-ky-nang-song/sach-20-gio-dau-tien.jpg"
+  }
+];

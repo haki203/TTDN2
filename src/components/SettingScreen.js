@@ -1,16 +1,29 @@
 import { StyleSheet, Text, View, yourColorVariable, Image,TouchableOpacity, Pressable } from 'react-native'
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+
 import Icon from "react-native-vector-icons/AntDesign"
+import { AppContext } from '../navigation/AppContext'
 
 const color_arrow = "#2E2E5D";
 const color_view = "#4838D1";
 const bgcolor = "#FFFFFF";
 const log_outcolor = "#F77A55";
-const SettingScreen = () => {
+const SettingScreen = (props) => {
+  const { navigation } = props;
+  const { isLogin,setIsLogin } = useContext(AppContext);
+    const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+    useEffect(() => {
+
+        const unsubscribe = navigation.addListener('focus', () => {
+          setIsTabVisible(false)
+        });
+    
+        return unsubscribe;
+      }, []);
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Icon style={styles.icon_arrow} name='arrowleft' color={color_arrow} />
+                <Icon onPress={() => navigation.goBack()} style={styles.icon_arrow} name='arrowleft' color={color_arrow} />
                 <Text style={styles.txt_settings}>Settings</Text>
             </View>
             <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
@@ -21,7 +34,7 @@ const SettingScreen = () => {
                 </View>
                 <View style={styles.name_profile}>
                     <Text style={styles.name}>John Doe</Text>
-                    <Text style={styles.name_view}>View profile</Text>
+                    <Text onPress={()=>navigation.navigate('Profile')} style={styles.name_view}>View profile</Text>
                 </View>
             </View>
             <View style={{ backgroundColor: '#F5F5FA', height: 28, width: '100%' }}></View>   
@@ -50,7 +63,7 @@ const SettingScreen = () => {
                 <Text style={styles.body1}>About Audibooks</Text>
             </View>
             <View style={{flexDirection:'row', justifyContent:'center',padding:5}}>        
-            <Pressable style={styles.button}>
+            <Pressable style={styles.button} onPress={()=>setIsLogin(false)}>
                 <Text style={{textAlign:'center',color:log_outcolor}}>Log out</Text>
             </Pressable>
             </View>

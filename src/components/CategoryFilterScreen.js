@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity,Dimensions } from 'react-native'
+import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, Dimensions } from 'react-native'
 import React, { useState } from 'react'
 import ItemFilter from './ItemFilter'
 import ItemButtonFilter from './ItemButtonFilter'
@@ -9,7 +9,7 @@ const CategoryFilterScreen = (props) => {
     return (
         <View style={styles.container}>
             <View>
-                <Image style={{height:height/2.2}} source={require('../assets/images/Study.png')}></Image>
+                <Image style={{ height: height / 2.2 }} source={require('../assets/images/Study.png')}></Image>
             </View>
             <View style={{ flexDirection: 'row', marginTop: 38, marginHorizontal: 170 }}>
                 <View style={{ width: 15, height: 6, backgroundColor: 'rgba(213, 85, 85, 0.15)', borderRadius: 3 }} />
@@ -25,7 +25,7 @@ const CategoryFilterScreen = (props) => {
                     scrollEnabled={false}
                     horizontal={true}
                 />
-                <FlatList style={{marginTop: 8}}
+                <FlatList style={{ marginTop: 8 }}
                     data={dataNe1}
                     scrollEnabled={false}
                     renderItem={({ item }) => <ItemButtonFilter product={item} />}
@@ -33,7 +33,7 @@ const CategoryFilterScreen = (props) => {
                     showsVerticalScrollIndicator={false}
                     horizontal={true}
                 />
-                <FlatList style={{marginTop: 8}}
+                <FlatList style={{ marginTop: 8 }}
                     data={dataNe2}
                     scrollEnabled={false}
                     renderItem={({ item }) => <ItemButtonFilter product={item} />}
@@ -41,7 +41,7 @@ const CategoryFilterScreen = (props) => {
                     showsVerticalScrollIndicator={false}
                     horizontal={true}
                 />
-                <FlatList style={{marginTop: 8}}
+                <FlatList style={{ marginTop: 8 }}
                     data={dataNe3}
                     scrollEnabled={false}
                     renderItem={({ item }) => <ItemButtonFilter product={item} />}
@@ -59,9 +59,9 @@ const CategoryFilterScreen = (props) => {
                     showsVerticalScrollIndicator={false}
                 />
             </View>
-            <View style={{ alignItems: 'center' }}>
+            <View style={{ alignItems: 'center', position: 'absolute', end: '50%', bottom: height * 0.08, start: '50%' }}>
                 <TouchableOpacity onPress={() => navigation.navigate('Go')} style={styles.button}>
-                    <Text style={styles.textButton}>Next</Text>
+                    <Text style={styles.textButton}>Sign Up</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -73,16 +73,16 @@ export default CategoryFilterScreen
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FDFDFD'
+        backgroundColor: '#FDFDFD',
+        marginTop: 25
     },
     button: {
-        paddingVertical: 17,
-        paddingHorizontal: 69,
+        padding:15,
         backgroundColor: '#D45555',
-        display: 'flex',
         borderRadius: 10,
-        marginTop: 59,
-    },
+        width:140,
+        alignItems:'center'
+      },
     textButton: {
         color: '#FFFFFF',
         fontSize: 14,

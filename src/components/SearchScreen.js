@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View, Dimensions, Image, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import ItemSearch from './ItemSearch';
+import { AppContext } from '../navigation/AppContext';
 const { height } = Dimensions.get('window');
 const backroundContainer = '#FFFFFF';
 const bacroundHeight = '#C4C4C426';
@@ -9,6 +10,15 @@ const backroundSearch = '#C4C4C426';
 const bacroundColor = '#272956';
 const ColorAuthor = '#4838D1';
 const SearchScreen = (props) => {
+  const { navigation } = props;
+  const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setIsTabVisible(false)
+    });
+
+    return unsubscribe;
+  }, []);
   const [data, setData] = useState([
     {
       "name": "Herzog - Hane",
@@ -142,33 +152,31 @@ const SearchScreen = (props) => {
   // const filtered = data.filter(item => item.name.includes(searchQuery));
   const latestText = filteredData.length > 10 ? 'Latest' : 'Results';
   const resetSearch = () => {
-    setSearchQuery('');
-    setFilteredData(data); // Đặt lại danh sách hiển thị về danh sách ban đầu
-    textInputRef.current.clear();
+    navigation.goBack();
   }
   return (
     <View>
       <View style={styles.hearderContainer}>
         <Image style={styles.search} source={require('../assets/images/manerge.png')}></Image>
-        <View style={{flexDirection: 'row'}}>
-        <TextInput ref={textInputRef} onChangeText={(text) => handleSearch(text)} placeholder='Search' style={styles.TextSearch}>
-        </TextInput>
-        <TouchableOpacity onPress={resetSearch}>
-        {/* <Image style={styles.mark} source={require('../assets/images/mark.png')}></Image> */}
-        <Text style={styles.huy}>Hủy</Text>
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row' }}>
+          <TextInput ref={textInputRef} onChangeText={(text) => handleSearch(text)} placeholder='Search' style={styles.TextSearch}>
+          </TextInput>
+          <TouchableOpacity onPress={resetSearch}>
+            {/* <Image style={styles.mark} source={require('../assets/images/mark.png')}></Image> */}
+            <Text style={styles.huy}>Hủy</Text>
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.listContainer}>
 
-          <Text style={styles.content}>{latestText}</Text>
-          <FlatList
-            data={filteredData}
-            renderItem={({item}) => <ItemSearch product = {item}/>}
-            keyExtractor={item => item._id}
-            showsVerticalScrollIndicator={false}
-            disableVirtualization={true} // Thêm thuộc tính này
-          />
+        <Text style={styles.content}>{latestText}</Text>
+        <FlatList
+          data={filteredData}
+          renderItem={({ item }) => <ItemSearch product={item} />}
+          keyExtractor={item => item._id}
+          showsVerticalScrollIndicator={false}
+          disableVirtualization={true} // Thêm thuộc tính này
+        />
       </View>
     </View>
   )
@@ -231,8 +239,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
     marginTop: 8
   },
-  huy:{
-    color:bacroundColor,
+  huy: {
+    color: bacroundColor,
     fontSize: 14,
     fontWeight: '500',
     fontStyle: 'normal',

@@ -1,22 +1,43 @@
-import { Button, StyleSheet, Text, View, Switch, Image, Dimensions } from 'react-native';
-import React, { useState } from 'react';
+import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { AppContext } from '../navigation/AppContext'
 
-const LibraryScreen = () => {
+import React, { useContext, useEffect, useState } from 'react'
+
+const color_text = "#272956";
+const color_view = "#4838D1";
+const bgcolor = "#FFFFFF";
+const pluscolor = "#CDCDCD";
+const color_logo = '#272956';
+const LibraryScreen = (props) => {
+  const { isTabVisible, setIsTabVisible } = useContext(AppContext);
 
   const [isEnabled, setIsEnabled] = useState(false);
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
+  const { navigation } = props;
+  const search = () => (
+    navigation.navigate('SearchScreen')
 
+  );
+  useEffect(() => {
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      setIsTabVisible(true)
+    });
+
+    return unsubscribe;
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.leftHeader}>
-          <Image style={styles.imagemenuic} source={require('../../src/assets/images/menuic.png')} />
-          <Text style={styles.textLibrary}> LIBRARY</Text>
+        <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
+          <Text style={styles.authen}>Librarys</Text>
         </View>
-        <View style={styles.rightHeader}>
-          <Switch style={styles.switch} trackColor={styles.trackColor} thumbColor={styles.thumbColor(isEnabled)} onValueChange={setIsEnabled} value={isEnabled} />
-          <Image style={styles.imageprofile} source={require('../../src/assets/images/user-setting.png')} />
+        <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
+          <TouchableOpacity onPress={search}>
+            <Image style={styles.tok} source={require('../assets/images/search.png')} />
+          </TouchableOpacity>
+          <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
         </View>
       </View>
       <View View style={styles.bodyContainer}>
@@ -171,20 +192,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding:25,
+    padding: 25,
   },
 
   container: {
     backgroundColor: '#ffffff',
-    flex:1,
+    flex: 1,
   },
   bodyContainer: {
-    backgroundColor: '#e6e6e6',
-    borderTopLeftRadius:30,
-    borderTopRightRadius:30,
+    backgroundColor: '#f3f3f3',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
     overflow: 'hidden',
-    flex:1,
-    padding:10
+    flex: 1,
+    padding: 10
   },
   body: {
 
@@ -217,9 +238,9 @@ const styles = StyleSheet.create({
   book: {
     marginTop: 15,
     flexDirection: 'row',
-    borderBottomWidth:1,
-    paddingBottom:15,
-    borderBottomColor:'#D9D9D9'
+    borderBottomWidth: 1,
+    paddingBottom: 15,
+    borderBottomColor: '#D9D9D9'
   },
 
   sort: {
@@ -269,6 +290,30 @@ const styles = StyleSheet.create({
     top: 0,
     width: '100%'
   },
+  header: {
+    width: '100%',
+    height: 70,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  tok: {
+    width: 40,
+    height: 40,
+    marginRight: 8
+  }, profile: {
+    width: 40,
+    height: 40
+  },
+  authen: {
+    marginLeft: 8,
+    fontSize: 24,
+    fontStyle: 'normal',
+    fontWeight: '700',
+    fontFamily: 'Poppins',
+    color: color_logo,
+    letterSpacing: 0.5
+
+  }
 
 
 });

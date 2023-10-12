@@ -1,25 +1,38 @@
 import { StyleSheet, Text, View, ScrollView, FlatList, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+
+import React, { useContext, useEffect, useState } from 'react'
+
 import ItemListView from './ItemListView';
 import Icon from "react-native-vector-icons/AntDesign"
+import { AppContext } from '../navigation/AppContext';
 const color_text = "#272956";
 const color_view = "#4838D1";
 const bgcolor = "#FFFFFF";
 const pluscolor = "#CDCDCD";
 const color_logo = '#272956';
-
 const FavouriteScreen = (props) => {
+  const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+
+  const { navigation } = props;
   const search = () => (
-    navigation.navigate('Search')
+    navigation.navigate('SearchScreen')
 
   );
-  const { navigation } = props;
+  useEffect(() => {
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      setIsTabVisible(true)
+    });
+
+    return unsubscribe;
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
           <Text style={styles.authen}>Favourites</Text>
         </View>
+        
         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
           <TouchableOpacity onPress={search}>
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
@@ -27,6 +40,11 @@ const FavouriteScreen = (props) => {
           <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
         </View>
       </View>
+      <Text style={styles.title1}>
+          Book
+        </Text>
+        <View style={{marginTop:7,width:48, height:2, backgroundColor:'green', marginLeft: 25}}>
+        </View>
       <View style={styles.flatlist}>
 
         <FlatList
@@ -65,11 +83,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginTop: 20
   }, title1: {
-    marginTop: 20,
+    marginTop: 25,
     color: color_text,
     fontFamily: 'Poppins',
     fontSize: 20,
-    fontWeight: '700'
+    fontWeight: '700',
+    paddingLeft: 25,
+    marginBottom: 5
   }, flatlist: {
     width: '100%',
     height: 420,
