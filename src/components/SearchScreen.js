@@ -149,13 +149,6 @@ const SearchScreen = (props) => {
   return (
     <View>
       <View style={styles.hearderContainer}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Image style={styles.DrawBar} source={require('../assets/images/Vector.png')}></Image>
-          <View style={{ flexDirection: 'row' }}>
-            <Image style={styles.Darkmo} source={require('../assets/images/darkmo.png')}></Image>
-            <Image style={styles.profile} source={require('../assets/images/profile1.png')}></Image>
-          </View>
-        </View>
         <Image style={styles.search} source={require('../assets/images/manerge.png')}></Image>
         <View style={{flexDirection: 'row'}}>
         <TextInput ref={textInputRef} onChangeText={(text) => handleSearch(text)} placeholder='Search' style={styles.TextSearch}>
@@ -180,7 +173,6 @@ const SearchScreen = (props) => {
     </View>
   )
 }
-
 export default SearchScreen
 
 const styles = StyleSheet.create({
@@ -189,10 +181,10 @@ const styles = StyleSheet.create({
     backgroundColor: backroundContainer
   },
   hearderContainer: {
-    height: height * 0.22,
+    height: height * 0.1,
   },
   listContainer: {
-    height: height * 0.75,
+    height: height * 0.88,
     backgroundColor: bacroundHeight,
     borderTopRightRadius: 43,
     borderTopLeftRadius: 43,
@@ -221,7 +213,7 @@ const styles = StyleSheet.create({
   },
   search: {
     position: 'absolute',
-    marginTop: 102,
+    marginTop: 36,
     marginLeft: 50
   },
   mark: {

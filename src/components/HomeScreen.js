@@ -7,9 +7,7 @@ import { AppContext } from '../navigation/AppContext'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Screen1 from './tab_view/Screen1'
 import Screen2 from './tab_view/Screen2'
-
-
-
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const color_txt1 = "#9D9D9D";
 const color_txt2 = "#272956";
@@ -17,17 +15,18 @@ const colorsearch = "#e6e6e6";
 const icon_color = "#C4C4C4";
 const namebook_color = "#272956";
 const color_search = "black";
+const color_logo = '#272956';
 
 const HomeScreen = (props) => {
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
   const { navigation } = props;
 
   useEffect(() => {
-    
+
     const unsubscribe = navigation.addListener('focus', () => {
       setIsTabVisible(true)
     });
-  
+
     return unsubscribe;
   }, []);
 
@@ -46,6 +45,10 @@ const HomeScreen = (props) => {
     <ScrollView>
       <Screen1 navigation={navigation} />
     </ScrollView>
+
+  );
+  const search = () => (
+    navigation.navigate('Search')
 
   );
   const RomanceRoute = () => (
@@ -109,19 +112,20 @@ const HomeScreen = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Icon style={styles.menu} name='menu' size={22} />
-        <Image style={styles.tok} source={require('../assets/images/Group3.png')} />
-
-        <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
+        <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
+          <Image style={styles.menu} source={require('../assets/images/logo2.png')} size={22} />
+          <Text style={styles.authen}>Authens</Text>
+        </View>
+        <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
+          <TouchableOpacity onPress={search}>
+            <Image style={styles.tok} source={require('../assets/images/search.png')} />
+          </TouchableOpacity>
+          <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
+        </View>
       </View>
       <View style={styles.title}>
         <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Welcome back, Bunny!</Text>
-        <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>What do you want to{'\n'} read today?</Text>
-      </View>
-      <View style={styles.search}>
-        <Icon2 style={styles.icon} name='search1' size={18} />
-        <TextInput style={styles.txtsearch} placeholder='Search' placeholderTextColor={icon_color}></TextInput>
-        <Icon3 style={styles.icon} name='microphone' size={18} />
+        <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>What do you want to{'\n'}read today?</Text>
       </View>
       <TabView
         style={styles.tab}
@@ -129,6 +133,8 @@ const HomeScreen = (props) => {
         onIndexChange={setIndex}
         renderScene={renderScene}
         renderTabBar={renderTabBar}
+        scrollEnabled={false}
+
       />
     </View>
   )
@@ -144,12 +150,14 @@ const styles = StyleSheet.create({
     height: 70,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 21,
   },
   tok: {
-    marginLeft: 190
+    width: 40,
+    height: 40,
+    marginRight: 8
   }, profile: {
-    marginTop: -6
+    width: 40,
+    height: 40
   }, title: {
     marginLeft: 21
   }, search: {
@@ -171,6 +179,21 @@ const styles = StyleSheet.create({
   }, tab: {
     marginLeft: 20,
     height: 'auto',
+
+  },
+  menu: {
+    width: 40,
+    height: 40
+  },
+  authen: {
+    marginLeft: 8,
+
+    fontSize: 20,
+    fontStyle: 'normal',
+    fontWeight: '700',
+    fontFamily: 'Poppins',
+    color: color_logo,
+    letterSpacing: 0.5
 
   }
 

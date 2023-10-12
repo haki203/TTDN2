@@ -37,6 +37,8 @@ const Mains = () => {
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name='Detail' component={BookDetail} />
             <Stack.Screen name='Play' component={PlayScreen} />
+            <Stack.Screen name='Search' component={SearchScreen} />
+
         </Stack.Navigator>
 
     )

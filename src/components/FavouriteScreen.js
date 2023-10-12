@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, FlatList } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, FlatList, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import ItemListView from './ItemListView';
 import Icon from "react-native-vector-icons/AntDesign"
@@ -6,19 +6,25 @@ const color_text = "#272956";
 const color_view = "#4838D1";
 const bgcolor = "#FFFFFF";
 const pluscolor = "#CDCDCD";
+const color_logo = '#272956';
 
 const FavouriteScreen = (props) => {
+  const search = () => (
+    navigation.navigate('Search')
+
+  );
   const { navigation } = props;
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>
-          Favorites
-        </Text>
-        <Text style={styles.title1}>
-          Book
-        </Text>
-        <View style={{ marginTop: 7, width: 48, height: 2, backgroundColor: 'green' }}>
+        <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
+          <Text style={styles.authen}>Favourites</Text>
+        </View>
+        <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
+          <TouchableOpacity onPress={search}>
+            <Image style={styles.tok} source={require('../assets/images/search.png')} />
+          </TouchableOpacity>
+          <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
         </View>
       </View>
       <View style={styles.flatlist}>
@@ -73,6 +79,30 @@ const styles = StyleSheet.create({
     padding: 25,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  header: {
+    width: '100%',
+    height: 70,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  tok: {
+    width: 40,
+    height: 40,
+    marginRight: 8
+  }, profile: {
+    width: 40,
+    height: 40
+  },
+  authen: {
+    marginLeft: 8,
+    fontSize: 24,
+    fontStyle: 'normal',
+    fontWeight: '700',
+    fontFamily: 'Poppins',
+    color: color_logo,
+    letterSpacing: 0.5
+
   }
 })
 
