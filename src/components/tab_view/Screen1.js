@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, TextInput, FlatList, useWindowDimensions } from 'react-native'
+import { Image, StyleSheet, Text, View, TextInput, FlatList, useWindowDimensions,TouchableOpacity } from 'react-native'
 import React from 'react'
 import Icon from "react-native-vector-icons/Feather"
 import Icon2 from "react-native-vector-icons/AntDesign"
@@ -11,8 +11,7 @@ const colorsearch = "#F2F2F2";
 const icon_color = "#C4C4C4";
 const namebook_color = "#272956";
 
-const Screen1 = (props) => {
-
+const Screen1 = ({navigation}) => {
   const NovelRoute = () => (
     <View style={{ flex: 1, backgroundColor: '#ff4081' }} />
   );
@@ -45,13 +44,13 @@ const Screen1 = (props) => {
   ]);
 
   
-  const { navigation } = props;
 
-  const renderItemPopularDeals = (props) => {
-    const { item } = props;
+
+  const renderItemPopularDeals = ({ item, navigation }) => {
+
     const { id, book_name, author_name, img } = item;
     return (
-      <View style={styles.containername}>
+      <TouchableOpacity onPress={() => navigation.navigate('Play')} style={styles.containername}>
         {/* Image */}
         <Image
           source={img}
@@ -68,7 +67,7 @@ const Screen1 = (props) => {
           <Text style={styles.renderauthor}>{author_name}</Text>
         </View>
         {/* IconAdd */}
-      </View>
+      </TouchableOpacity>
     );
   }
 
@@ -77,7 +76,7 @@ const Screen1 = (props) => {
       <FlatList
         style={{  flexGrow: 0, height: 340,with:'auto' }}
         data={dataImagePopularDeals}
-        renderItem={renderItemPopularDeals}
+        renderItem={({ item }) => renderItemPopularDeals({ item, navigation })}
         keyExtractor={item => item.id}
         horizontal={true}
         showsVerticalScrollIndicator={false}
@@ -86,7 +85,7 @@ const Screen1 = (props) => {
       <FlatList
         style={{ flexGrow: 0, height: 340 ,with:'auto'}}
         data={dataImagePopularDeals}
-        renderItem={renderItemPopularDeals}
+        renderItem={({ item }) => renderItemPopularDeals({ item, navigation })}
         keyExtractor={item => item.id}
         horizontal={true}
         showsVerticalScrollIndicator={false}

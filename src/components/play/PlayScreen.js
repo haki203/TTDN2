@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View, Image, Button, TouchableOpacity, Dimensions, TouchableWithoutFeedback } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useContext } from 'react'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import TrackPlayer from 'react-native-track-player';
+import { AppContext } from '../../navigation/AppContext';
 import Slider from 'react-native-slider';
 const colorTitle = '#272956';
 const colorContent = 'white';
@@ -13,7 +14,7 @@ const sizeIcon = 26;
 const baseImgPath = '../../assets/images/';
 const colorProgressText = '#5849B7';
 const PlayScreen = () => {
-
+    const {isTabVisible, setIsTabVisible} = useContext(AppContext);
     //----------------------------------------------------------------------
     const [trackName, setTrackName] = useState("");
     const [onVolume, setOnVolume] = useState(false);
@@ -72,6 +73,7 @@ const PlayScreen = () => {
     };
     // Khởi tạo thoi gian hien tai
     useEffect(() => {
+        setIsTabVisible(false)
         const interval = setInterval(updatePosition, 1000);
         return () => {
             clearInterval(interval);

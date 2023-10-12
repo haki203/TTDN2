@@ -1,8 +1,10 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity ,Dimensions} from 'react-native'
-import React from 'react'
+import React,{useContext} from 'react'
+import { AppContext } from '../navigation/AppContext';
 const { width, height } = Dimensions.get('window');
 const ReadyGoScreen = (props) => {
   const {navigation} = props
+  const {isLogin,setIsLogin} = useContext(AppContext);
   return (
     <View style={styles.container}>
       <View>
@@ -18,7 +20,7 @@ const ReadyGoScreen = (props) => {
         <Text style={styles.content_1}>Congratulation, any interesting topics will be shortly in your hands.</Text>
       </View>
       <View style={{ alignItems: 'center' }}>
-        <TouchableOpacity onPress={() => navigation.navigate('Search')} style={styles.button}>
+        <TouchableOpacity onPress={() => setIsLogin(true)} style={styles.button}>
           <Text style={styles.textButton}>Next</Text>
         </TouchableOpacity>
       </View>

@@ -3,6 +3,7 @@ import React from 'react'
 import Icon from "react-native-vector-icons/Feather"
 import Icon2 from "react-native-vector-icons/AntDesign"
 import Icon3 from "react-native-vector-icons/FontAwesome"
+
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Screen1 from './tab_view/Screen1'
 import Screen2 from './tab_view/Screen2'
@@ -12,39 +13,39 @@ import Screen2 from './tab_view/Screen2'
 
 const color_txt1 = "#9D9D9D";
 const color_txt2 = "#272956";
-const colorsearch = "#F2F2F2";
+const colorsearch = "#e6e6e6";
 const icon_color = "#C4C4C4";
 const namebook_color = "#272956";
 const color_search = "black";
 
 const HomeScreen = (props) => {
-
+  const { navigation } = props;
   const NovelRoute = () => (
     <ScrollView>
-      <Screen1 />
+      <Screen1 navigation={navigation}/>
     </ScrollView>
     
   );
   const SelfRoute = () => (
     <ScrollView>
-    <Screen1 />
+    <Screen1 navigation={navigation}/>
   </ScrollView>
   );
   const ScienceRoute = () => (
     <ScrollView>
-      <Screen1 />
+      <Screen1 navigation={navigation}/>
     </ScrollView>
 
   );
   const RomanceRoute = () => (
     <ScrollView>
-      <Screen1 />
+      <Screen1 navigation={navigation}/>
     </ScrollView>
 
   );
   const CrimeRoute = () => (
     <ScrollView>
-    <Screen1 />
+    <Screen1 navigation={navigation}/>
   </ScrollView>
 
   );
@@ -65,7 +66,6 @@ const HomeScreen = (props) => {
   ]);
 
 
-  const { navigation } = props;
 
 
   const renderTabBar = props => (

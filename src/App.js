@@ -8,17 +8,20 @@ import AppNavigator from './navigation/AppNavigator';
 import ItemListView from './components/ItemListView';
 import PlayScreen from './components/play/PlayScreen';
 import LibraryScreen from './components/LibraryScreen';
+import HomeScreen from './components/HomeScreen';
+import { AppContextProvider } from './navigation/AppContext';
 console.disableYellowBox = true;
 
 const App = () => {
 
   return (
-    <Provider store={store}>
-      {/* <NavigationContainer>
+    <AppContextProvider>
+      <NavigationContainer>
         <AppNavigator />
-      </NavigationContainer> */}
-      <LibraryScreen/>
-    </Provider>
+      </NavigationContainer>
+    </AppContextProvider>
+
+
   );
 };
 

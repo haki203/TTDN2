@@ -4,7 +4,8 @@ import React from 'react';
 
 const backgroundColor = '#FDFDFD';
 const color= '#D45555';
-const Welcome = () => {
+const Welcome = (props) => {
+  const {navigation} = props;
   return (
     <View style={styles.container}>
       <View style={styles.image} />
@@ -18,16 +19,16 @@ const Welcome = () => {
       </View>
 
       <View style={styles.touchable}>
-        <TouchableOpacity style={styles.touchableFB}>
+        <TouchableOpacity style={styles.touchableFB} onPress={()=>navigation.navigate('Hello')}>
           <Image style={styles.icon} source={require('../assets/images/ic_fb.png')}></Image>
           <Text style={styles.textView_FB}>Continue with Facebook</Text>
         </TouchableOpacity>
         <Text style={styles.textView_3}>OR</Text>
-        <TouchableOpacity style={styles.touchableGG}>
+        <TouchableOpacity style={styles.touchableGG} onPress={()=>navigation.navigate('Hello')}>
           <Image style={styles.icon} source={require('../assets/images/ic_gg.png')}></Image>
           <Text style={styles.textView_GG}>Continue with Google</Text>
         </TouchableOpacity>
-        <Text style={styles.textView_4}>Sign in with audibox username</Text>
+
       </View>
     </View>
   );
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
     fontFamily: 'italic',
   },
   textView_2: {
-    color: '#E8E8E5',
+    color: '#d5d5d5',
     textAlign: 'center',
     width: 300,
     fontSize: 15,

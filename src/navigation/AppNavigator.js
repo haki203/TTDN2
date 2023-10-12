@@ -13,17 +13,18 @@ import LibraryScreen from '../components/LibraryScreen';
 import DetailScreen from '../components/DetailScreen';
 import SearchScreen from '../components/SearchScreen';
 import PlayScreen from '../components/play/PlayScreen';
-
+import { AppContext } from './AppContext';
 import SignUpScreen from '../components/SignUpScreen';
 import CategoryFilterScreen from '../components/CategoryFilterScreen';
 import ReadyGoScreen from '../components/ReadyGoScreen';
+import Welcome from '../components/Welcome';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Users = () => {
     return (
-        <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Navigator initialRouteName='Welcome' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Welcome" component={Welcome} />
+            <Stack.Screen name="Hello" component={ManChao} />
         </Stack.Navigator>
     )
 }
@@ -32,7 +33,7 @@ const Mains = () => {
     return (
         <Stack.Navigator initialRouteName='Home' screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name='Login' component={LoginScreen} />
+            <Stack.Screen name='Play' component={PlayScreen} />
         </Stack.Navigator>
 
     )
@@ -43,7 +44,6 @@ const ManChao = () => {
             <Stack.Screen name="Sign" component={SignUpScreen} />
             <Stack.Screen name='Filter' component={CategoryFilterScreen} />
             <Stack.Screen name='Go' component={ReadyGoScreen} />
-            <Stack.Screen name='Search' component={SearchScreen} />
         </Stack.Navigator>
 
     )
@@ -51,19 +51,19 @@ const ManChao = () => {
 
 
 const Home = ({ scrollY }) => {
-    const isTabVisibleRedux = useSelector(state => state.scroll.isTabVisible);
-    const [isTabVisible, setIsTabVisible] = useState(isTabVisibleRedux);
+    // const isTabVisibleRedux = useSelector(state => state.scroll.isTabVisible);
+    const [isTabVisible, setIsTabVisible] = useState(true);
     // Sử dụng useEffect để theo dõi thay đổi của isTabVisible trong Redux
-    useEffect(() => {
-        setIsTabVisible(isTabVisibleRedux);
-    }, [isTabVisibleRedux]);
+    // useEffect(() => {
+    //     setIsTabVisible(isTabVisibleRedux);
+    // }, [isTabVisibleRedux]);
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 headerShown: false,
                 color: 'red',
                 tabBarLabelStyle: { fontSize: 15 },
-                tabBarStyle: { height: 60, borderRadius: 20, display: isTabVisible, },
+                tabBarStyle: { height: 60, borderRadius: 20 },
             })}
         >
             <Tab.Screen
@@ -73,14 +73,10 @@ const Home = ({ scrollY }) => {
                     tabBarIcon: ({ color, size }) => (
                         <Icon name="home" color={color} size={30} />
                     ),
-                    // tabBarStyle: {
-                    //     display: isTabVisible,
-                    //     height:0, borderRadius: 20
-                    // },
                 }}
             >
                 {() => (
-                    <PlayScreen />
+                    <Mains />
                 )}
             </Tab.Screen>
             <Tab.Screen
@@ -120,7 +116,7 @@ const Home = ({ scrollY }) => {
                 }}
             >
                 {() => (
-                        <LibraryScreen />
+                    <LibraryScreen />
                 )}
             </Tab.Screen>
 
@@ -139,17 +135,17 @@ const Play = () => {
         >
             <Stack.Screen name="Home">
                 {(props) => (
-                    <Home/>
+                    <Mains />
                 )}
             </Stack.Screen>
             <Stack.Screen name="Detail">
                 {(props) => (
-                    <DetailScreen navigation={props.navigation}/>
+                    <DetailScreen navigation={props.navigation} />
                 )}
             </Stack.Screen>
             <Stack.Screen name="Search">
                 {(props) => (
-                    <SearchScreen navigation={props.navigation}/>
+                    <SearchScreen navigation={props.navigation} />
                 )}
             </Stack.Screen>
             <Stack.Screen name="Hot">
@@ -170,17 +166,15 @@ const Play = () => {
     );
 };
 const AppNavigator = () => {
-
+    const { isLogin, setIsLogin } = useContext(AppContext);
     return (
         <>
-            <ManChao />
+            {isLogin == false ? <Users /> : <Home />}
         </>
     )
 }
-const mapStateToProps = (state) => ({
-    isTabVisible: state.isTabVisible,
-});
-export default connect(mapStateToProps)(AppNavigator);
+
+export default AppNavigator;
 
 const styles = StyleSheet.create({
     iconTab: { width: 30, height: 29 }
