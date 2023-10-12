@@ -1,9 +1,9 @@
-import { Image, StyleSheet, Text, View, TextInput, FlatList, ScrollView  } from 'react-native'
-import React from 'react'
+import { Image, StyleSheet, Text, View, TextInput, FlatList, ScrollView } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
 import Icon from "react-native-vector-icons/Feather"
 import Icon2 from "react-native-vector-icons/AntDesign"
 import Icon3 from "react-native-vector-icons/FontAwesome"
-
+import { AppContext } from '../navigation/AppContext'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Screen1 from './tab_view/Screen1'
 import Screen2 from './tab_view/Screen2'
@@ -19,34 +19,45 @@ const namebook_color = "#272956";
 const color_search = "black";
 
 const HomeScreen = (props) => {
+  const { isTabVisible, setIsTabVisible } = useContext(AppContext);
   const { navigation } = props;
+
+  useEffect(() => {
+    
+    const unsubscribe = navigation.addListener('focus', () => {
+      setIsTabVisible(true)
+    });
+  
+    return unsubscribe;
+  }, []);
+
   const NovelRoute = () => (
     <ScrollView>
-      <Screen1 navigation={navigation}/>
+      <Screen1 navigation={navigation} />
     </ScrollView>
-    
+
   );
   const SelfRoute = () => (
     <ScrollView>
-    <Screen1 navigation={navigation}/>
-  </ScrollView>
+      <Screen1 navigation={navigation} />
+    </ScrollView>
   );
   const ScienceRoute = () => (
     <ScrollView>
-      <Screen1 navigation={navigation}/>
+      <Screen1 navigation={navigation} />
     </ScrollView>
 
   );
   const RomanceRoute = () => (
     <ScrollView>
-      <Screen1 navigation={navigation}/>
+      <Screen1 navigation={navigation} />
     </ScrollView>
 
   );
   const CrimeRoute = () => (
     <ScrollView>
-    <Screen1 navigation={navigation}/>
-  </ScrollView>
+      <Screen1 navigation={navigation} />
+    </ScrollView>
 
   );
   const renderScene = SceneMap({
@@ -111,7 +122,7 @@ const HomeScreen = (props) => {
         <Icon2 style={styles.icon} name='search1' size={18} />
         <TextInput style={styles.txtsearch} placeholder='Search' placeholderTextColor={icon_color}></TextInput>
         <Icon3 style={styles.icon} name='microphone' size={18} />
-      </View>  
+      </View>
       <TabView
         style={styles.tab}
         navigationState={{ index, routes }}
@@ -157,11 +168,11 @@ const styles = StyleSheet.create({
   icon: {
     marginTop: 14,
     color: icon_color
-  },tab:{
-    marginLeft:20,
-    height:'auto',
+  }, tab: {
+    marginLeft: 20,
+    height: 'auto',
 
   }
- 
+
 })
 

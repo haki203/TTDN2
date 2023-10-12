@@ -1,15 +1,15 @@
 /* eslint-disable prettier/prettier */
-import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View, Image, ImageBackground,Dimensions} from 'react-native';
 import React from 'react';
-
+const { width, height } = Dimensions.get('window');
 const backgroundColor = '#FDFDFD';
 const color= '#D45555';
 const Welcome = (props) => {
   const {navigation} = props;
   return (
     <View style={styles.container}>
-      <View style={styles.image} />
-
+      <ImageBackground style={{position:'absolute',width:width,height:height}} source={require('../assets/images/bg_welcome.png')}/>
+      <ImageBackground style={styles.image} source={require('../assets/images/logo-athens.png')}/>
       <View style={styles.textView}>
         <Text style={styles.textView_1}>Athens</Text>
         <Text style={styles.textView_2}>
@@ -39,7 +39,7 @@ export default Welcome;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: backgroundColor,
+    // backgroundColor: backgroundColor,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
   textView_3: {
     paddingTop: 20,
     paddingBottom: 20,
+    color:'#D9D9D9',
   },
   touchableGG: {
     width: 300,

@@ -96,7 +96,6 @@ const PlayScreen = () => {
 
     // Khởi tạo trình phát âm nhạc
     useEffect(() => {
-
         try {
             if (isSetup) {
             } else {
@@ -105,11 +104,7 @@ const PlayScreen = () => {
                         await TrackPlayer.setupPlayer();
                         // Thêm danh sách phát vào trình phát
                         await TrackPlayer.add(trackList);
-                        const duration = await TrackPlayer.getDuration();
-                        setDuration(duration);
-                        setIsSetup(true);
-                        const name = await TrackPlayer.getCurrentTrack();
-                        setTrackName(trackList[name].title);
+                        getInfo();
                     } catch (error) {
                         console.log(error);
                     }
@@ -121,7 +116,13 @@ const PlayScreen = () => {
             console.log(error);
         }
     }, [isSetup]);
-
+    const getInfo =async()=>{
+        const duration = await TrackPlayer.getDuration();
+        setDuration(duration);
+        setIsSetup(true);
+        const name = await TrackPlayer.getCurrentTrack();
+        setTrackName(trackList[name].title);
+    }
     // Bắt đầu chơi
 
     async function playPlayer() {
@@ -149,6 +150,7 @@ const PlayScreen = () => {
             await TrackPlayer.skipToNext();
             await TrackPlayer.pause();
             setIsPlay(false);
+            getInfo();
         } catch (error) {
             console.log(error);
         }
@@ -161,7 +163,7 @@ const PlayScreen = () => {
             await TrackPlayer.skipToPrevious();
             await TrackPlayer.pause();
             setIsPlay(false);
-
+            getInfo();
         } catch (error) {
             console.log(error);
         }
@@ -233,10 +235,14 @@ const PlayScreen = () => {
                             <Image source={require(baseImgPath + "back.png")} />
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.btnPlay} onPress={playPlayer}>
-                            {isPlay ?
+                            {!isPlay ?
                                 <Image source={require(baseImgPath + "PlayMusic.png")} />
                                 :
-                                <Image source={require(baseImgPath + "PlayMusic.png")} />
+                                // <Image source={require(baseImgPath + "PlayMusic.png")} />
+                                <View style={{backgroundColor:'#0000cc',width:60,height:60,borderRadius:50,flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                                    <View style={{height:30,width:12,backgroundColor:'white',margin:2,borderRadius:10}}></View>
+                                    <View style={{height:30,width:12,backgroundColor:'white',margin:2,borderRadius:10}}></View>
+                                </View>
                             }
                         </TouchableOpacity>
                         <TouchableOpacity onPress={skipToNextTrack}>

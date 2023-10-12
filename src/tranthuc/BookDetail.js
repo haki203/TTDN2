@@ -1,12 +1,22 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, } from 'react-native'
-import React, { useState } from 'react';
+import React, { useState ,useContext,useEffect} from 'react';
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/FontAwesome';
 import Icon_3 from 'react-native-vector-icons/MaterialIcons';
+import { AppContext } from '../navigation/AppContext'
 
-const BookDetail = () => {
+const BookDetail = (props) => {
     const [showMore, setShowMore] = useState(false);
-
+    const {navigation}= props;
+    const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+    useEffect(() => {
+    
+        const unsubscribe = navigation.addListener('focus', () => {
+          setIsTabVisible(true)
+        });
+      
+        return unsubscribe;
+      }, []);
     const toggleShowMore = () => {
         setShowMore(prevShowMore => !prevShowMore);
     };
@@ -32,7 +42,6 @@ const BookDetail = () => {
                         <Icon_2 name={isHearted ? 'bookmark' : 'bookmark-o'} size={30} color="red" />
                     </TouchableOpacity>
                 </View>
-                <View style={styles.Separator}></View>
                 <ScrollView>
                 <View style={styles.Image_Container}>
                     <View>
@@ -66,7 +75,7 @@ const BookDetail = () => {
                         <Icon_1 name="document-text" size={16} color="white" />
                         <Text style={styles.Text_Click}>Đọc</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.View_Click1}>
+                    <TouchableOpacity style={styles.View_Click1} onPress={()=>navigation.navigate('Play')}>
                         <Icon_1 name="play-circle" size={16} color="white" />
                         <Text style={styles.Text_Click}>Nghe</Text>
                     </TouchableOpacity>

@@ -50,7 +50,7 @@ const Screen1 = ({navigation}) => {
 
     const { id, book_name, author_name, img } = item;
     return (
-      <TouchableOpacity onPress={() => navigation.navigate('Play')} style={styles.containername}>
+      <TouchableOpacity onPress={() => navigation.navigate('Detail')} style={styles.containername}>
         {/* Image */}
         <Image
           source={img}
@@ -79,7 +79,7 @@ const Screen1 = ({navigation}) => {
         renderItem={({ item }) => renderItemPopularDeals({ item, navigation })}
         keyExtractor={item => item.id}
         horizontal={true}
-        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       />
       <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, }}>New Arrivals</Text>
       <FlatList
@@ -88,7 +88,7 @@ const Screen1 = ({navigation}) => {
         renderItem={({ item }) => renderItemPopularDeals({ item, navigation })}
         keyExtractor={item => item.id}
         horizontal={true}
-        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       />
     </View>
   )

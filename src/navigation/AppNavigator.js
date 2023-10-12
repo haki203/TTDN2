@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon1 from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import HomeScreen from '../components/HomeScreen';
 import LoginScreen from '../components/LoginScreen';
@@ -18,6 +19,7 @@ import SignUpScreen from '../components/SignUpScreen';
 import CategoryFilterScreen from '../components/CategoryFilterScreen';
 import ReadyGoScreen from '../components/ReadyGoScreen';
 import Welcome from '../components/Welcome';
+import BookDetail from '../tranthuc/BookDetail';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Users = () => {
@@ -33,6 +35,7 @@ const Mains = () => {
     return (
         <Stack.Navigator initialRouteName='Home' screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name='Detail' component={BookDetail} />
             <Stack.Screen name='Play' component={PlayScreen} />
         </Stack.Navigator>
 
@@ -52,18 +55,26 @@ const ManChao = () => {
 
 const Home = ({ scrollY }) => {
     // const isTabVisibleRedux = useSelector(state => state.scroll.isTabVisible);
-    const [isTabVisible, setIsTabVisible] = useState(true);
+    const {isTabVisible, setIsTabVisible} = useContext(AppContext);
+    const [display, setDisplay] = useState("");
+     
     // Sử dụng useEffect để theo dõi thay đổi của isTabVisible trong Redux
-    // useEffect(() => {
-    //     setIsTabVisible(isTabVisibleRedux);
-    // }, [isTabVisibleRedux]);
+    useEffect(() => {
+        if(isTabVisible){
+            setDisplay('flex');
+        }
+        else{
+            setDisplay('none');
+        }
+    }, [isTabVisible]);
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 headerShown: false,
                 color: 'red',
-                tabBarLabelStyle: { fontSize: 15 },
-                tabBarStyle: { height: 60, borderRadius: 20 },
+                tabBarLabelStyle: { display:'none' },
+                tabBarActiveTintColor:'#D45555',
+                tabBarStyle: { height: 75, borderTopLeftRadius:40,borderTopRightRadius:40,display:display },
             })}
         >
             <Tab.Screen
