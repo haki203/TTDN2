@@ -1,16 +1,32 @@
 /* eslint-disable prettier/prettier */
-import {StyleSheet, Text, TouchableOpacity, View, Image} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+  ImageBackground,
+} from 'react-native';
 import React from 'react';
 
 const backgroundColor = '#FDFDFD';
-const color= '#D45555';
+const color = '#D45555';
+const color1 = '#FFFFFE';
+const fontchu = 'popins';
 const Welcome = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.image} />
+    <ImageBackground
+      source={require('../assets/images/bg_welcome.png')}
+      style={styles.container}>
+      <Image
+        source={require('../assets/images/10089818_preview_rev_1.png')}
+        style={styles.image}
+      />
 
       <View style={styles.textView}>
-        <Text style={styles.textView_1}>Athens</Text>
+        <Text style={styles.textView_1}>
+          Welcome to <Text style={{color: color}}>Athens</Text>
+        </Text>
         <Text style={styles.textView_2}>
           AudioBox allowing you to listen to your favourite books anytime,
           anywhere
@@ -19,17 +35,21 @@ const Welcome = () => {
 
       <View style={styles.touchable}>
         <TouchableOpacity style={styles.touchableFB}>
-          <Image style={styles.icon} source={require('../assets/images/ic_fb.png')}></Image>
+          <Image
+            style={styles.icon}
+            source={require('../assets/images/ic_fb.png')}></Image>
           <Text style={styles.textView_FB}>Continue with Facebook</Text>
         </TouchableOpacity>
         <Text style={styles.textView_3}>OR</Text>
         <TouchableOpacity style={styles.touchableGG}>
-          <Image style={styles.icon} source={require('../assets/images/ic_gg.png')}></Image>
+          <Image
+            style={styles.icon}
+            source={require('../assets/images/ic_gg.png')}></Image>
           <Text style={styles.textView_GG}>Continue with Google</Text>
         </TouchableOpacity>
         <Text style={styles.textView_4}>Sign in with audibox username</Text>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -38,18 +58,19 @@ export default Welcome;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: backgroundColor,
+    // backgroundColor: backgroundColor,
+
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingTop: 100,
-    paddingBottom: 70,
+    paddingBottom: 30,
   },
   image: {
-    backgroundColor: '#D9D9D9',
-    borderRadius: 150,
-    width: 100,
-    height: 100,
+    // backgroundColor: '#D9D9D9',
+    // borderRadius: 150,
+    width: 150,
+    height: 150,
   },
   textView: {
     display: 'flex',
@@ -58,7 +79,7 @@ const styles = StyleSheet.create({
     marginTop: -50,
   },
   textView_1: {
-    color: color,
+    color: color1,
     fontSize: 40,
     fontFamily: 'italic',
   },
@@ -95,6 +116,7 @@ const styles = StyleSheet.create({
   textView_3: {
     paddingTop: 20,
     paddingBottom: 20,
+    color: color1,
   },
   touchableGG: {
     width: 300,
@@ -106,7 +128,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: color,
     flexDirection: 'row',
-
   },
   textView_GG: {
     color: color,
@@ -120,7 +141,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 10,
-    width:20,
-    height:20,
+    width: 20,
+    height: 20,
   },
 });

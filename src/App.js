@@ -19,7 +19,7 @@ const App = () => {
     //   </NavigationContainer>
     // </Provider>
     <View style={styles.container}>
-      <Read />
+      <WaitScreen/>
     </View>
   );
 };
