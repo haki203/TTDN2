@@ -1,27 +1,25 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, } from 'react-native'
-import React, { useState ,useContext,useEffect} from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button } from 'react-native'
+import React, { useState, useContext, useEffect } from 'react';
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/FontAwesome';
 import Icon_3 from 'react-native-vector-icons/MaterialIcons';
 import { AppContext } from '../navigation/AppContext'
+const { width, height } = Dimensions.get('window');
 
 const BookDetail = (props) => {
     const [showMore, setShowMore] = useState(false);
-    const {navigation}= props;
+    const { navigation } = props;
+    const [heightView, setHeightView] = useState(0);
+    const [showFullText, setShowFullText] = useState(false);
     const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+    const longText = "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời.";
     const Read = () => {
         navigation.navigate('Read')
     }
     const Back = () => {
         navigation.goBack();
     }
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-          setIsTabVisible(true)
-        });
-      
-        return unsubscribe;
-      }, []);
+
     const toggleShowMore = () => {
         setShowMore(prevShowMore => !prevShowMore);
     };
@@ -38,16 +36,16 @@ const BookDetail = (props) => {
         { id: '3', name1: 'The CATCHER in the RYE', name2: 'J.D.Salinger', source: require('../assets/images/bookdetail.png') },
     ];
     return (
-            <View style={styles.Container} >
-                <View style={styles.Icon_Container}>
-                    <TouchableOpacity onPress={Back}>
-                        <Icon_1  name="chevron-back" size={30} color="black" />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={handleHeartPress}>
-                        <Icon_2 name={isHearted ? 'bookmark' : 'bookmark-o'} size={30} color="red" />
-                    </TouchableOpacity>
-                </View>
-                <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.Container} >
+            <View style={styles.Icon_Container}>
+                <TouchableOpacity onPress={Back}>
+                    <Icon_1 name="chevron-back" size={30} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleHeartPress}>
+                    <Icon_2 name={isHearted ? 'bookmark' : 'bookmark-o'} size={30} color="red" />
+                </TouchableOpacity>
+            </View>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.Image_Container}>
                     <View>
                         <Image style={styles.View_Image} source={require('../assets/images/bookdetail.png')} />
@@ -80,7 +78,7 @@ const BookDetail = (props) => {
                         <Icon_1 name="document-text" size={16} color="white" />
                         <Text style={styles.Text_Click}>Đọc</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.View_Click1} onPress={()=>navigation.navigate('Play')}>
+                    <TouchableOpacity style={styles.View_Click1} onPress={() => navigation.navigate('Play')}>
                         <Icon_1 name="play-circle" size={16} color="white" />
                         <Text style={styles.Text_Click}>Nghe</Text>
                     </TouchableOpacity>
@@ -134,30 +132,68 @@ const BookDetail = (props) => {
                                 <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={20} color="#272956" />
                             </View>
                         </View>
-                        <View>
-                            <Text style={styles.Text_Review}>Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.
-                                {showMore && (
-                                    <Text>
-                                        {' '}
-                                        Đó là 1 quyển sách tuyệt vời.
-                                    </Text>
-                                )}
-                                <TouchableOpacity onPress={toggleShowMore} style={styles.toggleButton}>
-                                    <Text style={styles.toggleButtonText_1}> {showMore ? 'Thu gọn' : 'Xem thêm'} </Text>
-                                </TouchableOpacity>
-                            </Text>
+                        <View style={{ flex: 1 }}>
+                            {showFullText ? (
+                                <Text>{longText}
+                                    <Text onPress={() => setShowFullText(!showFullText)} style={{ fontWeight: 'bold' }}>{showFullText ? "Ẩn bớt" : "Xem thêm..."}</Text>
+                                </Text>
+                            ) : (
+                                <Text>{longText.substring(0, 120)}...
+                                    <Text onPress={() => setShowFullText(!showFullText)} style={{ fontWeight: 'bold' }}>{showFullText ? "Ẩn bớt" : "Xem thêm"}</Text>
+                                </Text>
+                            )}
+
                         </View>
                     </View>
-                    <TouchableOpacity style={styles.Xem_All}>
-                        <Text style={styles.Xem_All_Cmt}>Xem tất cả 30 đánh giá</Text>
-                        <Icon_3 style={styles.Next} name="navigate-next" size={30} color="white" />
-                    </TouchableOpacity>
+                    {
+                        (heightView < 1) ?
+                            (
+                                <TouchableOpacity style={styles.Xem_All} onPress={() => setHeightView(600)}>
+                                    <Text style={styles.Xem_All_Cmt}>Xem tất cả đánh giá </Text>
+                                    <Icon_2 style={styles.Next} name="caret-down" size={26} color="white" />
+                                </TouchableOpacity>
+                            ) :
+                            (
+                                <TouchableOpacity style={styles.Xem_All} onPress={() => setHeightView(0)}>
+                                    <Text style={styles.Xem_All_Cmt}>Ẩn tất cả đánh giá </Text>
+                                    <Icon_2 style={styles.Next} name="caret-up" size={26} color="white" />
+                                </TouchableOpacity>
+                            )
+                    }
+                </View>
+                <View style={{ width: width, height: heightView, marginBottom: 5, alignItems: 'center', }}>
+                    {
+                        (heightView > 0) ?
+                            (
+                                <View style={{ width: '90%', backgroundColor: '#d5d5d5', height: '100%', borderRadius: 20, padding: 10 }}>
+                                    {/*((--------- Style tại đây này------------ */}
+
+                                    
+
+                                    {/*---------- Style tại đây này------------ ))*/}
+                                    <TouchableOpacity style={{ width: '100%', position: 'absolute', bottom: 0 }}
+                                        onPress={() => setHeightView(0)}>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                                            <Icon_2 name="caret-up" size={25} color={'#272956'} />
+                                        </View>
+                                    </TouchableOpacity>
+
+                                </View>
+                            ) :
+                            (
+                                <View style={{ display: 'none' }}>
+                                </View>
+                            )
+
+                    }
+
+
                 </View>
                 <View style={styles.Separator}></View>
                 <View style={styles.View_SachLienQuan}>
                     <Text style={styles.Text_BinhLuan}>Những sách liên quan</Text>
                     <FlatList
-                        showsHorizontalScrollIndicator ={false}
+                        showsHorizontalScrollIndicator={false}
                         data={imageData}
                         keyExtractor={(item) => item.id}
                         horizontal={true}
@@ -172,8 +208,9 @@ const BookDetail = (props) => {
                         )}
                     />
                 </View>
-                </ScrollView>
-            </View>
+
+            </ScrollView >
+        </View >
     )
 }
 
@@ -268,6 +305,7 @@ const styles = StyleSheet.create({
     },
     View_BinhLuan: {
         padding: 20,
+        paddingBottom: 5
     },
     Text_BinhLuan: {
         fontWeight: 'bold',
@@ -345,7 +383,6 @@ const styles = StyleSheet.create({
         color: '#9D9DA1'
     },
     Xem_All_Cmt: {
-        paddingTop: 10,
         fontSize: 18,
         fontFamily: 'Poppins',
         color: '#272956',
@@ -354,6 +391,8 @@ const styles = StyleSheet.create({
     Xem_All: {
         flexDirection: 'row',
         justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
     },
     View_NoiDung_DocGia: {
         flexDirection: 'row',
@@ -367,7 +406,6 @@ const styles = StyleSheet.create({
         paddingLeft: 12,
     },
     Next: {
-        paddingTop: 6,
         color: '#272956',
     },
     Text_NoiDung_DocGia: {

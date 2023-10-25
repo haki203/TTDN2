@@ -19,7 +19,7 @@ import SignUpScreen from '../components/SignUpScreen';
 import CategoryFilterScreen from '../components/CategoryFilterScreen';
 import ReadyGoScreen from '../components/ReadyGoScreen';
 import Welcome from '../components/Welcome';
-import BookDetail from '../tranthuc/BookDetail';
+import BookDetail from '../components/BookDetail';
 import Read from '../components/Read';
 import SettingScreen from '../components/SettingScreen';
 import ProfileScreen from '../components/ProfileScreen';
@@ -214,6 +214,7 @@ const AppNavigator = () => {
         <>
             {isLogin == false ? <Users /> : <Home />}
         </>
+
     )
 }
 
