@@ -1,26 +1,73 @@
 /* eslint-disable prettier/prettier */
-import { StyleSheet, Text, TouchableOpacity, View, Image, ImageBackground, Dimensions } from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, ToastAndroid, Image, ImageBackground, Dimensions } from 'react-native';
+import React, { useContext } from 'react';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { AppContext } from '../navigation/AppContext';
+import auth from '@react-native-firebase/auth';
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 
 const { width, height } = Dimensions.get('window');
 const backgroundColor = '#FDFDFD';
 const color = '#D45555';
 const Welcome = (props) => {
-
+  GoogleSignin.configure({
+    webClientId: '604464843561-7bobfsn4dq8d243n2ka1ngpiavlbof23.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+    offlineAccess: false,
+  });
   const { navigation } = props;
+  const { setIsLogin } = useContext(AppContext);
 
-  //---------------------- login facebook ---------------------- //
-  const onLoginFB = () => {
+  //---------------------- login google ---------------------- //
+  const onLoginGG = async () => {
+    try {
+
+      await GoogleSignin.hasPlayServices();
+      console.log('Login');
+      const userInfor = await GoogleSignin.signIn();
+      console.log(userInfor);
+      ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
+      setIsLogin(true);
+    } catch (error) {
+      ToastAndroid.show("Đăng nhập thất bại ", ToastAndroid.SHORT);
+      console.log(error);
+    }
 
   }
 
 
 
+
   //---------------------- login facebook ---------------------- //
+  async function onFacebookButtonPress() {
+    // Attempt login with permissions
+    const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
 
+    if (result.isCancelled) {
+      throw 'User cancelled the login process';
+    }
+
+    // Once signed in, get the users AccessToken
+    const data = await AccessToken.getCurrentAccessToken();
+
+    if (!data) {
+      throw 'Something went wrong obtaining access token';
+    } else {
+
+      console.log('loginFB');
+
+      console.log(data);
+      setIsLogin(true);
+      ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
+
+    }
+
+    // Create a Firebase credential with the AccessToken
+    const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(facebookCredential);
+  }
   // ________________________________________________________________________________________//
-
-  //---------------------- login google ---------------------- //
 
 
 
@@ -40,12 +87,12 @@ const Welcome = (props) => {
       </View>
 
       <View style={styles.touchable}>
-        <TouchableOpacity style={styles.touchableFB} onPress={() => navigation.navigate('Hello')}>
+        <TouchableOpacity style={styles.touchableFB} onPress={() => onFacebookButtonPress()}>
           <Image style={styles.icon} source={require('../assets/images/ic_fb.png')}></Image>
           <Text style={styles.textView_FB}>Continue with Facebook</Text>
         </TouchableOpacity>
         <Text style={styles.textView_3}>OR</Text>
-        <TouchableOpacity style={styles.touchableGG} onPress={() => navigation.navigate('Hello')}>
+        <TouchableOpacity style={styles.touchableGG} onPress={onLoginGG}>
           <Image style={styles.icon} source={require('../assets/images/ic_gg.png')}></Image>
           <Text style={styles.textView_GG}>Continue with Google</Text>
         </TouchableOpacity>
