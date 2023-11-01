@@ -51,8 +51,14 @@ const Welcome = (props) => {
 
     if (!data) {
       throw 'Something went wrong obtaining access token';
-    }else{
+    } else {
+
+      console.log('loginFB');
+
       console.log(data);
+      setIsLogin(true);
+      ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
+
     }
 
     // Create a Firebase credential with the AccessToken
