@@ -7,16 +7,32 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import React from 'react';
+import React,{useContext, useState, useEffect} from 'react';
+import { AppContext } from '../navigation/AppContext';
 const backgroundColor1 = '#FDFDFD';
 const headerNameBoColorBo = '#272956';
 const headerNameBoColorAu = '#9D9D9D';
 const noidungColor = '#9D9D9D';
-const Read = () => {
+const Read = (props) => {
+  const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+  const { navigation } = props;
+  const Back = () =>{
+    navigation.goBack();
+  }
+  useEffect(() => {
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      setIsTabVisible(false)
+    });
+
+    return unsubscribe;
+  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity onPress={Back}>
         <Image source={require('../assets/images/ic_left.png')} />
+        </TouchableOpacity>
         <View style={styles.header_Name}>
           <Text style={styles.header_Name_Bo}>Catcher in the Rye</Text>
           <Text style={styles.header_Name_Au}>J.D. Salinger</Text>
@@ -25,8 +41,8 @@ const Read = () => {
           <Image source={require('../assets/images/ic_3cham.png')} />
         </TouchableOpacity>
       </View>
-      <ScrollView style={styles.body}>
-        <Text style={styles.body_NoiDung}>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.body}>
+        <Text selectable={true} style={styles.body_NoiDung}>
           Pencey is Holden’s fourth school; he has already failed out of three
           others.At Pencey, he has failed four out of five of his classes and
           has received notice that he is being expelled, but he is not scheduled
@@ -92,15 +108,14 @@ export default Read;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: backgroundColor1,
-    paddingTop: 30,
-    paddingBottom: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
+    padding:20
   },
   header: {
     display: 'flex',
     flexDirection: 'row',
+    alignItems:'center',
     justifyContent: 'space-between',
+
   },
   header_Name: {
     display: 'flex',
@@ -108,13 +123,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   header_Name_Bo: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     color: headerNameBoColorBo,
   },
   header_Name_Au: {
-    fontSize: 14,
+    fontSize: 17,
     color: headerNameBoColorAu,
+    fontWeight:'600'
   },
   body: {
     marginTop: 20,
@@ -123,5 +139,6 @@ const styles = StyleSheet.create({
   body_NoiDung: {
     fontSize: 20,
     color: noidungColor,
+    fontWeight:'500'
   },
 });

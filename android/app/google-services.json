@@ -1,36 +1,64 @@
 {
   "project_info": {
-    "project_number": "941767688049",
-    "project_id": "project1-8ff01",
-    "storage_bucket": "project1-8ff01.appspot.com"
+    "project_number": "604464843561",
+    "project_id": "ttdn1-997ef",
+    "storage_bucket": "ttdn1-997ef.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:941767688049:android:f7614ca2fa2daade8d80d0",
+        "mobilesdk_app_id": "1:604464843561:android:41a8bdef1395942e48c538",
         "android_client_info": {
-          "package_name": "com.ttdn2"
+          "package_name": "com.apphc"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "941767688049-rildanvhn98ajhtm87pm9q7sjnemslo2.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB1e4QsYIfp2oJGl6aKG640jpIDkTJ8fBg"
+          "current_key": "AIzaSyClP-ol934Fq3wO-byn40U_AbVxbpxgMdE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "941767688049-rildanvhn98ajhtm87pm9q7sjnemslo2.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604464843561:android:d3bef22bb54d969f48c538",
+        "android_client_info": {
+          "package_name": "com.example.ttdn1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClP-ol934Fq3wO-byn40U_AbVxbpxgMdE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604464843561:android:098de2d39780510548c538",
+        "android_client_info": {
+          "package_name": "com.ttdn2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClP-ol934Fq3wO-byn40U_AbVxbpxgMdE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
         }
       }
     }

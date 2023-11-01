@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon1 from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux';
 import HomeScreen from '../components/HomeScreen';
 import LoginScreen from '../components/LoginScreen';
@@ -12,14 +13,23 @@ import FavouriteScreen from '../components/FavouriteScreen';
 import LibraryScreen from '../components/LibraryScreen';
 import DetailScreen from '../components/DetailScreen';
 import SearchScreen from '../components/SearchScreen';
-
+import PlayScreen from '../components/play/PlayScreen';
+import { AppContext } from './AppContext';
+import SignUpScreen from '../components/SignUpScreen';
+import CategoryFilterScreen from '../components/CategoryFilterScreen';
+import ReadyGoScreen from '../components/ReadyGoScreen';
+import Welcome from '../components/Welcome';
+import BookDetail from '../components/BookDetail';
+import Read from '../components/Read';
+import SettingScreen from '../components/SettingScreen';
+import ProfileScreen from '../components/ProfileScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Users = () => {
     return (
-        <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Navigator initialRouteName='Welcome' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Welcome" component={Welcome} />
+            <Stack.Screen name="Hello" component={ManChao} />
         </Stack.Navigator>
     )
 }
@@ -28,26 +38,75 @@ const Mains = () => {
     return (
         <Stack.Navigator initialRouteName='Home' screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name='Login' component={LoginScreen} />
+            <Stack.Screen name='Detail' component={BookDetail} />
+            <Stack.Screen name='Play' component={PlayScreen} />
+            <Stack.Screen name='Read' component={Read} />
+            <Stack.Screen name='Setting' component={SettingScreen} />
+            <Stack.Screen name='SearchScreen' component={SearchScreen} />
+            <Stack.Screen name='Profile' component={ProfileScreen} />
+            <Stack.Screen name='Welcome' component={ManChao} />
+        </Stack.Navigator>
+
+    )
+}
+const Favourite = () => {
+    return (
+        <Stack.Navigator initialRouteName='Favourite' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='FavouriteScreen' component={FavouriteScreen} />
+            <Stack.Screen name="SearchScreen" component={SearchScreen} />
+        </Stack.Navigator>
+    )
+}
+const Hot = () => {
+    return (
+        <Stack.Navigator initialRouteName='HotScreen' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='HotScreen' component={HotScreen} />
+            <Stack.Screen name="SearchScreen" component={SearchScreen} />
+        </Stack.Navigator>
+    )
+}
+const Library = () => {
+    return (
+        <Stack.Navigator initialRouteName='LibraryScreen' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='LibraryScreen' component={LibraryScreen} />
+            <Stack.Screen name="SearchScreen" component={SearchScreen} />
+        </Stack.Navigator>
+    )
+}
+const ManChao = () => {
+    return (
+        <Stack.Navigator initialRouteName='Sign' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Sign" component={SignUpScreen} />
+            <Stack.Screen name='Filter' component={CategoryFilterScreen} />
+            <Stack.Screen name='Go' component={ReadyGoScreen} />
         </Stack.Navigator>
 
     )
 }
 
+
 const Home = ({ scrollY }) => {
-    const isTabVisibleRedux = useSelector(state => state.scroll.isTabVisible);
-    const [isTabVisible, setIsTabVisible] = useState(isTabVisibleRedux);
+    // const isTabVisibleRedux = useSelector(state => state.scroll.isTabVisible);
+    const {isTabVisible, setIsTabVisible} = useContext(AppContext);
+    const [display, setDisplay] = useState("");
+     
     // Sử dụng useEffect để theo dõi thay đổi của isTabVisible trong Redux
     useEffect(() => {
-        setIsTabVisible(isTabVisibleRedux);
-    }, [isTabVisibleRedux]);
+        if(isTabVisible){
+            setDisplay('flex');
+        }
+        else{
+            setDisplay('none');
+        }
+    }, [isTabVisible]);
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 headerShown: false,
                 color: 'red',
-                tabBarLabelStyle: { fontSize: 15 },
-                tabBarStyle: { height: 60, borderRadius: 20, display: isTabVisible, },
+                tabBarLabelStyle: { display:'none' },
+                tabBarActiveTintColor:'#D45555',
+                tabBarStyle: { height: 75, borderTopLeftRadius:40,borderTopRightRadius:40,display:display },
             })}
         >
             <Tab.Screen
@@ -57,14 +116,10 @@ const Home = ({ scrollY }) => {
                     tabBarIcon: ({ color, size }) => (
                         <Icon name="home" color={color} size={30} />
                     ),
-                    // tabBarStyle: {
-                    //     display: isTabVisible,
-                    //     height:0, borderRadius: 20
-                    // },
                 }}
             >
                 {() => (
-                    <HomeScreen />
+                    <Mains />
                 )}
             </Tab.Screen>
             <Tab.Screen
@@ -77,7 +132,7 @@ const Home = ({ scrollY }) => {
                 }}
             >
                 {() => (
-                    <FavouriteScreen />
+                    <Favourite/>
                 )}
             </Tab.Screen>
             <Tab.Screen
@@ -90,7 +145,7 @@ const Home = ({ scrollY }) => {
                 }}
             >
                 {() => (
-                    <HotScreen />
+                    <Hot />
                 )}
             </Tab.Screen>
 
@@ -104,7 +159,7 @@ const Home = ({ scrollY }) => {
                 }}
             >
                 {() => (
-                        <LibraryScreen />
+                    <Library />
                 )}
             </Tab.Screen>
 
@@ -123,17 +178,17 @@ const Play = () => {
         >
             <Stack.Screen name="Home">
                 {(props) => (
-                    <Home/>
+                    <Mains />
                 )}
             </Stack.Screen>
             <Stack.Screen name="Detail">
                 {(props) => (
-                    <DetailScreen navigation={props.navigation}/>
+                    <DetailScreen navigation={props.navigation} />
                 )}
             </Stack.Screen>
             <Stack.Screen name="Search">
                 {(props) => (
-                    <SearchScreen navigation={props.navigation}/>
+                    <SearchScreen navigation={props.navigation} />
                 )}
             </Stack.Screen>
             <Stack.Screen name="Hot">
@@ -143,21 +198,27 @@ const Play = () => {
                     </ScreenWrapper>
                 )}
             </Stack.Screen>
+            <Stack.Screen name="SignUp">
+                {(props) => (
+                    <ScreenWrapper>
+                        <SignUpScreen navigation={props.navigation} />
+                    </ScreenWrapper>
+                )}
+            </Stack.Screen>
         </Stack.Navigator>
     );
 };
 const AppNavigator = () => {
-
+    const { isLogin, setIsLogin } = useContext(AppContext);
     return (
         <>
-            <Home />
+            {isLogin == false ? <Users /> : <Home />}
         </>
+
     )
 }
-const mapStateToProps = (state) => ({
-    isTabVisible: state.isTabVisible,
-});
-export default connect(mapStateToProps)(AppNavigator);
+
+export default AppNavigator;
 
 const styles = StyleSheet.create({
     iconTab: { width: 30, height: 29 }
