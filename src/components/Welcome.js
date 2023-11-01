@@ -15,7 +15,7 @@ const Welcome = (props) => {
     offlineAccess: false,
   });
   const { navigation } = props;
-  const { setIsLogin } = useContext(AppContext);
+  const { setIsLogin ,setinfoUser} = useContext(AppContext);
 
   //---------------------- login google ---------------------- //
   const onLoginGG = async () => {
@@ -24,6 +24,10 @@ const Welcome = (props) => {
       await GoogleSignin.hasPlayServices();
       console.log('Login');
       const userInfor = await GoogleSignin.signIn();
+      const infoUser ={
+        name:userInfor.name,avatar:userInfor.photo
+      }
+      setinfoUser(infoUser);
       console.log(userInfor);
       ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
       setIsLogin(true);
