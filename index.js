@@ -7,6 +7,7 @@ import TrackPlayer from 'react-native-track-player';
 import Hot2 from './src/components/Hot2';
 import BookDetail from './src/components/BookDetail';
 import ItemListComment from './src/components/ItemListComment';
+import LoginUser from './src/components/LoginUser';
 
 // facebook
 

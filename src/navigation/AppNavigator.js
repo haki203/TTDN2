@@ -23,12 +23,14 @@ import BookDetail from '../components/BookDetail';
 import Read from '../components/Read';
 import SettingScreen from '../components/SettingScreen';
 import ProfileScreen from '../components/ProfileScreen';
+import LoginUser from '../components/LoginUser';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Users = () => {
     return (
         <Stack.Navigator initialRouteName='Welcome' screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Welcome" component={Welcome} />
+            <Stack.Screen name="LoginUser" component={LoginUser} />
             <Stack.Screen name="Hello" component={ManChao} />
         </Stack.Navigator>
     )
@@ -45,6 +47,7 @@ const Mains = () => {
             <Stack.Screen name='SearchScreen' component={SearchScreen} />
             <Stack.Screen name='Profile' component={ProfileScreen} />
             <Stack.Screen name='Welcome' component={ManChao} />
+            <Stack.Screen name='LoginUser' component={LoginUser} />
         </Stack.Navigator>
 
     )

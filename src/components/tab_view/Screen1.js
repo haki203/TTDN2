@@ -81,6 +81,7 @@ const Screen1 = ({navigation}) => {
         keyExtractor={item => item.id}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
       />
       <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2,marginLeft:20 }}>New Arrivals</Text>
       <FlatList

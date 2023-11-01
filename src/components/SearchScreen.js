@@ -12,13 +12,13 @@ const ColorAuthor = '#4838D1';
 const SearchScreen = (props) => {
   const { navigation } = props;
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     setIsTabVisible(false)
-  //   });
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setIsTabVisible(false)
+    });
 
-  //   return unsubscribe;
-  // }, []);
+    return unsubscribe;
+  }, []);
   const [data, setData] = useState([
     {
       "name": "Herzog - Hane",
