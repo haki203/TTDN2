@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button, Modal, } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react';
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/FontAwesome';
-import Icon_3 from 'react-native-vector-icons/MaterialIcons';
+import Icon_3 from 'react-native-vector-icons/AntDesign';
 import { AppContext } from '../navigation/AppContext'
+import ItemListComment from './ItemListComment';
 const { width, height } = Dimensions.get('window');
 
 const BookDetail = (props) => {
@@ -11,7 +12,7 @@ const BookDetail = (props) => {
     const { navigation } = props;
     const [heightView, setHeightView] = useState(0);
     const [showFullText, setShowFullText] = useState(false);
-    const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+    // const { isTabVisible, setIsTabVisible } = useContext(AppContext);
     const longText = "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời.";
     const Read = () => {
         navigation.navigate('Read')
@@ -29,6 +30,9 @@ const BookDetail = (props) => {
     const handleHeartPress = () => {
         setIsHearted(!isHearted);
     };
+
+    const [isDobModalVisible, setDobModalVisible] = useState(false);
+
 
     const imageData = [
         { id: '1', name1: 'Đắc Nhân Tâm', name2: 'Dale Carnegie', source: require('../assets/images/Dac-Nhan-Tam.jpg') },
@@ -95,7 +99,7 @@ const BookDetail = (props) => {
                                 <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
                                 <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
                                 <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={20} color="#272956" />
-                                <Text style={styles.Text_Cmt}>(30)</Text>
+                                <Text style={styles.Text_Cmt}>(10)</Text>
                             </View>
                             <View style={styles.View_NoiDung}>
                                 <View>
@@ -110,84 +114,26 @@ const BookDetail = (props) => {
                             </View>
                         </View>
                     </View>
-                    <View style={styles.View_DocGia}>
-                        <Text style={styles.Text_DocGia}>Bởi Trần Thức ngày 09/10/2023</Text>
-                        <View style={styles.View_NoiDung_DocGia}>
-                            <Text style={styles.Text_NoiDung_DocGia}>Nội dung:</Text>
-                            <View style={styles.Star}>
-                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                                <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={20} color="#272956" />
+                    <TouchableOpacity onPress={() => setDobModalVisible(true)} style={styles.Xem_All}>
+                        <Text style={styles.Xem_All_Cmt}>Xem tất cả đánh giá </Text>
+                        <Icon_2 style={styles.Next} name="caret-down" size={26} color="white" />
+                    </TouchableOpacity>
+                    <Modal animationType="slide" transparent={true} visible={isDobModalVisible}>
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                <View>
+                                    <Text style={styles.Text_Modal_DanhGia}>Tất cả đánh giá</Text>
+                                    <Icon_3 onPress={() => setDobModalVisible(false)} style={styles.Close} name="closecircleo" size={28} color="#272956" />
+                                </View>
+                                <FlatList style={styles.List_Comment}
+                                    data = {dataNe}
+                                    renderItem={({item}) => <ItemListComment dulieu={item} navigation={navigation} />}
+                                    keyExtractor={item => item._id}
+                                    showsVerticalScrollIndicator={false}
+                                />
                             </View>
                         </View>
-                        <View style={styles.View_NoiDung_DocGia}>
-                            <Text style={styles.Text_NoiDung_DocGia}>Giọng đọc:</Text>
-                            <View style={styles.Star1}>
-                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                                <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={20} color="#272956" />
-                            </View>
-                        </View>
-                        <View style={{ flex: 1 }}>
-                            {showFullText ? (
-                                <Text>{longText}
-                                    <Text onPress={() => setShowFullText(!showFullText)} style={{ fontWeight: 'bold' }}>{showFullText ? "Ẩn bớt" : "Xem thêm..."}</Text>
-                                </Text>
-                            ) : (
-                                <Text>{longText.substring(0, 120)}...
-                                    <Text onPress={() => setShowFullText(!showFullText)} style={{ fontWeight: 'bold' }}>{showFullText ? "Ẩn bớt" : "Xem thêm"}</Text>
-                                </Text>
-                            )}
-
-                        </View>
-                    </View>
-                    {
-                        (heightView < 1) ?
-                            (
-                                <TouchableOpacity style={styles.Xem_All} onPress={() => setHeightView(600)}>
-                                    <Text style={styles.Xem_All_Cmt}>Xem tất cả đánh giá </Text>
-                                    <Icon_2 style={styles.Next} name="caret-down" size={26} color="white" />
-                                </TouchableOpacity>
-                            ) :
-                            (
-                                <TouchableOpacity style={styles.Xem_All} onPress={() => setHeightView(0)}>
-                                    <Text style={styles.Xem_All_Cmt}>Ẩn tất cả đánh giá </Text>
-                                    <Icon_2 style={styles.Next} name="caret-up" size={26} color="white" />
-                                </TouchableOpacity>
-                            )
-                    }
-                </View>
-                <View style={{ width: width, height: heightView, marginBottom: 5, alignItems: 'center', }}>
-                    {
-                        (heightView > 0) ?
-                            (
-                                <View style={{ width: '90%', backgroundColor: '#d5d5d5', height: '100%', borderRadius: 20, padding: 10 }}>
-                                    {/*((--------- Style tại đây này------------ */}
-
-                                    
-
-                                    {/*---------- Style tại đây này------------ ))*/}
-                                    <TouchableOpacity style={{ width: '100%', position: 'absolute', bottom: 0 }}
-                                        onPress={() => setHeightView(0)}>
-                                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-                                            <Icon_2 name="caret-up" size={25} color={'#272956'} />
-                                        </View>
-                                    </TouchableOpacity>
-
-                                </View>
-                            ) :
-                            (
-                                <View style={{ display: 'none' }}>
-                                </View>
-                            )
-
-                    }
-
-
+                    </Modal>
                 </View>
                 <View style={styles.Separator}></View>
                 <View style={styles.View_SachLienQuan}>
@@ -220,6 +166,40 @@ const styles = StyleSheet.create({
     Container: {
         flex: 1,
         backgroundColor: 'white',
+    },
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        width: '100%',
+        padding: 20,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        elevation: 5,
+        height: '92%',
+        position: 'absolute',
+        bottom: 0,
+    },
+    List_Comment:{
+        marginTop: 10,
+    },
+    button_text1: {
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    Close: {
+        position: 'absolute',
+        right: 0,
+    },
+    Text_Modal_DanhGia: {
+        textAlign: 'center',
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: 'black'
     },
     Icon_Container: {
         flexDirection: 'row',
@@ -314,6 +294,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
     },
     View_ImageBook: {
+        marginTop: 5,
         width: 80,
         height: 120,
         borderRadius: 10,
@@ -327,10 +308,11 @@ const styles = StyleSheet.create({
     },
     View_Cmt_DocGia: {
         flexDirection: 'column',
-        backgroundColor: '#F4F4F4',
         width: '75%',
         height: '100%',
         borderRadius: 10,
+        backgroundColor: '#FAF9F9',
+        elevation: 2,
     },
     View_Cmt_Star: {
         flexDirection: 'row',
@@ -351,6 +333,7 @@ const styles = StyleSheet.create({
     },
     Star_Danhgia1: {
         paddingLeft: 5,
+
     },
     verticalLine: {
         marginLeft: 15,
@@ -368,7 +351,8 @@ const styles = StyleSheet.create({
     View_DocGia: {
         borderRadius: 10,
         backgroundColor: '#F4F4F4',
-        padding: 15,
+        padding: 20,
+        marginTop: 15,
     },
     Text_DocGia: {
         fontSize: 18,
@@ -392,7 +376,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 10,
     },
     View_NoiDung_DocGia: {
         flexDirection: 'row',
@@ -457,4 +440,68 @@ const styles = StyleSheet.create({
         width: 145,
         color: '#272956'
     },
-})
+});
+
+const dataNe = [
+    {
+        "id": 1,
+        "name": "Mac",
+        "date": "12/10/2022",
+        "star": 5,
+        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
+      }, {
+        "id": 2,
+        "name": "Lorita",
+        "date": "12/6/2022",
+        "star": 2,
+        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
+      }, {
+        "id": 3,
+        "name": "Tadeo",
+        "date": "9/16/2023",
+        "star": 2,
+        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
+      }, {
+        "id": 4,
+        "name": "Levey",
+        "date": "3/16/2023",
+        "star": 5,
+        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
+      }, {
+        "id": 5,
+        "name": "Ketti",
+        "date": "12/30/2022",
+        "star": 1,
+        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
+      }, {
+        "id": 6,
+        "name": "Callean",
+        "date": "5/18/2023",
+        "star": 3,
+        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
+      }, {
+        "id": 7,
+        "name": "Sophey",
+        "date": "5/9/2023",
+        "star": 3,
+        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
+      }, {
+        "id": 8,
+        "name": "Erminia",
+        "date": "12/31/2022",
+        "star": 5,
+        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
+      }, {
+        "id": 9,
+        "name": "Judon",
+        "date": "2/3/2023",
+        "star": 1,
+        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
+      }, {
+        "id": 10,
+        "name": "Farrell",
+        "date": "5/29/2023",
+        "star": 4,
+        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
+      }
+]

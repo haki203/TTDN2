@@ -10,6 +10,7 @@ import PlayScreen from './components/play/PlayScreen';
 import LibraryScreen from './components/LibraryScreen';
 import HomeScreen from './components/HomeScreen';
 import { AppContextProvider } from './navigation/AppContext';
+import BookDetail from './components/BookDetail';
 console.disableYellowBox = true;
 
 
@@ -22,7 +23,6 @@ const App = () => {
         <AppNavigator />
       </NavigationContainer>
     </AppContextProvider>
-
 
   );
 };

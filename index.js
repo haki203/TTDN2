@@ -5,9 +5,11 @@ import {name as appName} from './app.json';
 // Import Facebook SDK
 import TrackPlayer from 'react-native-track-player';
 import Hot2 from './src/components/Hot2';
+import BookDetail from './src/components/BookDetail';
+import ItemListComment from './src/components/ItemListComment';
 
 // facebook
 
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent(appName, () => BookDetail);
 TrackPlayer.registerPlaybackService(() => require('./service'));
 
