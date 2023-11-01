@@ -10,6 +10,6 @@ import ItemListComment from './src/components/ItemListComment';
 
 // facebook
 
-AppRegistry.registerComponent(appName, () => BookDetail);
+AppRegistry.registerComponent(appName, () => App);
 TrackPlayer.registerPlaybackService(() => require('./service'));
 

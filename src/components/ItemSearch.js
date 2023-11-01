@@ -9,11 +9,10 @@ const ItemSearch = (props) => {
     <TouchableOpacity>
       <View style={{flexDirection: 'row'}}>
         <Image style={styles.image1} source={{uri: product.image}}></Image>
-        <View>
+        <View style={{justifyContent: 'center'}}>
         <Text style={styles.nameBook}>{product.name}</Text>
         <Text style={styles.category}>{product.category}</Text>
         </View>
-        <Image style={styles.image2} source={require('../assets/images/mark.png')}></Image>
       </View>
     </TouchableOpacity>
   )
