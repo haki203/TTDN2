@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
 const productModel = require('../../components/products/ProductModel');
+const categoryModel = require('../../components/products/CategoryModel');
 
 const productController = require('../../components/products/ProductController');
 const UploadFile = require('../../middle/UploadFile');
@@ -29,6 +30,15 @@ router.get('/author/:id', async (req, res, next) => {
     try {
         const author = await authorModel.findById(id);
         res.status(200).json({author,result:true});
+    } catch (error) {
+        res.status(400).json({});
+    }
+});
+// get category
+router.get('/category/getAlls', async (req, res, next) => {
+    try {
+        const category = await categoryModel.find({})
+        res.status(200).json({category,result:true});
     } catch (error) {
         res.status(400).json({});
     }

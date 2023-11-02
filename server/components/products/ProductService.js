@@ -1,11 +1,11 @@
 const productModel = require('./ProductModel');
-
+const unorm = require('unorm');
 const getAllProducts = async (size, page) => {
     // lay toan bo sp trong database
     // size =20 , page =4 ==> 61-80
     try {
         const books = await productModel.find({});
-        return  books ;
+        return books;
     } catch (error) {
         console.log("getAllProducts error: " + error);
         throw error;
@@ -36,10 +36,10 @@ const deleteProductById = async (id) => {
     return false;
 
 }
-const addNewProduct = async (title,authorId,categoryId, description, image,createAt,updateAt ) => {
+const addNewProduct = async (title, authorId, categoryId, description, image, createAt, updateAt) => {
     try {
         const newProduct = {
-            title,authorId,categoryId, description, image,createAt,updateAt 
+            title, authorId, categoryId, description, image, createAt, updateAt
         }
         await productModel.create(newProduct);
         return true;
@@ -82,15 +82,34 @@ const getProductById = async (id) => {
     }
     return null;
 }
+const removeDiacritics = require('diacritics').remove; // Import thư viện diacritics
+
 const search = async (keyword) => {
     try {
-        let query = {
-            title: { $regex: keyword, $options: 'i' },
-        }
-        let product = await productModel.find(query);
-        return product;
+        // Lấy tất cả sản phẩm từ cơ sở dữ liệu
+        const products = await productModel.find();
+
+        // Chuẩn hóa từ khóa tìm kiếm
+        const normalizedKeyword = removeDiacritics(keyword).toLowerCase();
+
+        // Dùng mảng để lưu trữ kết quả
+        const results = [];
+
+        // Lặp qua danh sách sản phẩm và so sánh
+        products.forEach((product) => {
+            const normalizedTitle = removeDiacritics(product.title).toLowerCase();
+
+            if (normalizedTitle.includes(normalizedKeyword)) {
+                results.push(product);
+            }
+        });
+
+        return results;
     } catch (error) {
         console.log('search error', error);
     }
 }
-module.exports = { getAllProducts,getProductById,search};
+
+
+
+module.exports = { getAllProducts, getProductById, search };
