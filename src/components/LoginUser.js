@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         backgroundColor: backgroundleader,
         alignItems: 'center',
-
     },
     profile: {
         marginTop: -45
