@@ -7,9 +7,9 @@ const WaitScreen = () => {
     <ImageBackground
       source={require('../assets/images/bg_Wait.png')}
       style={styles.container}>
-      <View style={styles.image}>
-        
-      </View>
+      <Image
+        source={require('../assets/images/10089818_preview_rev_1.png')}
+        style={styles.image}></Image>
     </ImageBackground>
   );
 };
@@ -25,9 +25,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    backgroundColor: '#D9D9D9',
-    borderRadius: 150,
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
   },
 });
