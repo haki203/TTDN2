@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
 const productModel = require('../../components/products/ProductModel');
+const authorModel = require('../../components/products/AuthorModel');
 const categoryModel = require('../../components/products/CategoryModel');
 
 const productController = require('../../components/products/ProductController');
@@ -28,10 +29,11 @@ router.get('/:id', async (req, res, next) => {
 router.get('/author/:id', async (req, res, next) => {
     const { id } = req.params;
     try {
+        console.log(id);
         const author = await authorModel.findById(id);
         res.status(200).json({author,result:true});
     } catch (error) {
-        res.status(400).json({});
+        res.status(400).json({result:false,error});
     }
 });
 // get category
