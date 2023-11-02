@@ -1,17 +1,26 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 const bacroundColor = '#272956';
 const ColorAuthor = '#4838D1';
 const ItemSearch = (props) => {
     const {product} = props;
+    const [name, setName] = useState("Chưa có")
+    useEffect(() => {
+      try {
+        setName(product.author.name);
+      } catch (error) {
+        setName("Chưa có");
+      }
+   
+    }, []);
   return (
     <TouchableOpacity>
       <View style={{flexDirection: 'row'}}>
         <Image style={styles.image1} source={{uri: product.image}}></Image>
         <View style={{justifyContent: 'center'}}>
-        <Text style={styles.nameBook}>{product.name}</Text>
-        <Text style={styles.category}>{product.category}</Text>
+        <Text style={styles.nameBook}>{product.title}</Text>
+        <Text style={styles.category}>{name}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -46,9 +55,4 @@ const styles = StyleSheet.create({
         lineHeight: 18,
         marginTop: 3
     },
-    image2:{
-        position: 'absolute',
-        marginLeft: 358,
-        marginTop: 55
-    }
 })

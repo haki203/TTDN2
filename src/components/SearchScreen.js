@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, Dimensions, Image, FlatList } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, Image, FlatList, ScrollView, TextInput, TouchableOpacity, ToastAndroid, ActivityIndicator } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react'
-import { ScrollView, TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import ItemSearch from './ItemSearch';
 import { AppContext } from '../navigation/AppContext';
+import AxiosIntance from '../axios/AxiosIntance';
 const { height } = Dimensions.get('window');
 const backroundContainer = '#FFFFFF';
 const bacroundHeight = '#C4C4C426';
@@ -12,6 +12,47 @@ const ColorAuthor = '#4838D1';
 const SearchScreen = (props) => {
   const { navigation } = props;
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+  const [dataNe, setdataNe] = useState([]);
+  const [isLoading, setisLoading] = useState(true);
+
+  let timeout = null;
+  const countDownSearch = (searchText) => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => {
+      search(searchText);
+    }, 1000);
+  }
+  const search = async (searchText) => {
+    setisLoading(true);
+    const respone = await AxiosIntance().get("product/search/name?keyword=" + searchText);
+    console.log(respone.result);
+    if (respone.result == true) {
+      // lay du lieu
+      setdataNe(respone.product);
+      console.log("search " + respone.product);
+      setisLoading(false);
+    }
+    else {
+      ToastAndroid.show("Lay du lieu that bai", ToastAndroid.SHORT);
+    }
+  }
+
+  const Issearch = async () => {
+    setisLoading(true);
+    const respone = await AxiosIntance().get("product/search/name?keyword=");
+    console.log(respone.result);
+    if (respone.result == false) {
+      // lay du lieu
+      setdataNe(respone.product);
+      console.log(respone.product);
+      setisLoading(false);
+    }
+    else {
+      ToastAndroid.show("Lay du lieu that bai", ToastAndroid.SHORT);
+    }
+  }
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       setIsTabVisible(false)
@@ -19,6 +60,24 @@ const SearchScreen = (props) => {
 
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    const getNews = async () => {
+      const respone = await AxiosIntance().get("product/");
+      if (respone.result == true) {
+        setdataNe(respone.product)
+        console.log('error product', respone.product);
+        setisLoading(false);
+      } else {
+        ToastAndroid.show("get product", ToastAndroid.SHORT);
+      }
+    }
+    getNews();
+
+    return () => {
+    }
+  }, [])
+
   const [data, setData] = useState([
     {
       "name": "Herzog - Hane",
@@ -150,16 +209,18 @@ const SearchScreen = (props) => {
     setFilteredData(filtered)
   }
   // const filtered = data.filter(item => item.name.includes(searchQuery));
-  const latestText = filteredData.length > 10 ? 'Latest' : 'Results';
+  const latestText = dataNe.length > 0 ? 'Results' : 'Lastest';
   const resetSearch = () => {
     navigation.goBack();
   }
   return (
     <View>
       <View style={styles.hearderContainer}>
-        <Image style={styles.search} source={require('../assets/images/manerge.png')}></Image>
+        <TouchableOpacity onPress={search}>
+          <Image style={styles.search} source={require('../assets/images/manerge.png')}></Image>
+        </TouchableOpacity>
         <View style={{ flexDirection: 'row' }}>
-          <TextInput ref={textInputRef} onChangeText={(text) => handleSearch(text)} placeholder='Search' style={styles.TextSearch}>
+          <TextInput ref={textInputRef} onChangeText={(text) => countDownSearch(text)} placeholder='Search' style={styles.TextSearch}>
           </TextInput>
           <TouchableOpacity onPress={resetSearch}>
             {/* <Image style={styles.mark} source={require('../assets/images/mark.png')}></Image> */}
@@ -168,15 +229,23 @@ const SearchScreen = (props) => {
         </View>
       </View>
       <View style={styles.listContainer}>
-
         <Text style={styles.content}>{latestText}</Text>
-        <FlatList
-          data={filteredData}
-          renderItem={({ item }) => <ItemSearch product={item} />}
-          keyExtractor={item => item._id}
-          showsVerticalScrollIndicator={false}
-          disableVirtualization={true} // Thêm thuộc tính này
-        />
+        <View style={styles.container1}>
+          {
+            isLoading == true ? (
+                <View >
+                  <ActivityIndicator size='large' color='#fff00' />
+                  <Text style={{ color: 'black', fontSize: 14, fontWeight: '600', textAlign: 'center' }}>Loading...</Text>
+                </View>
+            ) : (
+              <FlatList
+                data={dataNe}
+                renderItem={({ item }) => <ItemSearch product={item} navigation={navigation} />}
+                keyExtractor={item => item._id}
+                showsVerticalScrollIndicator={false}
+              />
+            )}
+        </View>
       </View>
     </View>
   )
@@ -187,6 +256,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: backroundContainer
+  },
+  container1: {
+    flex: 1,
+    justifyContent: 'center',
   },
   hearderContainer: {
     height: height * 0.1,

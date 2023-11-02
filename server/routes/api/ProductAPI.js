@@ -3,7 +3,7 @@ var router = express.Router();
 const mongoose = require('mongoose');
 const productModel = require('../../components/products/ProductModel');
 const categoryModel = require('../../components/products/CategoryModel');
-
+const authorModel = require('../../components/products/AuthorModel')
 const productController = require('../../components/products/ProductController');
 const UploadFile = require('../../middle/UploadFile');
 //api/product
