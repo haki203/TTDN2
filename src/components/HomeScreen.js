@@ -8,6 +8,7 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Screen1 from './tab_view/Screen1'
 import Screen2 from './tab_view/Screen2'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import AxiosIntance from '../axios/AxiosIntance'
 
 const color_txt1 = "#9D9D9D";
 const color_txt2 = "#272956";
@@ -67,6 +68,25 @@ const HomeScreen = (props) => {
     </ScrollView>
 
   );
+
+
+  useEffect(() => {
+    const getAllCate = async () => {
+        const respone = await AxiosIntance().get();
+        console.log(respone.data);
+        
+        if(respone.error == false){
+            setdataNe(respone.data)
+            setisLoading(false);
+        }else{
+            ToastAndroid.show("get data", ToastAndroid.SHORT);
+        }
+    }
+    getNews();
+
+    return () => {
+    }
+}, [])
   const renderScene = SceneMap({
     Novel: NovelRoute,
     Self: SelfRoute,
@@ -76,7 +96,7 @@ const HomeScreen = (props) => {
   });
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: 'Novel', title: 'Novel' },
+    { key: 'Novel', title: 'Novell' },
     { key: 'Self', title: 'Self-love' },
     { key: 'Science', title: 'Science' },
     { key: 'Romance', title: 'Romance' },
@@ -125,7 +145,7 @@ const HomeScreen = (props) => {
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
           </TouchableOpacity>
           <TouchableOpacity onPress={settings}>
-          <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
+            <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
           </TouchableOpacity>
         </View>
       </View>
