@@ -15,9 +15,9 @@ const ItemListRelate = (props) => {
         <View>
             <View>
                 <TouchableOpacity>
-                    <Image source={{ uri: dulieu.imageRelate}} style={styles.FlatList_Image} />
-                    <Text style={styles.FlatList_Name1}>{dulieu.titleRelate}</Text>
-                    <Text style={styles.FlatList_Name2}>{dulieu.titleRelate}</Text>
+                    <Image source={dulieu.source} style={styles.FlatList_Image} />
+                    <Text style={styles.FlatList_Name1}>{dulieu.name1}</Text>
+                    <Text style={styles.FlatList_Name2}>{dulieu.name2}</Text>
                 </TouchableOpacity>
             </View>
         </View>

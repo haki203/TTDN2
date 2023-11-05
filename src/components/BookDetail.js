@@ -41,8 +41,8 @@ const BookDetail = (props) => {
             }
             console.log(Data2);
             setBookData(Data2);
-            setRelateData1(Data2.category);
-            console.log("123r", RelateData1);
+            // setRelateData1(Data2.category);
+            // console.log("123r", RelateData1);
         }
         DetailBook();
         return () => { }
@@ -198,7 +198,7 @@ const BookDetail = (props) => {
                     <Text style={styles.Text_BinhLuan}>Những sách liên quan</Text>
                     <FlatList
                         showsHorizontalScrollIndicator={false}
-                        data={RelateData2}
+                        data={imageData}
                         keyExtractor={(item) => item.id}
                         horizontal={true}
                         renderItem={({ item }) => <ItemListRelate dulieu={item} navigation={navigation} />}
