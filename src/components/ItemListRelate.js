@@ -15,9 +15,9 @@ const ItemListRelate = (props) => {
         <View>
             <View>
                 <TouchableOpacity>
-                    <Image source={dulieu.source} style={styles.FlatList_Image} />
-                    <Text style={styles.FlatList_Name1}>{dulieu.name1}</Text>
-                    <Text style={styles.FlatList_Name2}>{dulieu.name2}</Text>
+                    <Image source={{uri: dulieu.image}} style={styles.FlatList_Image} />
+                    <Text style={styles.FlatList_Name1}>{dulieu.title}</Text>
+                    {/* <Text style={styles.FlatList_Name2}>{dulieu.authorId}</Text> */}
                 </TouchableOpacity>
             </View>
         </View>
@@ -285,6 +285,7 @@ const styles = StyleSheet.create({
         width: 145,
         height: 210,
         borderRadius: 10,
+        marginRight: 10,
     },
     FlatList_Name1: {
         paddingTop: 10,

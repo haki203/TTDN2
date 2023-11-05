@@ -14,7 +14,7 @@ const BookDetail = (props) => {
 
     const [authorData, setAuthorData] = useState([]);
     const [bookData, setBookData] = useState([]);
-    const [RelateData1, setRelateData1] = useState([]);
+
     const [RelateData2, setRelateData2] = useState([]);
     useEffect(() => {
         const AuthorBook = async () => {
@@ -27,7 +27,7 @@ const BookDetail = (props) => {
             setAuthorData(Data1);
         }
         AuthorBook();
-        return () => { }
+
     }, []);
     useEffect(() => {
         const DetailBook = async () => {
@@ -38,32 +38,29 @@ const BookDetail = (props) => {
                 description: response.product.description,
                 rate: response.product.rate,
                 category: response.product.categoryId,
+
             }
             console.log(Data2);
             setBookData(Data2);
-            // setRelateData1(Data2.category);
-            // console.log("123r", RelateData1);
+            console.log("123r", bookData.category);
         }
         DetailBook();
-        return () => { }
-    }, []);
 
+    }, []);
 
     useEffect(() => {
         const Relate = async () => {
-            const response = await AxiosIntance().get('/product/get-by-category/'+ RelateData1); 
-            for (let i = 0; i < response.product.length; i++){
-                const Data3 = {
-                    id: response.product[i]._id,
-                    imageRelate: response.product[i].image,
-                    titleRelate: response.product[i].title,
-                };
-                console.log("123123123",Data3);
-                setRelateData2(Data3);
+            const response = await AxiosIntance().get('/product/get-by-category/' + bookData.category);
+            const dataa = response.product;
+            let datarelate = [];
+            for (let i = 0; i < dataa.length; i++) {
+                datarelate.push(dataa[i]);
+                console.log(datarelate);
+                setRelateData2(datarelate);
+
             }
         }
         Relate();
-        return () => { }
     }, []);
 
     const [showMore, setShowMore] = useState(false);
@@ -198,7 +195,7 @@ const BookDetail = (props) => {
                     <Text style={styles.Text_BinhLuan}>Những sách liên quan</Text>
                     <FlatList
                         showsHorizontalScrollIndicator={false}
-                        data={imageData}
+                        data={RelateData2}
                         keyExtractor={(item) => item.id}
                         horizontal={true}
                         renderItem={({ item }) => <ItemListRelate dulieu={item} navigation={navigation} />}
