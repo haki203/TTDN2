@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, TextInput, FlatList, ScrollView } from 'react-native'
+import { Image, StyleSheet, Text, View, TextInput, FlatList, ScrollView, ToastAndroid } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import Icon from "react-native-vector-icons/Feather"
 import Icon2 from "react-native-vector-icons/AntDesign"
@@ -21,6 +21,7 @@ const color_logo = '#272956';
 const HomeScreen = (props) => {
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
   const { navigation } = props;
+  const [dataNe, setdataNe] = useState([]);
 
   useEffect(() => {
 
@@ -56,54 +57,63 @@ const HomeScreen = (props) => {
     navigation.navigate('Setting')
 
   );
-  const RomanceRoute = () => (
+  const RomanceRoute = (id) => (
     <ScrollView>
-      <Screen1 navigation={navigation} />
+      <Screen1 navigation={navigation} id={id} />
     </ScrollView>
 
   );
   const CrimeRoute = () => (
     <ScrollView>
-      <Screen1 navigation={navigation} />
+      <Screen2 navigation={navigation} />
     </ScrollView>
 
   );
 
 
+
+  const renderScene = ({ route }) => {
+
+    return (RomanceRoute(route.key));
+  }
+  const [index, setIndex] = React.useState(0);
+  const [routes, setRoutes] = React.useState([
+
+  ]);
+  const { } = useState([]);
+
+  console.log(routes);
+
   useEffect(() => {
     const getAllCate = async () => {
-        const respone = await AxiosIntance().get();
-        console.log(respone.data);
-        
-        if(respone.error == false){
-            setdataNe(respone.data)
-            setisLoading(false);
-        }else{
-            ToastAndroid.show("get data", ToastAndroid.SHORT);
-        }
+      const respone = await AxiosIntance().get("/product/category/getAlls");
+
+      console.log(respone.category);
+
+      const newArray = [];
+
+      for (const item of respone.category) {
+        const newItem = { key: item._id, title: item.name };
+        newArray.push(newItem);
+      }
+      console.log(newArray);
+
+      if (newArray.length > 0) {
+        setRoutes(newArray);
+        setIndex(0);
+      }
+
+      if (respone.result == true) {
+
+        setdataNe(respone.category)
+      } else {
+        ToastAndroid.show("get data", ToastAndroid.SHORT);
+      }
     }
-    getNews();
-
-    return () => {
-    }
-}, [])
-  const renderScene = SceneMap({
-    Novel: NovelRoute,
-    Self: SelfRoute,
-    Science: ScienceRoute,
-    Romance: RomanceRoute,
-    Crime: CrimeRoute,
-  });
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: 'Novel', title: 'Novell' },
-    { key: 'Self', title: 'Self-love' },
-    { key: 'Science', title: 'Science' },
-    { key: 'Romance', title: 'Romance' },
-    { key: 'Crime', title: 'Crime' },
-  ]);
+    getAllCate();
 
 
+  }, [])
 
 
   const renderTabBar = props => (
@@ -153,15 +163,18 @@ const HomeScreen = (props) => {
         <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Welcome back, Bunny!</Text>
         <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>What do you want to{'\n'}read today?</Text>
       </View>
-      <TabView
-        style={styles.tab}
-        navigationState={{ index, routes }}
-        onIndexChange={setIndex}
-        renderScene={renderScene}
-        renderTabBar={renderTabBar}
-        scrollEnabled={false}
+      <>{
+        routes.length > 0 &&
+        <TabView
+          style={styles.tab}
+          navigationState={{ index, routes }}
+          onIndexChange={setIndex}
+          renderScene={renderScene}
+          renderTabBar={renderTabBar}
+          scrollEnabled={false}
+        />
+      }</>
 
-      />
     </View>
   )
 }
