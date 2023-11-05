@@ -6,15 +6,35 @@ import AxiosIntance from '../axios/AxiosIntance';
 const bacroundColor = '#272956';
 const ColorAuthor = '#4838D1';
 const ItemSearch = (props) => {
-  const { product, navigation, author } = props;
-  
+  const { product, navigation } = props;
+  const [name, setName] = useState("Chưa có");
+  useEffect(() => {
+    const getAdmin = async () => {
+      try {
+        if (product.authorId) {
+          console.log('author ne: ',product.authorId);
+          const respone = await AxiosIntance().get(`/product/author/${product.authorId}`);
+          console.log("author khi goi api ne: ", respone.author.name);
+          setName(respone.author.name)
+        }
+      } catch (error) {
+      }
+
+    }
+    try {
+      getAdmin();
+    } catch (error) {
+      setName("Chưa có");
+    }
+
+  }, []);
   return (
     <TouchableOpacity>
       <View style={{ flexDirection: 'row' }}>
         <Image style={styles.image1} source={{ uri: product.image }}></Image>
         <View style={{ justifyContent: 'center' }}>
           <Text style={styles.nameBook}>{product.title}</Text>
-          <Text style={styles.category}>{product.authorId.author}</Text>
+          <Text style={styles.category}>{name}</Text>
         </View>
       </View>
     </TouchableOpacity>
