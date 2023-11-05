@@ -13,8 +13,9 @@ const SearchScreen = (props) => {
   const { navigation } = props;
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
   const [dataNe, setdataNe] = useState([]);
+  const [imagee, setImagee] = useState([]);
+  const [nameauthor, setNameauthor] = useState([]);
   const [isLoading, setisLoading] = useState(true);
-
   let timeout = null;
   const countDownSearch = (searchText) => {
     if (timeout) {
@@ -26,12 +27,18 @@ const SearchScreen = (props) => {
   }
   const search = async (searchText) => {
     setisLoading(true);
-    const respone = await AxiosIntance().get("product/search/name?keyword=" + searchText);
-    console.log(respone.result);
+    const respone = await AxiosIntance().get("/product/search/name?keyword=" + searchText);
+    respone.product.forEach((product) => {
+      setNameauthor(product.authorId);
+      console.log("Rate:", nameauthor);
+    });
+    // const imageproduct = respone.product.map(product => product.image);
+    // setNameauthor(authorId);
     if (respone.result == true) {
       // lay du lieu
       setdataNe(respone.product);
-      console.log("search " + respone.product);
+      console.log("data ne " + respone.product)
+      // console.log("search " + respone.product);
       setisLoading(false);
     }
     else {
@@ -63,7 +70,10 @@ const SearchScreen = (props) => {
 
   useEffect(() => {
     const getNews = async () => {
-      const respone = await AxiosIntance().get("product/");
+      const respone = await AxiosIntance().get("/product/");
+      // const authorId = respone.product.map(product => product.authorId);
+      // const imageproduct = respone.product.map(product => product.image);
+      // setdataNe(imageproduct)
       if (respone.result == true) {
         setdataNe(respone.product)
         console.log('error product', respone.product);
@@ -77,6 +87,24 @@ const SearchScreen = (props) => {
     return () => {
     }
   }, [])
+  useEffect(() => {
+  const AuthorName = async () => {
+    try {
+      const response = await AxiosIntance().get(`/product/author/` + nameauthor);
+      if (response.result == true) {
+        setdataNe(response.author.name);
+        console.log("author: " + response.author.name)
+      } else {
+        ToastAndroid.show('Failed to get product', ToastAndroid.SHORT);
+      }
+    } catch (error) {
+      ToastAndroid.show('Không lấy được id', ToastAndroid.SHORT);
+    }
+  }
+  AuthorName();
+  return () => {
+  }
+}, [])
 
   const [data, setData] = useState([
     {
@@ -209,7 +237,8 @@ const SearchScreen = (props) => {
     setFilteredData(filtered)
   }
   // const filtered = data.filter(item => item.name.includes(searchQuery));
-  const latestText = dataNe.length > 0 ? 'Results' : 'Lastest';
+  // const latestText = dataNe.length > 0 ? 'Results' : 'Lastest';
+  // const latestText2 = dataNe.length > 0 ? 'Results' : 'Lastest';
   const resetSearch = () => {
     navigation.goBack();
   }
@@ -229,18 +258,21 @@ const SearchScreen = (props) => {
         </View>
       </View>
       <View style={styles.listContainer}>
-        <Text style={styles.content}>{latestText}</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={styles.content}>Lastest</Text>
+          <Text style={styles.content1}></Text>
+        </View>
         <View style={styles.container1}>
           {
             isLoading == true ? (
-                <View >
-                  <ActivityIndicator size='large' color='#fff00' />
-                  <Text style={{ color: 'black', fontSize: 14, fontWeight: '600', textAlign: 'center' }}>Loading...</Text>
-                </View>
+              <View >
+                <ActivityIndicator size='large' color='#fff00' />
+                <Text style={{ color: 'black', fontSize: 14, fontWeight: '600', textAlign: 'center' }}>Loading...</Text>
+              </View>
             ) : (
               <FlatList
                 data={dataNe}
-                renderItem={({ item }) => <ItemSearch product={item} navigation={navigation} />}
+                renderItem={({ item }) => <ItemSearch author={item} product={item} navigation={navigation} />}
                 keyExtractor={item => item._id}
                 showsVerticalScrollIndicator={false}
               />
@@ -309,8 +341,16 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     letterSpacing: 0.408,
     lineHeight: 22,
-    marginHorizontal: 25,
+    paddingLeft: 25,
     marginTop: 8
+  },
+  content1: {
+    color: bacroundColor,
+    fontSize: 20,
+    fontWeight: '500',
+    fontStyle: 'normal',
+    paddingLeft: 5,
+    marginTop: 5
   },
   huy: {
     color: bacroundColor,

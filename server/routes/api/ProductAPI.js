@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const productModel = require('../../components/products/ProductModel');
 const authorModel = require('../../components/products/AuthorModel');
 const categoryModel = require('../../components/products/CategoryModel');
-const authorModel = require('../../components/products/AuthorModel')
 const productController = require('../../components/products/ProductController');
 const UploadFile = require('../../middle/UploadFile');
 //api/product
