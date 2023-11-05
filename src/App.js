@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, LogBox, Image, } from 'react-native';
+import { StyleSheet, Text, View, Image, } from 'react-native';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import { NavigationContainer } from '@react-navigation/native';
@@ -11,7 +11,9 @@ import LibraryScreen from './components/LibraryScreen';
 import HomeScreen from './components/HomeScreen';
 import { AppContextProvider } from './navigation/AppContext';
 console.disableYellowBox = true;
+import { LogBox } from "react-native"
 
+LogBox.ignoreAllLogs(true)
 
 const App = () => {
 
