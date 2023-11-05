@@ -5,10 +5,11 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { AppContext } from '../navigation/AppContext';
 import auth from '@react-native-firebase/auth';
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+import AxiosIntance from '../axios/AxiosIntance';
 
 const { width, height } = Dimensions.get('window');
 const backgroundColor = '#FDFDFD';
-const color = '#D45555';
+const color = '#FFFFFF';
 const Welcome = (props) => {
   GoogleSignin.configure({
     webClientId: '604464843561-7bobfsn4dq8d243n2ka1ngpiavlbof23.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
@@ -24,6 +25,10 @@ const Welcome = (props) => {
       await GoogleSignin.hasPlayServices();
       console.log('Login');
       const userInfor = await GoogleSignin.signIn();
+      const res = await AxiosIntance().post("/user/login", { email: userInfor.user.email });
+      if(res.result){
+        
+      }
       const infoUser ={
         name:userInfor.name,avatar:userInfor.photo
       }
@@ -93,7 +98,7 @@ const Welcome = (props) => {
       <View style={styles.touchable}>
         <TouchableOpacity style={styles.touchableFB} onPress={() => onFacebookButtonPress()}>
           <Image style={styles.icon} source={require('../assets/images/ic_fb.png')}></Image>
-          <Text style={styles.textView_FB}>Continue with Facebook</Text>
+          <Text style={styles.textView_GG}>Continue with Facebook</Text>
         </TouchableOpacity>
         <Text style={styles.textView_3}>OR</Text>
         <TouchableOpacity style={styles.touchableGG} onPress={onLoginGG}>
