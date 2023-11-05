@@ -21,10 +21,7 @@ const noidungColor = '#9D9D9D';
 const Read = props => {
   const {isTabVisible, setIsTabVisible} = useContext(AppContext);
   const {navigation} = props;
-  const PdfResource = {
-    uri: 'https://api.printnode.com/static/test/pdf/multipage.pdf',
-    cache: true,
-  };
+  const PdfResource= require('../assets/pdf/dacnhantam.pdf');
   const Back = () => {
     navigation.goBack();
   };
@@ -52,7 +49,7 @@ const Read = props => {
       <View style={styles.body}>
         <PDF
           style={styles.body_NoiDung}
-          trustAllCerts={true} // bỏ qua chứng chỉ ssl
+          trustAllCerts={false} // bỏ qua chứng chỉ ssl
           source={PdfResource}
           page={1} //hiển thị trang số 1 đầu tiên
           scale={1.0} // tỉ lệ phóng ban đầu
@@ -74,9 +71,9 @@ const Read = props => {
             console.log(`-----------------------${page}/${totalPages}`)
           } //  hiển thị số trang
           onError={error => console.log(error)} // hiển thị lỗi
-          onPageSingleTap={page => alert(page)} // hiển thị khi click vào trang
+          // onPageSingleTap={page => alert(page)} // hiển thị khi click vào trang
           onPressLink={link => Linking.openURL(link)} // hiển thị khi click vào link
-          onScaleChanged={scale => console.log(scale)} // hiển thị khi thay đổi tỉ lệ phóng
+          // onScaleChanged={scale => console.log(scale)} // hiển thị khi thay đổi tỉ lệ phóng
           // singlePage={true}
           spacing={5} // khoảng cách giữa 2 trang
         />
@@ -125,5 +122,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: Dimensions.get('window').width + 40,
     height: Dimensions.get('window').height,
+    fontSize:12,
+    backgroundColor:'black'
   },
 });
