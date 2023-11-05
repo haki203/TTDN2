@@ -5,9 +5,67 @@ import Icon_2 from 'react-native-vector-icons/FontAwesome';
 import Icon_3 from 'react-native-vector-icons/AntDesign';
 import { AppContext } from '../navigation/AppContext'
 import ItemListComment from './ItemListComment';
+import AxiosIntance from '../axios/AxiosIntance';
+import { URI } from '../../server/public/assets/vendor/tinymce/tinymce';
+import ItemListRelate from './ItemListRelate';
 const { width, height } = Dimensions.get('window');
 
 const BookDetail = (props) => {
+
+    const [authorData, setAuthorData] = useState([]);
+    const [bookData, setBookData] = useState([]);
+    const [RelateData1, setRelateData1] = useState([]);
+    const [RelateData2, setRelateData2] = useState([]);
+    useEffect(() => {
+        const AuthorBook = async () => {
+            const response = await AxiosIntance().get('/product/author/654205756ca8e32b5fdddba7')
+            const Data1 = {
+                authorname: response.author.name,
+                introduce: response.author.introduce,
+            }
+            console.log(Data1);
+            setAuthorData(Data1);
+        }
+        AuthorBook();
+        return () => { }
+    }, []);
+    useEffect(() => {
+        const DetailBook = async () => {
+            const response = await AxiosIntance().get('/product/654200036ca8e32b5fd3bfec')
+            const Data2 = {
+                title: response.product.title,
+                image: response.product.image,
+                description: response.product.description,
+                rate: response.product.rate,
+                category: response.product.categoryId,
+            }
+            console.log(Data2);
+            setBookData(Data2);
+            setRelateData1(Data2.category);
+            console.log("123r", RelateData1);
+        }
+        DetailBook();
+        return () => { }
+    }, []);
+
+
+    useEffect(() => {
+        const Relate = async () => {
+            const response = await AxiosIntance().get('/product/get-by-category/'+ RelateData1); 
+            for (let i = 0; i < response.product.length; i++){
+                const Data3 = {
+                    id: response.product[i]._id,
+                    imageRelate: response.product[i].image,
+                    titleRelate: response.product[i].title,
+                };
+                console.log("123123123",Data3);
+                setRelateData2(Data3);
+            }
+        }
+        Relate();
+        return () => { }
+    }, []);
+
     const [showMore, setShowMore] = useState(false);
     const { navigation } = props;
     const [heightView, setHeightView] = useState(0);
@@ -52,11 +110,11 @@ const BookDetail = (props) => {
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.Image_Container}>
                     <View>
-                        <Image style={styles.View_Image} source={require('../assets/images/bookdetail.png')} />
+                        <Image style={styles.View_Image} source={{ uri: bookData.image }} />
                     </View>
                     <View>
-                        <Text style={styles.View_Text1}>Catcher in the Rye</Text>
-                        <Text style={styles.View_Text2}>J.D. Salinger</Text>
+                        <Text style={styles.View_Text1}>{bookData.title}</Text>
+                        <Text style={styles.View_Text2}>{authorData.authorname}</Text>
                     </View>
                     <View style={styles.View_Danhgia}>
                         <Icon_2 style={styles.Star_Danhgia} name="star" size={20} color="#272956" />
@@ -64,17 +122,17 @@ const BookDetail = (props) => {
                         <Icon_2 style={styles.Star_Danhgia} name="star" size={20} color="#272956" />
                         <Icon_2 style={styles.Star_Danhgia} name="star" size={20} color="#272956" />
                         <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={20} color="#272956" />
-                        <Text style={styles.Text_DanhGia}>4.5</Text>
+                        <Text style={styles.Text_DanhGia}>{bookData.rate}</Text>
                     </View>
                 </View>
                 <View style={styles.View_MoTa}>
                     <View>
-                        <Text style={styles.Text_MoTa1}>About the author</Text>
-                        <Text style={styles.Text_MoTa2}>J.D. Salinger was an American writer, best known for his 1951 novel The Catcher in the Rye. Before its publi cation, Salinger published several short stories in Story magazine</Text>
+                        <Text style={styles.Text_MoTa1}>Giới thiệu về tác giả</Text>
+                        <Text style={styles.Text_MoTa2}>{authorData.introduce}</Text>
                     </View>
                     <View style={styles.View_Text3}>
-                        <Text style={styles.Text_MoTa1}>Overview</Text>
-                        <Text style={styles.Text_MoTa2}>The Catcher in the Rye is a novel by J. D. Salinger, partially published in serial form in 1945–1946 and as a novel in 1951. It was originally intended for adu lts but is often read by adolescents for its theme of angst, alienation and as a critique......</Text>
+                        <Text style={styles.Text_MoTa1}>Tổng quan về sách</Text>
+                        <Text style={styles.Text_MoTa2}>{bookData.description}</Text>
                     </View>
                 </View>
                 <View style={styles.View_Click}>
@@ -90,10 +148,10 @@ const BookDetail = (props) => {
                 <View style={styles.View_BinhLuan}>
                     <Text style={styles.Text_BinhLuan}>Bình luận</Text>
                     <View style={styles.View_Cmt}>
-                        <Image style={styles.View_ImageBook} source={require('../assets/images/bookdetail.png')} />
+                        <Image style={styles.View_ImageBook} source={{ uri: bookData.image }} />
                         <View style={styles.View_Cmt_DocGia}>
                             <View style={styles.View_Cmt_Star}>
-                                <Text style={styles.Text_Cmt}>4.5</Text>
+                                <Text style={styles.Text_Cmt}>{bookData.rate}</Text>
                                 <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
                                 <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
                                 <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
@@ -126,8 +184,8 @@ const BookDetail = (props) => {
                                     <Icon_3 onPress={() => setDobModalVisible(false)} style={styles.Close} name="closecircleo" size={28} color="#272956" />
                                 </View>
                                 <FlatList style={styles.List_Comment}
-                                    data = {dataNe}
-                                    renderItem={({item}) => <ItemListComment dulieu={item} navigation={navigation} />}
+                                    data={dataNe}
+                                    renderItem={({ item }) => <ItemListComment dulieu={item} navigation={navigation} />}
                                     keyExtractor={item => item._id}
                                     showsVerticalScrollIndicator={false}
                                 />
@@ -140,21 +198,12 @@ const BookDetail = (props) => {
                     <Text style={styles.Text_BinhLuan}>Những sách liên quan</Text>
                     <FlatList
                         showsHorizontalScrollIndicator={false}
-                        data={imageData}
+                        data={RelateData2}
                         keyExtractor={(item) => item.id}
                         horizontal={true}
-                        renderItem={({ item }) => (
-                            <View style={styles.FlatList_View}>
-                                <TouchableOpacity>
-                                    <Image source={item.source} style={styles.FlatList_Image} />
-                                    <Text style={styles.FlatList_Name1}>{item.name1}</Text>
-                                    <Text style={styles.FlatList_Name2}>{item.name2}</Text>
-                                </TouchableOpacity>
-                            </View>
-                        )}
+                        renderItem={({ item }) => <ItemListRelate dulieu={item} navigation={navigation} />}
                     />
                 </View>
-
             </ScrollView >
         </View >
     )
@@ -184,7 +233,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
     },
-    List_Comment:{
+    List_Comment: {
         marginTop: 10,
     },
     button_text1: {
@@ -295,8 +344,8 @@ const styles = StyleSheet.create({
     },
     View_ImageBook: {
         marginTop: 5,
-        width: 80,
-        height: 120,
+        width: 75,
+        height: 110,
         borderRadius: 10,
     },
     View_Cmt: {
@@ -449,59 +498,59 @@ const dataNe = [
         "date": "12/10/2022",
         "star": 5,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 2,
         "name": "Lorita",
         "date": "12/6/2022",
         "star": 2,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 3,
         "name": "Tadeo",
         "date": "9/16/2023",
         "star": 2,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 4,
         "name": "Levey",
         "date": "3/16/2023",
         "star": 5,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 5,
         "name": "Ketti",
         "date": "12/30/2022",
         "star": 1,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 6,
         "name": "Callean",
         "date": "5/18/2023",
         "star": 3,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 7,
         "name": "Sophey",
         "date": "5/9/2023",
         "star": 3,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 8,
         "name": "Erminia",
         "date": "12/31/2022",
         "star": 5,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 9,
         "name": "Judon",
         "date": "2/3/2023",
         "star": 1,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 10,
         "name": "Farrell",
         "date": "5/29/2023",
         "star": 4,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }
+    }
 ]

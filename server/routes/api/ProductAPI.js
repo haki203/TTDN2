@@ -6,6 +6,7 @@ const categoryModel = require('../../components/products/CategoryModel');
 
 const productController = require('../../components/products/ProductController');
 const UploadFile = require('../../middle/UploadFile');
+const AuthorModel = require('../../components/products/AuthorModel');
 //api/product
 router.get('/', async (req, res, next) => {
     try {
@@ -28,7 +29,7 @@ router.get('/:id', async (req, res, next) => {
 router.get('/author/:id', async (req, res, next) => {
     const { id } = req.params;
     try {
-        const author = await authorModel.findById(id);
+        const author = await AuthorModel.findById(id);
         res.status(200).json({author,result:true});
     } catch (error) {
         res.status(400).json({});
