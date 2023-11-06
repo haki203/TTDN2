@@ -6,6 +6,7 @@ const authorModel = require('../../components/products/AuthorModel');
 const categoryModel = require('../../components/products/CategoryModel');
 const productController = require('../../components/products/ProductController');
 const UploadFile = require('../../middle/UploadFile');
+const AuthorModel = require('../../components/products/AuthorModel');
 //api/product
 router.get('/', async (req, res, next) => {
     try {
