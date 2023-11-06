@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button, Modal, } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button, Modal, ActivityIndicator } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react';
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/FontAwesome';
@@ -14,10 +14,12 @@ const BookDetail = (props) => {
 
     const [authorData, setAuthorData] = useState([]);
     const [bookData, setBookData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [RelateData2, setRelateData2] = useState([]);
     useEffect(() => {
         const AuthorBook = async () => {
+            setIsLoading(true);
             const response = await AxiosIntance().get('/product/author/654205756ca8e32b5fdddba7')
             const Data1 = {
                 authorname: response.author.name,
@@ -42,26 +44,26 @@ const BookDetail = (props) => {
             }
             console.log(Data2);
             setBookData(Data2);
-            console.log("123r", bookData.category);
+            console.log("123r", response.product.categoryId);
+            Relate(response.product.categoryId)
         }
         DetailBook();
 
     }, []);
+    const Relate = async (category) => {
+        setIsLoading(true);
+        const response = await AxiosIntance().get('/product/get-by-category/' + category);
+        const dataa = response.product;
+        let datarelate = [];
+        for (let i = 0; i < dataa.length; i++) {
+            datarelate.push(dataa[i]);
+            console.log(datarelate);
 
-    useEffect(() => {
-        const Relate = async () => {
-            const response = await AxiosIntance().get('/product/get-by-category/' + bookData.category);
-            const dataa = response.product;
-            let datarelate = [];
-            for (let i = 0; i < dataa.length; i++) {
-                datarelate.push(dataa[i]);
-                console.log(datarelate);
-                setRelateData2(datarelate);
-
-            }
         }
-        Relate();
-    }, []);
+        setRelateData2(datarelate);
+        setIsLoading(false)
+    }
+
 
     const [showMore, setShowMore] = useState(false);
     const { navigation } = props;
@@ -96,6 +98,7 @@ const BookDetail = (props) => {
     ];
     return (
         <View style={styles.Container} >
+            {isLoading ? (<View style={styles.loading}><ActivityIndicator size={35} color={'black'} /></View>) : (<View></View>)}
             <View style={styles.Icon_Container}>
                 <TouchableOpacity onPress={Back}>
                     <Icon_1 name="chevron-back" size={30} color="black" />
@@ -213,6 +216,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
     },
+    loading:{width:width,height:height,alignItems:'center',justifyContent:'center',backgroundColor:'white'},
     modalContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -450,8 +454,7 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     View_SachLienQuan: {
-        paddingLeft: 20,
-        paddingRight: 20,
+        padding:20
     },
     toggleButtonText_1: {
         fontWeight: 'bold',
