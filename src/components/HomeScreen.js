@@ -32,23 +32,7 @@ const HomeScreen = (props) => {
     return unsubscribe;
   }, []);
 
-  const NovelRoute = () => (
-    <ScrollView>
-      <Screen1 navigation={navigation} />
-    </ScrollView>
 
-  );
-  const SelfRoute = () => (
-    <ScrollView>
-      <Screen1 navigation={navigation} />
-    </ScrollView>
-  );
-  const ScienceRoute = () => (
-    <ScrollView>
-      <Screen1 navigation={navigation} />
-    </ScrollView>
-
-  );
   const search = () => (
     navigation.navigate('SearchScreen')
 
@@ -60,12 +44,6 @@ const HomeScreen = (props) => {
   const RomanceRoute = (id) => (
     <ScrollView>
       <Screen1 navigation={navigation} id={id} />
-    </ScrollView>
-
-  );
-  const CrimeRoute = () => (
-    <ScrollView>
-      <Screen2 navigation={navigation} />
     </ScrollView>
 
   );
@@ -160,8 +138,8 @@ const HomeScreen = (props) => {
         </View>
       </View>
       <View style={styles.title}>
-        <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Welcome back, Bunny!</Text>
-        <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>What do you want to{'\n'}read today?</Text>
+        <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Chào mừng bạn trở lại, Bunny!</Text>
+        <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>Bạn muốn đọc sách gì?</Text>
       </View>
       <>{
         routes.length > 0 &&
@@ -216,7 +194,7 @@ const styles = StyleSheet.create({
     marginTop: 14,
     color: icon_color
   }, tab: {
-    marginLeft: 20,
+    marginLeft: 10,
     height: 'auto',
 
   },
@@ -233,6 +211,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
     color: color_logo,
     letterSpacing: 0.5
+
+  },
+  label:{
+    fontWeight:'500',
+    fontSize:16
+  },
+  activeLabel:{
+    color:'black',
 
   }
 

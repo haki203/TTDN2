@@ -9,31 +9,31 @@ import AxiosIntance from '../axios/AxiosIntance';
 import { URI } from '../../server/public/assets/vendor/tinymce/tinymce';
 import ItemListRelate from './ItemListRelate';
 const { width, height } = Dimensions.get('window');
-
+import { useRoute } from '@react-navigation/native';
 const BookDetail = (props) => {
 
+    const { itemId } = props.route.params;
     const [authorData, setAuthorData] = useState([]);
     const [bookData, setBookData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const [RelateData2, setRelateData2] = useState([]);
-    useEffect(() => {
-        const AuthorBook = async () => {
-            setIsLoading(true);
-            const response = await AxiosIntance().get('/product/author/654205756ca8e32b5fdddba7')
-            const Data1 = {
-                authorname: response.author.name,
-                introduce: response.author.introduce,
-            }
-            console.log(Data1);
-            setAuthorData(Data1);
-        }
-        AuthorBook();
 
-    }, []);
+    const AuthorBook = async (id) => {
+        setIsLoading(true);
+        const response = await AxiosIntance().get("/product/author/"+id)
+        const Data1 = {
+            authorname: response.author.name,
+            introduce: response.author.introduce,
+        }
+        console.log(Data1);
+        setAuthorData(Data1);
+    }
     useEffect(() => {
         const DetailBook = async () => {
-            const response = await AxiosIntance().get('/product/654200036ca8e32b5fd3bfec')
+            console.log("item id ne: ", itemId);
+            const response = await AxiosIntance().get("/product/" + itemId)
+            console.log("book ne: ", response);
             const Data2 = {
                 title: response.product.title,
                 image: response.product.image,
@@ -45,6 +45,7 @@ const BookDetail = (props) => {
             console.log(Data2);
             setBookData(Data2);
             console.log("123r", response.product.categoryId);
+            AuthorBook(response.product.authorId)
             Relate(response.product.categoryId)
         }
         DetailBook();
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
     },
-    loading:{width:width,height:height,alignItems:'center',justifyContent:'center',backgroundColor:'white'},
+    loading: { width: width, height: height, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' },
     modalContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -454,7 +455,7 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     View_SachLienQuan: {
-        padding:20
+        padding: 20
     },
     toggleButtonText_1: {
         fontWeight: 'bold',

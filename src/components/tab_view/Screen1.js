@@ -17,26 +17,40 @@ const namebook_color = "#272956";
 const Screen1 = ({ navigation, id }) => {
 
   const [data, setData] = useState([]);
+  const [author, setAuthor] = useState('Đang cập nhật');
 
   console.log(id);
   useEffect(() => {
     const getAllCate = async () => {
+      let arrayData=[];
       const respone = await AxiosIntance().get("/product/get-by-category/" + id);
-      setData(respone.product)
-      console.log(respone);
-
+      for(let i=0;i<respone.product.length;i++){
+        if(respone.product[i]){
+          let dataIndex = respone.product[i];
+          // lay author
+          const res = await AxiosIntance().get("/product/author/"+respone.product[i].authorId)
+          dataIndex.authorId=res.author.name;
+          arrayData.push(dataIndex);
+        }
+      }
+      setData(arrayData);
     }
+
     getAllCate();
 
 
   }, [])
 
 
-  const renderItemPopularDeals = ({ item, navigation }) => {
+  const ItemBook = ({ item, navigation }) => {
+    const { _id, title, authorId, image } = item;
+    const onPressItem=()=>{
+      console.log("id cua book la: ",_id);
+      navigation.navigate('Detail', { itemId: _id });
+    }
 
-    const { id, title, authorId, image } = item;
     return (
-      <TouchableOpacity onPress={() => navigation.navigate('Detail')} style={{}}>
+      <TouchableOpacity onPress={()=>onPressItem() } style={{}}>
         {/* Image */}
 
         <Image
@@ -60,20 +74,21 @@ const Screen1 = ({ navigation, id }) => {
 
   return (
     <View style={styles.container}>
+      <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>Sách hot</Text>
       <FlatList
         style={{ flexGrow: 0, height: 340, }}
         data={data}
-        renderItem={({ item }) => renderItemPopularDeals({ item, navigation })}
+        renderItem={({ item }) => <ItemBook item={item} navigation={navigation}/>}
         keyExtractor={item => item.id}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       />
-      <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>New Arrivals</Text>
+      <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>Sách mới xuất bản</Text>
       <FlatList
         style={{ flexGrow: 0, height: 340, }}
         data={data}
-        renderItem={({ item }) => renderItemPopularDeals({ item, navigation })}
+        renderItem={({ item }) => <ItemBook item={item} navigation={navigation}/>}
         keyExtractor={item => item.id}
         horizontal={true}
         showsHorizontalScrollIndicator={false}

@@ -46,7 +46,7 @@ const getProductById = async(id)=>{
     try {
         return await productService.getProductById(id);
     } catch (error) {
-        console.log("getProductById error: "+error);
+        console.log("getProductById error ne: "+error);
         throw error;
     }
 }
