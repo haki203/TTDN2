@@ -1,7 +1,7 @@
 # OSX
 #
 .DS_Store
-
+src/axios
 # Xcode
 #
 build/
@@ -70,3 +70,5 @@ yarn.lock
 yarn.lock
 yarn.lock
 yarn.lock
+yarn.lock
+src/axios/AxiosIntance.js
