@@ -35,7 +35,7 @@ router.post('/login', async (req, res, next) => {
             return res.status(200).json({ result: true, user: user, token: token });
         }
         else {
-            return res.status(202).json({ result: false, message: "Email doesn't exist" });
+            return res.status(444).json({ result: false, message: "Email doesn't exist" });
         }
     } catch (error) {
         console.log(error);
