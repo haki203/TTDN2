@@ -28,10 +28,10 @@ const Welcome = (props) => {
       const res = await AxiosIntance().post("/user/login", { email: userInfor.user.email });
       if (res.result) {
         const infoUser = {
-          name: userInfor.name, avatar: userInfor.photo
+          name: userInfor.name, avatar: userInfor.photo,id:res.user._id
         }
         setinfoUser(infoUser);
-        console.log(userInfor);
+        console.log(res.user);
         ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
         setIsLogin(true);
       }else{

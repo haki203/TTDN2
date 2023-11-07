@@ -12,7 +12,7 @@ const { width, height } = Dimensions.get('window');
 import { useRoute } from '@react-navigation/native';
 import { Alert } from 'react-native';
 const BookDetail = (props) => {
-    const { infoUser} = useContext(AppContext);
+    const { infoUser } = useContext(AppContext);
 
     const { itemId } = props.route.params;
     const [authorData, setAuthorData] = useState([]);
@@ -37,6 +37,7 @@ const BookDetail = (props) => {
             const response = await AxiosIntance().get("/product/" + itemId)
             console.log("book ne: ", response);
             const Data2 = {
+                id: response.product._id,
                 title: response.product.title,
                 image: response.product.image,
                 description: response.product.description,
@@ -97,39 +98,60 @@ const BookDetail = (props) => {
     const [title, setTitle] = useState('');
 
     const handleSave = async () => {
-        if (rating) {
-            setRating(rating);
-        } else {
-            Alert.alert('Vui lòng đánh giá sao');
-            return;
-        };
-        if (content) {
-            setContent(content);
-        } else {
-            Alert.alert('Vui lòng đánh tiêu đề');
-            return;
-        };
+        try {
+            try {
+                if (rating) {
+                    setRating(rating);
+                } else {
+                    Alert.alert('Vui lòng đánh giá sao');
+                    return;
+                };
+                if (content) {
+                    setContent(content);
+                } else {
+                    Alert.alert('Vui lòng đánh tiêu đề');
+                    return;
+                };
 
-        if (title) {
-            setTitle(title);
-        } else {
-            Alert.alert('Vui lòng đánh giá nội dung');
-            return;
-        };
-        console.log(title, "123");
-        console.log(content, "123");
-        console.log("cc");
-        setDobModalVisible1(false);
-        
-        const postData = {
-            userId: newCmt.userId,
-            bookId: newCmt.bookId,
-            title: newCmt.title,
-            content: newCmt.content,
-            rate: newCmt.rate,
-        };
-        const response = await AxiosIntance().post('/product/comment/new' + postData);
-        
+                if (title) {
+                    setTitle(title);
+                } else {
+                    Alert.alert('Vui lòng đánh giá nội dung');
+                    return;
+                };
+                console.log(title, "123");
+                console.log(content, "123");
+                console.log(rating, "123");
+            } catch (error) {
+
+            }
+
+
+            try {
+                const postData = {
+                    userId: infoUser.id,
+                    bookId: bookData.id,
+                    title: title,
+                    content: content,
+                    rate: rating,
+                };
+                console.log("postData ne: ", postData);
+                const response = await AxiosIntance().post('/product/comment/new', postData);
+                console.log("Kết quả nè", response );
+                if (response.result) {
+                    Alert.alert('Đăng thành công');
+                    setDobModalVisible1(false);
+
+                }
+                else {
+                    Alert.alert('Đăng thất bại', response.message);
+                }
+            } catch (error) {
+                Alert.alert('Đăng thất bại', error);
+            }
+        } catch (error) {
+            console.log("lỗi đăng nè: ", error);
+        }
     };
 
     const [rating, setRating] = useState(0);

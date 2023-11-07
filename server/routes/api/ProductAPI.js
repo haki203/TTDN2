@@ -80,7 +80,7 @@ router.post('/comment/new', async (req, res) => {
         const time = moment().format('hh:mm A');
         const date = moment().format('DD/MM/YYYY');
         if (!userId || !bookId || !title || !content || !rate) {
-            res.status(444).json({ result: false });
+            res.status(444).json({ result: false, message: "Thiếu thông tin" });
         } else {
             const newCmt = {
                 time: time,
@@ -108,7 +108,7 @@ router.post('/comment/new', async (req, res) => {
             }
         }
     } catch (err) {
-        res.status(500).json({ error: 'Đã có lỗi xảy ra' + err });
+        res.status(500).json({result: false, error: 'Đã có lỗi xảy ra' + err });
     }
 });
 router.get('/comment/get-by-id/:bookId', async (req, res, next) => {
