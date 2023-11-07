@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button, Modal, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button, Modal, ActivityIndicator, TextInput } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react';
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/FontAwesome';
@@ -10,6 +10,7 @@ import { URI } from '../../server/public/assets/vendor/tinymce/tinymce';
 import ItemListRelate from './ItemListRelate';
 const { width, height } = Dimensions.get('window');
 import { useRoute } from '@react-navigation/native';
+import { Alert } from 'react-native';
 const BookDetail = (props) => {
 
     const { itemId } = props.route.params;
@@ -21,7 +22,7 @@ const BookDetail = (props) => {
 
     const AuthorBook = async (id) => {
         setIsLoading(true);
-        const response = await AxiosIntance().get("/product/author/"+id)
+        const response = await AxiosIntance().get("/product/author/" + id)
         const Data1 = {
             authorname: response.author.name,
             introduce: response.author.introduce,
@@ -90,6 +91,56 @@ const BookDetail = (props) => {
     };
 
     const [isDobModalVisible, setDobModalVisible] = useState(false);
+    const [isDobModalVisible1, setDobModalVisible1] = useState(false);
+    const [content, setContent] = useState('');
+    const [title, setTitle] = useState('');
+
+    const handleSave = () => {
+        if (rating) {
+            setRating(rating);
+        } else {
+            Alert.alert('Vui lòng đánh giá sao');
+            return;
+        };
+        if (content) {
+            setContent(content);
+        } else {
+            Alert.alert('Vui lòng đánh tiêu đề');
+            return;
+        };
+
+        if (title) {
+            setTitle(title);
+        } else {
+            Alert.alert('Vui lòng đánh giá nội dung');
+            return;
+        };
+        console.log(title, "123");
+        console.log(content, "123");
+        console.log("cc");
+        setDobModalVisible1(false);
+    };
+
+    const [rating, setRating] = useState(0);
+
+    const handleStarPress = (newRating) => {
+        setRating(newRating);
+    };
+
+    const renderStars = () => {
+        const stars = [];
+        for (let i = 1; i <= 5; i++) {
+            stars.push(
+                <TouchableOpacity
+                    key={i}
+                    onPress={() => handleStarPress(i)}
+                >
+                    <Text style={i <= rating ? styles.filledStar : styles.emptyStar}>★</Text>
+                </TouchableOpacity>
+            );
+        }
+        return stars;
+    };
 
 
     const imageData = [
@@ -151,25 +202,68 @@ const BookDetail = (props) => {
                     <View style={styles.View_Cmt}>
                         <Image style={styles.View_ImageBook} source={{ uri: bookData.image }} />
                         <View style={styles.View_Cmt_DocGia}>
-                            <View style={styles.View_Cmt_Star}>
-                                <Text style={styles.Text_Cmt}>{bookData.rate}</Text>
-                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                                <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={20} color="#272956" />
-                                <Text style={styles.Text_Cmt}>(10)</Text>
-                            </View>
                             <View style={styles.View_NoiDung}>
-                                <View>
-                                    <Text style={styles.Text_Danhgia1}>4.5/5.0</Text>
-                                    <Text style={styles.Text_Danhgia1}>NỘI DUNG</Text>
+                                <View style={styles.View_Danhgiane1}>
+                                    <Text style={styles.Text_Cmt}>{bookData.rate}</Text>
+                                    <View style={styles.View_Cmt_Star}>
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={20} color="#272956" />
+                                    </View>
+                                    <Text style={styles.Text_Cmt1}>10 lượt</Text>
                                 </View>
                                 <View style={styles.verticalLine}></View>
-                                <View>
-                                    <Text style={styles.Text_Danhgia1}>4.5/5.0</Text>
-                                    <Text style={styles.Text_Danhgia1}>NỘI DUNG</Text>
+                                <View style={styles.View_Danhgiane2}>
+                                    <Text style={styles.Text_Danhgia1}><Text style={styles.Text_Danhgia11}>{bookData.rate}</Text>/5.0</Text>
+                                    <Text style={styles.Text_Danhgia1}>Nội Dung</Text>
                                 </View>
+                            </View>
+                            <View style={styles.Separator}></View>
+                            <View>
+                                <TouchableOpacity onPress={() => setDobModalVisible1(true)}>
+                                    <Text style={styles.Text_Danhgia12}>Đánh Giá</Text>
+                                </TouchableOpacity>
+                                <Modal animationType="slide" transparent={true} visible={isDobModalVisible1}>
+                                    <View style={styles.modalContainer}>
+                                        <View style={styles.modalContent}>
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                <TouchableOpacity onPress={() => handleSave()} style={styles.button}>
+                                                    <Text style={styles.button_text}>Đăng</Text>
+                                                </TouchableOpacity>
+
+                                                <TouchableOpacity onPress={() => setDobModalVisible1(false)} style={styles.button}>
+                                                    <Text style={styles.button_text}>Hủy</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                            {/* <Text style={styles.label}>Đánh giá của bạn:</Text> */}
+                                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+
+                                                <View style={styles.starContainer}>
+                                                    {renderStars()}
+                                                </View>
+                                                {/* <Text style={styles.ratingText}>{rating} sao</Text> */}
+                                            </View>
+
+                                            <TextInput
+                                                style={styles.input}
+                                                placeholder="Tiêu đề"
+                                                placeholderTextColor='#CDCDCD'
+                                                onChangeText={(text) => setContent(text)}
+                                                value={content}
+                                            />
+                                            <TextInput
+                                                style={styles.input1}
+                                                placeholder="Nội dung"
+                                                placeholderTextColor='#CDCDCD'
+                                                onChangeText={(text) => setTitle(text)}
+                                                value={title}
+                                            />
+
+                                        </View>
+                                    </View>
+                                </Modal>
                             </View>
                         </View>
                     </View>
@@ -368,15 +462,28 @@ const styles = StyleSheet.create({
     View_Cmt_Star: {
         flexDirection: 'row',
         justifyContent: 'center',
-        paddingTop: 10,
     },
     View_NoiDung: {
         flexDirection: 'row',
         justifyContent: 'center',
         padding: 20,
     },
+    View_Danhgiane1: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    View_Danhgiane2: {
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     Text_Cmt: {
         fontWeight: 'bold',
+        fontFamily: 'Poppins',
+        color: '#272956',
+        fontSize: 24,
+        paddingLeft: 5,
+    },
+    Text_Cmt1: {
         fontFamily: 'Poppins',
         color: '#272956',
         fontSize: 16,
@@ -394,10 +501,26 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
     },
     Text_Danhgia1: {
-        fontSize: 14,
+        fontSize: 16,
         fontFamily: 'Poppins',
         color: '#272956',
-        textAlign: 'center'
+        textAlign: 'center',
+        paddingTop: 5,
+    },
+    Text_Danhgia11: {
+        fontSize: 16,
+        fontFamily: 'Poppins',
+        color: '#272956',
+        textAlign: 'center',
+    },
+    Text_Danhgia12: {
+        fontWeight: '800',
+        fontSize: 16,
+        fontFamily: 'Poppins',
+        color: '#272956',
+        textAlign: 'center',
+        paddingTop: 5,
+        paddingBottom: 5,
     },
     View_DocGia: {
         borderRadius: 10,
@@ -489,6 +612,85 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         width: 145,
         color: '#272956'
+    },
+    modalContainer: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        width: '100%',
+        padding: 20,
+        borderRadius: 10,
+        elevation: 5,
+        height: '92%',
+        position: 'absolute',
+        bottom: 0,
+    },
+    input: {
+        height: 60,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 5,
+        marginTop: 10,
+        paddingLeft: 5,
+        fontSize: 16,
+        color: 'black',
+    },
+    input1: {
+        height: 100,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 5,
+        marginTop: 10,
+        paddingLeft: 5,
+        fontSize: 16,
+        color: 'black',
+    },
+    button: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        // backgroundColor: 'blue',
+        height: 40,
+        marginTop: 10,
+        paddingRight: 10,
+    },
+    button_text: {
+        color: '#272956',
+        height: 40,
+        textAlign: 'center',
+        paddingTop: 10,
+        borderRadius: 10,
+        fontSize: 16,
+    },
+    button_text11: {
+        marginTop: 10,
+        fontSize: 16,
+        color: 'black',
+    },
+    label: {
+        fontSize: 18,
+    },
+    starContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    filledStar: {
+        color: '#272956',
+        fontSize: 40,
+        margin: 10
+    },
+    emptyStar: {
+        color: '#CDCDCD',
+        fontSize: 40,
+        margin: 10
+
+    },
+    ratingText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        alignItems: 'center'
     },
 });
 
