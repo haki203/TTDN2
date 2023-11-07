@@ -246,16 +246,16 @@ const SearchScreen = (props) => {
     <View style={styles.container}>
       <View style={styles.hearderContainer}>
         <View style={styles.TextSearch}>
-        <TouchableOpacity style={styles.search} onPress={search}>
-          <Image source={require('../assets/images/manerge.png')}></Image>
-        </TouchableOpacity>
-        <TextInput
-          ref={textInputRef}
-          onChangeText={(text) => countDownSearch(text)}
-          placeholderTextColor="black"
-          placeholder='Search'
-        >
-        </TextInput>
+          <TouchableOpacity style={styles.search} onPress={search}>
+            <Image source={require('../assets/images/manerge.png')}></Image>
+          </TouchableOpacity>
+          <TextInput
+            ref={textInputRef}
+            onChangeText={(text) => countDownSearch(text)}
+            placeholderTextColor="black"
+            placeholder='Search'
+          >
+          </TextInput>
         </View>
         <TouchableOpacity style={styles.huy1} onPress={resetSearch}>
           <Text style={styles.huy}>Hủy</Text>
@@ -335,11 +335,12 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontStyle: 'normal',
     fontFamily: 'Poppins',
+    justifyContent:'center'
     // paddingRight: 50
   },
   search: {
     position: 'absolute',
-    top: 15,
+    top: '37%',
     left: 22
     // // left: '17%',
     // // top: '45%'
