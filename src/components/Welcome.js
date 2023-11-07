@@ -23,7 +23,7 @@ const Welcome = (props) => {
     try {
 
       await GoogleSignin.hasPlayServices();
-      console.log('Login');
+      console.log('LoginGG');
       const userInfor = await GoogleSignin.signIn();
       const res = await AxiosIntance().post("/user/login", { email: userInfor.user.email });
       if(res.result){

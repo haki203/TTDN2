@@ -21,7 +21,7 @@ const CategoryFilterScreen = (props) => {
                     data={dataNe}
                     renderItem={({ item }) => <ItemButtonFilter product={item} />}
                     keyExtractor={item => item._id}
-                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
                     scrollEnabled={false}
                     horizontal={true}
                 />
@@ -30,7 +30,7 @@ const CategoryFilterScreen = (props) => {
                     scrollEnabled={false}
                     renderItem={({ item }) => <ItemButtonFilter product={item} />}
                     keyExtractor={item => item._id}
-                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
                     horizontal={true}
                 />
                 <FlatList style={{ marginTop: 8 }}
@@ -38,7 +38,7 @@ const CategoryFilterScreen = (props) => {
                     scrollEnabled={false}
                     renderItem={({ item }) => <ItemButtonFilter product={item} />}
                     keyExtractor={item => item._id}
-                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
                     horizontal={true}
                 />
                 <FlatList style={{ marginTop: 8 }}
@@ -46,7 +46,7 @@ const CategoryFilterScreen = (props) => {
                     scrollEnabled={false}
                     renderItem={({ item }) => <ItemButtonFilter product={item} />}
                     keyExtractor={item => item._id}
-                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
                     horizontal={true}
                 />
             </View>
@@ -56,7 +56,7 @@ const CategoryFilterScreen = (props) => {
                     scrollEnabled={false}
                     renderItem={({ item }) => <ItemFilter products={item} />}
                     keyExtractor={item => item._id}
-                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
                 />
             </View>
             <View style={{ alignItems: 'center', position: 'absolute', end: '50%', bottom: height * 0.08, start: '50%' }}>
@@ -97,7 +97,8 @@ const styles = StyleSheet.create({
     },
     buttonFilter: {
         marginTop: 35,
-        marginHorizontal: 62
+        marginHorizontal: 60,
+        width:'100%'
     },
 })
 
