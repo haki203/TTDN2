@@ -27,15 +27,18 @@ const Welcome = (props) => {
       const userInfor = await GoogleSignin.signIn();
       const res = await AxiosIntance().post("/user/login", { email: userInfor.user.email });
       if (res.result) {
+        const infoUser = {
+          name: userInfor.name, avatar: userInfor.photo
+        }
+        setinfoUser(infoUser);
+        console.log(userInfor);
+        ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
+        setIsLogin(true);
+      }else{
+      ToastAndroid.show("Đăng nhập thất bại ", ToastAndroid.SHORT);
 
       }
-      const infoUser = {
-        name: userInfor.name, avatar: userInfor.photo
-      }
-      setinfoUser(infoUser);
-      console.log(userInfor);
-      ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
-      setIsLogin(true);
+
     } catch (error) {
       ToastAndroid.show("Đăng nhập thất bại ", ToastAndroid.SHORT);
       console.log(error);
