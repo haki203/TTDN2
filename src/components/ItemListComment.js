@@ -8,7 +8,7 @@ const { width, height } = Dimensions.get('window');
 
 const ItemListComment = (props) => {
     const [showMore, setShowMore] = useState(false);
-    const {dulieu, navigation } = props;
+    const { dulieu, navigation } = props;
 
     const [showFullText, setShowFullText] = useState(false);
     // const { isTabVisible, setIsTabVisible } = useContext(AppContext);
@@ -39,28 +39,32 @@ const ItemListComment = (props) => {
         <View>
             <View>
                 <View style={styles.View_DocGia}>
-                    <Text style={styles.Text_DocGia}>Bởi {dulieu.name} ngày {dulieu.date}</Text>
+                    <View style={styles.Star}>
+                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                        <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={20} color="#272956" />
+                    </View>
+                    <Text style={styles.Text_DocGia}>Bởi {dulieu.user.full_name} ngày {dulieu.date}</Text>
                     <View style={styles.View_NoiDung_DocGia}>
-                        <Text style={styles.Text_NoiDung_DocGia}>Nội dung:</Text>
-                        <View style={styles.Star}>
-                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                            <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={20} color="#272956" />
-                        </View>
+
+                        <Text style={styles.Text_NoiDung_DocGia}>Tiêu đề: {dulieu.title}</Text>
+
                     </View>
                     <View>
                         {showFullText ? (
-                            <Text style={{ fontWeight: '400', color: 'black' }}>{dulieu.content}
+                            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16  }}>Nội dung: {dulieu.content}
                                 <Text onPress={() => setShowFullText(!showFullText)} style={{ fontWeight: 'bold', color: 'black' }}>{showFullText ? "Ẩn bớt" : "Xem thêm..."}</Text>
                             </Text>
                         ) : (
-                            <Text style={{ fontWeight: '400', color: 'black' }}>{dulieu.content.substring(0, 120)}...
+                            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>Nội dung: {dulieu.content.substring(0, 120)}...
                                 <Text onPress={() => setShowFullText(!showFullText)} style={{ fontWeight: 'bold', color: 'black' }}>{showFullText ? "Ẩn bớt" : "Xem thêm"}</Text>
                             </Text>
                         )}
                     </View>
+                    <Text style={styles.Text_NoiDung_DocGia}>Thời gian: {dulieu.time}</Text>
+                    {/* <Text style={styles.Text_NoiDung_DocGia}> {dulieu.likeBy.length}</Text> */}
                 </View>
             </View>
         </View>
@@ -91,7 +95,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
     },
-    List_Comment:{
+    List_Comment: {
         marginTop: 15,
     },
     button_text1: {
@@ -284,7 +288,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     View_NoiDung_DocGia: {
-        flexDirection: 'row',
     },
     Star: {
         flexDirection: 'row',

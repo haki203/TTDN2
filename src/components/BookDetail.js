@@ -17,6 +17,8 @@ const BookDetail = (props) => {
     const { itemId } = props.route.params;
     const [authorData, setAuthorData] = useState([]);
     const [bookData, setBookData] = useState([]);
+    const [numCmt, setNumCmt] = useState(0);
+    const [dataCmt, setDataCmt] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const [RelateData2, setRelateData2] = useState([]);
@@ -43,13 +45,14 @@ const BookDetail = (props) => {
                 description: response.product.description,
                 rate: response.product.rate,
                 category: response.product.categoryId,
-
             }
             console.log(Data2);
             setBookData(Data2);
             console.log("123r", response.product.categoryId);
             AuthorBook(response.product.authorId)
             Relate(response.product.categoryId)
+            console.log("bookid ne: ", response.product._id);
+            Comment(response.product._id)
         }
         DetailBook();
 
@@ -66,6 +69,24 @@ const BookDetail = (props) => {
         }
         setRelateData2(datarelate);
         setIsLoading(false)
+    }
+    const Comment = async (bookId) => {
+        setIsLoading(true);
+        const response = await AxiosIntance().get('/product/comment/get-by-id/' + bookId);
+        console.log(response);
+        if (response.result) {
+            setNumCmt(response.comments.length)
+            console.log(response.comments[0].user.full_name);
+            
+            let arraycmt=[]
+            for (let index = 0; index < response.comments.length; index++) {
+                console.log(response.comments[index]);
+                arraycmt.push(response.comments[index]);
+
+            }
+            setDataCmt(arraycmt)
+            setIsLoading(false)
+        }
     }
 
 
@@ -137,7 +158,7 @@ const BookDetail = (props) => {
                 };
                 console.log("postData ne: ", postData);
                 const response = await AxiosIntance().post('/product/comment/new', postData);
-                console.log("Kết quả nè", response );
+                console.log("Kết quả nè", response);
                 if (response.result) {
                     Alert.alert('Đăng thành công');
                     setDobModalVisible1(false);
@@ -245,7 +266,7 @@ const BookDetail = (props) => {
                                         <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
                                         <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={20} color="#272956" />
                                     </View>
-                                    <Text style={styles.Text_Cmt1}>10 lượt</Text>
+                                    <Text style={styles.Text_Cmt1}>{numCmt} lượt</Text>
                                 </View>
                                 <View style={styles.verticalLine}></View>
                                 <View style={styles.View_Danhgiane2}>
@@ -301,18 +322,18 @@ const BookDetail = (props) => {
                         </View>
                     </View>
                     <TouchableOpacity onPress={() => setDobModalVisible(true)} style={styles.Xem_All}>
-                        <Text style={styles.Xem_All_Cmt}>Xem tất cả đánh giá </Text>
+                        <Text style={styles.Xem_All_Cmt}>Xem tất cả đánh giá ({numCmt})</Text>
                         <Icon_2 style={styles.Next} name="caret-down" size={26} color="white" />
                     </TouchableOpacity>
                     <Modal animationType="slide" transparent={true} visible={isDobModalVisible}>
                         <View style={styles.modalContainer}>
                             <View style={styles.modalContent}>
                                 <View>
-                                    <Text style={styles.Text_Modal_DanhGia}>Tất cả đánh giá</Text>
+                                    <Text onPress={() => Comment(bookData.id)} style={styles.Text_Modal_DanhGia}>Tất cả đánh giá ({numCmt})</Text>
                                     <Icon_3 onPress={() => setDobModalVisible(false)} style={styles.Close} name="closecircleo" size={28} color="#272956" />
                                 </View>
                                 <FlatList style={styles.List_Comment}
-                                    data={dataNe}
+                                    data={dataCmt}
                                     renderItem={({ item }) => <ItemListComment dulieu={item} navigation={navigation} />}
                                     keyExtractor={item => item._id}
                                     showsVerticalScrollIndicator={false}
