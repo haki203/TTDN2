@@ -38,7 +38,7 @@ const HomeScreen = (props) => {
 
   );
   const settings = () => (
-    navigation.navigate('LoginUser')
+    navigation.navigate('Profile')
 
   );
   const RomanceRoute = (id) => (

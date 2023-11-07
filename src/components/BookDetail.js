@@ -66,7 +66,7 @@ const BookDetail = (props) => {
         }
         setRelateData2(datarelate);
         setIsLoading(false)
-    }
+    } 
 
 
     const [showMore, setShowMore] = useState(false);
