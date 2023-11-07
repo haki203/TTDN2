@@ -24,6 +24,7 @@ import Read from '../components/Read';
 import SettingScreen from '../components/SettingScreen';
 import ProfileScreen from '../components/ProfileScreen';
 import LoginUser from '../components/LoginUser';
+import WaitScreen from '../components/WaitScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Users = () => {
@@ -48,6 +49,7 @@ const Mains = () => {
             <Stack.Screen name='Profile' component={ProfileScreen} />
             <Stack.Screen name='Welcome' component={ManChao} />
             <Stack.Screen name='LoginUser' component={LoginUser} />
+            <Stack.Screen name='WaitScreen' component={WaitScreen} />
         </Stack.Navigator>
 
     )

@@ -1,13 +1,16 @@
 import { StyleSheet, Text, View, yourColorVariable, Image,TouchableOpacity, Pressable, TextInput } from 'react-native'
-import React from 'react'
+import React ,{useContext}from 'react'
 import Icon from "react-native-vector-icons/AntDesign"
 
 const color_arrow = "#2E2E5D";
 const color_view = "#4838D1";
 const bgcolor = "#FFFFFF";
+import { AppContext } from '../navigation/AppContext';
 const log_outcolor = "#F77A55";
 const ProfileScreen = (props) => {
     const {navigation} = props;
+  const { infoUser } = useContext(AppContext);
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>

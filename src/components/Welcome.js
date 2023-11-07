@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { StyleSheet, Text, TouchableOpacity, View, ToastAndroid, Image, ImageBackground, Dimensions } from 'react-native';
-import React, { useContext } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View, ToastAndroid, Image, ImageBackground, Dimensions, ActivityIndicator } from 'react-native';
+import React, { useContext, useState } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { AppContext } from '../navigation/AppContext';
 import auth from '@react-native-firebase/auth';
@@ -17,18 +17,21 @@ const Welcome = (props) => {
   });
   const { navigation } = props;
   const { setIsLogin, setinfoUser } = useContext(AppContext);
+  const [isLoading, setIsLoading] = useState(true);
+
 
   //---------------------- login google ---------------------- //
   const onLoginGG = async () => {
-    try {
 
+    try {
+      setIsLoading(false);
       await GoogleSignin.hasPlayServices();
-      console.log('Login');
+      console.log('LoginGG');
       const userInfor = await GoogleSignin.signIn();
       const res = await AxiosIntance().post("/user/login", { email: userInfor.user.email });
       if (res.result) {
         const infoUser = {
-          name: userInfor.name, avatar: userInfor.photo,id:res.user._id
+          name: res.user.full_name, avatar: res.user.avatar,id:res.user._id
         }
         setinfoUser(infoUser);
         console.log(res.user);
@@ -104,6 +107,7 @@ const Welcome = (props) => {
 
   return (
     <View style={styles.container}>
+      {isLoading ? (<View style={styles.loading}><ActivityIndicator size={35} color={'black'} /></View>) : (<View></View>)}
       <ImageBackground style={{ position: 'absolute', width: width, height: height }} source={require('../assets/images/bg_welcome.png')} />
       <ImageBackground style={styles.image} source={require('../assets/images/logo-athens.png')} />
       <View style={styles.textView}>
@@ -142,6 +146,7 @@ const styles = StyleSheet.create({
     paddingTop: 100,
     paddingBottom: 70,
   },
+
   image: {
     backgroundColor: '#D9D9D9',
     borderRadius: 150,
