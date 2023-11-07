@@ -31,7 +31,7 @@ const Welcome = (props) => {
       const res = await AxiosIntance().post("/user/login", { email: userInfor.user.email });
       if (res.result) {
         const infoUser = {
-          name: userInfor.name, avatar: userInfor.photo,id:res.user._id
+          name: res.user.full_name, avatar: res.user.avatar,id:res.user._id
         }
         setinfoUser(infoUser);
         console.log(res.user);

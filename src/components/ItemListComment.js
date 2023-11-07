@@ -8,7 +8,7 @@ const { width, height } = Dimensions.get('window');
 
 const ItemListComment = (props) => {
     const [showMore, setShowMore] = useState(false);
-    const {dulieu, navigation } = props;
+    const { dulieu, navigation } = props;
 
     const [showFullText, setShowFullText] = useState(false);
     // const { isTabVisible, setIsTabVisible } = useContext(AppContext);
@@ -39,28 +39,92 @@ const ItemListComment = (props) => {
         <View>
             <View>
                 <View style={styles.View_DocGia}>
-                    <Text style={styles.Text_DocGia}>Bởi {dulieu.name} ngày {dulieu.date}</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image style={styles.profile} source={{ uri: dulieu.user.avatar }} />
+                        <Text style={styles.Text_DocGia}>{dulieu.user.full_name} </Text>
+                    </View>
+                    <View style={styles.Star}>
+                        {dulieu.rate > 4.5 ? (
+                            <View  style={styles.Star}>
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                            </View>
+                        ) : (
+                            <View >
+                                {dulieu.rate > 3.5 && dulieu.rate < 4.5 ? (
+                                    <View  style={styles.Star}>
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                    </View>
+                                ) : (
+                                    <View>
+                                        {dulieu.rate > 2.5 && dulieu.rate < 3.5 ? (
+                                            <View  style={styles.Star}>
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+
+                                            </View>
+                                        ) : (
+                                            <View>
+                                                {dulieu.rate > 1.5 && dulieu.rate < 2.5 ? (
+                                                    <View  style={styles.Star}>
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+
+                                                    </View>
+                                                ) : (
+                                                    <View  style={styles.Star}>
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+
+                                                    </View>
+                                                )}
+
+                                            </View>
+                                        )}
+
+                                    </View>
+                                )}
+
+                            </View>
+                        )}
+
+                        <Text style={styles.Text_DocGia}> {dulieu.date}</Text>
+                    </View>
+
                     <View style={styles.View_NoiDung_DocGia}>
-                        <Text style={styles.Text_NoiDung_DocGia}>Nội dung:</Text>
-                        <View style={styles.Star}>
-                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                            <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={20} color="#272956" />
-                        </View>
+
+                        <Text style={[styles.Text_NoiDung_DocGia, { fontWeight: '700' }]}>Tiêu đề: {dulieu.title}</Text>
+
                     </View>
                     <View>
                         {showFullText ? (
-                            <Text style={{ fontWeight: '400', color: 'black' }}>{dulieu.content}
+                            <Text style={{ fontWeight: '400', color: '#272956', fontSize: 16 }}>Nội dung: {dulieu.content}
                                 <Text onPress={() => setShowFullText(!showFullText)} style={{ fontWeight: 'bold', color: 'black' }}>{showFullText ? "Ẩn bớt" : "Xem thêm..."}</Text>
                             </Text>
                         ) : (
-                            <Text style={{ fontWeight: '400', color: 'black' }}>{dulieu.content.substring(0, 120)}...
+                            <Text style={{ fontWeight: '400', color: '#272956', fontSize: 16 }}>Nội dung: {dulieu.content.substring(0, 120)}...
                                 <Text onPress={() => setShowFullText(!showFullText)} style={{ fontWeight: 'bold', color: 'black' }}>{showFullText ? "Ẩn bớt" : "Xem thêm"}</Text>
                             </Text>
                         )}
                     </View>
+                    <Text style={[styles.Text_NoiDung_DocGia, { fontSize: 12, fontWeight: 'bold', textAlign: 'right' }]}>{dulieu.time}</Text>
+                    {/* <Text style={styles.Text_NoiDung_DocGia}> {dulieu.likeBy.length}</Text> */}
                 </View>
             </View>
         </View>
@@ -91,7 +155,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
     },
-    List_Comment:{
+    List_Comment: {
         marginTop: 15,
     },
     button_text1: {
@@ -120,6 +184,12 @@ const styles = StyleSheet.create({
         width: 220,
         height: 320,
         borderRadius: 20,
+    },
+    profile: {
+        width: 40,
+        height: 40,
+        marginRight: 10,
+        borderRadius: 45,
     },
     View_Text1: {
         fontFamily: 'Poppins',
@@ -237,8 +307,7 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
     },
     Star_Danhgia1: {
-        paddingLeft: 5,
-
+        paddingRight: 5,
     },
     verticalLine: {
         marginLeft: 15,
@@ -260,10 +329,10 @@ const styles = StyleSheet.create({
         marginTop: 15,
     },
     Text_DocGia: {
-        fontSize: 18,
-        fontWeight: 'bold',
+        fontSize: 16,
+        fontWeight: '500',
         fontFamily: 'Poppins',
-        color: '#272956'
+        color: '#272956',
     },
     Text_Review: {
         paddingTop: 10,
@@ -284,11 +353,17 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     View_NoiDung_DocGia: {
-        flexDirection: 'row',
     },
     Star: {
         flexDirection: 'row',
-        paddingLeft: 20,
+        alignItems: 'center',
+        paddingTop: 5,
+        paddingBottom: 5,
+    },
+    Text_Star: {
+        fontSize: 16,
+        fontFamily: 'Poppins',
+        color: '#272956',
     },
     Star1: {
         flexDirection: 'row',
