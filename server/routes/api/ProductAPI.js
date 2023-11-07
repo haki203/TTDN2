@@ -91,14 +91,7 @@ router.post('/comment/new', async (req, res) => {
                 date: date,
                 title: title,
             };
-            const allCmt = await commentModel.find({});
-            console.log(allCmt[0]);
-            for (let index = 0; index < allCmt.length; index++) {
-                if (allCmt[index].userId == newCmt.userId) {
-                    res.status(400).json({ result: false, message: "Bạn đã comment trước đó rồi" });
-                    return;
-                }
-            }
+
             const comment = await commentModel.create(newCmt);
             if (comment) {
                 res.status(200).json({ result: true, comment });
