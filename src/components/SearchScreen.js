@@ -5,13 +5,13 @@ import { AppContext } from '../navigation/AppContext';
 import AxiosIntance from '../axios/AxiosIntance';
 const { height } = Dimensions.get('window');
 const backroundContainer = '#FFFFFF';
-const bacroundHeight = '#C4C4C426';
-const backroundSearch = '#C4C4C426';
+const bacroundHeight = '#E8E8E8';
+const backroundSearch = '#E8E8E8';
 const bacroundColor = '#272956';
 const ColorAuthor = '#4838D1';
 const SearchScreen = (props) => {
   const { navigation } = props;
-  const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+  // const { isTabVisible, setIsTabVisible } = useContext(AppContext);
   const [dataNe, setdataNe] = useState([]);
   const [imagee, setImagee] = useState([]);
   const [nameauthor, setNameauthor] = useState([]);
@@ -46,27 +46,27 @@ const SearchScreen = (props) => {
     }
   }
 
-  const Issearch = async () => {
-    setisLoading(true);
-    const respone = await AxiosIntance().get("product/search/name?keyword=");
-    console.log(respone.result);
-    if (respone.result == false) {
-      // lay du lieu
-      setdataNe(respone.product);
-      console.log(respone.product);
-      setisLoading(false);
-    }
-    else {
-      ToastAndroid.show("Lay du lieu that bai", ToastAndroid.SHORT);
-    }
-  }
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      setIsTabVisible(false)
-    });
+  // const Issearch = async () => {
+  //   setisLoading(true);
+  //   const respone = await AxiosIntance().get("product/search/name?keyword=");
+  //   console.log(respone.result);
+  //   if (respone.result == false) {
+  //     // lay du lieu
+  //     setdataNe(respone.product);
+  //     console.log(respone.product);
+  //     setisLoading(false);
+  //   }
+  //   else {
+  //     ToastAndroid.show("Lay du lieu that bai", ToastAndroid.SHORT);
+  //   }
+  // }
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     setIsTabVisible(false)
+  //   });
 
-    return unsubscribe;
-  }, []);
+  //   return unsubscribe;
+  // }, []);
 
   useEffect(() => {
     const getNews = async () => {
@@ -243,18 +243,23 @@ const SearchScreen = (props) => {
     navigation.goBack();
   }
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.hearderContainer}>
+        <View style={styles.TextSearch}>
+        <TouchableOpacity style={styles.search} onPress={search}>
+          <Image source={require('../assets/images/manerge.png')}></Image>
+        </TouchableOpacity>
+        <TextInput
+          ref={textInputRef}
+          onChangeText={(text) => countDownSearch(text)}
+          placeholderTextColor="black"
+          placeholder='Search'
+        >
+        </TextInput>
+        </View>
         <TouchableOpacity style={styles.huy1} onPress={resetSearch}>
           <Text style={styles.huy}>Hủy</Text>
         </TouchableOpacity>
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-          <TextInput ref={textInputRef} onChangeText={(text) => countDownSearch(text)} placeholder='Search' style={styles.TextSearch}>
-          </TextInput>
-        </View>
-        <TouchableOpacity style={styles.search} onPress={search}>
-            <Image source={require('../assets/images/manerge.png')}></Image>
-          </TouchableOpacity>
       </View>
       <View style={styles.listContainer}>
         <View style={{ flexDirection: 'row' }}>
@@ -294,6 +299,10 @@ const styles = StyleSheet.create({
   },
   hearderContainer: {
     height: height * 0.1,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   listContainer: {
     height: height * 0.9,
@@ -315,19 +324,26 @@ const styles = StyleSheet.create({
   },
   TextSearch: {
     width: '75%',
-    height: '105%',
+    height: '65%',
     backgroundColor: backroundSearch,
     borderRadius: 15,
     // marginLeft: 29,
     // marginTop: 18,
     paddingLeft: 50,
-    top: '5%'
+    color: '#000',
+    fontSize: 12,
+    fontWeight: '400',
+    fontStyle: 'normal',
+    fontFamily: 'Poppins',
     // paddingRight: 50
   },
   search: {
     position: 'absolute',
-    left: '17%',
-    top: '45%'
+    top: 15,
+    left: 22
+    // // left: '17%',
+    // // top: '45%'
+    // left: '30%'
   },
   mark: {
     position: 'absolute',
@@ -355,10 +371,11 @@ const styles = StyleSheet.create({
     // marginLeft: 15,
   },
   huy1: {
-    right: 0,
-    position: 'absolute',
-    marginRight: 12,
-    top: '40%'
+    // right: 0,
+    // position: 'absolute',
+    // marginRight: 12,
+    // top: '40%'
+    left: '18%'
   }
 })
 
