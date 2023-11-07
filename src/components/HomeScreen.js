@@ -20,6 +20,7 @@ const color_logo = '#272956';
 
 const HomeScreen = (props) => {
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+  const { infoUser } = useContext(AppContext);
   const { navigation } = props;
   const [dataNe, setdataNe] = useState([]);
 
@@ -38,7 +39,7 @@ const HomeScreen = (props) => {
 
   );
   const settings = () => (
-    navigation.navigate('LoginUser')
+    navigation.navigate('Setting')
 
   );
   const RomanceRoute = (id) => (
@@ -64,6 +65,7 @@ const HomeScreen = (props) => {
 
   useEffect(() => {
     const getAllCate = async () => {
+      console.log("infoUser ne: ",infoUser);
       const respone = await AxiosIntance().get("/product/category/getAlls");
 
       console.log(respone.category);
@@ -133,12 +135,12 @@ const HomeScreen = (props) => {
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
           </TouchableOpacity>
           <TouchableOpacity onPress={settings}>
-            <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
+            <Image style={styles.profile} source={{uri:infoUser.avatar}} />
           </TouchableOpacity>
         </View>
       </View>
       <View style={styles.title}>
-        <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Chào mừng bạn trở lại, Bunny!</Text>
+        <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Chào mừng bạn trở lại, {infoUser.name}!</Text>
         <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>Bạn muốn đọc sách gì?</Text>
       </View>
       <>{
@@ -174,7 +176,8 @@ const styles = StyleSheet.create({
     marginRight: 8
   }, profile: {
     width: 40,
-    height: 40
+    height: 40,
+    borderRadius:35,
   }, title: {
     marginLeft: 21
   }, search: {

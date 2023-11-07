@@ -10,7 +10,7 @@ const bgcolor = "#FFFFFF";
 const log_outcolor = "#F77A55";
 const SettingScreen = (props) => {
   const { navigation } = props;
-  const { isLogin,setIsLogin } = useContext(AppContext);
+  const { infoUser,setIsLogin } = useContext(AppContext);
     const { isTabVisible, setIsTabVisible } = useContext(AppContext);
     useEffect(() => {
 
@@ -30,10 +30,10 @@ const SettingScreen = (props) => {
             </View>
             <View style={styles.view_profile}>
                 <View style={styles.avatar}>
-                    <Image source={require('../assets/images/avt.png')} />
+                    <Image style={{width:77,height:77,borderRadius:60}} source={{uri:infoUser.avatar}} />
                 </View>
                 <View style={styles.name_profile}>
-                    <Text style={styles.name}>John Doe</Text>
+                    <Text style={styles.name}>{infoUser.name}</Text>
                     <Text onPress={()=>navigation.navigate('Profile')} style={styles.name_view}>View profile</Text>
                 </View>
             </View>
@@ -113,7 +113,6 @@ const styles = StyleSheet.create({
         height: 72,
 
     }, name_profile: {
-        width: 80,
         height: 47,
         justifyContent: 'space-around',
         marginTop: 10,

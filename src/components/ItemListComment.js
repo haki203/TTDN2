@@ -40,21 +40,76 @@ const ItemListComment = (props) => {
             <View>
                 <View style={styles.View_DocGia}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Image style={styles.profile} source={{uri: dulieu.user.avatar}} />
+                        <Image style={styles.profile} source={{ uri: dulieu.user.avatar }} />
                         <Text style={styles.Text_DocGia}>{dulieu.user.full_name} </Text>
                     </View>
                     <View style={styles.Star}>
-                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                        <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={18} color="#272956" />
+                        {dulieu.rate > 4.5 ? (
+                            <View  style={styles.Star}>
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                            </View>
+                        ) : (
+                            <View >
+                                {dulieu.rate > 3.5 && dulieu.rate < 4.5 ? (
+                                    <View  style={styles.Star}>
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                    </View>
+                                ) : (
+                                    <View>
+                                        {dulieu.rate > 2.5 && dulieu.rate < 3.5 ? (
+                                            <View  style={styles.Star}>
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+
+                                            </View>
+                                        ) : (
+                                            <View>
+                                                {dulieu.rate > 1.5 && dulieu.rate < 2.5 ? (
+                                                    <View  style={styles.Star}>
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+
+                                                    </View>
+                                                ) : (
+                                                    <View  style={styles.Star}>
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+
+                                                    </View>
+                                                )}
+
+                                            </View>
+                                        )}
+
+                                    </View>
+                                )}
+
+                            </View>
+                        )}
+
                         <Text style={styles.Text_DocGia}> {dulieu.date}</Text>
                     </View>
 
                     <View style={styles.View_NoiDung_DocGia}>
 
-                        <Text style={[styles.Text_NoiDung_DocGia, {fontWeight: '700'}]}>Tiêu đề: {dulieu.title}</Text>
+                        <Text style={[styles.Text_NoiDung_DocGia, { fontWeight: '700' }]}>Tiêu đề: {dulieu.title}</Text>
 
                     </View>
                     <View>
@@ -68,7 +123,7 @@ const ItemListComment = (props) => {
                             </Text>
                         )}
                     </View>
-                    <Text style={[styles.Text_NoiDung_DocGia, {fontSize: 12, fontWeight: 'bold', textAlign: 'right'}]}>{dulieu.time}</Text>
+                    <Text style={[styles.Text_NoiDung_DocGia, { fontSize: 12, fontWeight: 'bold', textAlign: 'right' }]}>{dulieu.time}</Text>
                     {/* <Text style={styles.Text_NoiDung_DocGia}> {dulieu.likeBy.length}</Text> */}
                 </View>
             </View>
@@ -131,8 +186,8 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     profile: {
-        width: 30,
-        height: 30,
+        width: 40,
+        height: 40,
         marginRight: 10,
         borderRadius: 45,
     },
