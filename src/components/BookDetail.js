@@ -217,7 +217,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
     },
-    loading: { width: width, height: height, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' },
     modalContainer: {
         flex: 1,
         justifyContent: 'center',
