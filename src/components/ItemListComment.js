@@ -39,31 +39,36 @@ const ItemListComment = (props) => {
         <View>
             <View>
                 <View style={styles.View_DocGia}>
-                    <View style={styles.Star}>
-                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                        <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={20} color="#272956" />
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image style={styles.profile} source={{uri: dulieu.user.avatar}} />
+                        <Text style={styles.Text_DocGia}>{dulieu.user.full_name} </Text>
                     </View>
-                    <Text style={styles.Text_DocGia}>Bởi {dulieu.user.full_name} ngày {dulieu.date}</Text>
+                    <View style={styles.Star}>
+                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                        <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={18} color="#272956" />
+                        <Text style={styles.Text_DocGia}> {dulieu.date}</Text>
+                    </View>
+
                     <View style={styles.View_NoiDung_DocGia}>
 
-                        <Text style={styles.Text_NoiDung_DocGia}>Tiêu đề: {dulieu.title}</Text>
+                        <Text style={[styles.Text_NoiDung_DocGia, {fontWeight: '700'}]}>Tiêu đề: {dulieu.title}</Text>
 
                     </View>
                     <View>
                         {showFullText ? (
-                            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16  }}>Nội dung: {dulieu.content}
+                            <Text style={{ fontWeight: '400', color: '#272956', fontSize: 16 }}>Nội dung: {dulieu.content}
                                 <Text onPress={() => setShowFullText(!showFullText)} style={{ fontWeight: 'bold', color: 'black' }}>{showFullText ? "Ẩn bớt" : "Xem thêm..."}</Text>
                             </Text>
                         ) : (
-                            <Text style={{ fontWeight: '400', color: 'black', fontSize: 16 }}>Nội dung: {dulieu.content.substring(0, 120)}...
+                            <Text style={{ fontWeight: '400', color: '#272956', fontSize: 16 }}>Nội dung: {dulieu.content.substring(0, 120)}...
                                 <Text onPress={() => setShowFullText(!showFullText)} style={{ fontWeight: 'bold', color: 'black' }}>{showFullText ? "Ẩn bớt" : "Xem thêm"}</Text>
                             </Text>
                         )}
                     </View>
-                    <Text style={styles.Text_NoiDung_DocGia}>Thời gian: {dulieu.time}</Text>
+                    <Text style={[styles.Text_NoiDung_DocGia, {fontSize: 12, fontWeight: 'bold', textAlign: 'right'}]}>{dulieu.time}</Text>
                     {/* <Text style={styles.Text_NoiDung_DocGia}> {dulieu.likeBy.length}</Text> */}
                 </View>
             </View>
@@ -124,6 +129,12 @@ const styles = StyleSheet.create({
         width: 220,
         height: 320,
         borderRadius: 20,
+    },
+    profile: {
+        width: 30,
+        height: 30,
+        marginRight: 10,
+        borderRadius: 45,
     },
     View_Text1: {
         fontFamily: 'Poppins',
@@ -241,8 +252,7 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
     },
     Star_Danhgia1: {
-        paddingLeft: 5,
-
+        paddingRight: 5,
     },
     verticalLine: {
         marginLeft: 15,
@@ -264,10 +274,10 @@ const styles = StyleSheet.create({
         marginTop: 15,
     },
     Text_DocGia: {
-        fontSize: 18,
-        fontWeight: 'bold',
+        fontSize: 16,
+        fontWeight: '500',
         fontFamily: 'Poppins',
-        color: '#272956'
+        color: '#272956',
     },
     Text_Review: {
         paddingTop: 10,
@@ -291,7 +301,14 @@ const styles = StyleSheet.create({
     },
     Star: {
         flexDirection: 'row',
-        paddingLeft: 20,
+        alignItems: 'center',
+        paddingTop: 5,
+        paddingBottom: 5,
+    },
+    Text_Star: {
+        fontSize: 16,
+        fontFamily: 'Poppins',
+        color: '#272956',
     },
     Star1: {
         flexDirection: 'row',
