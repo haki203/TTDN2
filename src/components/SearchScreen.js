@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
   },
   TextSearch: {
     width: '75%',
-    height: '70%',
+    height: '65%',
     backgroundColor: backroundSearch,
     borderRadius: 15,
     // marginLeft: 29,
