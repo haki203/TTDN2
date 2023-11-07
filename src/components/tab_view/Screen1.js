@@ -1,9 +1,11 @@
-import { Image, StyleSheet, Text, View, TextInput,Dimensions, FlatList, useWindowDimensions,TouchableOpacity } from 'react-native'
-import React from 'react'
+import { Image, StyleSheet, Text, View, TextInput, Dimensions, FlatList, useWindowDimensions, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Icon from "react-native-vector-icons/Feather"
 import Icon2 from "react-native-vector-icons/AntDesign"
 import Icon3 from "react-native-vector-icons/FontAwesome"
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { _isDomSupported } from '../../../server/public/assets/vendor/chart.js/helpers'
+import AxiosIntance from '../../axios/AxiosIntance'
 const { width, height } = Dimensions.get('window');
 
 const color_txt1 = "#9D9D9D";
@@ -12,50 +14,48 @@ const colorsearch = "#F2F2F2";
 const icon_color = "#C4C4C4";
 const namebook_color = "#272956";
 
-const Screen1 = ({navigation}) => {
-  const NovelRoute = () => (
-    <View style={{ flex: 1, backgroundColor: '#ff4081' }} />
-  );
-  const SelfRoute = () => (
-    <View style={{ flex: 1, backgroundColor: '#673ab7' }} />
-  );
-  const ScienceRoute = () => (
-    <View style={{ flex: 1, backgroundColor: '#673ab7' }} />
-  );
-  const RomanceRoute = () => (
-    <View style={{ flex: 1, backgroundColor: '#673ab7' }} />
-  );
-  const CrimeRoute = () => (
-    <View style={{ flex: 1, backgroundColor: '#673ab7' }} />
-  );
-  const renderScene = SceneMap({
-    Novel: NovelRoute,
-    Self: SelfRoute,
-    Science: ScienceRoute,
-    Romance: RomanceRoute,
-    Crime: CrimeRoute,
-  });
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: 'Novel', title: 'Novel' },
-    { key: 'Self', title: 'Self-love' },
-    { key: 'Science', title: 'Science' },
-    { key: 'Romance', title: 'Romance' },
-    { key: 'Crime', title: 'Crime' },
-  ]);
+const Screen1 = ({ navigation, id }) => {
 
-  
+  const [data, setData] = useState([]);
+  const [author, setAuthor] = useState('Đang cập nhật');
+
+  console.log(id);
+  useEffect(() => {
+    const getAllCate = async () => {
+      let arrayData=[];
+      const respone = await AxiosIntance().get("/product/get-by-category/" + id);
+      for(let i=0;i<respone.product.length;i++){
+        if(respone.product[i]){
+          let dataIndex = respone.product[i];
+          // lay author
+          const res = await AxiosIntance().get("/product/author/"+respone.product[i].authorId)
+          dataIndex.authorId=res.author.name;
+          arrayData.push(dataIndex);
+        }
+      }
+      setData(arrayData);
+    }
+
+    getAllCate();
 
 
-  const renderItemPopularDeals = ({ item, navigation }) => {
+  }, [])
 
-    const { id, book_name, author_name, img } = item;
+
+  const ItemBook = ({ item, navigation }) => {
+    const { _id, title, authorId, image } = item;
+    const onPressItem=()=>{
+      console.log("id cua book la: ",_id);
+      navigation.navigate('Detail', { itemId: _id });
+    }
+
     return (
-      <TouchableOpacity onPress={() => navigation.navigate('Detail')} style={{}}>
+      <TouchableOpacity onPress={()=>onPressItem() } style={{}}>
         {/* Image */}
+
         <Image
-          source={img}
-          style={[styles.renderImagePopularDeals, {marginTop: 15 }]}
+          source={{ uri: image }}
+          style={[styles.renderImagePopularDeals,]}
           shadowColor="black"
           shadowOffset={[5, 5]}
           shadowOpacity={1}
@@ -64,8 +64,8 @@ const Screen1 = ({navigation}) => {
 
         {/* Text */}
         <View style={styles.containerText}>
-          <Text style={styles.rendername}>{book_name}</Text>
-          <Text style={styles.renderauthor}>{author_name}</Text>
+          <Text style={styles.rendername}>{title}</Text>
+          <Text style={styles.renderauthor}>{authorId}</Text>
         </View>
         {/* IconAdd */}
       </TouchableOpacity>
@@ -74,20 +74,21 @@ const Screen1 = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>Sách hot</Text>
       <FlatList
-        style={{  flexGrow: 0, height: 340, }}
-        data={dataImagePopularDeals}
-        renderItem={({ item }) => renderItemPopularDeals({ item, navigation })}
+        style={{ flexGrow: 0, height: 340, }}
+        data={data}
+        renderItem={({ item }) => <ItemBook item={item} navigation={navigation}/>}
         keyExtractor={item => item.id}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       />
-      <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2,marginLeft:20 }}>New Arrivals</Text>
+      <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>Sách mới xuất bản</Text>
       <FlatList
-        style={{ flexGrow: 0, height: 340 ,}}
-        data={dataImagePopularDeals}
-        renderItem={({ item }) => renderItemPopularDeals({ item, navigation })}
+        style={{ flexGrow: 0, height: 340, }}
+        data={data}
+        renderItem={({ item }) => <ItemBook item={item} navigation={navigation}/>}
         keyExtractor={item => item.id}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
@@ -100,16 +101,21 @@ export default Screen1
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1
   },
   containerText: {
-    marginLeft:16,
+    marginLeft: 16,
     marginTop: -10
   }, rendername: {
     color: namebook_color,
     fontSize: 16,
     fontWeight: '700',
     fontFamily: 'Poppins'
+  }, renderImagePopularDeals: {
+    width: 150,
+    height: 220,
+    margin: 20,
+    borderRadius: 10
   }
 })
 

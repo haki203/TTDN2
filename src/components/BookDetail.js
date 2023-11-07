@@ -1,13 +1,74 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button, Modal, } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button, Modal, ActivityIndicator, TextInput } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react';
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/FontAwesome';
 import Icon_3 from 'react-native-vector-icons/AntDesign';
 import { AppContext } from '../navigation/AppContext'
 import ItemListComment from './ItemListComment';
+import AxiosIntance from '../axios/AxiosIntance';
+import { URI } from '../../server/public/assets/vendor/tinymce/tinymce';
+import ItemListRelate from './ItemListRelate';
 const { width, height } = Dimensions.get('window');
-
+import { useRoute } from '@react-navigation/native';
+import { Alert } from 'react-native';
 const BookDetail = (props) => {
+    const { infoUser } = useContext(AppContext);
+
+    const { itemId } = props.route.params;
+    const [authorData, setAuthorData] = useState([]);
+    const [bookData, setBookData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const [RelateData2, setRelateData2] = useState([]);
+
+    const AuthorBook = async (id) => {
+        setIsLoading(true);
+        const response = await AxiosIntance().get("/product/author/" + id)
+        const Data1 = {
+            authorname: response.author.name,
+            introduce: response.author.introduce,
+        }
+        console.log(Data1);
+        setAuthorData(Data1);
+    }
+    useEffect(() => {
+        const DetailBook = async () => {
+            console.log("item id ne: ", itemId);
+            const response = await AxiosIntance().get("/product/" + itemId)
+            console.log("book ne: ", response);
+            const Data2 = {
+                id: response.product._id,
+                title: response.product.title,
+                image: response.product.image,
+                description: response.product.description,
+                rate: response.product.rate,
+                category: response.product.categoryId,
+
+            }
+            console.log(Data2);
+            setBookData(Data2);
+            console.log("123r", response.product.categoryId);
+            AuthorBook(response.product.authorId)
+            Relate(response.product.categoryId)
+        }
+        DetailBook();
+
+    }, []);
+    const Relate = async (category) => {
+        setIsLoading(true);
+        const response = await AxiosIntance().get('/product/get-by-category/' + category);
+        const dataa = response.product;
+        let datarelate = [];
+        for (let i = 0; i < dataa.length; i++) {
+            datarelate.push(dataa[i]);
+            console.log(datarelate);
+
+        }
+        setRelateData2(datarelate);
+        setIsLoading(false)
+    }
+
+
     const [showMore, setShowMore] = useState(false);
     const { navigation } = props;
     const [heightView, setHeightView] = useState(0);
@@ -32,6 +93,87 @@ const BookDetail = (props) => {
     };
 
     const [isDobModalVisible, setDobModalVisible] = useState(false);
+    const [isDobModalVisible1, setDobModalVisible1] = useState(false);
+    const [content, setContent] = useState('');
+    const [title, setTitle] = useState('');
+
+    const handleSave = async () => {
+        try {
+            try {
+                if (rating) {
+                    setRating(rating);
+                } else {
+                    Alert.alert('Vui lòng đánh giá sao');
+                    return;
+                };
+                if (content) {
+                    setContent(content);
+                } else {
+                    Alert.alert('Vui lòng đánh tiêu đề');
+                    return;
+                };
+
+                if (title) {
+                    setTitle(title);
+                } else {
+                    Alert.alert('Vui lòng đánh giá nội dung');
+                    return;
+                };
+                console.log(title, "123");
+                console.log(content, "123");
+                console.log(rating, "123");
+            } catch (error) {
+
+            }
+
+
+            try {
+                const postData = {
+                    userId: infoUser.id,
+                    bookId: bookData.id,
+                    title: title,
+                    content: content,
+                    rate: rating,
+                };
+                console.log("postData ne: ", postData);
+                const response = await AxiosIntance().post('/product/comment/new', postData);
+                console.log("Kết quả nè", response );
+                if (response.result) {
+                    Alert.alert('Đăng thành công');
+                    setDobModalVisible1(false);
+
+                }
+                else {
+                    Alert.alert('Đăng thất bại', response.message);
+                }
+            } catch (error) {
+                Alert.alert('Đăng thất bại', error);
+            }
+        } catch (error) {
+            console.log("lỗi đăng nè: ", error);
+        }
+    };
+
+    const [rating, setRating] = useState(0);
+
+    const handleStarPress = (newRating) => {
+        setRating(newRating);
+    };
+
+    const renderStars = () => {
+        const stars = [];
+        for (let i = 1; i <= 5; i++) {
+            stars.push(
+                <TouchableOpacity
+                    key={i}
+                    onPress={() => handleStarPress(i)}
+                >
+                    <Text style={i <= rating ? styles.filledStar : styles.emptyStar}>★</Text>
+                </TouchableOpacity>
+            );
+        }
+        return stars;
+    };
 
 
     const imageData = [
@@ -41,6 +183,7 @@ const BookDetail = (props) => {
     ];
     return (
         <View style={styles.Container} >
+            {isLoading ? (<View style={styles.loading}><ActivityIndicator size={35} color={'black'} /></View>) : (<View></View>)}
             <View style={styles.Icon_Container}>
                 <TouchableOpacity onPress={Back}>
                     <Icon_1 name="chevron-back" size={30} color="black" />
@@ -52,11 +195,11 @@ const BookDetail = (props) => {
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.Image_Container}>
                     <View>
-                        <Image style={styles.View_Image} source={require('../assets/images/bookdetail.png')} />
+                        <Image style={styles.View_Image} source={{ uri: bookData.image }} />
                     </View>
                     <View>
-                        <Text style={styles.View_Text1}>Catcher in the Rye</Text>
-                        <Text style={styles.View_Text2}>J.D. Salinger</Text>
+                        <Text style={styles.View_Text1}>{bookData.title}</Text>
+                        <Text style={styles.View_Text2}>{authorData.authorname}</Text>
                     </View>
                     <View style={styles.View_Danhgia}>
                         <Icon_2 style={styles.Star_Danhgia} name="star" size={20} color="#272956" />
@@ -64,17 +207,17 @@ const BookDetail = (props) => {
                         <Icon_2 style={styles.Star_Danhgia} name="star" size={20} color="#272956" />
                         <Icon_2 style={styles.Star_Danhgia} name="star" size={20} color="#272956" />
                         <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={20} color="#272956" />
-                        <Text style={styles.Text_DanhGia}>4.5</Text>
+                        <Text style={styles.Text_DanhGia}>{bookData.rate}</Text>
                     </View>
                 </View>
                 <View style={styles.View_MoTa}>
                     <View>
-                        <Text style={styles.Text_MoTa1}>About the author</Text>
-                        <Text style={styles.Text_MoTa2}>J.D. Salinger was an American writer, best known for his 1951 novel The Catcher in the Rye. Before its publi cation, Salinger published several short stories in Story magazine</Text>
+                        <Text style={styles.Text_MoTa1}>Giới thiệu về tác giả</Text>
+                        <Text style={styles.Text_MoTa2}>{authorData.introduce}</Text>
                     </View>
                     <View style={styles.View_Text3}>
-                        <Text style={styles.Text_MoTa1}>Overview</Text>
-                        <Text style={styles.Text_MoTa2}>The Catcher in the Rye is a novel by J. D. Salinger, partially published in serial form in 1945–1946 and as a novel in 1951. It was originally intended for adu lts but is often read by adolescents for its theme of angst, alienation and as a critique......</Text>
+                        <Text style={styles.Text_MoTa1}>Tổng quan về sách</Text>
+                        <Text style={styles.Text_MoTa2}>{bookData.description}</Text>
                     </View>
                 </View>
                 <View style={styles.View_Click}>
@@ -90,27 +233,70 @@ const BookDetail = (props) => {
                 <View style={styles.View_BinhLuan}>
                     <Text style={styles.Text_BinhLuan}>Bình luận</Text>
                     <View style={styles.View_Cmt}>
-                        <Image style={styles.View_ImageBook} source={require('../assets/images/bookdetail.png')} />
+                        <Image style={styles.View_ImageBook} source={{ uri: bookData.image }} />
                         <View style={styles.View_Cmt_DocGia}>
-                            <View style={styles.View_Cmt_Star}>
-                                <Text style={styles.Text_Cmt}>4.5</Text>
-                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
-                                <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={20} color="#272956" />
-                                <Text style={styles.Text_Cmt}>(10)</Text>
-                            </View>
                             <View style={styles.View_NoiDung}>
-                                <View>
-                                    <Text style={styles.Text_Danhgia1}>4.5/5.0</Text>
-                                    <Text style={styles.Text_Danhgia1}>NỘI DUNG</Text>
+                                <View style={styles.View_Danhgiane1}>
+                                    <Text style={styles.Text_Cmt}>{bookData.rate}</Text>
+                                    <View style={styles.View_Cmt_Star}>
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={20} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star-half-full" size={20} color="#272956" />
+                                    </View>
+                                    <Text style={styles.Text_Cmt1}>10 lượt</Text>
                                 </View>
                                 <View style={styles.verticalLine}></View>
-                                <View>
-                                    <Text style={styles.Text_Danhgia1}>4.5/5.0</Text>
-                                    <Text style={styles.Text_Danhgia1}>NỘI DUNG</Text>
+                                <View style={styles.View_Danhgiane2}>
+                                    <Text style={styles.Text_Danhgia1}><Text style={styles.Text_Danhgia11}>{bookData.rate}</Text>/5.0</Text>
+                                    <Text style={styles.Text_Danhgia1}>Nội Dung</Text>
                                 </View>
+                            </View>
+                            <View style={styles.Separator}></View>
+                            <View>
+                                <TouchableOpacity onPress={() => setDobModalVisible1(true)}>
+                                    <Text style={styles.Text_Danhgia12}>Đánh Giá</Text>
+                                </TouchableOpacity>
+                                <Modal animationType="slide" transparent={true} visible={isDobModalVisible1}>
+                                    <View style={styles.modalContainer}>
+                                        <View style={styles.modalContent}>
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                <TouchableOpacity onPress={() => handleSave()} style={styles.button}>
+                                                    <Text style={styles.button_text}>Đăng</Text>
+                                                </TouchableOpacity>
+
+                                                <TouchableOpacity onPress={() => setDobModalVisible1(false)} style={styles.button}>
+                                                    <Text style={styles.button_text}>Hủy</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                            {/* <Text style={styles.label}>Đánh giá của bạn:</Text> */}
+                                            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+
+                                                <View style={styles.starContainer}>
+                                                    {renderStars()}
+                                                </View>
+                                                {/* <Text style={styles.ratingText}>{rating} sao</Text> */}
+                                            </View>
+
+                                            <TextInput
+                                                style={styles.input}
+                                                placeholder="Tiêu đề"
+                                                placeholderTextColor='#CDCDCD'
+                                                onChangeText={(text) => setContent(text)}
+                                                value={content}
+                                            />
+                                            <TextInput
+                                                style={styles.input1}
+                                                placeholder="Nội dung"
+                                                placeholderTextColor='#CDCDCD'
+                                                onChangeText={(text) => setTitle(text)}
+                                                value={title}
+                                            />
+
+                                        </View>
+                                    </View>
+                                </Modal>
                             </View>
                         </View>
                     </View>
@@ -126,8 +312,8 @@ const BookDetail = (props) => {
                                     <Icon_3 onPress={() => setDobModalVisible(false)} style={styles.Close} name="closecircleo" size={28} color="#272956" />
                                 </View>
                                 <FlatList style={styles.List_Comment}
-                                    data = {dataNe}
-                                    renderItem={({item}) => <ItemListComment dulieu={item} navigation={navigation} />}
+                                    data={dataNe}
+                                    renderItem={({ item }) => <ItemListComment dulieu={item} navigation={navigation} />}
                                     keyExtractor={item => item._id}
                                     showsVerticalScrollIndicator={false}
                                 />
@@ -140,21 +326,12 @@ const BookDetail = (props) => {
                     <Text style={styles.Text_BinhLuan}>Những sách liên quan</Text>
                     <FlatList
                         showsHorizontalScrollIndicator={false}
-                        data={imageData}
+                        data={RelateData2}
                         keyExtractor={(item) => item.id}
                         horizontal={true}
-                        renderItem={({ item }) => (
-                            <View style={styles.FlatList_View}>
-                                <TouchableOpacity>
-                                    <Image source={item.source} style={styles.FlatList_Image} />
-                                    <Text style={styles.FlatList_Name1}>{item.name1}</Text>
-                                    <Text style={styles.FlatList_Name2}>{item.name2}</Text>
-                                </TouchableOpacity>
-                            </View>
-                        )}
+                        renderItem={({ item }) => <ItemListRelate dulieu={item} navigation={navigation} />}
                     />
                 </View>
-
             </ScrollView >
         </View >
     )
@@ -167,6 +344,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
     },
+    loading: { width: width, height: height, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' },
     modalContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -184,7 +362,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
     },
-    List_Comment:{
+    List_Comment: {
         marginTop: 10,
     },
     button_text1: {
@@ -295,8 +473,8 @@ const styles = StyleSheet.create({
     },
     View_ImageBook: {
         marginTop: 5,
-        width: 80,
-        height: 120,
+        width: 75,
+        height: 110,
         borderRadius: 10,
     },
     View_Cmt: {
@@ -317,15 +495,28 @@ const styles = StyleSheet.create({
     View_Cmt_Star: {
         flexDirection: 'row',
         justifyContent: 'center',
-        paddingTop: 10,
     },
     View_NoiDung: {
         flexDirection: 'row',
         justifyContent: 'center',
         padding: 20,
     },
+    View_Danhgiane1: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    View_Danhgiane2: {
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     Text_Cmt: {
         fontWeight: 'bold',
+        fontFamily: 'Poppins',
+        color: '#272956',
+        fontSize: 24,
+        paddingLeft: 5,
+    },
+    Text_Cmt1: {
         fontFamily: 'Poppins',
         color: '#272956',
         fontSize: 16,
@@ -343,10 +534,26 @@ const styles = StyleSheet.create({
         backgroundColor: 'black',
     },
     Text_Danhgia1: {
-        fontSize: 14,
+        fontSize: 16,
         fontFamily: 'Poppins',
         color: '#272956',
-        textAlign: 'center'
+        textAlign: 'center',
+        paddingTop: 5,
+    },
+    Text_Danhgia11: {
+        fontSize: 16,
+        fontFamily: 'Poppins',
+        color: '#272956',
+        textAlign: 'center',
+    },
+    Text_Danhgia12: {
+        fontWeight: '800',
+        fontSize: 16,
+        fontFamily: 'Poppins',
+        color: '#272956',
+        textAlign: 'center',
+        paddingTop: 5,
+        paddingBottom: 5,
     },
     View_DocGia: {
         borderRadius: 10,
@@ -404,8 +611,7 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     View_SachLienQuan: {
-        paddingLeft: 20,
-        paddingRight: 20,
+        padding: 20
     },
     toggleButtonText_1: {
         fontWeight: 'bold',
@@ -440,6 +646,85 @@ const styles = StyleSheet.create({
         width: 145,
         color: '#272956'
     },
+    modalContainer: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modalContent: {
+        backgroundColor: 'white',
+        width: '100%',
+        padding: 20,
+        borderRadius: 10,
+        elevation: 5,
+        height: '92%',
+        position: 'absolute',
+        bottom: 0,
+    },
+    input: {
+        height: 60,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 5,
+        marginTop: 10,
+        paddingLeft: 5,
+        fontSize: 16,
+        color: 'black',
+    },
+    input1: {
+        height: 100,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 5,
+        marginTop: 10,
+        paddingLeft: 5,
+        fontSize: 16,
+        color: 'black',
+    },
+    button: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        // backgroundColor: 'blue',
+        height: 40,
+        marginTop: 10,
+        paddingRight: 10,
+    },
+    button_text: {
+        color: '#272956',
+        height: 40,
+        textAlign: 'center',
+        paddingTop: 10,
+        borderRadius: 10,
+        fontSize: 16,
+    },
+    button_text11: {
+        marginTop: 10,
+        fontSize: 16,
+        color: 'black',
+    },
+    label: {
+        fontSize: 18,
+    },
+    starContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    filledStar: {
+        color: '#272956',
+        fontSize: 40,
+        margin: 10
+    },
+    emptyStar: {
+        color: '#CDCDCD',
+        fontSize: 40,
+        margin: 10
+
+    },
+    ratingText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        alignItems: 'center'
+    },
 });
 
 const dataNe = [
@@ -449,59 +734,59 @@ const dataNe = [
         "date": "12/10/2022",
         "star": 5,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 2,
         "name": "Lorita",
         "date": "12/6/2022",
         "star": 2,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 3,
         "name": "Tadeo",
         "date": "9/16/2023",
         "star": 2,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 4,
         "name": "Levey",
         "date": "3/16/2023",
         "star": 5,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 5,
         "name": "Ketti",
         "date": "12/30/2022",
         "star": 1,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 6,
         "name": "Callean",
         "date": "5/18/2023",
         "star": 3,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 7,
         "name": "Sophey",
         "date": "5/9/2023",
         "star": 3,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 8,
         "name": "Erminia",
         "date": "12/31/2022",
         "star": 5,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 9,
         "name": "Judon",
         "date": "2/3/2023",
         "star": 1,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }, {
+    }, {
         "id": 10,
         "name": "Farrell",
         "date": "5/29/2023",
         "star": 4,
         "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-      }
+    }
 ]

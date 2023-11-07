@@ -52,9 +52,9 @@ const Read = props => {
           trustAllCerts={false} // bỏ qua chứng chỉ ssl
           source={PdfResource}
           page={1} //hiển thị trang số 1 đầu tiên
-          scale={1.0} // tỉ lệ phóng ban đầu
-          minScale={0.5} // tỉ lệ phóng nhỏ nhất
-          maxScale={3.0} // tỉ lệ phóng lớn nhất
+          scale={1.5} // tỉ lệ phóng ban đầu
+          minScale={1} // tỉ lệ phóng nhỏ nhất
+          maxScale={2.0} // tỉ lệ phóng lớn nhất
           renderActivityIndicator={() => (
             <ActivityIndicator color="black" size="large" />
           )} // hiển thị loading

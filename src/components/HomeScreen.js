@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, TextInput, FlatList, ScrollView } from 'react-native'
+import { Image, StyleSheet, Text, View, TextInput, FlatList, ScrollView, ToastAndroid } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import Icon from "react-native-vector-icons/Feather"
 import Icon2 from "react-native-vector-icons/AntDesign"
@@ -8,6 +8,7 @@ import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Screen1 from './tab_view/Screen1'
 import Screen2 from './tab_view/Screen2'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import AxiosIntance from '../axios/AxiosIntance'
 
 const color_txt1 = "#9D9D9D";
 const color_txt2 = "#272956";
@@ -20,6 +21,7 @@ const color_logo = '#272956';
 const HomeScreen = (props) => {
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
   const { navigation } = props;
+  const [dataNe, setdataNe] = useState([]);
 
   useEffect(() => {
 
@@ -30,23 +32,7 @@ const HomeScreen = (props) => {
     return unsubscribe;
   }, []);
 
-  const NovelRoute = () => (
-    <ScrollView>
-      <Screen1 navigation={navigation} />
-    </ScrollView>
 
-  );
-  const SelfRoute = () => (
-    <ScrollView>
-      <Screen1 navigation={navigation} />
-    </ScrollView>
-  );
-  const ScienceRoute = () => (
-    <ScrollView>
-      <Screen1 navigation={navigation} />
-    </ScrollView>
-
-  );
   const search = () => (
     navigation.navigate('SearchScreen')
 
@@ -55,35 +41,57 @@ const HomeScreen = (props) => {
     navigation.navigate('LoginUser')
 
   );
-  const RomanceRoute = () => (
+  const RomanceRoute = (id) => (
     <ScrollView>
-      <Screen1 navigation={navigation} />
+      <Screen1 navigation={navigation} id={id} />
     </ScrollView>
 
   );
-  const CrimeRoute = () => (
-    <ScrollView>
-      <Screen1 navigation={navigation} />
-    </ScrollView>
 
-  );
-  const renderScene = SceneMap({
-    Novel: NovelRoute,
-    Self: SelfRoute,
-    Science: ScienceRoute,
-    Romance: RomanceRoute,
-    Crime: CrimeRoute,
-  });
+
+
+  const renderScene = ({ route }) => {
+
+    return (RomanceRoute(route.key));
+  }
   const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: 'Novel', title: 'Novel' },
-    { key: 'Self', title: 'Self-love' },
-    { key: 'Science', title: 'Science' },
-    { key: 'Romance', title: 'Romance' },
-    { key: 'Crime', title: 'Crime' },
+  const [routes, setRoutes] = React.useState([
+
   ]);
+  const { } = useState([]);
+
+  console.log(routes);
+
+  useEffect(() => {
+    const getAllCate = async () => {
+      const respone = await AxiosIntance().get("/product/category/getAlls");
+
+      console.log(respone.category);
+
+      const newArray = [];
+
+      for (const item of respone.category) {
+        const newItem = { key: item._id, title: item.name };
+        newArray.push(newItem);
+      }
+      console.log(newArray);
+
+      if (newArray.length > 0) {
+        setRoutes(newArray);
+        setIndex(0);
+      }
+
+      if (respone.result == true) {
+
+        setdataNe(respone.category)
+      } else {
+        ToastAndroid.show("get data", ToastAndroid.SHORT);
+      }
+    }
+    getAllCate();
 
 
+  }, [])
 
 
   const renderTabBar = props => (
@@ -125,23 +133,26 @@ const HomeScreen = (props) => {
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
           </TouchableOpacity>
           <TouchableOpacity onPress={settings}>
-          <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
+            <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
           </TouchableOpacity>
         </View>
       </View>
       <View style={styles.title}>
-        <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Welcome back, Bunny!</Text>
-        <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>What do you want to{'\n'}read today?</Text>
+        <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Chào mừng bạn trở lại, Bunny!</Text>
+        <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>Bạn muốn đọc sách gì?</Text>
       </View>
-      <TabView
-        style={styles.tab}
-        navigationState={{ index, routes }}
-        onIndexChange={setIndex}
-        renderScene={renderScene}
-        renderTabBar={renderTabBar}
-        scrollEnabled={false}
+      <>{
+        routes.length > 0 &&
+        <TabView
+          style={styles.tab}
+          navigationState={{ index, routes }}
+          onIndexChange={setIndex}
+          renderScene={renderScene}
+          renderTabBar={renderTabBar}
+          scrollEnabled={false}
+        />
+      }</>
 
-      />
     </View>
   )
 }
@@ -183,7 +194,7 @@ const styles = StyleSheet.create({
     marginTop: 14,
     color: icon_color
   }, tab: {
-    marginLeft: 20,
+    marginLeft: 10,
     height: 'auto',
 
   },
@@ -200,6 +211,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
     color: color_logo,
     letterSpacing: 0.5
+
+  },
+  label:{
+    fontWeight:'500',
+    fontSize:16
+  },
+  activeLabel:{
+    color:'black',
 
   }
 
