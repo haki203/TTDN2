@@ -8,7 +8,7 @@ const commentModel = require('../../components/products/CommentModel');
 const categoryModel = require('../../components/products/CategoryModel');
 const productController = require('../../components/products/ProductController');
 const UploadFile = require('../../middle/UploadFile');
-const AuthorModel = require('../../components/products/AuthorModel');
+const favouriteModel = require('../../components/products/FavouriteModel');
 const userModel = require('../../components/users/UserModel');
 //api/product
 router.get('/', async (req, res, next) => {
@@ -37,6 +37,60 @@ router.get('/author/:id', async (req, res, next) => {
         res.status(200).json({ author, result: true });
     } catch (error) {
         res.status(400).json({ result: false, error });
+    }
+});
+//add favourite
+router.post('/favourite/new', async (req, res, next) => {
+    const { idUser, idBook } = req.body;
+    try {
+        if (!idUser || !idBook) {
+            return res.status(400).json({ result: false, message: "Thieu thong tin" });
+        }
+        else {
+            const allFavourites = await favouriteModel.find({});
+            for (let i = 0; i < allFavourites.length; i++) {
+                if (allFavourites[i].bookId == idBook && allFavourites[i].userId == idUser) {
+                    const favouriteDelete = await favouriteModel.findByIdAndDelete(allFavourites[i]._id);
+                    if (favouriteDelete) {
+                        console.log(allFavourites[i]._id);
+                        return res.status(200).json({ message: "huy yeu thich thanh cong", result: true });
+                    }
+                }
+            }
+            const fa = { bookId: idBook, userId: idUser }
+            const favourite = await favouriteModel.create(fa);
+            if (favourite) {
+                return res.status(200).json({ result: true, message: "yeu thich thanh cong" });
+            } else {
+                return res.status(400).json({ result: false });
+            }
+        }
+    } catch (error) {
+        return res.status(400).json({ result: false, error });
+    }
+});
+// get all favourite by id user
+router.get('/favourite/get-book-by-user', async (req, res, next) => {
+    const { idUser } = req.body;
+    try {
+        if (!idUser) {
+            return res.status(400).json({ result: false, message: "Thieu thong tin" });
+        }
+        else {
+            const userFavourites = await favouriteModel.find({ userId: idUser });
+            if (userFavourites.length>0) {
+                let books = [];
+                for (let i = 0; i < userFavourites.length; i++) {
+                    const booksNe = await productModel.findById(userFavourites[i].bookId);
+                    books.push(booksNe);
+                }
+                return res.status(200).json({ result: true,books});
+            } else {
+                return res.status(400).json({ result: false });
+            }
+        }
+    } catch (error) {
+        return res.status(400).json({ result: false, error });
     }
 });
 // get category
@@ -101,12 +155,12 @@ router.post('/comment/new', async (req, res) => {
             }
         }
     } catch (err) {
-        res.status(500).json({result: false, error: 'Đã có lỗi xảy ra' + err });
+        res.status(500).json({ result: false, error: 'Đã có lỗi xảy ra' + err });
     }
 });
 router.get('/comment/get-by-id/:bookId', async (req, res, next) => {
     try {
-        const {bookId} = req.params;
+        const { bookId } = req.params;
         const comment = await commentModel.find({});
         let comments = [];
         if (comment) {
@@ -127,7 +181,7 @@ router.get('/comment/get-by-id/:bookId', async (req, res, next) => {
                     }
                     comments.push(cmt);
                 }
-                else{
+                else {
                 }
             }
             return res.status(200).json({ comments, result: true });

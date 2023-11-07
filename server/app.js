@@ -10,7 +10,6 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 const productApiRouter = require('./routes/api/ProductAPI');
-const reportApiRouter = require('./routes/api/ReportAPI');
 const userApiRouter = require('./routes/api/UserAPI');
 const productCpanelRouter = require('./routes/cpanel/ProductCPanel');
 const userCpanelRouter = require('./routes/cpanel/UserCpanel');
@@ -56,7 +55,6 @@ app.use('/users', usersRouter);
 
 app.use('/api/user', userApiRouter);
 app.use('/api/product', productApiRouter);
-app.use('/api/report', reportApiRouter);
 app.use('/cpanel/user', userCpanelRouter);
 app.use('/cpanel/product', productCpanelRouter);
 // catch 404 and forward to error handler
