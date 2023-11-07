@@ -8,9 +8,9 @@ import Hot2 from './src/components/Hot2';
 import BookDetail from './src/components/BookDetail';
 import ItemListComment from './src/components/ItemListComment';
 import LoginUser from './src/components/LoginUser';
+import SearchScreen from './src/components/SearchScreen';
 
 // facebook
-
 AppRegistry.registerComponent(appName, () => App);
 TrackPlayer.registerPlaybackService(() => require('./service'));
 
