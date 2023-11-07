@@ -3,6 +3,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import ItemSearch from './ItemSearch';
 import { AppContext } from '../navigation/AppContext';
 import AxiosIntance from '../axios/AxiosIntance';
+import Icon from 'react-native-vector-icons/AntDesign';
 const { height } = Dimensions.get('window');
 const backroundContainer = '#FFFFFF';
 const bacroundHeight = '#E8E8E8';
@@ -16,18 +17,19 @@ const SearchScreen = (props) => {
   const [imagee, setImagee] = useState([]);
   const [nameauthor, setNameauthor] = useState([]);
   const [isLoading, setisLoading] = useState(true);
+  const [searchText, setSearchText] = useState('');
   let timeout = null;
-  const countDownSearch = (searchText) => {
+  const countDownSearch = (text) => {
     if (timeout) {
       clearTimeout(timeout);
     }
     timeout = setTimeout(() => {
-      search(searchText);
+      search(text);
     }, 2000);
   }
-  const search = async (searchText) => {
+  const search = async (text) => {
     setisLoading(true);
-    const respone = await AxiosIntance().get("/product/search/name?keyword=" + searchText);
+    const respone = await AxiosIntance().get("/product/search/name?keyword=" + text);
     respone.product.forEach((product) => {
       setNameauthor(product.authorId);
       console.log("Rate:", nameauthor);
@@ -67,9 +69,15 @@ const SearchScreen = (props) => {
 
   //   return unsubscribe;
   // }, []);
+  const HandleChangeText = (text) => {
+    setSearchText(text)
+    countDownSearch(text)
+    console.log(text);
 
+  }
   useEffect(() => {
     const getNews = async () => {
+      setisLoading(true);
       const respone = await AxiosIntance().get("/product/");
       // const authorId = respone.product.map(product => product.authorId);
       // const imageproduct = respone.product.map(product => product.image);
@@ -87,24 +95,6 @@ const SearchScreen = (props) => {
     return () => {
     }
   }, [])
-  //   useEffect(() => {
-  //   const AuthorName = async () => {
-  //     try {
-  //       const response = await AxiosIntance().get(`/product/author/` + nameauthor);
-  //       if (response.result == true) {
-  //         setdataNe(response.author.name);
-  //         console.log("author: " + response.author.name)
-  //       } else {
-  //         ToastAndroid.show('Failed to get product', ToastAndroid.SHORT);
-  //       }
-  //     } catch (error) {
-  //       ToastAndroid.show('Không lấy được id', ToastAndroid.SHORT);
-  //     }
-  //   }
-  //   AuthorName();
-  //   return () => {
-  //   }
-  // }, [])
 
   const [data, setData] = useState([
     {
@@ -231,11 +221,7 @@ const SearchScreen = (props) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState(data);
   const textInputRef = React.createRef(); // Tạo một ref cho TextInput
-  const handleSearch = (text) => {
-    setSearchQuery(text);
-    const filtered = data.filter(item => item.name.includes(searchQuery));
-    setFilteredData(filtered)
-  }
+
   // const filtered = data.filter(item => item.name.includes(searchQuery));
   // const latestText = dataNe.length > 0 ? 'Results' : 'Lastest';
   // const latestText2 = dataNe.length > 0 ? 'Results' : 'Lastest';
@@ -249,13 +235,19 @@ const SearchScreen = (props) => {
           <TouchableOpacity style={styles.search} onPress={search}>
             <Image source={require('../assets/images/manerge.png')}></Image>
           </TouchableOpacity>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
           <TextInput
             ref={textInputRef}
-            onChangeText={(text) => countDownSearch(text)}
+            value={searchText}
+            onChangeText={(text) => {HandleChangeText(text)}}
             placeholderTextColor="black"
             placeholder='Search'
           >
           </TextInput>
+          <TouchableOpacity onPress={() => HandleChangeText("")}>
+          {searchText.length > 0 && <Icon name="close" size={25} color="#000" right="15%"/> /* Hiển thị Icon khi searchText có độ dài lớn hơn 1 */}
+          </TouchableOpacity>
+          </View>
         </View>
         <TouchableOpacity style={styles.huy1} onPress={resetSearch}>
           <Text style={styles.huy}>Hủy</Text>
@@ -335,7 +327,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontStyle: 'normal',
     fontFamily: 'Poppins',
-    justifyContent:'center'
+    justifyContent:'center', 
     // paddingRight: 50
   },
   search: {

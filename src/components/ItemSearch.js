@@ -8,6 +8,8 @@ const ColorAuthor = '#4838D1';
 const ItemSearch = (props) => {
   const { product, navigation } = props;
   const [name, setName] = useState("Chưa có");
+  const [id, setId] = useState(product._id);
+
   useEffect(() => {
     const getAdmin = async () => {
       try {
@@ -28,8 +30,12 @@ const ItemSearch = (props) => {
     }
 
   }, []);
+  const onClickDetail = () =>{
+    console.log(id);
+    navigation.navigate('Detail', { itemId: id });
+  }
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={() => onClickDetail()}>
       <View style={{ flexDirection: 'row', marginTop: 20 }}>
         <Image style={styles.image1} source={{ uri: product.image }}></Image>
         <View style={{ justifyContent: 'center' }}>
