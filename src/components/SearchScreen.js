@@ -23,7 +23,7 @@ const SearchScreen = (props) => {
     }
     timeout = setTimeout(() => {
       search(searchText);
-    }, 1000);
+    }, 2000);
   }
   const search = async (searchText) => {
     setisLoading(true);
@@ -87,24 +87,24 @@ const SearchScreen = (props) => {
     return () => {
     }
   }, [])
-  useEffect(() => {
-  const AuthorName = async () => {
-    try {
-      const response = await AxiosIntance().get(`/product/author/` + nameauthor);
-      if (response.result == true) {
-        setdataNe(response.author.name);
-        console.log("author: " + response.author.name)
-      } else {
-        ToastAndroid.show('Failed to get product', ToastAndroid.SHORT);
-      }
-    } catch (error) {
-      ToastAndroid.show('Không lấy được id', ToastAndroid.SHORT);
-    }
-  }
-  AuthorName();
-  return () => {
-  }
-}, [])
+  //   useEffect(() => {
+  //   const AuthorName = async () => {
+  //     try {
+  //       const response = await AxiosIntance().get(`/product/author/` + nameauthor);
+  //       if (response.result == true) {
+  //         setdataNe(response.author.name);
+  //         console.log("author: " + response.author.name)
+  //       } else {
+  //         ToastAndroid.show('Failed to get product', ToastAndroid.SHORT);
+  //       }
+  //     } catch (error) {
+  //       ToastAndroid.show('Không lấy được id', ToastAndroid.SHORT);
+  //     }
+  //   }
+  //   AuthorName();
+  //   return () => {
+  //   }
+  // }, [])
 
   const [data, setData] = useState([
     {
@@ -245,22 +245,21 @@ const SearchScreen = (props) => {
   return (
     <View>
       <View style={styles.hearderContainer}>
-        <TouchableOpacity onPress={search}>
-          <Image style={styles.search} source={require('../assets/images/manerge.png')}></Image>
+        <TouchableOpacity style={styles.huy1} onPress={resetSearch}>
+          <Text style={styles.huy}>Hủy</Text>
         </TouchableOpacity>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
           <TextInput ref={textInputRef} onChangeText={(text) => countDownSearch(text)} placeholder='Search' style={styles.TextSearch}>
           </TextInput>
-          <TouchableOpacity onPress={resetSearch}>
-            {/* <Image style={styles.mark} source={require('../assets/images/mark.png')}></Image> */}
-            <Text style={styles.huy}>Hủy</Text>
-          </TouchableOpacity>
         </View>
+        <TouchableOpacity style={styles.search} onPress={search}>
+            <Image source={require('../assets/images/manerge.png')}></Image>
+          </TouchableOpacity>
       </View>
       <View style={styles.listContainer}>
         <View style={{ flexDirection: 'row' }}>
           <Text style={styles.content}>Lastest</Text>
-          <Text style={styles.content1}></Text>
+          {/* <Text style={styles.content1}></Text> */}
         </View>
         <View style={styles.container1}>
           {
@@ -297,7 +296,7 @@ const styles = StyleSheet.create({
     height: height * 0.1,
   },
   listContainer: {
-    height: height * 0.88,
+    height: height * 0.9,
     backgroundColor: bacroundHeight,
     borderTopRightRadius: 43,
     borderTopLeftRadius: 43,
@@ -315,19 +314,20 @@ const styles = StyleSheet.create({
     marginTop: 34.5,
   },
   TextSearch: {
-    width: 305,
-    height: 49,
+    width: '75%',
+    height: '105%',
     backgroundColor: backroundSearch,
     borderRadius: 15,
-    marginLeft: 29,
-    marginTop: 18,
-    paddingLeft: 55,
+    // marginLeft: 29,
+    // marginTop: 18,
+    paddingLeft: 50,
+    top: '5%'
     // paddingRight: 50
   },
   search: {
     position: 'absolute',
-    marginTop: 36,
-    marginLeft: 50
+    left: '17%',
+    top: '45%'
   },
   mark: {
     position: 'absolute',
@@ -341,26 +341,24 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     letterSpacing: 0.408,
     lineHeight: 22,
-    paddingLeft: 25,
-    marginTop: 8
-  },
-  content1: {
-    color: bacroundColor,
-    fontSize: 20,
-    fontWeight: '500',
-    fontStyle: 'normal',
-    paddingLeft: 5,
-    marginTop: 5
+    left: '80%',
+    top: '3%'
   },
   huy: {
     color: bacroundColor,
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 15,
+    fontWeight: '600',
     fontStyle: 'normal',
-    lineHeight: 22,
-    marginTop: 30,
     fontFamily: 'Poppins',
-    marginLeft: 18
+    lineHeight: 22
+    // marginTop: 30,
+    // marginLeft: 15,
+  },
+  huy1: {
+    right: 0,
+    position: 'absolute',
+    marginRight: 12,
+    top: '40%'
   }
 })
 
