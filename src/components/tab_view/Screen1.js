@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, TextInput, Dimensions, FlatList, useWindowDimensions, TouchableOpacity } from 'react-native'
+import { Image, StyleSheet, Text, View, TextInput, Dimensions, FlatList, useWindowDimensions, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Icon from "react-native-vector-icons/Feather"
 import Icon2 from "react-native-vector-icons/AntDesign"
@@ -17,6 +17,7 @@ const namebook_color = "#272956";
 const Screen1 = ({ navigation, id }) => {
 
   const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [author, setAuthor] = useState('Đang cập nhật');
 
   useEffect(() => {
@@ -33,6 +34,7 @@ const Screen1 = ({ navigation, id }) => {
         }
       }
       setData(arrayData);
+      setIsLoading(false)
     }
 
     getAllCate();
@@ -73,8 +75,19 @@ const Screen1 = ({ navigation, id }) => {
   return (
     <View style={styles.container}>
       <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>Sách hot</Text>
+      {
+        isLoading ?
+          (
+            <View style={{width:'100%',height:300,alignContent:'center',justifyContent:'center'}}><ActivityIndicator size={30} color={'black'}/></View>
+          ) :
+
+          (
+            <View></View>
+
+          )
+      }
       <FlatList
-        style={{ flexGrow: 0, height: 340, }}
+        style={{ flexGrow: 0,paddingBottom:20}}
         data={data}
         renderItem={({ item }) => <ItemBook item={item} navigation={navigation} />}
         keyExtractor={item => item.id}
@@ -83,8 +96,19 @@ const Screen1 = ({ navigation, id }) => {
         showsVerticalScrollIndicator={false}
       />
       <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>Sách mới xuất bản</Text>
+      {
+        isLoading ?
+          (
+            <View style={{width:'100%',height:300,alignContent:'center',justifyContent:'center'}}><ActivityIndicator size={30} color={'black'}/></View>
+          ) :
+
+          (
+            <View></View>
+
+          )
+      }
       <FlatList
-        style={{ flexGrow: 0, height: 340, }}
+        style={{ flexGrow: 0}}
         data={data}
         renderItem={({ item }) => <ItemBook item={item} navigation={navigation} />}
         keyExtractor={item => item.id}

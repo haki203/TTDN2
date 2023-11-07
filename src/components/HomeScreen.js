@@ -61,14 +61,11 @@ const HomeScreen = (props) => {
   ]);
   const { } = useState([]);
 
-  console.log(routes);
 
   useEffect(() => {
     const getAllCate = async () => {
-      console.log("infoUser ne: ",infoUser);
       const respone = await AxiosIntance().get("/product/category/getAlls");
 
-      console.log(respone.category);
 
       const newArray = [];
 
@@ -76,7 +73,6 @@ const HomeScreen = (props) => {
         const newItem = { key: item._id, title: item.name };
         newArray.push(newItem);
       }
-      console.log(newArray);
 
       if (newArray.length > 0) {
         setRoutes(newArray);
@@ -128,7 +124,7 @@ const HomeScreen = (props) => {
       <View style={styles.header}>
         <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
           <Image style={styles.menu} source={require('../assets/images/logo2.png')} size={22} />
-          <Text style={styles.authen}>Authens</Text>
+          <Text style={styles.authen}>Athens</Text>
         </View>
         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
           <TouchableOpacity onPress={search}>

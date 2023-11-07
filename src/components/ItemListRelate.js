@@ -10,11 +10,11 @@ import { URI } from '../../server/public/assets/vendor/tinymce/tinymce';
 const { width, height } = Dimensions.get('window');
 
 const ItemListRelate = (props) => {
-    const {dulieu} = props;
+    const {dulieu,navigation} = props;
     return (
         <View>
             <View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=> navigation.navigate('Detail', { itemId:dulieu._id })}>
                     <Image source={{uri: dulieu.image}} style={styles.FlatList_Image} />
                     <Text style={styles.FlatList_Name1}>{dulieu.title}</Text>
                     {/* <Text style={styles.FlatList_Name2}>{dulieu.authorId}</Text> */}

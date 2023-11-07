@@ -31,14 +31,11 @@ const BookDetail = (props) => {
             authorname: response.author.name,
             introduce: response.author.introduce,
         }
-        console.log(Data1);
         setAuthorData(Data1);
     }
     useEffect(() => {
         const DetailBook = async () => {
-            console.log("item id ne: ", itemId);
             const response = await AxiosIntance().get("/product/" + itemId)
-            console.log("book ne: ", response);
             const Data2 = {
                 id: response.product._id,
                 title: response.product.title,
@@ -590,15 +587,15 @@ const BookDetail = (props) => {
                                             style={styles.input}
                                             placeholder="Tiêu đề"
                                             placeholderTextColor='#CDCDCD'
-                                            onChangeText={(text) => setContent(text)}
-                                            value={content}
+                                            onChangeText={(text) => setTitle(text)}
+                                            value={title}
                                         />
                                         <TextInput
                                             style={styles.input1}
                                             placeholder="Nội dung"
                                             placeholderTextColor='#CDCDCD'
-                                            onChangeText={(text) => setTitle(text)}
-                                            value={title}
+                                            onChangeText={(text) => setContent(text)}
+                                            value={content}
                                         />
 
                                     </View>
@@ -779,7 +776,7 @@ const styles = StyleSheet.create({
     },
     View_ImageBook: {
         marginTop: 5,
-        width: '27%',
+        width: '25%',
         height: '100%',
         borderRadius: 10,
     },

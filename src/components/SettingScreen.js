@@ -12,14 +12,7 @@ const SettingScreen = (props) => {
   const { navigation } = props;
   const { infoUser,setIsLogin } = useContext(AppContext);
     const { isTabVisible, setIsTabVisible } = useContext(AppContext);
-    useEffect(() => {
 
-        const unsubscribe = navigation.addListener('focus', () => {
-          setIsTabVisible(false)
-        });
-    
-        return unsubscribe;
-      }, []);
     return (
         <View style={styles.container}>
             <View style={styles.header}>
