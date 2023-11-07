@@ -119,6 +119,7 @@ const BookDetail = (props) => {
         console.log(content, "123");
         console.log("cc");
         setDobModalVisible1(false);
+        
     };
 
     const [rating, setRating] = useState(0);
