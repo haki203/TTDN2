@@ -1,67 +1,79 @@
 /* eslint-disable prettier/prettier */
-import { StyleSheet, Text, TouchableOpacity, View, ToastAndroid, Image, ImageBackground, Dimensions, ActivityIndicator } from 'react-native';
-import React, { useContext, useState } from 'react';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { AppContext } from '../navigation/AppContext';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ToastAndroid,
+  Image,
+  ImageBackground,
+  Dimensions,
+  ActivityIndicator,
+} from 'react-native';
+import React, {useContext, useState} from 'react';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {AppContext} from '../navigation/AppContext';
 import auth from '@react-native-firebase/auth';
-import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 import AxiosIntance from '../axios/AxiosIntance';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 const backgroundColor = '#FDFDFD';
 const color = '#FFFFFF';
-const Welcome = (props) => {
+const Welcome = props => {
   GoogleSignin.configure({
-    webClientId: '604464843561-7bobfsn4dq8d243n2ka1ngpiavlbof23.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+    webClientId:
+      '604464843561-7bobfsn4dq8d243n2ka1ngpiavlbof23.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
     offlineAccess: false,
   });
-  const { navigation } = props;
-  const { setIsLogin, setinfoUser } = useContext(AppContext);
+  const {navigation} = props;
+  const {setIsLogin, setinfoUser} = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(true);
-
 
   //---------------------- login google ---------------------- //
   const onLoginGG = async () => {
-
     try {
       setIsLoading(false);
       await GoogleSignin.hasPlayServices();
       console.log('LoginGG');
       const userInfor = await GoogleSignin.signIn();
-      const res = await AxiosIntance().post("/user/login", { email: userInfor.user.email });
+      const res = await AxiosIntance().post('/user/login', {
+        email: userInfor.user.email,
+      });
       if (res.result) {
         const infoUser = {
-          name: userInfor.name, avatar: userInfor.photo,id:res.user._id
-        }
+          name: userInfor.name,
+          avatar: userInfor.photo,
+          id: res.user._id,
+        };
         setinfoUser(infoUser);
         console.log(res.user);
-        ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
+        ToastAndroid.show('Đăng Nhập thành công', ToastAndroid.SHORT);
         setIsLogin(true);
-      }else{
-      ToastAndroid.show("Đăng nhập thất bại ", ToastAndroid.SHORT);
-
+      } else {
+        ToastAndroid.show('Đăng nhập thất bại ', ToastAndroid.SHORT);
       }
-
     } catch (error) {
-      ToastAndroid.show("Đăng nhập thất bại ", ToastAndroid.SHORT);
+      ToastAndroid.show('Đăng nhập thất bại ', ToastAndroid.SHORT);
       console.log(error);
     }
-
-  }
-
-
-
+  };
 
   //---------------------- login facebook ---------------------- //
   async function getFacebookUserData(accessToken) {
-    const response = await fetch(`https://graph.facebook.com/v12.0/me?fields=id,name,email,phone,avatar&access_token=${accessToken}`);
+    const response = await fetch(
+      `https://graph.facebook.com/v12.0/me?fields=id,name,email,phone,avatar&access_token=${accessToken}`,
+    );
     const userData = await response.json();
     return userData;
   }
   async function onFacebookButtonPress() {
     // Attempt login with permissions
-    const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-    console.log("result fb ne: ", result);
+    const result = await LoginManager.logInWithPermissions([
+      'public_profile',
+      'email',
+    ]);
+    console.log('result fb ne: ', result);
     if (result.isCancelled) {
       throw 'User cancelled the login process';
     }
@@ -76,59 +88,77 @@ const Welcome = (props) => {
       console.log('Thông tin người dùng Facebook:', userData);
       console.log('loginFB');
 
-      console.log("data fb ne: ", data);
+      console.log('data fb ne: ', data);
       // loginnnnnnnnnnnnnnnnnnnnnnn api
-      const res = await AxiosIntance().post("/user/login", { email: data.userID });
+      const res = await AxiosIntance().post('/user/login', {
+        email: data.userID,
+      });
       if (res.result) {
         setIsLogin(true);
         const infoUser = {
-          name: res.user.name, avatar: res.user.avatar
-        }
+          name: res.user.name,
+          avatar: res.user.avatar,
+        };
         setinfoUser(infoUser);
-        console.log("result login fb ",res.user);
-        ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
+        console.log('result login fb ', res.user);
+        ToastAndroid.show('Đăng Nhập thành công', ToastAndroid.SHORT);
       }
     }
 
     // Create a Firebase credential with the AccessToken
-    const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
-    console.log("facebookCredential fb ne: ", facebookCredential);
-
+    const facebookCredential = auth.FacebookAuthProvider.credential(
+      data.accessToken,
+    );
+    console.log('facebookCredential fb ne: ', facebookCredential);
 
     // Sign-in the user with the credential
     return auth().signInWithCredential(facebookCredential);
   }
   // ________________________________________________________________________________________//
 
-
-
-
   //---------------------- login google ---------------------- //
 
   return (
     <View style={styles.container}>
-      {isLoading ? (<View style={styles.loading}><ActivityIndicator size={35} color={'black'} /></View>) : (<View></View>)}
-      <ImageBackground style={{ position: 'absolute', width: width, height: height }} source={require('../assets/images/bg_welcome.png')} />
-      <ImageBackground style={styles.image} source={require('../assets/images/logo-athens.png')} />
+      {isLoading ? (
+        <View style={styles.loading}>
+          <ActivityIndicator size={35} color={'black'} />
+        </View>
+      ) : (
+        <View></View>
+      )}
+      <ImageBackground
+        style={{position: 'absolute', width: width, height: height}}
+        source={require('../assets/images/bg_welcome.png')}
+      />
+      <ImageBackground
+        style={styles.image}
+        source={require('../assets/images/logo-athens.png')}
+      />
       <View style={styles.textView}>
         <Text style={styles.textView_1}>Authens</Text>
         <Text style={styles.textView_2}>
-          AudioBox allowing you to listen to your favourite books anytime,
-          anywhere
+          AudioBox cho phép bạn nghe những cuốn sách yêu thích của mình bất cứ
+          lúc nào, bất cứ nơi đâu
         </Text>
       </View>
 
       <View style={styles.touchable}>
-        <TouchableOpacity style={styles.touchableFB} onPress={() => onFacebookButtonPress()}>
-          <Image style={styles.icon} source={require('../assets/images/ic_fb.png')}></Image>
-          <Text style={styles.textView_GG}>Continue with Facebook</Text>
+        <TouchableOpacity
+          style={styles.touchableFB}
+          onPress={() => onFacebookButtonPress()}>
+          <Image
+            style={styles.icon}
+            source={require('../assets/images/ic_fb.png')}></Image>
+          <Text style={styles.textView_GG}>Đăng nhập bằng Facebook</Text>
         </TouchableOpacity>
-        <Text style={styles.textView_3}>OR</Text>
+        <Text style={styles.textView_3}>Hoặc</Text>
         <TouchableOpacity style={styles.touchableGG} onPress={onLoginGG}>
-          <Image style={styles.icon} source={require('../assets/images/ic_gg.png')}></Image>
-          <Text style={styles.textView_GG}>Continue with Google</Text>
+          <Image
+            style={styles.icon}
+            source={require('../assets/images/ic_gg.png')}></Image>
+          <Text style={styles.textView_GG}>Đăng nhập bằng Google</Text>
         </TouchableOpacity>
-
       </View>
     </View>
   );
@@ -209,7 +239,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: color,
     flexDirection: 'row',
-
   },
   textView_GG: {
     color: color,
