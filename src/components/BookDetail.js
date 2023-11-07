@@ -12,6 +12,7 @@ const { width, height } = Dimensions.get('window');
 import { useRoute } from '@react-navigation/native';
 import { Alert } from 'react-native';
 const BookDetail = (props) => {
+    const { infoUser} = useContext(AppContext);
 
     const { itemId } = props.route.params;
     const [authorData, setAuthorData] = useState([]);
@@ -95,7 +96,7 @@ const BookDetail = (props) => {
     const [content, setContent] = useState('');
     const [title, setTitle] = useState('');
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (rating) {
             setRating(rating);
         } else {
@@ -119,6 +120,15 @@ const BookDetail = (props) => {
         console.log(content, "123");
         console.log("cc");
         setDobModalVisible1(false);
+        
+        const postData = {
+            userId: newCmt.userId,
+            bookId: newCmt.bookId,
+            title: newCmt.title,
+            content: newCmt.content,
+            rate: newCmt.rate,
+        };
+        const response = await AxiosIntance().post('/product/comment/new' + postData);
         
     };
 
