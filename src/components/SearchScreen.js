@@ -223,7 +223,7 @@ const SearchScreen = (props) => {
   const textInputRef = React.createRef(); // Tạo một ref cho TextInput
 
   // const filtered = data.filter(item => item.name.includes(searchQuery));
-  // const latestText = dataNe.length > 0 ? 'Results' : 'Lastest';
+  const latestText = searchText.length > 0 ? 'Kết quả tìm kiếm' : 'Tìm kiếm gần đây';
   // const latestText2 = dataNe.length > 0 ? 'Results' : 'Lastest';
   const resetSearch = () => {
     navigation.goBack();
@@ -235,18 +235,18 @@ const SearchScreen = (props) => {
           <TouchableOpacity style={styles.search} onPress={search}>
             <Image source={require('../assets/images/manerge.png')}></Image>
           </TouchableOpacity>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-          <TextInput
-            ref={textInputRef}
-            value={searchText}
-            onChangeText={(text) => {HandleChangeText(text)}}
-            placeholderTextColor="black"
-            placeholder='Search'
-          >
-          </TextInput>
-          <TouchableOpacity onPress={() => HandleChangeText("")}>
-          {searchText.length > 0 && <Icon name="close" size={25} color="#000" right="15%"/> /* Hiển thị Icon khi searchText có độ dài lớn hơn 1 */}
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <TextInput
+              ref={textInputRef}
+              value={searchText}
+              onChangeText={(text) => { HandleChangeText(text) }}
+              placeholderTextColor="black"
+              placeholder='Tìm kiếm...'
+            >
+            </TextInput>
+            <TouchableOpacity onPress={() => HandleChangeText("")}>
+              {searchText.length > 0 && <Icon name="close" size={25} color="#000" right="15%" /> /* Hiển thị Icon khi searchText có độ dài lớn hơn 1 */}
+            </TouchableOpacity>
           </View>
         </View>
         <TouchableOpacity style={styles.huy1} onPress={resetSearch}>
@@ -255,7 +255,7 @@ const SearchScreen = (props) => {
       </View>
       <View style={styles.listContainer}>
         <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.content}>Lastest</Text>
+          <Text style={styles.content}>{latestText}</Text>
           {/* <Text style={styles.content1}></Text> */}
         </View>
         <View style={styles.container1}>
@@ -327,7 +327,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontStyle: 'normal',
     fontFamily: 'Poppins',
-    justifyContent:'center', 
+    justifyContent: 'center',
     // paddingRight: 50
   },
   search: {
