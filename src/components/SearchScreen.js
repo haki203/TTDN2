@@ -5,13 +5,13 @@ import { AppContext } from '../navigation/AppContext';
 import AxiosIntance from '../axios/AxiosIntance';
 const { height } = Dimensions.get('window');
 const backroundContainer = '#FFFFFF';
-const bacroundHeight = '#C4C4C426';
-const backroundSearch = '#C4C4C426';
+const bacroundHeight = '#E8E8E8';
+const backroundSearch = '#E8E8E8';
 const bacroundColor = '#272956';
 const ColorAuthor = '#4838D1';
 const SearchScreen = (props) => {
   const { navigation } = props;
-  const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+  // const { isTabVisible, setIsTabVisible } = useContext(AppContext);
   const [dataNe, setdataNe] = useState([]);
   const [imagee, setImagee] = useState([]);
   const [nameauthor, setNameauthor] = useState([]);
@@ -23,7 +23,7 @@ const SearchScreen = (props) => {
     }
     timeout = setTimeout(() => {
       search(searchText);
-    }, 1000);
+    }, 2000);
   }
   const search = async (searchText) => {
     setisLoading(true);
@@ -46,27 +46,27 @@ const SearchScreen = (props) => {
     }
   }
 
-  const Issearch = async () => {
-    setisLoading(true);
-    const respone = await AxiosIntance().get("product/search/name?keyword=");
-    console.log(respone.result);
-    if (respone.result == false) {
-      // lay du lieu
-      setdataNe(respone.product);
-      console.log(respone.product);
-      setisLoading(false);
-    }
-    else {
-      ToastAndroid.show("Lay du lieu that bai", ToastAndroid.SHORT);
-    }
-  }
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      setIsTabVisible(false)
-    });
+  // const Issearch = async () => {
+  //   setisLoading(true);
+  //   const respone = await AxiosIntance().get("product/search/name?keyword=");
+  //   console.log(respone.result);
+  //   if (respone.result == false) {
+  //     // lay du lieu
+  //     setdataNe(respone.product);
+  //     console.log(respone.product);
+  //     setisLoading(false);
+  //   }
+  //   else {
+  //     ToastAndroid.show("Lay du lieu that bai", ToastAndroid.SHORT);
+  //   }
+  // }
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     setIsTabVisible(false)
+  //   });
 
-    return unsubscribe;
-  }, []);
+  //   return unsubscribe;
+  // }, []);
 
   useEffect(() => {
     const getNews = async () => {
@@ -87,24 +87,24 @@ const SearchScreen = (props) => {
     return () => {
     }
   }, [])
-  useEffect(() => {
-  const AuthorName = async () => {
-    try {
-      const response = await AxiosIntance().get(`/product/author/` + nameauthor);
-      if (response.result == true) {
-        setdataNe(response.author.name);
-        console.log("author: " + response.author.name)
-      } else {
-        ToastAndroid.show('Failed to get product', ToastAndroid.SHORT);
-      }
-    } catch (error) {
-      ToastAndroid.show('Không lấy được id', ToastAndroid.SHORT);
-    }
-  }
-  AuthorName();
-  return () => {
-  }
-}, [])
+  //   useEffect(() => {
+  //   const AuthorName = async () => {
+  //     try {
+  //       const response = await AxiosIntance().get(`/product/author/` + nameauthor);
+  //       if (response.result == true) {
+  //         setdataNe(response.author.name);
+  //         console.log("author: " + response.author.name)
+  //       } else {
+  //         ToastAndroid.show('Failed to get product', ToastAndroid.SHORT);
+  //       }
+  //     } catch (error) {
+  //       ToastAndroid.show('Không lấy được id', ToastAndroid.SHORT);
+  //     }
+  //   }
+  //   AuthorName();
+  //   return () => {
+  //   }
+  // }, [])
 
   const [data, setData] = useState([
     {
@@ -243,24 +243,28 @@ const SearchScreen = (props) => {
     navigation.goBack();
   }
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.hearderContainer}>
-        <TouchableOpacity onPress={search}>
-          <Image style={styles.search} source={require('../assets/images/manerge.png')}></Image>
-        </TouchableOpacity>
-        <View style={{ flexDirection: 'row' }}>
-          <TextInput ref={textInputRef} onChangeText={(text) => countDownSearch(text)} placeholder='Search' style={styles.TextSearch}>
-          </TextInput>
-          <TouchableOpacity onPress={resetSearch}>
-            {/* <Image style={styles.mark} source={require('../assets/images/mark.png')}></Image> */}
-            <Text style={styles.huy}>Hủy</Text>
+        <View style={styles.TextSearch}>
+          <TouchableOpacity style={styles.search} onPress={search}>
+            <Image source={require('../assets/images/manerge.png')}></Image>
           </TouchableOpacity>
+          <TextInput
+            ref={textInputRef}
+            onChangeText={(text) => countDownSearch(text)}
+            placeholderTextColor="black"
+            placeholder='Search'
+          >
+          </TextInput>
         </View>
+        <TouchableOpacity style={styles.huy1} onPress={resetSearch}>
+          <Text style={styles.huy}>Hủy</Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.listContainer}>
         <View style={{ flexDirection: 'row' }}>
           <Text style={styles.content}>Lastest</Text>
-          <Text style={styles.content1}></Text>
+          {/* <Text style={styles.content1}></Text> */}
         </View>
         <View style={styles.container1}>
           {
@@ -295,9 +299,13 @@ const styles = StyleSheet.create({
   },
   hearderContainer: {
     height: height * 0.1,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   listContainer: {
-    height: height * 0.88,
+    height: height * 0.9,
     backgroundColor: bacroundHeight,
     borderTopRightRadius: 43,
     borderTopLeftRadius: 43,
@@ -315,19 +323,28 @@ const styles = StyleSheet.create({
     marginTop: 34.5,
   },
   TextSearch: {
-    width: 305,
-    height: 49,
+    width: '75%',
+    height: '65%',
     backgroundColor: backroundSearch,
     borderRadius: 15,
-    marginLeft: 29,
-    marginTop: 18,
-    paddingLeft: 55,
+    // marginLeft: 29,
+    // marginTop: 18,
+    paddingLeft: 50,
+    color: '#000',
+    fontSize: 12,
+    fontWeight: '400',
+    fontStyle: 'normal',
+    fontFamily: 'Poppins',
+    justifyContent:'center'
     // paddingRight: 50
   },
   search: {
     position: 'absolute',
-    marginTop: 36,
-    marginLeft: 50
+    top: '37%',
+    left: 22
+    // // left: '17%',
+    // // top: '45%'
+    // left: '30%'
   },
   mark: {
     position: 'absolute',
@@ -341,26 +358,25 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     letterSpacing: 0.408,
     lineHeight: 22,
-    paddingLeft: 25,
-    marginTop: 8
-  },
-  content1: {
-    color: bacroundColor,
-    fontSize: 20,
-    fontWeight: '500',
-    fontStyle: 'normal',
-    paddingLeft: 5,
-    marginTop: 5
+    left: '80%',
+    top: '3%'
   },
   huy: {
     color: bacroundColor,
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 15,
+    fontWeight: '600',
     fontStyle: 'normal',
-    lineHeight: 22,
-    marginTop: 30,
     fontFamily: 'Poppins',
-    marginLeft: 18
+    lineHeight: 22
+    // marginTop: 30,
+    // marginLeft: 15,
+  },
+  huy1: {
+    // right: 0,
+    // position: 'absolute',
+    // marginRight: 12,
+    // top: '40%'
+    left: '18%'
   }
 })
 

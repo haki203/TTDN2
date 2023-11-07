@@ -30,15 +30,18 @@ const Welcome = (props) => {
       const userInfor = await GoogleSignin.signIn();
       const res = await AxiosIntance().post("/user/login", { email: userInfor.user.email });
       if (res.result) {
+        const infoUser = {
+          name: userInfor.name, avatar: userInfor.photo,id:res.user._id
+        }
+        setinfoUser(infoUser);
+        console.log(res.user);
+        ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
+        setIsLogin(true);
+      }else{
+      ToastAndroid.show("Đăng nhập thất bại ", ToastAndroid.SHORT);
 
       }
-      const infoUser = {
-        name: userInfor.name, avatar: userInfor.photo
-      }
-      setinfoUser(infoUser);
-      console.log(userInfor);
-      ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
-      setIsLogin(true);
+
     } catch (error) {
       ToastAndroid.show("Đăng nhập thất bại ", ToastAndroid.SHORT);
       console.log(error);
@@ -50,10 +53,15 @@ const Welcome = (props) => {
 
 
   //---------------------- login facebook ---------------------- //
+  async function getFacebookUserData(accessToken) {
+    const response = await fetch(`https://graph.facebook.com/v12.0/me?fields=id,name,email,phone,avatar&access_token=${accessToken}`);
+    const userData = await response.json();
+    return userData;
+  }
   async function onFacebookButtonPress() {
     // Attempt login with permissions
     const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-
+    console.log("result fb ne: ", result);
     if (result.isCancelled) {
       throw 'User cancelled the login process';
     }
@@ -64,18 +72,28 @@ const Welcome = (props) => {
     if (!data) {
       throw 'Something went wrong obtaining access token';
     } else {
-
+      const userData = await getFacebookUserData(data.accessToken);
+      console.log('Thông tin người dùng Facebook:', userData);
       console.log('loginFB');
 
-      console.log(data);
-      setIsLogin(true);
-
-      ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
-
+      console.log("data fb ne: ", data);
+      // loginnnnnnnnnnnnnnnnnnnnnnn api
+      const res = await AxiosIntance().post("/user/login", { email: data.userID });
+      if (res.result) {
+        setIsLogin(true);
+        const infoUser = {
+          name: res.user.name, avatar: res.user.avatar
+        }
+        setinfoUser(infoUser);
+        console.log("result login fb ",res.user);
+        ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
+      }
     }
 
     // Create a Firebase credential with the AccessToken
     const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
+    console.log("facebookCredential fb ne: ", facebookCredential);
+
 
     // Sign-in the user with the credential
     return auth().signInWithCredential(facebookCredential);

@@ -30,7 +30,7 @@ const ItemSearch = (props) => {
   }, []);
   return (
     <TouchableOpacity>
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', marginTop: 20 }}>
         <Image style={styles.image1} source={{ uri: product.image }}></Image>
         <View style={{ justifyContent: 'center' }}>
           <Text style={styles.nameBook}>{product.title}</Text>
@@ -45,16 +45,14 @@ export default ItemSearch
 
 const styles = StyleSheet.create({
   image1: {
-    width: 71,
+    width: '17%',
     height: 106,
     display: 'flex',
     flexShrink: 0,
     borderRadius: 10,
-    marginVertical: 8,
-    marginHorizontal: 23
+    marginHorizontal: 20,
   },
   nameBook: {
-    marginTop: 23,
     color: bacroundColor,
     fontSize: 18,
     fontStyle: 'normal',
@@ -67,6 +65,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontStyle: 'normal',
     lineHeight: 18,
-    marginTop: 3
   },
 })

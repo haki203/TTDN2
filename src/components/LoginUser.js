@@ -45,7 +45,9 @@ const LoginUser = props => {
               <Text style={styles.txt2}>Đăng nhập</Text>
             </TouchableOpacity>
           </LinearGradient>
+          <TouchableOpacity style={styles.txt1}>
           <Text style={styles.txt}>Tạo tài khoản mới</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </LinearGradient>
@@ -77,20 +79,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 49, // Tương tự với "padding: 0 69px;"
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 30,
+    top: '15%',
   },
   txt: {
-    marginTop: 17,
+    top: '8%',
     color: colorText,
     fontSize: 16,
     fontStyle: 'normal',
     fontFamily: 'Poppins',
     fontWeight: '400',
   },
-
+  txt1: {
+    top: '20%',
+  },
   left: {
-    width: 40,
-    height: 40,
+    width: '10%',
+    height: '5%',
     backgroundColor: '#778899',
     borderRadius: 30,
     position: 'absolute',
