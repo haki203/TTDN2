@@ -17,7 +17,7 @@ const SettingScreen = (props) => {
         <View style={styles.container}>
             <View style={styles.header}>
                 <Icon onPress={() => navigation.goBack()} style={styles.icon_arrow} name='arrowleft' color={color_arrow} />
-                <Text style={styles.txt_settings}>Settings</Text>
+                <Text style={styles.txt_settings}>Cài đặt</Text>
             </View>
             <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
             </View>
@@ -27,37 +27,37 @@ const SettingScreen = (props) => {
                 </View>
                 <View style={styles.name_profile}>
                     <Text style={styles.name}>{infoUser.name}</Text>
-                    <Text onPress={()=>navigation.navigate('Profile')} style={styles.name_view}>View profile</Text>
+                    <Text onPress={()=>navigation.navigate('Profile')} style={styles.name_view}>Xem thông tin chi tiết</Text>
                 </View>
             </View>
             <View style={{ backgroundColor: '#F5F5FA', height: 28, width: '100%' }}></View>   
             <View style={styles.body}>
             <TouchableOpacity>  
-                <Text style={styles.body1}>Notifications</Text>
+                <Text style={styles.body1}>Thông tin</Text>
                 </TouchableOpacity>
             </View>
             
             <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
             </View>
             <View style={styles.body}>
-                <Text style={styles.body1}>Data and Storages</Text>
+                <Text style={styles.body1}>Tùy chọn giao diện</Text>
             </View>
             <View style={{ backgroundColor: '#F5F5FA', height: 28, width: '100%' }}></View>
             <View style={styles.body}>
-                <Text style={styles.body1}>Subscription</Text>
+                <Text style={styles.body1}>Cài đặt âm thanh</Text>
             </View>
             <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
             </View>
             <View style={styles.body}>
-                <Text style={styles.body1}>Linked Account</Text>
+                <Text style={styles.body1}>Cài đặt thông báo</Text>
             </View>
             <View style={{ backgroundColor: '#F5F5FA', height: 28, width: '100%' }}></View>
-            <View style={styles.body}>
-                <Text style={styles.body1}>About Audibooks</Text>
-            </View>
+            {/* <View style={styles.body}>
+                <Text style={styles.body1}>Thông tin ứng dụng</Text>
+            </View> */}
             <View style={{flexDirection:'row', justifyContent:'center',padding:5}}>        
             <Pressable style={styles.button} onPress={()=>setIsLogin(false)}>
-                <Text style={{textAlign:'center',color:log_outcolor}}>Log out</Text>
+                <Text style={{textAlign:'center',color:log_outcolor}}>Đăng xuất</Text>
             </Pressable>
             </View>
         </View>
@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
         height:60,
         borderWidth:1,
         borderRadius:10,
+        marginTop:20,
         borderColor:log_outcolor,
         justifyContent: 'center'
 
