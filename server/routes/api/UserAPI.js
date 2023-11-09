@@ -41,6 +41,26 @@ router.post('/login', async (req, res, next) => {
         res.status(400).json({ result: false });
     }
 });
+router.post('/update-user', async (req, res, next) => {
+    try {
+        const { id,name,email,phone ,avatar} = req.body;
+        if(!id || !name || !email || !phone || !avatar){
+            return res.status(444).json({ result: false, message: "thieu thong tin" });
+        }
+        const user = await userModel.findByIdAndUpdate(id,{full_name:name,email:email,avatar:avatar,phone:phone});
+        console.log(user);
+        if (user) {
+            // tao token
+            return res.status(200).json({ result: true, user: user,  });
+        }
+        else {
+            return res.status(444).json({ result: false,});
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(400).json({ result: false });
+    }
+});
 router.get('/logout', async (req, res, next) => {
     try {
         req.session.destroy;
