@@ -1,4 +1,4 @@
 const CONSTANTS ={
-    IP:'192.168.100.42',
+    IP:'192.168.1.73',
 }
 module.exports={CONSTANTS};
