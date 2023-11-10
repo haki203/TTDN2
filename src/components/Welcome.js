@@ -31,14 +31,13 @@ const Welcome = (props) => {
       const res = await AxiosIntance().post("/user/login", { email: userInfor.user.email });
       if (res.result) {
         const infoUser = {
-          name: res.user.full_name, avatar: res.user.avatar,id:res.user._id
+          name: res.user.full_name, avatar: res.user.avatar, id: res.user._id
         }
         setinfoUser(infoUser);
-        console.log(res.user);
         ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
         setIsLogin(true);
-      }else{
-      ToastAndroid.show("Đăng nhập thất bại ", ToastAndroid.SHORT);
+      } else {
+        ToastAndroid.show("Đăng nhập thất bại ", ToastAndroid.SHORT);
 
       }
 
@@ -82,10 +81,11 @@ const Welcome = (props) => {
       if (res.result) {
         setIsLogin(true);
         const infoUser = {
-          name: res.user.full_name, avatar: res.user.avatar,id:res.user._id
+          name: res.user.full_name, avatar: res.user.avatar, id: res.user._id
         }
         setinfoUser(infoUser);
-        console.log("result login fb ",res.user);
+        console.log("Iduser ne", infoUser.id);
+        console.log("result login fb ", res.user);
         ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
       }
     }

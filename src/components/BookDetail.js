@@ -66,6 +66,8 @@ const BookDetail = (props) => {
 
         }
         setRelateData2(datarelate);
+        console.log("sssss", RelateData2);
+
         // setIsLoading(false)
     }
     const Comment = async (bookId) => {
@@ -411,7 +413,7 @@ const BookDetail = (props) => {
                     <View style={{ flexDirection: 'row' }}>
                         <Image style={styles.View_ImageBook} source={{ uri: bookData.image }} />
 
-                        <View style={[styles.View_ImageBook,{backgroundColor:'#dddddd',flex:1,marginLeft:10,alignItems:'center'}]}>
+                        <View style={[styles.View_ImageBook, { backgroundColor: '#dddddd', flex: 1, marginLeft: 10, alignItems: 'center' }]}>
                             <View style={{}}>
                                 <View style={styles.View_Danhgiane1}>
                                     <Text style={styles.Text_Cmt}>{tbRate}</Text>
@@ -558,8 +560,8 @@ const BookDetail = (props) => {
                                     <Text style={styles.Text_Cmt1}>{numCmt} lượt</Text>
                                 </View>
                             </View>
-                            <View style={{borderBottomWidth:1,width:'80%',borderBottomColor:'grey',paddingTop:10}}></View>
-                            <TouchableOpacity style={{paddingBottom:5}} onPress={() => setDobModalVisible1(true)}>
+                            <View style={{ borderBottomWidth: 1, width: '80%', borderBottomColor: 'grey', paddingTop: 10 }}></View>
+                            <TouchableOpacity style={{ paddingBottom: 5 }} onPress={() => setDobModalVisible1(true)}>
                                 <Text style={styles.Text_Danhgia12}>Đánh Giá</Text>
                             </TouchableOpacity>
                             <Modal animationType="slide" transparent={true} visible={isDobModalVisible1}>
@@ -886,8 +888,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop:10,
-        marginBottom:5
+        marginTop: 10,
+        marginBottom: 5
     },
     View_NoiDung_DocGia: {
         flexDirection: 'row',
