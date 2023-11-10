@@ -70,21 +70,21 @@ router.post('/favourite/new', async (req, res, next) => {
     }
 });
 // get all favourite by id user
-router.get('/favourite/get-book-by-user', async (req, res, next) => {
-    const { idUser } = req.body;
+router.get('/favourite/get-book-by-user/:idUser', async (req, res, next) => {
+    const { idUser } = req.params;
     try {
         if (!idUser) {
             return res.status(400).json({ result: false, message: "Thieu thong tin" });
         }
         else {
             const userFavourites = await favouriteModel.find({ userId: idUser });
-            if (userFavourites.length>0) {
+            if (userFavourites.length > 0) {
                 let books = [];
                 for (let i = 0; i < userFavourites.length; i++) {
                     const booksNe = await productModel.findById(userFavourites[i].bookId);
                     books.push(booksNe);
                 }
-                return res.status(200).json({ result: true,books});
+                return res.status(200).json({ result: true, books });
             } else {
                 return res.status(400).json({ result: false });
             }
