@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
 import Icon from "react-native-vector-icons/Entypo"
 import Icon2 from "react-native-vector-icons/AntDesign"
@@ -12,14 +12,18 @@ const ItemListView = (props) => {
   const { dulieu, navigation } = props;
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={dulieu.image} />
-      <View style={styles.name}>
-        <View style={{flexDirection:'column'}}>
-          <Text style={styles.book_name} >{dulieu.book_name}</Text>
-          <Text style={styles.author_name}>{dulieu.author_name}</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Detail', { itemId: dulieu._id })} >
+        <View style={styles.body}>
+          <Image style={styles.image} source={{ uri: dulieu.image }} />
+          <View style={styles.name}>
+            <View style={{ flexDirection: 'column' }}>
+              <Text style={styles.book_name} >{dulieu.title}</Text>
+              <Text style={styles.author_name}>{dulieu.authorId}</Text>
+            </View>
+          </View>
+          <Icon style={styles.icon} name='dots-three-vertical' size={20} />
         </View>
-      </View>
-      <Icon style={styles.icon} name='dots-three-vertical' size={20} />
+      </TouchableOpacity>
     </View>
   )
 }
@@ -28,20 +32,19 @@ export default ItemListView
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    width: '100%',
-    height: 70,
-    justifyContent: 'space-between'
+    flex: 1,
+    paddingLeft: 10,
+    paddingRight: 5
   }, image: {
     margin: 10,
-    width:60,
-    height:60
-
+    width: 60,
+    height: 80,
+    borderRadius: 10,
   }, name: {
-    flexDirection:'row',
+    flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems:'center',
-    flex:1,
+    alignItems: 'center',
+    flex: 1,
     paddingLeft: 10,
   }, book_name: {
     color: color_text,
@@ -52,6 +55,12 @@ const styles = StyleSheet.create({
   },
   icon: {
     padding: 23,
-    marginLeft: 15
+    marginLeft: 30,
+  },
+  body: {
+    width: '100%',
+
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   }
 })
