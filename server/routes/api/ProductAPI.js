@@ -69,6 +69,25 @@ router.post('/favourite/new', async (req, res, next) => {
         return res.status(400).json({ result: false, error });
     }
 });
+router.get('/favourite/delete/:id', async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        if (!id) {
+            return res.status(400).json({ result: false, message: "Thieu thong tin" });
+        }
+        else {
+            const favourite = await favouriteModel.findByIdAndDelete(id);
+
+            if (favourite) {
+                return res.status(200).json({ result: true, message: "xoa thanh cong" });
+            } else {
+                return res.status(400).json({ result: false,message: "ko tim thay id"  });
+            }
+        }
+    } catch (error) {
+        return res.status(400).json({ result: false, error });
+    }
+});
 // get all favourite by id user
 router.get('/favourite/get-book-by-user/:idUser', async (req, res, next) => {
     const { idUser } = req.params;
