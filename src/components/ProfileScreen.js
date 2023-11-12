@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, yourColorVariable, Image, TouchableOpacity, Pressable, TextInput } from 'react-native'
+import { StyleSheet, Text, View, yourColorVariable, Image, TouchableOpacity, Pressable, TextInput, ToastAndroid } from 'react-native'
 import React, { useContext } from 'react'
 import Icon from "react-native-vector-icons/AntDesign"
 
@@ -8,17 +8,59 @@ const bgcolor = "#FFFFFF";
 const txtcolor = "#2E2E5D";
 const color_upload = "#FF97A3";
 import { AppContext } from '../navigation/AppContext';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import AxiosIntance from '../axios/AxiosIntance';
 const log_outcolor = "#F77A55";
 const ProfileScreen = (props) => {
     const { navigation } = props;
-    const { infoUser, data } = useContext(AppContext);
+    const { infoUser, setinfoUser } = useContext(AppContext);
+    console.log(infoUser);
+    const capture = async () => {
+        const result = await launchCamera();
+        console.log(result.assets[0].uri);
+        setshowImage(result.assets[0].uri);
+    };
+
+    const getImageLibrary = async () =>{
+        const result = await launchImageLibrary();
+        console.log(result.assets[0].uri);
+        setshowImage(result.assets[0].uri);
+
+
+        const formdata = new FormData();
+        formdata.append('image',{
+            uri: result.assets[0].uri, 
+            type:'image/jpeg',
+            name:'image.jpg',
+
+        });
+
+        const response = await AxiosIntance('multipart/form-data').post(
+            'media/upload',
+            formdata,
+        );
+        console.log(response.data.path);
+        
+        setinfoUser({...infoUser, avatar: response.data.path});
+    };
+
+    const updateProfile = async () =>{
+        const response = await AxiosIntance().post("/user/update-user", {full_name: infoUser.name, email: infoUser.email, phone: infoUser.phone, avatar: infoUser.avatar})
+        if(response.error == false){
+            ToastAndroid.show("Cap nhat thanh cong", Toast.LENGTH_SHORT);
+        }else{
+            ToastAndroid.show("Cap nhat that bai", Toast.LENGTH_SHORT);
+        }
+    }
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <Icon onPress={() => navigation.goBack()} style={styles.icon_arrow} name='arrowleft' color={color_arrow} />
                 <Text style={styles.txt_settings}>Thông tin người dùng</Text>
+                <TouchableOpacity onPress={updateProfile}>
                 <Text style={{ color: color_view, fontWeight: '500' }}>Lưu</Text>
+                </TouchableOpacity>
             </View>
             <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
             </View>
@@ -26,7 +68,11 @@ const ProfileScreen = (props) => {
                 <View style={styles.avatarContainer}>
                     <Image style={styles.avatar} source={{ uri: infoUser.avatar }} />
                 </View>
-                <Icon  style={styles.icon_upload} name='cloudupload' color={color_upload} />
+                <TouchableOpacity style={styles.icon_upload_outside} onPress={capture}>
+                    <Icon  style={styles.icon_upload} name='cloudupload' color={color_upload} />
+                    
+                </TouchableOpacity>
+                
             </View>
             <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
             </View>
@@ -35,19 +81,19 @@ const ProfileScreen = (props) => {
             </View>
             <View style={styles.body}>
                 <Text style={styles.body1}>Tên người dùng</Text>
-                <TextInput style={styles.body2} > {infoUser.name}</TextInput>
+                <TextInput style={styles.body2} onChangeText={(text) => setinfoUser({...infoUser, name : text}) } > {infoUser.name}</TextInput>
             </View>
             <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
             </View>
             <View style={styles.body}>
                 <Text style={styles.body1}>Email </Text>
-                <TextInput style={styles.body2} placeholder='john@mail.com'>{infoUser.email}</TextInput>
+                <TextInput style={styles.body2} placeholder='john@mail.com' onChangeText={(text) => setinfoUser({...infoUser, email : text}) }  >{infoUser.email}</TextInput>
             </View>
             <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
             </View>
             <View style={styles.body}>
                 <Text style={styles.body1}>Số điện thoại</Text>
-                <TextInput style={styles.body2} placeholder='+1234567890'>{infoUser.phone}</TextInput>
+                <TextInput style={styles.body2} placeholder='+1234567890' onChangeText={(text) => setinfoUser({...infoUser, phone : text}) }>{infoUser.phone}  </TextInput>
             </View>
             <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
             </View>
@@ -84,11 +130,14 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontFamily: 'Poppins',
     },
-    icon_upload:{
+    icon_upload_outside:{
         position:'absolute',
-        fontSize:30 ,
         left:'65%',
         top:'80%'
+    },
+    icon_upload:{   
+        fontSize:30 ,
+        
     },
     txt_settings: {
         width: 245,
@@ -155,7 +204,7 @@ const styles = StyleSheet.create({
     }
     ,
     body2: {
-        paddingLeft: 60,
+        paddingLeft: 40,
         color: txtcolor,
     }, button: {
         width: 330,

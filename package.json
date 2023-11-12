@@ -25,6 +25,7 @@
     "react-native-blob-util": "^0.19.2",
     "react-native-fbsdk-next": "^7.2.0",
     "react-native-gesture-handler": "^2.13.1",
+    "react-native-image-picker": "^7.0.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-pager-view": "^6.2.1",
