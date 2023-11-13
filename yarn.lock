@@ -1714,7 +1714,7 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/slider/-/slider-4.4.3.tgz"
   "version" "4.4.3"
 
-"@react-native-firebase/app@^18.5.0", "@react-native-firebase/app@18.6.0":
+"@react-native-firebase/app@^18.5.0", "@react-native-firebase/app@18.6.0", "@react-native-firebase/app@18.6.1":
   "integrity" "sha512-pJwq2D0VBk8QvmIw6qZ5P3Y5Uaq4LL9NarAcTdEIA342VlhmTB1rovcYHE/F/hohdGBwFzi5qXAQnZmTxv27sg=="
   "resolved" "https://registry.npmjs.org/@react-native-firebase/app/-/app-18.6.0.tgz"
   "version" "18.6.0"
@@ -1728,6 +1728,11 @@
   "version" "18.6.0"
   dependencies:
     "plist" "^3.1.0"
+
+"@react-native-firebase/storage@^18.6.1":
+  "integrity" "sha512-/MWn8EZ0OBqlE+B6XiwUdZYMCoPuh7oWxvw9GStBB4d5FUNt9jAkqSYDsfEGUjGSLjJ9iLBTyjK1PfXcH7EdZw=="
+  "resolved" "https://registry.npmjs.org/@react-native-firebase/storage/-/storage-18.6.1.tgz"
+  "version" "18.6.1"
 
 "@react-native-google-signin/google-signin@^10.1.0":
   "integrity" "sha512-9hhIlnNMfB6NO2738M437egA1p6inKdXXazh0qf6HJeBuLBTePSecePCOkVPczivM1mglquYXWCHJlx4D3Z7xw=="

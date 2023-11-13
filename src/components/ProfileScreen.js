@@ -8,8 +8,10 @@ const bgcolor = "#FFFFFF";
 const txtcolor = "#2E2E5D";
 const color_upload = "#FF97A3";
 import { AppContext } from '../navigation/AppContext';
+
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import AxiosIntance from '../axios/AxiosIntance';
+import storage from '@react-native-firebase/storage';
 const log_outcolor = "#F77A55";
 const ProfileScreen = (props) => {
     const { navigation } = props;
@@ -29,21 +31,24 @@ const ProfileScreen = (props) => {
         setshowImage(result.assets[0].uri);
 
 
-        const formdata = new FormData();
-        formdata.append('image', {
-            uri: result.assets[0].uri,
-            type: 'image/jpeg',
-            name: 'image.jpg',
+    const imageUri = result.assets[0].uri;
+    const filename = imageUri.substring(imageUri.lastIndexOf('/') + 1);
 
-        });
+    const storageRef = storage().ref('images/' + filename);
+    const task = storageRef.putFile(imageUri);
 
-        const response = await AxiosIntance('multipart/form-data').post(
-            'media/upload',
-            formdata,
-        );
-        console.log(response.data.path);
+    task.on('state_changed', snapshot => {
+        
+    }, error => {
+        console.error('Firebase storage error:', error);
+    }, async () => {
+        // up thành công dowload link ảnh về
+        const downloadURL = await storageRef.getDownloadURL();
+        console.log('File available at:', downloadURL);
 
-        setinfoUser({ ...infoUser, avatar: response.data.path });
+        // sửa dụng dowmloadURL để update thông tin 
+        setinfoUser({ ...infoUser, avatar: downloadURL });
+    });
     };
 
     const updateProfile = async () => {
@@ -76,7 +81,7 @@ const ProfileScreen = (props) => {
                 <View style={styles.avatarContainer}>
                     <Image style={styles.avatar} source={{ uri: infoUser.avatar }} />
                 </View>
-                <TouchableOpacity style={styles.icon_upload_outside} onPress={capture}>
+                <TouchableOpacity style={styles.icon_upload_outside} onPress={getImageLibrary}>
                     <Icon style={styles.icon_upload} name='cloudupload' color={color_upload} />
 
                 </TouchableOpacity>
