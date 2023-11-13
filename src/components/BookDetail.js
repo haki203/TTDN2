@@ -145,12 +145,13 @@ const BookDetail = (props) => {
             };
             console.log("favouriteData nè: ", favouriteData);
             const response = await AxiosIntance().post("/product/favourite/new/", favouriteData);
-            console.log("Data trả về nè: ", response);
+            console.log("Data trả về nè: ", response); 
 
             if (response.result) {
-                setIsHearted(!isHearted);
+                setIsHearted(!isHearted, true);
             }
             else {
+                setIsHearted(!isHearted, false);
             }
         } catch (error) {  
         }
