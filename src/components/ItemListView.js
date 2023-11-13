@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Modal } from 'react-native'
+import React, { useState } from 'react'
 import Icon from "react-native-vector-icons/Entypo"
 import Icon2 from "react-native-vector-icons/AntDesign"
-
+import { SwipeListView } from 'react-native-swipe-list-view';
+import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler'
 
 const color_text = "#272956";
 const color_view = "#4838D1";
@@ -10,22 +11,44 @@ const bgcolor = "#FFFFFF";
 const log_outcolor = "#F77A55";
 const ItemListView = (props) => {
   const { dulieu, navigation } = props;
+  const [isModalVisible, setModalVisible] = useState(false);
+
+
+  const rightSwipeable = () => {
+    return (
+      <View style={{ marginTop: 16, height: 80 }}>
+        <TouchableOpacity style={{ width: 80, height: 80, backgroundColor: '#C4C4C4', justifyContent: 'center', alignItems: 'center' }}>
+          <Icon2 name='delete' size={20} />
+        </TouchableOpacity>
+      </View>
+    )
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => navigation.navigate('Detail', { itemId: dulieu._id })} >
-        <View style={styles.body}>
-          <Image style={styles.image} source={{ uri: dulieu.image }} />
-          <View style={styles.name}>
-            <View style={{ flexDirection: 'column' }}>
-              <Text style={styles.book_name} >{dulieu.title}</Text>
-              <Text style={styles.author_name}>{dulieu.authorId}</Text>
+      <GestureHandlerRootView>
+        <Swipeable renderLeftActions={false} renderRightActions={rightSwipeable}>
+
+          <TouchableOpacity onPress={() => navigation.navigate('Detail', { itemId: dulieu._id })} >
+            <View style={styles.body}>
+              <Image style={styles.image} source={{ uri: dulieu.image }} />
+              <View style={styles.name}>
+                <View style={{ flexDirection: 'column' }}>
+                  <Text style={styles.book_name} >{dulieu.title}</Text>
+                  <Text style={styles.author_name}>{dulieu.authorId}</Text>
+                </View>
+              </View>
+              <TouchableOpacity onPress={() => toggleModal(dulieu)}>
+                <Icon style={styles.icon} name='dots-three-vertical' size={20} />
+              </TouchableOpacity>
             </View>
-          </View>
-          <Icon style={styles.icon} name='dots-three-vertical' size={20} />
-        </View>
-      </TouchableOpacity>
+          </TouchableOpacity>
+
+        </Swipeable>
+
+      </GestureHandlerRootView>
     </View>
-  )
+  );
 }
 
 export default ItemListView
@@ -54,7 +77,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   icon: {
-    padding: 23,
+    padding: 40,
     marginLeft: 30,
   },
   body: {
@@ -62,5 +85,14 @@ const styles = StyleSheet.create({
 
     flexDirection: 'row',
     justifyContent: 'space-between',
+  }
+  , modal: {
+    width: 100,
+    height: 50,
+    backgroundColor: '#C4C4C4',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 14,
+    borderRadius: 7
   }
 })
