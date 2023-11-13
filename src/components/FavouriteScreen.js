@@ -41,7 +41,6 @@ const FavouriteScreen = (props) => {
         const response = await AxiosIntance().get("product/favourite/get-book-by-user/" + infoUser.id);
         console.log("res ne: ", response);
         if (response.result == true) {
-          console.log("dataindex");
           for (let i = 0; i < response.books.length; i++) {
             if (response.books[i]) {
               let dataIndex = response.books[i];
@@ -49,9 +48,12 @@ const FavouriteScreen = (props) => {
               const res = await AxiosIntance().get("/product/author/" + response.books[i].authorId)
               dataIndex.authorId = res.author.name;
               arrayData.push(dataIndex);
+              console.log("array", arrayData);
+
             }
           }
           setData(arrayData);
+          console.log("dataindex", data);
           setIsLoading(false)
         }
         // Gọi getdata sau khi setData

@@ -1,9 +1,10 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, Modal } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Modal, ToastAndroid } from 'react-native'
 import React, { useState } from 'react'
 import Icon from "react-native-vector-icons/Entypo"
 import Icon2 from "react-native-vector-icons/AntDesign"
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler'
+import AxiosIntance from '../axios/AxiosIntance'
 
 const color_text = "#272956";
 const color_view = "#4838D1";
@@ -17,12 +18,22 @@ const ItemListView = (props) => {
   const rightSwipeable = () => {
     return (
       <View style={{ marginTop: 16, height: 80 }}>
-        <TouchableOpacity style={{ width: 80, height: 80, backgroundColor: '#C4C4C4', justifyContent: 'center', alignItems: 'center' }}>
+        <TouchableOpacity onPress={deleteFavorite} style={{ width: 80, height: 80, backgroundColor: '#C4C4C4', justifyContent: 'center', alignItems: 'center' }}>
           <Icon2 name='delete' size={20} />
         </TouchableOpacity>
       </View>
     )
   };
+  const deleteFavorite = async () => {
+
+    console.log(dulieu._id);
+    const response = await AxiosIntance().get("/favourite/delete/", dulieu._id)
+    if (response.result == true) {
+      console.log("xóa thành công");
+      ToastAndroid.show("Xóa thành côngr", ToastAndroid.SHORT);
+
+    }
+  }
 
   return (
     <View style={styles.container}>
