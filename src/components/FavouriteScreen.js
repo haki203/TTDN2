@@ -28,6 +28,8 @@ const FavouriteScreen = (props) => {
 
   );
   const fetchData = async () => {
+    setData([]);
+
     setTextNoti("")
     try {
       const getId = {
@@ -39,17 +41,20 @@ const FavouriteScreen = (props) => {
       console.log("res ne: ", response);
       if (response.result == true) {
         console.log("dataindex");
-        if (response.books == "") {
-          console.log("chua co sach yeu thich");
+        if (response.data.length< 1) {
+          console.log("chua co sach yeu thichh");
           setIsLoading(false)
           setTextNoti('Chưa có sách nào trong mục yêu thích.')
         } else {
-          for (let i = 0; i < response.books.length; i++) {
-            if (response.books[i]) {
-              let dataIndex = response.books[i];
+
+          for (let i = 0; i < response.data.length; i++) {
+            if (response.data[i].book) {
+              let dataIndex = response.data[i]
               // lay author
-              const res = await AxiosIntance().get("/product/author/" + response.books[i].authorId)
-              dataIndex.authorId = res.author.name;
+              const res = await AxiosIntance().get("/product/author/" + response.data[i].book.authorId)
+              console.log("----");
+
+              dataIndex.book.authorId = res.author.name;
               arrayData.push(dataIndex);
             }
           }
@@ -91,12 +96,12 @@ const FavouriteScreen = (props) => {
           <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
         </View>
       </View>
-      <Text style={styles.title1}>
+      <Text style={styles.title1} onPress={()=>fetchData()}>
         Các sách yêu thích
       </Text>
 
       <View style={styles.flatlist}>
-      <Text style={{fontSize:16,color:'black',fontWeight:500,position:'absolute',start:25,top:'15%'}}>{textNoti}</Text>
+        <Text style={{ fontSize: 16, color: 'black', fontWeight: 500, position: 'absolute', start: 25, top: '15%' }}>{textNoti}</Text>
         {
           isLoading ?
             (

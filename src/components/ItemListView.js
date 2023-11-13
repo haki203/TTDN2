@@ -25,13 +25,20 @@ const ItemListView = (props) => {
     )
   };
   const deleteFavorite = async () => {
-
-    console.log(dulieu._id);
-    const response = await AxiosIntance().get("/favourite/delete/", dulieu._id)
-    if (response.result == true) {
-      console.log("xóa thành công");
-      ToastAndroid.show("Xóa thành côngr", ToastAndroid.SHORT);
-
+    console.log("id favourite ne: ",dulieu.favourite._id);
+    try {
+      const response = await AxiosIntance().get("/product/favourite/delete/" + dulieu.favourite._id)
+      if (response.result == true) {
+        console.log("xóa thành công");
+        
+        ToastAndroid.show("Xóa thành côngr", ToastAndroid.SHORT);
+        // reload lai
+      }
+      else {
+        ToastAndroid.show("Xóa ko thành công " + response.error, ToastAndroid.SHORT);
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -40,16 +47,16 @@ const ItemListView = (props) => {
       <GestureHandlerRootView>
         <Swipeable renderLeftActions={false} renderRightActions={rightSwipeable}>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Detail', { itemId: dulieu._id })} >
+          <TouchableOpacity onPress={() => navigation.navigate('Detail', { itemId: dulieu.book._id })} >
             <View style={styles.body}>
-              <Image style={styles.image} source={{ uri: dulieu.image }} />
+              <Image style={styles.image} source={{ uri: dulieu.book.image }} />
               <View style={styles.name}>
                 <View style={{ flexDirection: 'column' }}>
-                  <Text style={styles.book_name} >{dulieu.title}</Text>
-                  <Text style={styles.author_name}>{dulieu.authorId}</Text>
+                  <Text style={styles.book_name} >{dulieu.book.title}</Text>
+                  <Text style={styles.author_name}>{dulieu.book.authorId}</Text>
                 </View>
               </View>
-              <TouchableOpacity onPress={() => toggleModal(dulieu)}>
+              <TouchableOpacity onPress={() => console.log("id cua ", dulieu.book.title, " ne: ", dulieu.favourite._id)}>
                 <Icon style={styles.icon} name='dots-three-vertical' size={20} />
               </TouchableOpacity>
             </View>

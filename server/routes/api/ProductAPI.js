@@ -106,7 +106,7 @@ router.get('/favourite/get-book-by-user/:idUser', async (req, res, next) => {
                 }
                 return res.status(200).json({ result: true, data});
             } else {
-                return res.status(200).json({ result: true,books:[] });
+                return res.status(200).json({ result: true,data:[] });
             }
         }
     } catch (error) {
