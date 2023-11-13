@@ -51,6 +51,7 @@ const BookDetail = (props) => {
             Relate(response.product.categoryId)
             console.log("bookid ne: ", response.product._id);
             Comment(response.product._id)
+            setIsLoading(false)
         }
         DetailBook();
 

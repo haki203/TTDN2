@@ -18,6 +18,7 @@ const FavouriteScreen = (props) => {
   const { infoUser } = useContext(AppContext);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [textNoti, setTextNoti] = useState("");
 
 
 
@@ -26,22 +27,23 @@ const FavouriteScreen = (props) => {
     navigation.navigate('SearchScreen')
 
   );
-  useEffect(() => {
-
-    const unsubscribe = navigation.addListener('focus', () => {
-      setIsTabVisible(true)
-    });
-    const fetchData = async () => {
-      try {
-        const getId = {
-          id: infoUser.id
-        }
-        let arrayData = [];
-        console.log("id ne: ", infoUser.id);
-        const response = await AxiosIntance().get("product/favourite/get-book-by-user/" + infoUser.id);
-        console.log("res ne: ", response);
-        if (response.result == true) {
-          console.log("dataindex");
+  const fetchData = async () => {
+    setTextNoti("")
+    try {
+      const getId = {
+        id: infoUser.id
+      }
+      let arrayData = [];
+      console.log("id ne: ", infoUser.id);
+      const response = await AxiosIntance().get("product/favourite/get-book-by-user/" + infoUser.id);
+      console.log("res ne: ", response);
+      if (response.result == true) {
+        console.log("dataindex");
+        if (response.books == "") {
+          console.log("chua co sach yeu thich");
+          setIsLoading(false)
+          setTextNoti('Chưa có sách nào trong mục yêu thích.')
+        } else {
           for (let i = 0; i < response.books.length; i++) {
             if (response.books[i]) {
               let dataIndex = response.books[i];
@@ -54,11 +56,19 @@ const FavouriteScreen = (props) => {
           setData(arrayData);
           setIsLoading(false)
         }
-        // Gọi getdata sau khi setData
-      } catch (error) {
-        console.error("Error fetching data: ", error);
+
       }
-    };
+      // Gọi getdata sau khi setData
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+  };
+  useEffect(() => {
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      setIsTabVisible(true)
+    });
+
     fetchData();
 
 
@@ -71,7 +81,7 @@ const FavouriteScreen = (props) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
-          <Text style={styles.authen}>Favourites</Text>
+          <Text style={styles.authen}>Yêu thích</Text>
         </View>
 
         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
@@ -82,11 +92,11 @@ const FavouriteScreen = (props) => {
         </View>
       </View>
       <Text style={styles.title1}>
-        Favourites Book
+        Các sách yêu thích
       </Text>
 
       <View style={styles.flatlist}>
-
+      <Text style={{fontSize:16,color:'black',fontWeight:500,position:'absolute',start:25,top:'15%'}}>{textNoti}</Text>
         {
           isLoading ?
             (
