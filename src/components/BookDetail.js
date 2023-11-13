@@ -112,6 +112,10 @@ const BookDetail = (props) => {
         }
     }
 
+    const handleStarPress = (newRating) => {
+        setRating(newRating);
+    };
+
 
     const [showMore, setShowMore] = useState(false);
     const { navigation } = props;
@@ -132,7 +136,7 @@ const BookDetail = (props) => {
 
     const [isHearted, setIsHearted] = useState(false);
 
-    const handleHeartPress = () => {
+    const handleHeartPress = async () => {
         setIsHearted(!isHearted);
     };
 
@@ -200,10 +204,6 @@ const BookDetail = (props) => {
 
     const [rating, setRating] = useState(0);
 
-    const handleStarPress = (newRating) => {
-        setRating(newRating);
-    };
-
     const renderStars = () => {
         const stars = [];
         for (let i = 1; i <= 5; i++) {
@@ -233,7 +233,7 @@ const BookDetail = (props) => {
                     <Icon_1 name="chevron-back" size={30} color="black" />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={handleHeartPress}>
-                    <Icon_2 name={isHearted ? 'bookmark' : 'bookmark-o'} size={30} color="red" />
+                    <Icon_2 name={isHearted ? 'heart' : 'heart-o'} size={30} color="black" />
                 </TouchableOpacity>
             </View>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -714,7 +714,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     Star_Danhgia: {
-        paddingTop: 5,
         paddingLeft: 5,
     },
     Text_DanhGia: {
