@@ -98,18 +98,19 @@ router.get('/favourite/get-book-by-user/:idUser', async (req, res, next) => {
         else {
             const userFavourites = await favouriteModel.find({ userId: idUser });
             if (userFavourites.length > 0) {
-                let books = [];
+                let data = [];
                 for (let i = 0; i < userFavourites.length; i++) {
                     const booksNe = await productModel.findById(userFavourites[i].bookId);
-                    books.push(booksNe);
+                    let favourites ={favourite:userFavourites[i],book:booksNe}
+                    data.push(favourites);
                 }
-                return res.status(200).json({ result: true, books });
+                return res.status(200).json({ result: true, data});
             } else {
                 return res.status(200).json({ result: true,books:[] });
             }
         }
     } catch (error) {
-        return res.status(400).json({ result: false, error });
+        return res.status(400).json({ result: false, message:error+idUser });
     }
 });
 // get category
