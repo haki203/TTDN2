@@ -137,509 +137,525 @@ const BookDetail = (props) => {
     const [isHearted, setIsHearted] = useState(false);
 
     const handleHeartPress = async () => {
-        setIsHearted(!isHearted);
-    };
-
-    const [isDobModalVisible, setDobModalVisible] = useState(false);
-    const [isDobModalVisible1, setDobModalVisible1] = useState(false);
-    const [content, setContent] = useState('');
-    const [title, setTitle] = useState('');
-
-    const handleSave = async () => {
+        // setIsHearted(!isHearted);
         try {
-            try {
-                if (rating) {
-                    setRating(rating);
-                } else {
-                    Alert.alert('Vui lòng đánh giá sao');
-                    return;
-                };
-                if (content) {
-                    setContent(content);
-                } else {
-                    Alert.alert('Vui lòng đánh tiêu đề');
-                    return;
-                };
+            const favouriteData = {
+                idUser: infoUser.id,
+                idBook: bookData.id,
+            };
+            console.log("favouriteData nè: ", favouriteData);
+            const response = await AxiosIntance().post("/product/favourite/new/", favouriteData);
+            console.log("Data trả về nè: ", response);
 
-                if (title) {
-                    setTitle(title);
-                } else {
-                    Alert.alert('Vui lòng đánh giá nội dung');
-                    return;
-                };
-                console.log(title, "123");
-                console.log(content, "123");
-                console.log(rating, "123");
-            } catch (error) {
+            if (response.result) {
+                setIsHearted(!isHearted);
+            }
+            else {
+            }
+        } catch (error) {  
+        }
+    }
+
+const [isDobModalVisible, setDobModalVisible] = useState(false);
+const [isDobModalVisible1, setDobModalVisible1] = useState(false);
+const [content, setContent] = useState('');
+const [title, setTitle] = useState('');
+
+const handleSave = async () => {
+    try {
+        try {
+            if (rating) {
+                setRating(rating);
+            } else {
+                Alert.alert('Vui lòng đánh giá sao');
+                return;
+            };
+            if (content) {
+                setContent(content);
+            } else {
+                Alert.alert('Vui lòng đánh tiêu đề');
+                return;
+            };
+
+            if (title) {
+                setTitle(title);
+            } else {
+                Alert.alert('Vui lòng đánh giá nội dung');
+                return;
+            };
+            console.log(title, "123");
+            console.log(content, "123");
+            console.log(rating, "123");
+        } catch (error) {
+
+        }
+
+
+        try {
+            const postData = {
+                userId: infoUser.id,
+                bookId: bookData.id,
+                title: title,
+                content: content,
+                rate: rating,
+            };
+            console.log("postData ne: ", postData);
+            const response = await AxiosIntance().post('/product/comment/new', postData);
+            console.log("Kết quả nè", response);
+            if (response.result) {
+                Alert.alert('Đăng thành công');
+                setDobModalVisible1(false);
 
             }
-
-
-            try {
-                const postData = {
-                    userId: infoUser.id,
-                    bookId: bookData.id,
-                    title: title,
-                    content: content,
-                    rate: rating,
-                };
-                console.log("postData ne: ", postData);
-                const response = await AxiosIntance().post('/product/comment/new', postData);
-                console.log("Kết quả nè", response);
-                if (response.result) {
-                    Alert.alert('Đăng thành công');
-                    setDobModalVisible1(false);
-
-                }
-                else {
-                    Alert.alert('Đăng thất bại', response.message);
-                }
-            } catch (error) {
-                Alert.alert('Đăng thất bại', error);
+            else {
+                Alert.alert('Đăng thất bại', response.message);
             }
         } catch (error) {
-            console.log("lỗi đăng nè: ", error);
+            Alert.alert('Đăng thất bại', error);
         }
-    };
+    } catch (error) {
+        console.log("lỗi đăng nè: ", error);
+    }
+};
 
-    const [rating, setRating] = useState(0);
+const [rating, setRating] = useState(0);
 
-    const renderStars = () => {
-        const stars = [];
-        for (let i = 1; i <= 5; i++) {
-            stars.push(
-                <TouchableOpacity
-                    key={i}
-                    onPress={() => handleStarPress(i)}
-                >
-                    <Text style={i <= rating ? styles.filledStar : styles.emptyStar}>★</Text>
+const renderStars = () => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+        stars.push(
+            <TouchableOpacity
+                key={i}
+                onPress={() => handleStarPress(i)}
+            >
+                <Text style={i <= rating ? styles.filledStar : styles.emptyStar}>★</Text>
+            </TouchableOpacity>
+        );
+    }
+    return stars;
+};
+
+
+const imageData = [
+    { id: '1', name1: 'Đắc Nhân Tâm', name2: 'Dale Carnegie', source: require('../assets/images/Dac-Nhan-Tam.jpg') },
+    { id: '2', name1: 'Hoàng Tử Bé', name2: 'Antoine de Saint-Exupéry', source: require('../assets/images/image.webp') },
+    { id: '3', name1: 'The CATCHER in the RYE', name2: 'J.D.Salinger', source: require('../assets/images/bookdetail.png') },
+];
+return (
+    <View style={styles.Container} >
+        {isLoading ? (<View style={styles.loading}><ActivityIndicator size={35} color={'black'} /></View>) : (<View></View>)}
+        <View style={styles.Icon_Container}>
+            <TouchableOpacity onPress={Back}>
+                <Icon_1 name="chevron-back" size={30} color="black" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleHeartPress}>
+                <Icon_2 name={isHearted ? 'heart' : 'heart-o'} size={30} color="black" />
+            </TouchableOpacity>
+        </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.Image_Container}>
+                <View>
+                    <Image style={styles.View_Image} source={{ uri: bookData.image }} />
+                </View>
+                <View>
+                    <Text style={styles.View_Text1}>{bookData.title}</Text>
+                    <Text style={styles.View_Text2}>{authorData.authorname}</Text>
+                </View>
+                <View style={styles.View_Danhgia}>
+                    <View style={styles.Star}>
+                        {tbRate > 4.7 ? (
+                            <View style={styles.Star}>
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                            </View>
+                        ) : (
+                            <View >
+                                {tbRate > 4.2 && tbRate < 4.7 ? (
+                                    <View style={styles.Star}>
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                        <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
+                                    </View>
+                                ) : (
+                                    <View>
+                                        {tbRate >= 3.7 && tbRate < 4.2 ? (
+                                            <View style={styles.Star}>
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+
+                                            </View>
+                                        ) : (
+                                            <View>
+                                                {tbRate >= 3.2 && tbRate < 3.7 ? (
+                                                    <View style={styles.Star}>
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                        <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+
+                                                    </View>
+                                                ) : (
+                                                    <View>
+                                                        {tbRate >= 2.7 && tbRate < 3.2 ? (
+                                                            <View style={styles.Star}>
+                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+
+                                                            </View>
+                                                        ) : (
+                                                            <View>
+                                                                {tbRate >= 2.2 && tbRate < 2.7 ? (
+                                                                    <View style={styles.Star}>
+                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                        <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
+                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+
+                                                                    </View>
+                                                                ) : (
+                                                                    <View>
+                                                                        {tbRate >= 1.7 && tbRate < 2.2 ? (
+                                                                            <View style={styles.Star}>
+                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+
+                                                                            </View>
+                                                                        ) : (
+                                                                            <View>
+                                                                                {tbRate >= 1.2 && tbRate < 1.7 ? (
+                                                                                    <View style={styles.Star}>
+                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                                        <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
+                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                    </View>
+                                                                                ) : (
+                                                                                    <View>
+                                                                                        {tbRate >= 0.7 && tbRate < 1.2 ? (
+                                                                                            <View style={styles.Star}>
+                                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                            </View>
+                                                                                        ) : (
+                                                                                            <View>
+                                                                                                {tbRate >= 0.1 && tbRate < 0.7 ? (
+                                                                                                    <View style={styles.Star}>
+                                                                                                        <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
+                                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                    </View>
+                                                                                                ) : (
+                                                                                                    <View style={styles.Star}>
+                                                                                                        <Text style={styles.Text_MoTa1}>Chưa có đánh giá</Text>
+                                                                                                    </View>
+                                                                                                )}
+
+                                                                                            </View>
+                                                                                        )}
+
+                                                                                    </View>
+                                                                                )}
+
+                                                                            </View>
+                                                                        )}
+
+                                                                    </View>
+                                                                )}
+
+                                                            </View>
+                                                        )}
+
+                                                    </View>
+                                                )}
+
+                                            </View>
+                                        )}
+
+                                    </View>
+                                )}
+
+                            </View>
+                        )}
+
+
+                    </View>
+                </View>
+                <Text style={styles.Text_DocGia}> {tbRate}</Text>
+            </View>
+            <View style={styles.View_MoTa}>
+                <View>
+                    <Text style={styles.Text_MoTa1}>Giới thiệu về tác giả</Text>
+                    <Text style={styles.Text_MoTa2}>{authorData.introduce}</Text>
+                </View>
+                <View style={styles.View_Text3}>
+                    <Text style={styles.Text_MoTa1}>Tổng quan về sách</Text>
+                    <Text style={styles.Text_MoTa2}>{bookData.description}</Text>
+                </View>
+            </View>
+            <View style={styles.View_Click}>
+                <TouchableOpacity onPress={Read} style={styles.View_Click1}>
+                    <Icon_1 name="document-text" size={16} color="white" />
+                    <Text style={styles.Text_Click}>Đọc</Text>
                 </TouchableOpacity>
-            );
-        }
-        return stars;
-    };
-
-
-    const imageData = [
-        { id: '1', name1: 'Đắc Nhân Tâm', name2: 'Dale Carnegie', source: require('../assets/images/Dac-Nhan-Tam.jpg') },
-        { id: '2', name1: 'Hoàng Tử Bé', name2: 'Antoine de Saint-Exupéry', source: require('../assets/images/image.webp') },
-        { id: '3', name1: 'The CATCHER in the RYE', name2: 'J.D.Salinger', source: require('../assets/images/bookdetail.png') },
-    ];
-    return (
-        <View style={styles.Container} >
-            {isLoading ? (<View style={styles.loading}><ActivityIndicator size={35} color={'black'} /></View>) : (<View></View>)}
-            <View style={styles.Icon_Container}>
-                <TouchableOpacity onPress={Back}>
-                    <Icon_1 name="chevron-back" size={30} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleHeartPress}>
-                    <Icon_2 name={isHearted ? 'heart' : 'heart-o'} size={30} color="black" />
+                <TouchableOpacity style={styles.View_Click1} onPress={() => navigation.navigate('Play')}>
+                    <Icon_1 name="play-circle" size={16} color="white" />
+                    <Text style={styles.Text_Click}>Nghe</Text>
                 </TouchableOpacity>
             </View>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.Image_Container}>
-                    <View>
-                        <Image style={styles.View_Image} source={{ uri: bookData.image }} />
-                    </View>
-                    <View>
-                        <Text style={styles.View_Text1}>{bookData.title}</Text>
-                        <Text style={styles.View_Text2}>{authorData.authorname}</Text>
-                    </View>
-                    <View style={styles.View_Danhgia}>
-                        <View style={styles.Star}>
-                            {tbRate > 4.7 ? (
-                                <View style={styles.Star}>
-                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                </View>
-                            ) : (
-                                <View >
-                                    {tbRate > 4.2 && tbRate < 4.7 ? (
-                                        <View style={styles.Star}>
-                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
-                                        </View>
-                                    ) : (
-                                        <View>
-                                            {tbRate >= 3.7 && tbRate < 4.2 ? (
-                                                <View style={styles.Star}>
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+            <View style={styles.View_BinhLuan}>
+                <Text style={styles.Text_BinhLuan}>Bình luận</Text>
+                <View style={{ flexDirection: 'row' }}>
+                    <Image style={styles.View_ImageBook} source={{ uri: bookData.image }} />
 
-                                                </View>
-                                            ) : (
-                                                <View>
-                                                    {tbRate >= 3.2 && tbRate < 3.7 ? (
-                                                        <View style={styles.Star}>
-                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
-                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-
-                                                        </View>
-                                                    ) : (
-                                                        <View>
-                                                            {tbRate >= 2.7 && tbRate < 3.2 ? (
-                                                                <View style={styles.Star}>
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-
-                                                                </View>
-                                                            ) : (
-                                                                <View>
-                                                                    {tbRate >= 2.2 && tbRate < 2.7 ? (
-                                                                        <View style={styles.Star}>
-                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
-                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-
-                                                                        </View>
-                                                                    ) : (
-                                                                        <View>
-                                                                            {tbRate >= 1.7 && tbRate < 2.2 ? (
-                                                                                <View style={styles.Star}>
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-
-                                                                                </View>
-                                                                            ) : (
-                                                                                <View>
-                                                                                    {tbRate >= 1.2 && tbRate < 1.7 ? (
-                                                                                        <View style={styles.Star}>
-                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
-                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                        </View>
-                                                                                    ) : (
-                                                                                        <View>
-                                                                                            {tbRate >= 0.7 && tbRate < 1.2 ? (
-                                                                                                <View style={styles.Star}>
-                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                </View>
-                                                                                            ) : (
-                                                                                                <View>
-                                                                                                    {tbRate >= 0.1 && tbRate < 0.7 ? (
-                                                                                                        <View style={styles.Star}>
-                                                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
-                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                        </View>
-                                                                                                    ) : (
-                                                                                                        <View style={styles.Star}>
-                                                                                                            <Text style={styles.Text_MoTa1}>Chưa có đánh giá</Text>
-                                                                                                        </View>
-                                                                                                    )}
-
-                                                                                                </View>
-                                                                                            )}
-
-                                                                                        </View>
-                                                                                    )}
-
-                                                                                </View>
-                                                                            )}
-
-                                                                        </View>
-                                                                    )}
-
-                                                                </View>
-                                                            )}
-
-                                                        </View>
-                                                    )}
-
-                                                </View>
-                                            )}
-
-                                        </View>
-                                    )}
-
-                                </View>
-                            )}
-
-
-                        </View>
-                    </View>
-                    <Text style={styles.Text_DocGia}> {tbRate}</Text>
-                </View>
-                <View style={styles.View_MoTa}>
-                    <View>
-                        <Text style={styles.Text_MoTa1}>Giới thiệu về tác giả</Text>
-                        <Text style={styles.Text_MoTa2}>{authorData.introduce}</Text>
-                    </View>
-                    <View style={styles.View_Text3}>
-                        <Text style={styles.Text_MoTa1}>Tổng quan về sách</Text>
-                        <Text style={styles.Text_MoTa2}>{bookData.description}</Text>
-                    </View>
-                </View>
-                <View style={styles.View_Click}>
-                    <TouchableOpacity onPress={Read} style={styles.View_Click1}>
-                        <Icon_1 name="document-text" size={16} color="white" />
-                        <Text style={styles.Text_Click}>Đọc</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.View_Click1} onPress={() => navigation.navigate('Play')}>
-                        <Icon_1 name="play-circle" size={16} color="white" />
-                        <Text style={styles.Text_Click}>Nghe</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.View_BinhLuan}>
-                    <Text style={styles.Text_BinhLuan}>Bình luận</Text>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Image style={styles.View_ImageBook} source={{ uri: bookData.image }} />
-
-                        <View style={[styles.View_ImageBook, { backgroundColor: '#dddddd', flex: 1, marginLeft: 10, alignItems: 'center' }]}>
-                            <View style={{}}>
-                                <View style={styles.View_Danhgiane1}>
-                                    <Text style={styles.Text_Cmt}>{tbRate}</Text>
-                                    <View>
-                                        <View style={styles.Star}>
-                                            {tbRate > 4.7 ? (
-                                                <View style={styles.Star}>
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                </View>
-                                            ) : (
-                                                <View >
-                                                    {tbRate > 4.2 && tbRate < 4.7 ? (
-                                                        <View style={styles.Star}>
-                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
-                                                        </View>
-                                                    ) : (
-                                                        <View>
-                                                            {tbRate >= 3.7 && tbRate < 4.2 ? (
-                                                                <View style={styles.Star}>
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-
-                                                                </View>
-                                                            ) : (
-                                                                <View>
-                                                                    {tbRate >= 3.2 && tbRate < 3.7 ? (
-                                                                        <View style={styles.Star}>
-                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
-                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-
-                                                                        </View>
-                                                                    ) : (
-                                                                        <View>
-                                                                            {tbRate >= 2.7 && tbRate < 3.2 ? (
-                                                                                <View style={styles.Star}>
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-
-                                                                                </View>
-                                                                            ) : (
-                                                                                <View>
-                                                                                    {tbRate >= 2.2 && tbRate < 2.7 ? (
-                                                                                        <View style={styles.Star}>
-                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
-                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-
-                                                                                        </View>
-                                                                                    ) : (
-                                                                                        <View>
-                                                                                            {tbRate >= 1.7 && tbRate < 2.2 ? (
-                                                                                                <View style={styles.Star}>
-                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-
-                                                                                                </View>
-                                                                                            ) : (
-                                                                                                <View>
-                                                                                                    {tbRate >= 1.2 && tbRate < 1.7 ? (
-                                                                                                        <View style={styles.Star}>
-                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
-                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                        </View>
-                                                                                                    ) : (
-                                                                                                        <View>
-                                                                                                            {tbRate >= 0.7 && tbRate < 1.2 ? (
-                                                                                                                <View style={styles.Star}>
-                                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                                </View>
-                                                                                                            ) : (
-                                                                                                                <View>
-                                                                                                                    {tbRate >= 0.1 && tbRate < 0.7 ? (
-                                                                                                                        <View style={styles.Star}>
-                                                                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
-                                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                                        </View>
-                                                                                                                    ) : (
-                                                                                                                        <View style={styles.Star}>
-                                                                                                                            <Text style={styles.Text_MoTa1}>Chưa có đánh giá</Text>
-                                                                                                                        </View>
-                                                                                                                    )}
-
-                                                                                                                </View>
-                                                                                                            )}
-
-                                                                                                        </View>
-                                                                                                    )}
-
-                                                                                                </View>
-                                                                                            )}
-
-                                                                                        </View>
-                                                                                    )}
-
-                                                                                </View>
-                                                                            )}
-
-                                                                        </View>
-                                                                    )}
-
-                                                                </View>
-                                                            )}
-
-                                                        </View>
-                                                    )}
-
-                                                </View>
-                                            )}
-                                        </View>
-                                    </View>
-
-                                    <Text style={styles.Text_Cmt1}>{numCmt} lượt</Text>
-                                </View>
-                            </View>
-                            <View style={{ borderBottomWidth: 1, width: '80%', borderBottomColor: 'grey', paddingTop: 10 }}></View>
-                            <TouchableOpacity style={{ paddingBottom: 5 }} onPress={() => setDobModalVisible1(true)}>
-                                <Text style={styles.Text_Danhgia12}>Đánh Giá</Text>
-                            </TouchableOpacity>
-                            <Modal animationType="slide" transparent={true} visible={isDobModalVisible1}>
-                                <View style={styles.modalContainer}>
-                                    <View style={styles.modalContent}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <TouchableOpacity onPress={() => handleSave()} style={styles.button}>
-                                                <Text style={styles.button_text}>Đăng</Text>
-                                            </TouchableOpacity>
-
-                                            <TouchableOpacity onPress={() => setDobModalVisible1(false)} style={styles.button}>
-                                                <Text style={styles.button_text}>Hủy</Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                        {/* <Text style={styles.label}>Đánh giá của bạn:</Text> */}
-                                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-
-                                            <View style={styles.starContainer}>
-                                                {renderStars()}
-                                            </View>
-                                            {/* <Text style={styles.ratingText}>{rating} sao</Text> */}
-                                        </View>
-
-                                        <TextInput
-                                            style={styles.input}
-                                            placeholder="Tiêu đề"
-                                            placeholderTextColor='#CDCDCD'
-                                            onChangeText={(text) => setTitle(text)}
-                                            value={title}
-                                        />
-                                        <TextInput
-                                            style={styles.input1}
-                                            placeholder="Nội dung"
-                                            placeholderTextColor='#CDCDCD'
-                                            onChangeText={(text) => setContent(text)}
-                                            value={content}
-                                        />
-
-                                    </View>
-                                </View>
-                            </Modal>
-                        </View>
-                    </View>
-                    <TouchableOpacity onPress={() => setDobModalVisible(true)} style={styles.Xem_All}>
-                        <Text style={styles.Xem_All_Cmt}>Xem tất cả đánh giá ({numCmt})</Text>
-                        <Icon_2 style={styles.Next} name="caret-down" size={26} color="white" />
-                    </TouchableOpacity>
-                    <Modal animationType="slide" transparent={true} visible={isDobModalVisible}>
-                        <View style={styles.modalContainer}>
-                            <View style={styles.modalContent}>
+                    <View style={[styles.View_ImageBook, { backgroundColor: '#dddddd', flex: 1, marginLeft: 10, alignItems: 'center' }]}>
+                        <View style={{}}>
+                            <View style={styles.View_Danhgiane1}>
+                                <Text style={styles.Text_Cmt}>{tbRate}</Text>
                                 <View>
-                                    <Text onPress={() => Comment(bookData.id)} style={styles.Text_Modal_DanhGia}>Tất cả đánh giá ({numCmt})</Text>
-                                    <Icon_3 onPress={() => setDobModalVisible(false)} style={styles.Close} name="closecircleo" size={28} color="#272956" />
+                                    <View style={styles.Star}>
+                                        {tbRate > 4.7 ? (
+                                            <View style={styles.Star}>
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                            </View>
+                                        ) : (
+                                            <View >
+                                                {tbRate > 4.2 && tbRate < 4.7 ? (
+                                                    <View style={styles.Star}>
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                        <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
+                                                    </View>
+                                                ) : (
+                                                    <View>
+                                                        {tbRate >= 3.7 && tbRate < 4.2 ? (
+                                                            <View style={styles.Star}>
+                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+
+                                                            </View>
+                                                        ) : (
+                                                            <View>
+                                                                {tbRate >= 3.2 && tbRate < 3.7 ? (
+                                                                    <View style={styles.Star}>
+                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                        <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
+                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+
+                                                                    </View>
+                                                                ) : (
+                                                                    <View>
+                                                                        {tbRate >= 2.7 && tbRate < 3.2 ? (
+                                                                            <View style={styles.Star}>
+                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+
+                                                                            </View>
+                                                                        ) : (
+                                                                            <View>
+                                                                                {tbRate >= 2.2 && tbRate < 2.7 ? (
+                                                                                    <View style={styles.Star}>
+                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                                        <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
+                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+
+                                                                                    </View>
+                                                                                ) : (
+                                                                                    <View>
+                                                                                        {tbRate >= 1.7 && tbRate < 2.2 ? (
+                                                                                            <View style={styles.Star}>
+                                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+
+                                                                                            </View>
+                                                                                        ) : (
+                                                                                            <View>
+                                                                                                {tbRate >= 1.2 && tbRate < 1.7 ? (
+                                                                                                    <View style={styles.Star}>
+                                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                                                        <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
+                                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                    </View>
+                                                                                                ) : (
+                                                                                                    <View>
+                                                                                                        {tbRate >= 0.7 && tbRate < 1.2 ? (
+                                                                                                            <View style={styles.Star}>
+                                                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                                <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                            </View>
+                                                                                                        ) : (
+                                                                                                            <View>
+                                                                                                                {tbRate >= 0.1 && tbRate < 0.7 ? (
+                                                                                                                    <View style={styles.Star}>
+                                                                                                                        <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
+                                                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                                        <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
+                                                                                                                    </View>
+                                                                                                                ) : (
+                                                                                                                    <View style={styles.Star}>
+                                                                                                                        <Text style={styles.Text_MoTa1}>Chưa có đánh giá</Text>
+                                                                                                                    </View>
+                                                                                                                )}
+
+                                                                                                            </View>
+                                                                                                        )}
+
+                                                                                                    </View>
+                                                                                                )}
+
+                                                                                            </View>
+                                                                                        )}
+
+                                                                                    </View>
+                                                                                )}
+
+                                                                            </View>
+                                                                        )}
+
+                                                                    </View>
+                                                                )}
+
+                                                            </View>
+                                                        )}
+
+                                                    </View>
+                                                )}
+
+                                            </View>
+                                        )}
+                                    </View>
                                 </View>
-                                <FlatList style={styles.List_Comment}
-                                    data={dataCmt}
-                                    renderItem={({ item }) => <ItemListComment dulieu={item} navigation={navigation} />}
-                                    keyExtractor={item => item._id}
-                                    showsVerticalScrollIndicator={false}
-                                />
+
+                                <Text style={styles.Text_Cmt1}>{numCmt} lượt</Text>
                             </View>
                         </View>
-                    </Modal>
+                        <View style={{ borderBottomWidth: 1, width: '80%', borderBottomColor: 'grey', paddingTop: 10 }}></View>
+                        <TouchableOpacity style={{ paddingBottom: 5 }} onPress={() => setDobModalVisible1(true)}>
+                            <Text style={styles.Text_Danhgia12}>Đánh Giá</Text>
+                        </TouchableOpacity>
+                        <Modal animationType="slide" transparent={true} visible={isDobModalVisible1}>
+                            <View style={styles.modalContainer}>
+                                <View style={styles.modalContent}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <TouchableOpacity onPress={() => handleSave()} style={styles.button}>
+                                            <Text style={styles.button_text}>Đăng</Text>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity onPress={() => setDobModalVisible1(false)} style={styles.button}>
+                                            <Text style={styles.button_text}>Hủy</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    {/* <Text style={styles.label}>Đánh giá của bạn:</Text> */}
+                                    <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+
+                                        <View style={styles.starContainer}>
+                                            {renderStars()}
+                                        </View>
+                                        {/* <Text style={styles.ratingText}>{rating} sao</Text> */}
+                                    </View>
+
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Tiêu đề"
+                                        placeholderTextColor='#CDCDCD'
+                                        onChangeText={(text) => setTitle(text)}
+                                        value={title}
+                                    />
+                                    <TextInput
+                                        style={styles.input1}
+                                        placeholder="Nội dung"
+                                        placeholderTextColor='#CDCDCD'
+                                        onChangeText={(text) => setContent(text)}
+                                        value={content}
+                                    />
+
+                                </View>
+                            </View>
+                        </Modal>
+                    </View>
                 </View>
-                <View style={styles.Separator}></View>
-                <View style={styles.View_SachLienQuan}>
-                    <Text style={styles.Text_BinhLuan}>Những sách liên quan</Text>
-                    <FlatList
-                        showsHorizontalScrollIndicator={false}
-                        data={RelateData2}
-                        keyExtractor={(item) => item.id}
-                        horizontal={true}
-                        renderItem={({ item }) => <ItemListRelate dulieu={item} navigation={navigation} />}
-                    />
-                </View>
-            </ScrollView >
-        </View >
-    )
+                <TouchableOpacity onPress={() => setDobModalVisible(true)} style={styles.Xem_All}>
+                    <Text style={styles.Xem_All_Cmt}>Xem tất cả đánh giá ({numCmt})</Text>
+                    <Icon_2 style={styles.Next} name="caret-down" size={26} color="white" />
+                </TouchableOpacity>
+                <Modal animationType="slide" transparent={true} visible={isDobModalVisible}>
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <View>
+                                <Text onPress={() => Comment(bookData.id)} style={styles.Text_Modal_DanhGia}>Tất cả đánh giá ({numCmt})</Text>
+                                <Icon_3 onPress={() => setDobModalVisible(false)} style={styles.Close} name="closecircleo" size={28} color="#272956" />
+                            </View>
+                            <FlatList style={styles.List_Comment}
+                                data={dataCmt}
+                                renderItem={({ item }) => <ItemListComment dulieu={item} navigation={navigation} />}
+                                keyExtractor={item => item._id}
+                                showsVerticalScrollIndicator={false}
+                            />
+                        </View>
+                    </View>
+                </Modal>
+            </View>
+            <View style={styles.Separator}></View>
+            <View style={styles.View_SachLienQuan}>
+                <Text style={styles.Text_BinhLuan}>Những sách liên quan</Text>
+                <FlatList
+                    showsHorizontalScrollIndicator={false}
+                    data={RelateData2}
+                    keyExtractor={(item) => item.id}
+                    horizontal={true}
+                    renderItem={({ item }) => <ItemListRelate dulieu={item} navigation={navigation} />}
+                />
+            </View>
+        </ScrollView >
+    </View >
+)
 }
 
 export default BookDetail
@@ -691,6 +707,7 @@ const styles = StyleSheet.create({
     },
     Image_Container: {
         alignItems: 'center',
+        justifyContent: 'center'
     },
     View_Image: {
         width: 220,
@@ -702,6 +719,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: '#272956',
+        textAlign: 'center',
     },
     View_Text2: {
         paddingTop: 5,
