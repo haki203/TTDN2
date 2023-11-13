@@ -11,18 +11,18 @@ const { authenApp } = require('../../middle/Authen');
 // Kiểm tra email và trả về user hoặc tạo mới user
 router.get('/login-google/:email', async (req, res) => {
     try {
-      const { email } = req.params;
-      // Kiểm tra xem email đã tồn tại trong MongoDB chưa
-      let user = await userModel.findOne({ email });
-      if (!user) {
-        // Nếu email chưa tồn tại, tạo mới user với email và các trường khác là null
-        user = await userModel.create({ email });
-      }
-      res.status(200).json({ result: true, user: user});
+        const { email } = req.params;
+        // Kiểm tra xem email đã tồn tại trong MongoDB chưa
+        let user = await userModel.findOne({ email });
+        if (!user) {
+            // Nếu email chưa tồn tại, tạo mới user với email và các trường khác là null
+            user = await userModel.create({ email });
+        }
+        res.status(200).json({ result: true, user: user });
     } catch (error) {
-      res.status(500).json({result:false, message: 'Internal Server Error'+error });
+        res.status(500).json({ result: false, message: 'Internal Server Error' + error });
     }
-  });
+});
 router.post('/login', async (req, res, next) => {
     try {
         const { email } = req.body;
@@ -43,22 +43,26 @@ router.post('/login', async (req, res, next) => {
 });
 router.post('/update-user', async (req, res, next) => {
     try {
-        const { id,name,email,phone ,avatar} = req.body;
-        if(!id || !name || !email || !phone || !avatar){
+        const { id, name, email, phone, avatar } = req.body;
+        if (!id || !name || !email || !phone || !avatar) {
             return res.status(444).json({ result: false, message: "thieu thong tin" });
         }
-        const user = await userModel.findByIdAndUpdate(id,{full_name:name,email:email,avatar:avatar,phone:phone});
-        console.log(user);
-        if (user) {
-            // tao token
-            return res.status(200).json({ result: true, user: user,  });
+        try {
+            const user = await userModel.findByIdAndUpdate(id, { full_name: name, email: email, avatar: avatar, phone: phone });
+            console.log(user);
+            if (user) {
+                return res.status(200).json({ result: true, user: user, });
+            }
+            else {
+                return res.status(445).json({ result: false, message: "ko cap nhat duoc user" });
+            }
+        } catch (error) {
+            return res.status(445).json({ result: false, message: error });
         }
-        else {
-            return res.status(444).json({ result: false,});
-        }
+
     } catch (error) {
         console.log(error);
-        res.status(400).json({ result: false });
+        res.status(400).json({ result: false, message: error });
     }
 });
 router.get('/logout', async (req, res, next) => {
@@ -90,10 +94,10 @@ router.post('/register', [validation.checkRegister], async (req, res, next) => {
             statusCode: 200,
             result,
         }
-        if(result==true){
+        if (result == true) {
             return res.status(200).json({ result: true, data });
         }
-        else{
+        else {
             return res.status(401).json({ result: false, data });
         }
     } catch (error) {
@@ -141,7 +145,7 @@ router.get('/findUser/:id', async (req, res, next) => {
     } catch (error) {
         console.log(error);
         //next error; Chi chay web
-        return res.status(400).json({ result: false});
+        return res.status(400).json({ result: false });
     }
 });
 
