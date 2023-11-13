@@ -51,18 +51,14 @@ const FavouriteScreen = (props) => {
               arrayData.push(dataIndex);
             }
           }
-
-
           setData(arrayData);
           setIsLoading(false)
-
         }
         // Gọi getdata sau khi setData
       } catch (error) {
         console.error("Error fetching data: ", error);
       }
     };
-
     fetchData();
 
 
