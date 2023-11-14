@@ -18,6 +18,7 @@ const FavouriteScreen = (props) => {
   const { infoUser } = useContext(AppContext);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [textNoti, setTextNoti] = useState("");
 
 
 
@@ -26,42 +27,52 @@ const FavouriteScreen = (props) => {
     navigation.navigate('SearchScreen')
 
   );
+  const fetchData = async () => {
+    setData([]);
+
+    setTextNoti("")
+    try {
+      const getId = {
+        id: infoUser.id
+      }
+      let arrayData = [];
+      console.log("id ne: ", infoUser.id);
+      const response = await AxiosIntance().get("product/favourite/get-book-by-user/" + infoUser.id);
+      console.log("res ne: ", response);
+      if (response.result == true) {
+        console.log("dataindex");
+        if (response.data.length < 1) {
+          console.log("chua co sach yeu thichh");
+          setIsLoading(false)
+          setTextNoti('Chưa có sách nào trong mục yêu thích.')
+        } else {
+
+          for (let i = 0; i < response.data.length; i++) {
+            if (response.data[i].book) {
+              let dataIndex = response.data[i]
+              // lay author
+              const res = await AxiosIntance().get("/product/author/" + response.data[i].book.authorId)
+              console.log("----");
+
+              dataIndex.book.authorId = res.author.name;
+              arrayData.push(dataIndex);
+            }
+          }
+          setData(arrayData);
+          setIsLoading(false)
+        }
+
+      }
+      // Gọi getdata sau khi setData
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+  };
   useEffect(() => {
 
     const unsubscribe = navigation.addListener('focus', () => {
       setIsTabVisible(true)
     });
-    const fetchData = async () => {
-      try {
-        const getId = {
-          id: infoUser.id
-        }
-        let arrayData = [];
-        console.log("id ne: ", infoUser.id);
-        const response = await AxiosIntance().get("product/favourite/get-book-by-user/" + infoUser.id);
-        console.log("res ne: ", response);
-        if (response.result == true) {
-          console.log("dataindex");
-          for (let i = 0; i < response.books.length; i++) {
-            if (response.books[i]) {
-              let dataIndex = response.books[i];
-              // lay author
-              const res = await AxiosIntance().get("/product/author/" + response.books[i].authorId)
-              dataIndex.authorId = res.author.name;
-              arrayData.push(dataIndex);
-            }
-          }
-
-
-          setData(arrayData);
-          setIsLoading(false)
-
-        }
-        // Gọi getdata sau khi setData
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      }
-    };
 
     fetchData();
 
@@ -70,12 +81,15 @@ const FavouriteScreen = (props) => {
   },
     []);
 
+  const reload = () => {
+    fetchData();
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
-          <Text style={styles.authen}>Favourites</Text>
+          <Text style={styles.authen}>Yêu thích</Text>
         </View>
 
         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
@@ -85,12 +99,12 @@ const FavouriteScreen = (props) => {
           <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
         </View>
       </View>
-      <Text style={styles.title1}>
-        Favourites Book
+      <Text style={styles.title1} onPress={() => fetchData()}>
+        Các sách yêu thích
       </Text>
 
       <View style={styles.flatlist}>
-
+        <Text style={{ fontSize: 16, color: 'black', fontWeight: 500, position: 'absolute', start: 25, top: '15%' }}>{textNoti}</Text>
         {
           isLoading ?
             (
@@ -104,7 +118,7 @@ const FavouriteScreen = (props) => {
         }
         <FlatList
           data={data}
-          renderItem={({ item }) => <ItemListView dulieu={item} navigation={navigation} />}
+          renderItem={({ item }) => <ItemListView dulieu={item} navigation={navigation} reloadItem={fetchData} />}
           keyExtractor={item => item._id}
           showsVerticalScrollIndicator={false}
         />

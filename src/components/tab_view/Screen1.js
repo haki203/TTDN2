@@ -19,22 +19,39 @@ const Screen1 = ({ navigation, id }) => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [author, setAuthor] = useState('Đang cập nhật');
+  const [textHot, setTextHot] = useState("Sách hot");
+  const [textNew, setTextNew] = useState("Sách mới xuất bản");
+  const [textNoti, setTextNoti] = useState("");
+
 
   useEffect(() => {
     const getAllCate = async () => {
       let arrayData = [];
       const respone = await AxiosIntance().get("/product/get-by-category/" + id);
-      for (let i = 0; i < respone.product.length; i++) {
-        if (respone.product[i]) {
-          let dataIndex = respone.product[i];
-          // lay author
-          const res = await AxiosIntance().get("/product/author/" + respone.product[i].authorId)
-          dataIndex.authorId = res.author.name;
-          arrayData.push(dataIndex);
+      setTextNoti("")
+      if (respone.product.length < 1) {
+        console.log("chua co sach");
+        setTextHot("");
+        setTextNew("");
+        setTextNoti("Danh mục đang được cập nhật")
+        setIsLoading(false);
+      } else {
+
+
+        for (let i = 0; i < respone.product.length; i++) {
+          if (respone.product[i]) {
+            let dataIndex = respone.product[i];
+            // lay author
+            const res = await AxiosIntance().get("/product/author/" + respone.product[i].authorId)
+            dataIndex.authorId = res.author.name;
+            arrayData.push(dataIndex);
+          }
+
         }
+        setData(arrayData);
+        setIsLoading(false)
       }
-      setData(arrayData);
-      setIsLoading(false)
+
     }
 
     getAllCate();
@@ -74,11 +91,11 @@ const Screen1 = ({ navigation, id }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>Sách hot</Text>
+      <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>{textHot}</Text>
       {
         isLoading ?
           (
-            <View style={{width:'100%',height:300,alignContent:'center',justifyContent:'center'}}><ActivityIndicator size={30} color={'black'}/></View>
+            <View style={{ width: '100%', height: 300, alignContent: 'center', justifyContent: 'center' }}><ActivityIndicator size={30} color={'black'} /></View>
           ) :
 
           (
@@ -87,7 +104,7 @@ const Screen1 = ({ navigation, id }) => {
           )
       }
       <FlatList
-        style={{ flexGrow: 0,paddingBottom:20}}
+        style={{ flexGrow: 0, paddingBottom: 20 }}
         data={data}
         renderItem={({ item }) => <ItemBook item={item} navigation={navigation} />}
         keyExtractor={item => item.id}
@@ -95,11 +112,11 @@ const Screen1 = ({ navigation, id }) => {
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       />
-      <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>Sách mới xuất bản</Text>
+      <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>{textNew}</Text>
       {
         isLoading ?
           (
-            <View style={{width:'100%',height:300,alignContent:'center',justifyContent:'center'}}><ActivityIndicator size={30} color={'black'}/></View>
+            <View style={{ width: '100%', height: 300, alignContent: 'center', justifyContent: 'center' }}><ActivityIndicator size={30} color={'black'} /></View>
           ) :
 
           (
@@ -108,13 +125,15 @@ const Screen1 = ({ navigation, id }) => {
           )
       }
       <FlatList
-        style={{ flexGrow: 0}}
+        style={{ flexGrow: 0 }}
         data={data}
         renderItem={({ item }) => <ItemBook item={item} navigation={navigation} />}
         keyExtractor={item => item.id}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
       />
+      <Text style={{ fontSize: 20, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>{textNoti}</Text>
+
     </View>
   )
 }

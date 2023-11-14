@@ -69,6 +69,25 @@ router.post('/favourite/new', async (req, res, next) => {
         return res.status(400).json({ result: false, error });
     }
 });
+router.get('/favourite/delete/:id', async (req, res, next) => {
+    const { id } = req.params;
+    try {
+        if (!id) {
+            return res.status(400).json({ result: false, message: "Thieu thong tin" });
+        }
+        else {
+            const favourite = await favouriteModel.findByIdAndDelete(id);
+
+            if (favourite) {
+                return res.status(200).json({ result: true, message: "xoa thanh cong" });
+            } else {
+                return res.status(400).json({ result: false,message: "ko tim thay id"  });
+            }
+        }
+    } catch (error) {
+        return res.status(400).json({ result: false, error });
+    }
+});
 // get all favourite by id user
 router.get('/favourite/get-book-by-user/:idUser', async (req, res, next) => {
     const { idUser } = req.params;
@@ -79,18 +98,19 @@ router.get('/favourite/get-book-by-user/:idUser', async (req, res, next) => {
         else {
             const userFavourites = await favouriteModel.find({ userId: idUser });
             if (userFavourites.length > 0) {
-                let books = [];
+                let data = [];
                 for (let i = 0; i < userFavourites.length; i++) {
                     const booksNe = await productModel.findById(userFavourites[i].bookId);
-                    books.push(booksNe);
+                    let favourites ={favourite:userFavourites[i],book:booksNe}
+                    data.push(favourites);
                 }
-                return res.status(200).json({ result: true, books });
+                return res.status(200).json({ result: true, data});
             } else {
-                return res.status(400).json({ result: false });
+                return res.status(200).json({ result: true,data:[] });
             }
         }
     } catch (error) {
-        return res.status(400).json({ result: false, error });
+        return res.status(400).json({ result: false, message:error+idUser });
     }
 });
 // get category
