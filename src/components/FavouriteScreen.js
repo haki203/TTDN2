@@ -36,11 +36,8 @@ const FavouriteScreen = (props) => {
         id: infoUser.id
       }
       let arrayData = [];
-      console.log("id ne: ", infoUser.id);
       const response = await AxiosIntance().get("product/favourite/get-book-by-user/" + infoUser.id);
-      console.log("res ne: ", response);
       if (response.result == true) {
-        console.log("dataindex");
         if (response.data.length < 1) {
           console.log("chua co sach yeu thichh");
           setIsLoading(false)
@@ -52,7 +49,6 @@ const FavouriteScreen = (props) => {
               let dataIndex = response.data[i]
               // lay author
               const res = await AxiosIntance().get("/product/author/" + response.data[i].book.authorId)
-              console.log("----");
 
               dataIndex.book.authorId = res.author.name;
               arrayData.push(dataIndex);
@@ -117,7 +113,7 @@ const FavouriteScreen = (props) => {
             )
         }
         <FlatList
-          data={data}
+          data={data.slice().reverse()}
           renderItem={({ item }) => <ItemListView dulieu={item} navigation={navigation} reloadItem={fetchData} />}
           keyExtractor={item => item._id}
           showsVerticalScrollIndicator={false}
