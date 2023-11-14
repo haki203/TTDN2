@@ -96,7 +96,7 @@ const FavouriteScreen = (props) => {
           <TouchableOpacity onPress={search}>
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
           </TouchableOpacity>
-          <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
+          <Image style={styles.profile} source={{uri:infoUser.avatar}} />
         </View>
       </View>
       <Text style={styles.title1} onPress={() => fetchData()}>
