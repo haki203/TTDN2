@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, Modal, ToastAndroid } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Modal, ToastAndroid, Alert } from 'react-native'
 import React, { useState } from 'react'
 import Icon from "react-native-vector-icons/Entypo"
 import Icon2 from "react-native-vector-icons/AntDesign"
@@ -14,26 +14,52 @@ const ItemListView = (props) => {
   const { dulieu, navigation, reloadItem } = props;
   const [isModalVisible, setModalVisible] = useState(false);
 
+  const toggleModal = () => {
+
+    setModalVisible(!isModalVisible);
+
+  };
+
 
   const rightSwipeable = () => {
     return (
       <View style={{ marginTop: 16, height: 80 }}>
-        <TouchableOpacity onPress={deleteFavorite} style={{ width: 80, height: 80, backgroundColor: '#C4C4C4', justifyContent: 'center', alignItems: 'center' }}>
+        <TouchableOpacity onPress={showalert} style={{ width: 80, height: 80, backgroundColor: '#C4C4C4', justifyContent: 'center', alignItems: 'center' }}>
           <Icon2 name='delete' size={20} />
         </TouchableOpacity>
       </View>
     )
   };
+  const showalert = () => {
+    Alert.alert(
+      //title
+      'Xóa sách yêu thích',
+      //body
+      'Bạn có chắc chắn muốn xóa khỏi sách yêu thích ?',
+      [
+        {
+          text: 'Có',
+          onPress: () => deleteFavorite()
+        },
+        {
+          text: 'Không'
+        },
+      ],
+      { cancelable: false },
+      //clicking out side of alert will not cancel
+    );
+  }
   const deleteFavorite = async () => {
+
     console.log("id favourite ne: ", dulieu.favourite._id);
     try {
       const response = await AxiosIntance().get("/product/favourite/delete/" + dulieu.favourite._id)
       if (response.result == true) {
         console.log("xóa thành công");
-
-        ToastAndroid.show("Xóa thành côngr", ToastAndroid.SHORT);
+        ToastAndroid.show("Xóa thành công", ToastAndroid.SHORT);
         // reload lai
         reloadItem();
+        toggleModal();
       }
       else {
         ToastAndroid.show("Xóa ko thành công " + response.error, ToastAndroid.SHORT);
@@ -42,6 +68,7 @@ const ItemListView = (props) => {
       console.log(error);
     }
   }
+  //() => console.log("id cua ", dulieu.book.title, " ne: ", dulieu.favourite._id)
 
   return (
     <View style={styles.container}>
@@ -57,9 +84,38 @@ const ItemListView = (props) => {
                   <Text style={styles.author_name}>{dulieu.book.authorId}</Text>
                 </View>
               </View>
-              <TouchableOpacity onPress={() => console.log("id cua ", dulieu.book.title, " ne: ", dulieu.favourite._id)}>
+              <TouchableOpacity onPress={toggleModal}>
                 <Icon style={styles.icon} name='dots-three-vertical' size={20} />
               </TouchableOpacity>
+
+              <Modal animationType="slide" transparent={true} visible={isModalVisible}>
+                <View style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', width: '100%', height: '100%' }}>
+                  <View style={styles.containerModal}>
+                    <Text style={styles.titleModal}>Tùy chọn</Text>
+                    <View style={styles.bodyModal}>
+                      <TouchableOpacity onPress={showalert}>
+                        <View style={styles.itembody}>
+                          <View style={styles.itemicon}>
+                            <Icon2 name='delete' color="#272956" size={13} />
+                          </View>
+                          <Text style={styles.itemTxt}>Xóa khỏi mục yêu thích</Text>
+                        </View >
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => navigation.navigate('Detail', { itemId: dulieu.book._id }, toggleModal())}>
+                        <View style={styles.itembody}>
+                          <View style={styles.itemicon}>
+                            <Icon2 name='info' color="#272956" size={15} />
+                          </View>
+                          <Text style={styles.itemTxt}>Thông tin sách</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                    <Icon2 onPress={toggleModal} style={styles.Close} name="closecircleo" size={28} color="#272956" />
+                  </View>
+                </View>
+              </Modal>
+
+
             </View>
           </TouchableOpacity>
 
@@ -105,13 +161,52 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   }
-  , modal: {
-    width: 100,
-    height: 50,
-    backgroundColor: '#C4C4C4',
-    flexDirection: 'row',
+  , containerModal: {
+    width: '100%',
+    height: '25%',
+    position: 'absolute',
+    backgroundColor: '#FFFFFF',
+    bottom: 0,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30
+  }, Close: {
+    position: 'absolute',
+    right: 15,
+    top: 15
+  }, titleModal: {
+    color: color_text,
+    fontFamily: 'Poppins',
+    fontSize: 20,
+    fontStyle: 'normal',
+    fontWeight: '700',
+    position: 'absolute',
+    left: 20,
+    top: 15
+  }, bodyModal: {
+    width: '100%',
+    height: '60%',
+    position: 'absolute',
+    top: 50,
+    paddingLeft: 20,
+    flexDirection: 'column',
     justifyContent: 'space-around',
-    padding: 14,
-    borderRadius: 7
+  },
+  itembody: {
+    flexDirection: 'row',
+  },
+  itemTxt: {
+    color: color_text,
+    fontFamily: 'Poppins',
+    fontSize: 15,
+    fontStyle: 'normal',
+    fontWeight: '600',
+    marginLeft: 15
+  }, itemicon: {
+    width: 25,
+    height: 25,
+    borderRadius: 20,
+    backgroundColor: '#D8F2F3',
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 })
