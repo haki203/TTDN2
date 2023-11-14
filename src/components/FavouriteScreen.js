@@ -41,7 +41,7 @@ const FavouriteScreen = (props) => {
       console.log("res ne: ", response);
       if (response.result == true) {
         console.log("dataindex");
-        if (response.data.length< 1) {
+        if (response.data.length < 1) {
           console.log("chua co sach yeu thichh");
           setIsLoading(false)
           setTextNoti('Chưa có sách nào trong mục yêu thích.')
@@ -81,6 +81,9 @@ const FavouriteScreen = (props) => {
   },
     []);
 
+  const reload = () => {
+    fetchData();
+  }
 
   return (
     <View style={styles.container}>
@@ -96,7 +99,7 @@ const FavouriteScreen = (props) => {
           <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
         </View>
       </View>
-      <Text style={styles.title1} onPress={()=>fetchData()}>
+      <Text style={styles.title1} onPress={() => fetchData()}>
         Các sách yêu thích
       </Text>
 
@@ -115,7 +118,7 @@ const FavouriteScreen = (props) => {
         }
         <FlatList
           data={data}
-          renderItem={({ item }) => <ItemListView dulieu={item} navigation={navigation} />}
+          renderItem={({ item }) => <ItemListView dulieu={item} navigation={navigation} reloadItem={fetchData} />}
           keyExtractor={item => item._id}
           showsVerticalScrollIndicator={false}
         />

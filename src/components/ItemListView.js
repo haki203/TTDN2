@@ -11,7 +11,7 @@ const color_view = "#4838D1";
 const bgcolor = "#FFFFFF";
 const log_outcolor = "#F77A55";
 const ItemListView = (props) => {
-  const { dulieu, navigation } = props;
+  const { dulieu, navigation, reloadItem } = props;
   const [isModalVisible, setModalVisible] = useState(false);
 
 
@@ -25,14 +25,15 @@ const ItemListView = (props) => {
     )
   };
   const deleteFavorite = async () => {
-    console.log("id favourite ne: ",dulieu.favourite._id);
+    console.log("id favourite ne: ", dulieu.favourite._id);
     try {
       const response = await AxiosIntance().get("/product/favourite/delete/" + dulieu.favourite._id)
       if (response.result == true) {
         console.log("xóa thành công");
-        
+
         ToastAndroid.show("Xóa thành côngr", ToastAndroid.SHORT);
         // reload lai
+        reloadItem();
       }
       else {
         ToastAndroid.show("Xóa ko thành công " + response.error, ToastAndroid.SHORT);
