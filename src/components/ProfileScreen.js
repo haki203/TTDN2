@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, yourColorVariable, Image, TouchableOpacity, Pressable, TextInput, ToastAndroid } from 'react-native'
+import { StyleSheet,  Dimensions, Text, View, yourColorVariable, ActivityIndicator, Image, TouchableOpacity, Pressable, TextInput, ToastAndroid } from 'react-native'
 import React, { useContext, useState } from 'react'
 import Icon from "react-native-vector-icons/AntDesign"
 
@@ -8,7 +8,7 @@ const bgcolor = "#FFFFFF";
 const txtcolor = "#2E2E5D";
 const color_upload = "#FF97A3";
 import { AppContext } from '../navigation/AppContext';
-
+const { width, height } = Dimensions.get('window');
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import AxiosIntance from '../axios/AxiosIntance';
 import storage from '@react-native-firebase/storage';
@@ -17,6 +17,7 @@ const ProfileScreen = (props) => {
     const { navigation } = props;
     const { infoUser, setinfoUser } = useContext(AppContext);
     const [image, setshowImage] = useState('')
+    const [isLoading, setisLoading] = useState(false);
     console.log(infoUser);
     const capture = async () => {
         const result = await launchCamera();
@@ -29,7 +30,7 @@ const ProfileScreen = (props) => {
         const result = await launchImageLibrary();
         console.log(result.assets[0].uri);
         setshowImage(result.assets[0].uri);
-
+        setisLoading(true);
 
     const imageUri = result.assets[0].uri;
     const filename = imageUri.substring(imageUri.lastIndexOf('/') + 1);
@@ -45,7 +46,7 @@ const ProfileScreen = (props) => {
         // up thành công dowload link ảnh về
         const downloadURL = await storageRef.getDownloadURL();
         console.log('File available at:', downloadURL);
-
+        setisLoading(false);
         // sửa dụng dowmloadURL để update thông tin 
         setinfoUser({ ...infoUser, avatar: downloadURL });
     });
@@ -78,8 +79,13 @@ const ProfileScreen = (props) => {
             <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
             </View>
             <View>
-                <View style={styles.avatarContainer}>
+                <View style={styles.avatarContainer} >
+               
+            
                     <Image style={styles.avatar} source={{ uri: infoUser.avatar }} />
+                    <View>{isLoading ? <View style={{position: 'absolute', right:67,}}><ActivityIndicator size="medium" color="white" /></View> : <View></View>}</View>
+
+                    
                 </View>
                 <TouchableOpacity style={styles.icon_upload_outside} onPress={getImageLibrary}>
                     <Icon style={styles.icon_upload} name='cloudupload' color={color_upload} />
