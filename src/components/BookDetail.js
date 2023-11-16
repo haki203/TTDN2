@@ -237,12 +237,6 @@ const renderStars = () => {
     return stars;
 };
 
-
-const imageData = [
-    { id: '1', name1: 'Đắc Nhân Tâm', name2: 'Dale Carnegie', source: require('../assets/images/Dac-Nhan-Tam.jpg') },
-    { id: '2', name1: 'Hoàng Tử Bé', name2: 'Antoine de Saint-Exupéry', source: require('../assets/images/image.webp') },
-    { id: '3', name1: 'The CATCHER in the RYE', name2: 'J.D.Salinger', source: require('../assets/images/bookdetail.png') },
-];
 return (
     <View style={styles.Container} >
         {isLoading ? (<View style={styles.loading}><ActivityIndicator size={35} color={'black'} /></View>) : (<View></View>)}

@@ -12,6 +12,8 @@ const schema = new Schema({
     audio: { type: String },
     createAt: { type: String},
     updateAt: { type: String },
+    last_search: { type: Date },
+    search: { type: Number },
     publicAt: { type: String },
     rate: { type: Number },
 });

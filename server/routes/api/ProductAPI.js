@@ -81,7 +81,7 @@ router.get('/favourite/delete/:id', async (req, res, next) => {
             if (favourite) {
                 return res.status(200).json({ result: true, message: "xoa thanh cong" });
             } else {
-                return res.status(400).json({ result: false,message: "ko tim thay id"  });
+                return res.status(400).json({ result: false, message: "ko tim thay id" });
             }
         }
     } catch (error) {
@@ -101,16 +101,16 @@ router.get('/favourite/get-book-by-user/:idUser', async (req, res, next) => {
                 let data = [];
                 for (let i = 0; i < userFavourites.length; i++) {
                     const booksNe = await productModel.findById(userFavourites[i].bookId);
-                    let favourites ={favourite:userFavourites[i],book:booksNe}
+                    let favourites = { favourite: userFavourites[i], book: booksNe }
                     data.push(favourites);
                 }
-                return res.status(200).json({ result: true, data});
+                return res.status(200).json({ result: true, data });
             } else {
-                return res.status(200).json({ result: true,data:[] });
+                return res.status(200).json({ result: true, data: [] });
             }
         }
     } catch (error) {
-        return res.status(400).json({ result: false, message:error+idUser });
+        return res.status(400).json({ result: false, message: error + idUser });
     }
 });
 // get category
@@ -235,6 +235,62 @@ router.get('/search/name', async (req, res, next) => {
     } catch (error) {
         console.log("api search error: " + error);
         res.status(400).json({ result: false });
+    }
+});
+router.get('/search/recent', async (req, res, next) => {
+    try {
+        const products = await productModel.find({});
+        products.sort((a, b) => b.last_search - a.last_search);
+
+        // Lấy ra 5 sản phẩm đầu tiên
+        const top5Products = products.slice(0, 5);
+        return res.status(200).json({ top5Products, result: true });
+    } catch (error) {
+        console.log("api search error: " + error);
+        res.status(400).json({ result: false });
+    }
+});
+router.get('/search/select/:id', async (req, res, next) => {
+    const {id} = req.params;
+    try {
+        const now = new Date();
+        const updatedProduct = await productModel.findByIdAndUpdate(
+            id,
+            {
+              $inc: { search: 1 }, // Cộng thêm 1 cho trường search
+              last_search: now,     // Cập nhật trường last_search thành thời gian hiện tại
+            },
+            { new: false } // Tùy chọn này để nhận lại sản phẩm đã được cập nhật
+          );
+
+        // Lấy ra 5 sản phẩm đầu tiên
+        return res.status(200).json({result: true });
+    } catch (error) {
+        console.log("api search error: " + error);
+        res.status(400).json({ result: false });
+    }
+});
+router.get('/add/new', async (req, res, next) => {
+    try {
+        // Sử dụng Mongoose để thực hiện cập nhật cho tất cả tài liệu
+        let date = new Date();
+
+        const updateResult = await productModel.updateMany(
+            {},
+            {
+                $set: {
+                    search: 1, // Thay đổi tên cột mới và giá trị mặc định của bạn
+                    last_search: date, // Thay đổi tên cột mới và giá trị mặc định của bạn
+                },
+            }
+        );
+
+        res.status(200).json({
+            result: true,
+            updateResult
+        });
+    } catch (error) {
+        res.status(400).json({ result: false, message: 'Lỗi khi cập nhật cột mới.' });
     }
 });
 router.get('/relate/:id', async (req, res, next) => {
