@@ -63,7 +63,6 @@ const BookDetail = (props) => {
         for (let i = 0; i < dataa.length; i++) {
             datarelate.push(dataa[i]);
             console.log(datarelate);
-
         }
         setRelateData2(datarelate);
         // setIsLoading(false)
@@ -183,7 +182,6 @@ const BookDetail = (props) => {
                 if (response.result) {
                     Alert.alert('Đăng thành công');
                     setDobModalVisible1(false);
-
                 }
                 else {
                     Alert.alert('Đăng thất bại', response.message);
