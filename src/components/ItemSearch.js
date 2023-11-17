@@ -14,9 +14,9 @@ const ItemSearch = (props) => {
     const getAdmin = async () => {
       try {
         if (product.authorId) {
-          console.log('author ne: ',product.authorId);
+          // console.log('author ne: ',product.authorId);
           const respone = await AxiosIntance().get(`/product/author/${product.authorId}`);
-          console.log("author khi goi api ne: ", respone.author.name);
+          // console.log("author khi goi api ne: ", respone.author.name);
           setName(respone.author.name)
         }
       } catch (error) {
@@ -30,9 +30,14 @@ const ItemSearch = (props) => {
     }
 
   }, []);
-  const onClickDetail = () =>{
-    console.log(id);
-    navigation.navigate('Detail', { itemId: id });
+  const onClickDetail = async () =>{
+    // console.log(id);
+    const reponse = await AxiosIntance().get(`/product/search/select/${id}`);
+    console.log("response day: ", reponse)
+    if (reponse.result == true) {
+      navigation.navigate('Detail', { itemId: id });
+    }
+   
   }
   return (
     <TouchableOpacity onPress={() => onClickDetail()}>

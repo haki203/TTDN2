@@ -241,7 +241,6 @@ router.get('/search/recent', async (req, res, next) => {
     try {
         const products = await productModel.find({});
         products.sort((a, b) => b.last_search - a.last_search);
-
         // Lấy ra 5 sản phẩm đầu tiên
         const top5Products = products.slice(0, 5);
         return res.status(200).json({ top5Products, result: true });
@@ -262,7 +261,6 @@ router.get('/search/select/:id', async (req, res, next) => {
             },
             { new: false } // Tùy chọn này để nhận lại sản phẩm đã được cập nhật
           );
-
         // Lấy ra 5 sản phẩm đầu tiên
         return res.status(200).json({result: true });
     } catch (error) {
