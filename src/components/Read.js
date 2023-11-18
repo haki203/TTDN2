@@ -52,7 +52,7 @@ const Read = props => {
           trustAllCerts={false} // bỏ qua chứng chỉ ssl
           source={PdfResource}
           page={1} //hiển thị trang số 1 đầu tiên
-          scale={1.5} // tỉ lệ phóng ban đầu
+          scale={1} // tỉ lệ phóng ban đầu
           minScale={1} // tỉ lệ phóng nhỏ nhất
           maxScale={2.0} // tỉ lệ phóng lớn nhất
           renderActivityIndicator={() => (
@@ -123,6 +123,6 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width + 40,
     height: Dimensions.get('window').height,
     fontSize:12,
-    backgroundColor:'black'
+    backgroundColor:'white'
   },
 });

@@ -213,8 +213,10 @@ const styles = StyleSheet.create({
 
   },
   label:{
-    fontWeight:'500',
-    fontSize:16
+    fontWeight:'700',
+    fontSize:16,
+    color:'#cdcdcd',
+
   },
   activeLabel:{
     color:'black',
