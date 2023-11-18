@@ -41,32 +41,13 @@ const SearchScreen = (props) => {
     }
   }
   
-  // const Issearch = async () => {
-  //   setisLoading(true);
-  //   const respone = await AxiosIntance().get("product/search/name?keyword=");
-  //   console.log(respone.result);
-  //   if (respone.result == false) {
-  //     // lay du lieu
-  //     setdataNe(respone.product);
-  //     console.log(respone.product);
-  //     setisLoading(false);
-  //   }
-  //   else {
-  //     ToastAndroid.show("Lay du lieu that bai", ToastAndroid.SHORT);
-  //   }
-  // }
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     setIsTabVisible(false)
-  //   });
-
-  //   return unsubscribe;
-  // }, []);
   const HandleChangeText = async (text) => {
     setSearchText(text)
     countDownSearch(text)
     console.log(text);
   }
+
+
   useEffect(() => {
     const getNews = async () => {
       setisLoading(true);
