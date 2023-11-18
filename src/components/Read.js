@@ -26,11 +26,14 @@ const Read = props => {
 
   const PdfResource1 = require('../assets/pdf/dacnhantam.pdf');
 
+  
   // link gốc: https://drive.google.com/drive/folders/1LxljCHjba8sudki7KuXFHffAPY6c9rQ-
 
   const pdfResource = {
     uri: 'https://drive.google.com/uc?export=download&id=1fqJpN32pezfnMY72dIU5RbbJxy79YFV-',
     cache: true, // Lưu trữ tệp PDF trong bộ nhớ cache
+
+    
   };
 
   const Back = () => {
