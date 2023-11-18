@@ -6,7 +6,6 @@ import Icon3 from "react-native-vector-icons/FontAwesome"
 import { AppContext } from '../navigation/AppContext'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Screen1 from './tab_view/Screen1'
-import Screen2 from './tab_view/Screen2'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import AxiosIntance from '../axios/AxiosIntance'
 

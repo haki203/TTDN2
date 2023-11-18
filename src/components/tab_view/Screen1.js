@@ -157,6 +157,9 @@ const styles = StyleSheet.create({
     height: 220,
     margin: 20,
     borderRadius: 10
+  },
+  renderauthor:{
+    color:'black'
   }
 })
 

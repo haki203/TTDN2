@@ -27,7 +27,6 @@ const App = () => {
     </AppContextProvider>
 
   );
-  
 };
 
 const styles = StyleSheet.create({
