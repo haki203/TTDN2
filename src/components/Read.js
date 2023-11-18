@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   Linking,
   Alert,
+  fetch,
 } from 'react-native';
 import React, {useContext, useState, useEffect} from 'react';
 import {AppContext} from '../navigation/AppContext';
@@ -18,10 +19,23 @@ const backgroundColor1 = '#FDFDFD';
 const headerNameBoColorBo = '#272956';
 const headerNameBoColorAu = '#9D9D9D';
 const noidungColor = '#9D9D9D';
+
 const Read = props => {
   const {isTabVisible, setIsTabVisible} = useContext(AppContext);
   const {navigation} = props;
-  const PdfResource= require('../assets/pdf/dacnhantam.pdf');
+
+  const PdfResource1 = require('../assets/pdf/dacnhantam.pdf');
+
+  
+  // link gốc: https://drive.google.com/drive/folders/1LxljCHjba8sudki7KuXFHffAPY6c9rQ-
+
+  const pdfResource = {
+    uri: 'https://drive.google.com/uc?export=download&id=1fqJpN32pezfnMY72dIU5RbbJxy79YFV-',
+    cache: true, // Lưu trữ tệp PDF trong bộ nhớ cache
+
+    
+  };
+
   const Back = () => {
     navigation.goBack();
   };
@@ -29,9 +43,9 @@ const Read = props => {
     const unsubscribe = navigation.addListener('focus', () => {
       setIsTabVisible(false);
     });
-
     return unsubscribe;
   }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -50,11 +64,12 @@ const Read = props => {
         <PDF
           style={styles.body_NoiDung}
           trustAllCerts={false} // bỏ qua chứng chỉ ssl
-          source={PdfResource}
+          source={pdfResource}
           page={1} //hiển thị trang số 1 đầu tiên
-          scale={1} // tỉ lệ phóng ban đầu
+          scale={1.5} // tỉ lệ phóng ban đầu
           minScale={1} // tỉ lệ phóng nhỏ nhất
           maxScale={2.0} // tỉ lệ phóng lớn nhất
+          cache={true} // lưu trữ tệp PDF trong bộ nhớ cache
           renderActivityIndicator={() => (
             <ActivityIndicator color="black" size="large" />
           )} // hiển thị loading
@@ -122,7 +137,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: Dimensions.get('window').width + 40,
     height: Dimensions.get('window').height,
-    fontSize:12,
-    backgroundColor:'white'
+    fontSize: 12,
+    backgroundColor: 'black',
   },
 });
