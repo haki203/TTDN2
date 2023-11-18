@@ -30,7 +30,7 @@ const Read = props => {
   // link gốc: https://drive.google.com/drive/folders/1LxljCHjba8sudki7KuXFHffAPY6c9rQ-
 
   const pdfResource = {
-    uri: 'https://drive.google.com/uc?export=download&id=1fqJpN32pezfnMY72dIU5RbbJxy79YFV-',
+    uri: 'https://drive.google.com/u/0/uc?id=11rVuFsMvencggcCrkPPlZYV1yel0TcvI&export=download',
     cache: true, // Lưu trữ tệp PDF trong bộ nhớ cache
 
     
@@ -66,7 +66,7 @@ const Read = props => {
           trustAllCerts={false} // bỏ qua chứng chỉ ssl
           source={pdfResource}
           page={1} //hiển thị trang số 1 đầu tiên
-          scale={1.5} // tỉ lệ phóng ban đầu
+          scale={1} // tỉ lệ phóng ban đầu
           minScale={1} // tỉ lệ phóng nhỏ nhất
           maxScale={2.0} // tỉ lệ phóng lớn nhất
           cache={true} // lưu trữ tệp PDF trong bộ nhớ cache

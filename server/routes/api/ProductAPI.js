@@ -39,6 +39,23 @@ router.get('/author/:id', async (req, res, next) => {
         res.status(400).json({ result: false, error });
     }
 });
+// thay pdf cho sach
+router.post('/pdf/update', async (req, res, next) => {
+    const { idBook, linkPdf } = req.body;
+    try {
+        if (!idBook || !linkPdf) {
+            res.status(400).json({ result: false, message: 'thieu thong tin' });
+
+        }
+        else {
+            const book = await productModel.findByIdAndUpdate(id,{pdf:linkPdf})
+            res.status(200).json({ book, result: true });
+        }
+
+    } catch (error) {
+        res.status(499).json({ result: false, message: error });
+    }
+});
 //add favourite
 router.post('/favourite/new', async (req, res, next) => {
     const { idUser, idBook } = req.body;
@@ -251,20 +268,20 @@ router.get('/search/recent', async (req, res, next) => {
     }
 });
 router.get('/search/select/:id', async (req, res, next) => {
-    const {id} = req.params;
+    const { id } = req.params;
     try {
         const now = new Date();
         const updatedProduct = await productModel.findByIdAndUpdate(
             id,
             {
-              $inc: { search: 1 }, // Cộng thêm 1 cho trường search
-              last_search: now,     // Cập nhật trường last_search thành thời gian hiện tại
+                $inc: { search: 1 }, // Cộng thêm 1 cho trường search
+                last_search: now,     // Cập nhật trường last_search thành thời gian hiện tại
             },
             { new: false } // Tùy chọn này để nhận lại sản phẩm đã được cập nhật
-          );
+        );
 
         // Lấy ra 5 sản phẩm đầu tiên
-        return res.status(200).json({result: true });
+        return res.status(200).json({ result: true });
     } catch (error) {
         console.log("api search error: " + error);
         res.status(400).json({ result: false });
@@ -304,9 +321,9 @@ router.get('/relate/:id', async (req, res, next) => {
     }
 });
 router.post('/public/year', async (req, res, next) => {
-    const {id,date} = req.body;
+    const { id, date } = req.body;
     try {
-        const product = await productModel.findByIdAndUpdate(id,{publicAt:date})
+        const product = await productModel.findByIdAndUpdate(id, { publicAt: date })
         return res.status(200).json({ product, result: true });
     } catch (error) {
         console.log("api search error: " + error);
