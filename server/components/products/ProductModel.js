@@ -14,7 +14,7 @@ const schema = new Schema({
     updateAt: { type: String },
     last_search: { type: Date },
     search: { type: Number },
-    publicAt: { type: String },
+    publicAt: { type: Number },
     rate: { type: Number },
 });
 // Đảm bảo rằng bảng Products chưa được định nghĩa trước đó

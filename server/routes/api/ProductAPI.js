@@ -279,8 +279,7 @@ router.get('/add/new', async (req, res, next) => {
             {},
             {
                 $set: {
-                    search: 1, // Thay đổi tên cột mới và giá trị mặc định của bạn
-                    last_search: date, // Thay đổi tên cột mới và giá trị mặc định của bạn
+                    publicAt: date, // Thay đổi tên cột mới và giá trị mặc định của bạn
                 },
             }
         );
@@ -298,6 +297,16 @@ router.get('/relate/:id', async (req, res, next) => {
     try {
         console.log(id);
         //const product = await productModel.find({ categoryId: categoryIdObjectId  }).exec();
+        return res.status(200).json({ product, result: true });
+    } catch (error) {
+        console.log("api search error: " + error);
+        res.status(400).json({ result: false });
+    }
+});
+router.post('/public/year', async (req, res, next) => {
+    const {id,date} = req.body;
+    try {
+        const product = await productModel.findByIdAndUpdate(id,{publicAt:date})
         return res.status(200).json({ product, result: true });
     } catch (error) {
         console.log("api search error: " + error);
