@@ -30,68 +30,41 @@ const SearchScreen = (props) => {
   const search = async (text) => {
     setisLoading(true);
     const respone = await AxiosIntance().get("/product/search/name?keyword=" + text);
-    respone.product.forEach((product) => {
-      setNameauthor(product.authorId);
-      console.log("Rate:", nameauthor);
-    });
-    // const imageproduct = respone.product.map(product => product.image);
-    // setNameauthor(authorId);
     if (respone.result == true) {
       // lay du lieu
       setdataNe(respone.product);
-      console.log("data ne " + respone.product)
-      // console.log("search " + respone.product);
+      console.log("data neee " + respone.product)
       setisLoading(false);
     }
     else {
       ToastAndroid.show("Lay du lieu that bai", ToastAndroid.SHORT);
     }
   }
-
-  // const Issearch = async () => {
-  //   setisLoading(true);
-  //   const respone = await AxiosIntance().get("product/search/name?keyword=");
-  //   console.log(respone.result);
-  //   if (respone.result == false) {
-  //     // lay du lieu
-  //     setdataNe(respone.product);
-  //     console.log(respone.product);
-  //     setisLoading(false);
-  //   }
-  //   else {
-  //     ToastAndroid.show("Lay du lieu that bai", ToastAndroid.SHORT);
-  //   }
-  // }
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     setIsTabVisible(false)
-  //   });
-
-  //   return unsubscribe;
-  // }, []);
-  const HandleChangeText = (text) => {
+  
+  const HandleChangeText = async (text) => {
     setSearchText(text)
     countDownSearch(text)
     console.log(text);
-
   }
+
+
   useEffect(() => {
     const getNews = async () => {
       setisLoading(true);
-      const respone = await AxiosIntance().get("/product/");
+      const respone = await AxiosIntance().get("/product/search/recent");
       // const authorId = respone.product.map(product => product.authorId);
       // const imageproduct = respone.product.map(product => product.image);
       // setdataNe(imageproduct)
+      // console.log("loi neeee: ", respone)
       if (respone.result == true) {
-        setdataNe(respone.product)
-        console.log('error product', respone.product);
+        setdataNe(respone.top5Products)
+        // console.log('error product recent', respone.top5Products);
         setisLoading(false);
       } else {
-        ToastAndroid.show("get product", ToastAndroid.SHORT);
+        ToastAndroid.show("get product recent", ToastAndroid.SHORT);
       }
     }
     getNews();
-
     return () => {
     }
   }, [])
@@ -223,7 +196,7 @@ const SearchScreen = (props) => {
   const textInputRef = React.createRef(); // Tạo một ref cho TextInput
 
   // const filtered = data.filter(item => item.name.includes(searchQuery));
-  // const latestText = dataNe.length > 0 ? 'Results' : 'Lastest';
+  const latestText = searchText.length > 0 ? 'Kết quả tìm kiếm' : 'Tìm kiếm gần đây';
   // const latestText2 = dataNe.length > 0 ? 'Results' : 'Lastest';
   const resetSearch = () => {
     navigation.goBack();
@@ -235,18 +208,18 @@ const SearchScreen = (props) => {
           <TouchableOpacity style={styles.search} onPress={search}>
             <Image source={require('../assets/images/manerge.png')}></Image>
           </TouchableOpacity>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-          <TextInput
-            ref={textInputRef}
-            value={searchText}
-            onChangeText={(text) => {HandleChangeText(text)}}
-            placeholderTextColor="black"
-            placeholder='Search'
-          >
-          </TextInput>
-          <TouchableOpacity onPress={() => HandleChangeText("")}>
-          {searchText.length > 0 && <Icon name="close" size={25} color="#000" right="15%"/> /* Hiển thị Icon khi searchText có độ dài lớn hơn 1 */}
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <TextInput
+              ref={textInputRef}
+              value={searchText}
+              onChangeText={(text) => { HandleChangeText(text) }}
+              placeholderTextColor="#A9A9A9"
+              placeholder='Tìm kiếm sách...'
+            >
+            </TextInput>
+            <TouchableOpacity onPress={() => HandleChangeText("")}>
+              {searchText.length > 0 && <Icon name="close" size={25} color="#000" right="15%" /> /* Hiển thị Icon khi searchText có độ dài lớn hơn 1 */}
+            </TouchableOpacity>
           </View>
         </View>
         <TouchableOpacity style={styles.huy1} onPress={resetSearch}>
@@ -255,7 +228,7 @@ const SearchScreen = (props) => {
       </View>
       <View style={styles.listContainer}>
         <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.content}>Lastest</Text>
+          <Text style={styles.content}>{latestText}</Text>
           {/* <Text style={styles.content1}></Text> */}
         </View>
         <View style={styles.container1}>
@@ -327,7 +300,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontStyle: 'normal',
     fontFamily: 'Poppins',
-    justifyContent:'center', 
+    justifyContent: 'center',
     // paddingRight: 50
   },
   search: {
@@ -351,7 +324,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.408,
     lineHeight: 22,
     left: '80%',
-    top: '3%'
+    top: '3%',
   },
   huy: {
     color: bacroundColor,
