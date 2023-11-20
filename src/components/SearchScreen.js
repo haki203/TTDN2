@@ -51,9 +51,9 @@ const SearchScreen = (props) => {
 
       countDownSearch(text)
     }
-    console.log(text);
+    // console.log(text);
     getNews()
-    console.log(dataNe.length);
+    // console.log(dataNe.length);
   }
 
   const getNews = async () => {

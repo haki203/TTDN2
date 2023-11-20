@@ -39,7 +39,6 @@ const Welcome = (props) => {
         setIsLogin(true);
       }else{
       ToastAndroid.show("Đăng nhập thất bại ", ToastAndroid.SHORT);
-
       }
 
     } catch (error) {
