@@ -1,13 +1,18 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Icon from "react-native-vector-icons/AntDesign"
+import AxiosIntance from '../axios/AxiosIntance';
 
 const ItemListView2 = (props) => {
-    const { dulieu, navigation } = props;
+    const { dulieu, navigation, id } = props;
     const [isLiked, setIsLiked] = useState(false);
+    const [data, setData] = useState([]);
+
     const handleLike = () => {
         setIsLiked(!isLiked);
     };
+
+
 
     return (
         <View style={styles.container}>
@@ -25,8 +30,8 @@ const ItemListView2 = (props) => {
                 <View style={styles.bodyimage}>
                     <Image style={styles.image} source={{ uri: dulieu.image }} />
                     <View style={styles.iconimage}>
-                        <Text style={{ color: "#000000", fontFamily: 'Poppins-Medium', fontSize: 13 }} >{dulieu.category}</Text>
-                        <Text style={{ marginTop: 3, fontSize: 10, fontFamily: 'Poppins-Medium' }}>Kinh Doanh - Lãnh Đạo</Text>
+                        <Text style={{ color: "#000000", fontFamily: 'Poppins-Medium', fontSize: 13 }} >{dulieu.title}</Text>
+                        <Text style={{ marginTop: 3, fontSize: 10, fontFamily: 'Poppins-Medium' }}>Audio Book</Text>
                         <View style={{ width: 200, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <View style={styles.click}>
                                 <Icon name="playcircleo" size={20} color='black' />
@@ -65,8 +70,8 @@ const ItemListView2 = (props) => {
                     </View>
                 </View>
                 <View style={styles.bodytext}>
-                    <Text style={styles.namebook}>{dulieu.bookname}</Text>
-                    <Text numberOfLines={2} style={styles.content}>{dulieu.content}</Text>
+                    <Text style={styles.namebook}>Tổng quan về sách</Text>
+                    <Text numberOfLines={2} style={styles.content}>{dulieu.description}</Text>
                 </View>
 
             </View>
@@ -84,10 +89,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingLeft: 10,
         paddingTop: 10,
-        borderBottomWidth:3,
-        borderBottomColor:'#f3f3f3',
-        paddingTop:30,
-        borderRadius:25,
+        borderBottomWidth: 3,
+        borderBottomColor: '#f3f3f3',
+        paddingTop: 30,
+        borderRadius: 25,
     }, datetime: {
         height: 300,
         width: 60
