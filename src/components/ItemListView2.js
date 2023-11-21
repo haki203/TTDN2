@@ -1,17 +1,80 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Icon from "react-native-vector-icons/AntDesign"
 import AxiosIntance from '../axios/AxiosIntance';
+import { AppContext } from '../navigation/AppContext';
+
 
 const ItemListView2 = (props) => {
     const { dulieu, navigation, id } = props;
-    const [isLiked, setIsLiked] = useState(false);
     const [data, setData] = useState([]);
+    const { infoUser } = useContext(AppContext);
+    const [bookData, setBookData] = useState([]);
+
+    const route = props.route;
+    const [isHearted, setIsHearted] = useState(false);
 
     const handleLike = () => {
         setIsLiked(!isLiked);
     };
 
+    const DetailBook = async () => {
+        const response = await AxiosIntance().get("/product/" + dulieu._id)
+        const Data2 = {
+            id: response.product._id,
+            title: response.product.title,
+            image: response.product.image,
+            description: response.product.description,
+            rate: response.product.rate,
+            category: response.product.categoryId,
+        }
+        setBookData(Data2);
+
+        // ---------------------
+
+
+        const res = await AxiosIntance().get("/product/favourite/get-book-by-user/" + infoUser.id);
+
+        for (let index = 0; index < res.data.length; index++) {
+
+            if (res.data[index].favourite.bookId == Data2.id) {
+                setIsHearted(true);
+
+                return;
+            }
+            else {
+                setIsHearted(false);
+            }
+        }
+        //------------------
+    }
+
+    useEffect(() => {
+
+        DetailBook();
+
+    }, []);
+
+    const handleHeartPress = async () => {
+        // setIsHearted(!isHearted);
+        try {
+            const favouriteData = {
+                idUser: infoUser.id,
+                idBook: bookData.id,
+            };
+            console.log("favouriteData nè: ", favouriteData);
+            const response = await AxiosIntance().post("/product/favourite/new/", favouriteData);
+            console.log("Data trả về nè: ", response);
+
+            if (response.result) {
+                setIsHearted(!isHearted, true);
+            }
+            else {
+                setIsHearted(!isHearted, false);
+            }
+        } catch (error) {
+        }
+    }
 
 
     return (
@@ -40,16 +103,16 @@ const ItemListView2 = (props) => {
                                 </Text>
                             </View>
                             <View style={styles.click}>
-                                <TouchableOpacity onPress={handleLike}>
+                                <TouchableOpacity onPress={handleHeartPress}>
                                     <View >
                                         <Icon
-                                            name={isLiked ? 'heart' : 'hearto'}
+                                            name={isHearted ? 'heart' : 'hearto'}
                                             size={20}
-                                            color={isLiked ? 'black' : 'black'}
+                                            color={isHearted ? 'black' : 'black'}
                                         />
                                     </View>
                                 </TouchableOpacity>
-                                {isLiked && <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium' }}>
+                                {isHearted && <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium' }}>
                                     Đã thích
                                 </Text> || <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium' }}>
                                         Yêu thích

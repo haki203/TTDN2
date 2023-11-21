@@ -33,14 +33,11 @@ const FavouriteScreen = (props) => {
 
     setTextNoti("")
     try {
-      const getId = {
-        id: infoUser.id
-      }
+
       let arrayData = [];
       const response = await AxiosIntance().get("product/favourite/get-book-by-user/" + infoUser.id);
       if (response.result == true) {
         if (response.data.length < 1) {
-          console.log("chua co sach yeu thichh");
           setIsLoading(false)
           setTextNoti('Chưa có sách nào trong mục yêu thích.')
         } else {
@@ -176,7 +173,7 @@ const styles = StyleSheet.create({
   }, profile: {
     width: 40,
     height: 40,
-    borderRadius:40
+    borderRadius: 40
   },
   authen: {
     marginLeft: 8,
@@ -189,57 +186,3 @@ const styles = StyleSheet.create({
 
   }
 })
-
-const DATAne = [
-  {
-    "id": 1,
-    "book_name": "Manusia Setengah Dewa",
-    "author_name": "Bonifas",
-    "image": require('../assets/images/Rectangle1.png'),
-  }, {
-    "id": 2,
-    "book_name": "Tanpa Karena",
-    "author_name": "Takos",
-    "image": require('../assets/images/Rectangle2.png'),
-  }, {
-    "id": 3,
-    "book_name": "Persahabatan Bagai Kepompong",
-    "author_name": "Rosberg",
-    "image": require('../assets/images/Rectangle3.png'),
-  }, {
-    "id": 4,
-    "book_name": "Sahabat Sejati",
-    "author_name": "Coviello",
-    "image": require('../assets/images/Rectangle4.png'),
-  }, {
-    "id": 5,
-    "book_name": "Sahabat Sejati",
-    "author_name": "Chugg",
-    "image": require('../assets/images/Rectangle5.png'),
-  }, {
-    "id": 6,
-    "book_name": "Ana",
-    "author_name": "Gerger",
-    "image": require('../assets/images/Rectangle1.png'),
-  }, {
-    "id": 7,
-    "book_name": "Stevana",
-    "author_name": "Riddle",
-    "image": require('../assets/images/Rectangle1.png'),
-  }, {
-    "id": 8,
-    "book_name": "Rad",
-    "author_name": "Parfrey",
-    "image": require('../assets/images/Rectangle1.png'),
-  }, {
-    "id": 9,
-    "book_name": "Billye",
-    "author_name": "Itzhaki",
-    "image": require('../assets/images/Rectangle1.png'),
-  }, {
-    "id": 10,
-    "book_name": "Roselle",
-    "author_name": "Joberne",
-    "image": require('../assets/images/Rectangle1.png'),
-  }
-]
