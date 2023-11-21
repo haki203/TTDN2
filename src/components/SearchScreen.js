@@ -36,7 +36,7 @@ const SearchScreen = (props) => {
       if (respone.result == true) {
         // lay du lieu
         setdataNe(respone.product);
-        console.log("data neee " + respone.product)
+        // console.log("data neee " + respone.product)
         setisLoading(false);
       }
       else {
