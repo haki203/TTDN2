@@ -130,7 +130,7 @@ const HomeScreen = (props) => {
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
           </TouchableOpacity>
           <TouchableOpacity onPress={settings}>
-            <Image style={styles.profile} source={{uri:infoUser.avatar}} />
+            <Image style={styles.profile} source={{ uri: infoUser.avatar }} />
           </TouchableOpacity>
         </View>
       </View>
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   }, profile: {
     width: 40,
     height: 40,
-    borderRadius:35,
+    borderRadius: 35,
   }, title: {
     marginLeft: 21
   }, search: {
@@ -217,8 +217,8 @@ const styles = StyleSheet.create({
     color:'#cdcdcd',
 
   },
-  activeLabel:{
-    color:'black',
+  activeLabel: {
+    color: 'black',
 
   }
 
