@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button, Modal, ActivityIndicator, TextInput } from 'react-native'
-import React, { useState, useContext, useEffect,useCallback ,useRef } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button, Modal, ActivityIndicator, TextInput, ToastAndroid } from 'react-native'
+import React, { useState, useContext, useEffect, useCallback, useRef } from 'react';
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/FontAwesome';
 import Icon_3 from 'react-native-vector-icons/AntDesign';
@@ -16,7 +16,7 @@ import { Alert } from 'react-native';
 const BookDetail = (props) => {
     const { infoUser } = useContext(AppContext);
     const [, updateState] = useState();
-    const scrollViewRef=useRef()
+    const scrollViewRef = useRef()
     // Hàm để buộc render lại màn hình
     const forceUpdate = () => updateState({});
     const { itemId } = props.route.params;
@@ -72,6 +72,7 @@ const BookDetail = (props) => {
             }
             else {
                 setIsHearted(false);
+
             }
         }
         //------------------
@@ -83,7 +84,7 @@ const BookDetail = (props) => {
 
         console.log("đang reload ne----------------");
         forceUpdate()
-        scrollViewRef.current.scrollTo({y:0,animated:true});
+        scrollViewRef.current.scrollTo({ y: 0, animated: true });
 
         DetailBook();
 
@@ -154,17 +155,17 @@ const BookDetail = (props) => {
     // const { isTabVisible, setIsTabVisible } = useContext(AppContext);
     const longText = "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời.";
     const Read = () => {
-        navigation.navigate('Read',{id:bookData.id})
+        navigation.navigate('Read', { id: bookData.id })
     }
     const Back = useCallback(() => {
         if (route.params && route.params.fromItem) {
-          // Nếu từ màn hình Item navigate đến Detail, thì quay lại màn hình Item
-          navigation.goBack(null); // Sử dụng null để tránh quay lại màn hình trước đó (Item)
+            // Nếu từ màn hình Item navigate đến Detail, thì quay lại màn hình Item
+            navigation.goBack(null); // Sử dụng null để tránh quay lại màn hình trước đó (Item)
         } else {
-          // Nếu không, thì quay lại màn hình Home
-          navigation.goBack();
+            // Nếu không, thì quay lại màn hình Home
+            navigation.goBack();
         }
-      }, [route.params, navigation]);
+    }, [route.params, navigation]);
 
     const toggleShowMore = () => {
         setShowMore(prevShowMore => !prevShowMore);
@@ -183,11 +184,14 @@ const BookDetail = (props) => {
             const response = await AxiosIntance().post("/product/favourite/new/", favouriteData);
             console.log("Data trả về nè: ", response);
 
-            if (response.result) {
+            if (response.message == "yeu thich thanh cong") {
                 setIsHearted(!isHearted, true);
+                ToastAndroid.show("Yêu thích thành công ", ToastAndroid.SHORT);
             }
             else {
                 setIsHearted(!isHearted, false);
+                ToastAndroid.show("Hủy yêu thích thành công ", ToastAndroid.SHORT);
+
             }
         } catch (error) {
         }

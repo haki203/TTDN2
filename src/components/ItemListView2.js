@@ -79,26 +79,17 @@ const ItemListView2 = (props) => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.datetime}>
-                <View style={styles.date}>
-                    <Text style={{ fontWeight: 'bold', fontSize: 17, color: '#000000', textAlign: 'center', marginTop: 10 }}>
-                        26
-                    </Text>
-                    <Text style={{ fontSize: 15, color: '#000000', textAlign: 'center' }}>
-                        T.8
-                    </Text>
-                </View>
-            </View>
+
             <View style={styles.body}>
                 <View style={styles.bodyimage}>
                     <Image style={styles.image} source={{ uri: dulieu.image }} />
                     <View style={styles.iconimage}>
-                        <Text style={{ color: "#000000", fontFamily: 'Poppins-Medium', fontSize: 13 }} >{dulieu.title}</Text>
-                        <Text style={{ marginTop: 3, fontSize: 10, fontFamily: 'Poppins-Medium' }}>Audio Book</Text>
+                        <Text style={{ color: "#000000", fontFamily: 'Poppins-Medium', fontSize: 15 }} >{dulieu.title}</Text>
+                        <Text style={{ marginTop: 3, fontSize: 10, fontFamily: 'Poppins-Medium', color: 'black' }}>Sách nghe - Sách nói</Text>
                         <View style={{ width: 200, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <View style={styles.click}>
                                 <Icon name="playcircleo" size={20} color='black' onPress={() => navigation.navigate('Play')} />
-                                <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium' }}>
+                                <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
                                     Nghe
                                 </Text>
                             </View>
@@ -112,16 +103,16 @@ const ItemListView2 = (props) => {
                                         />
                                     </View>
                                 </TouchableOpacity>
-                                {isHearted && <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium' }}>
+                                {isHearted && <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
                                     Đã thích
-                                </Text> || <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium' }}>
+                                </Text> || <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
                                         Yêu thích
                                     </Text>}
                             </View>
                             <View style={styles.click}>
                                 <Icon name="infocirlceo" size={20} color='black' onPress={() => navigation.navigate('Detail', { itemId: dulieu._id },)} />
 
-                                <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium' }}>
+                                <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
                                     Chi tiết
                                 </Text>
                             </View>
@@ -138,7 +129,7 @@ const ItemListView2 = (props) => {
 
             </View>
 
-        </View>
+        </View >
     )
 }
 
@@ -161,7 +152,8 @@ const styles = StyleSheet.create({
     }, body: {
         height: "100%",
         flexDirection: 'column',
-        display: 'flex'
+        display: 'flex',
+        paddingLeft: 25
     }, bodyimage: {
         width: '100%',
         height: "auto",
@@ -214,7 +206,8 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 2,
         fontFamily: 'Poppins-Medium',
-        marginBottom: 15
+        marginBottom: 15,
+        color: 'black'
     },
 
 })

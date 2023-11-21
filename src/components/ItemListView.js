@@ -72,7 +72,7 @@ const ItemListView = (props) => {
           <View style={styles.name}>
             <View style={{ flexDirection: 'column' }}>
               <Text style={styles.book_name} >{dulieu.book.title}</Text>
-              <Text style={styles.author_name}>{dulieu.book.authorId}</Text>
+              <Text style={{ color: 'black' }}>{dulieu.book.authorId}</Text>
             </View>
           </View>
           <TouchableOpacity onPress={toggleModal}>
@@ -121,7 +121,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingLeft: 10,
-    paddingRight: 5
+    paddingRight: 5,
+    backgroundColor: '#FFFFFF',
+
   }, image: {
     margin: 10,
     width: 60,

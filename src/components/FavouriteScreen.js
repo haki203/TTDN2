@@ -23,6 +23,10 @@ const FavouriteScreen = (props) => {
 
 
 
+  const settings = () => (
+    navigation.navigate('Setting')
+
+  );
   const { navigation } = props;
   const search = () => (
     navigation.navigate('SearchScreen')
@@ -96,15 +100,20 @@ const FavouriteScreen = (props) => {
         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
           <TouchableOpacity onPress={search}>
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
+          </TouchableOpacity >
+          <TouchableOpacity onPress={settings}>
+
+
+            <Image style={styles.profile} source={{ uri: infoUser.avatar }} />
           </TouchableOpacity>
-          <Image style={styles.profile} source={{ uri: infoUser.avatar }} />
         </View>
       </View>
-      <Text style={styles.title1} onPress={() => fetchData()}>
-        Các sách yêu thích
-      </Text>
+
 
       <View style={styles.flatlist}>
+        <Text style={styles.title1} onPress={() => fetchData()}>
+          Các sách yêu thích
+        </Text>
         <Text style={{ fontSize: 16, color: 'black', fontWeight: 500, position: 'absolute', start: 25, top: '15%' }}>{textNoti}</Text>
         {
           isLoading ?
@@ -135,7 +144,6 @@ export default FavouriteScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: bgcolor,
   }, title: {
     color: color_text,
     fontFamily: 'Poppins',
@@ -150,10 +158,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     paddingLeft: 25,
-    marginBottom: 5
+    marginBottom: 5,
+    backgroundColor: '#FFFFFF',
+
   }, flatlist: {
     width: '100%',
-    height: '100%'
+    height: '100%',
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30
+
   }, plus: {
     width: 290,
     padding: 25,

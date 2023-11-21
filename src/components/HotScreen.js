@@ -22,6 +22,11 @@ const HotScreen = (props) => {
   const [isLoading, setIsLoading] = useState(true);
 
 
+  const settings = () => (
+    navigation.navigate('Setting')
+
+  );
+
   const getAllCate = async () => {
 
     const respone = await AxiosIntance().get("/product");
@@ -63,14 +68,18 @@ const HotScreen = (props) => {
       <View style={[styles.Headers]}>
         <View style={styles.header}>
           <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
-            <Text style={styles.authen}>Hots</Text>
+            <Text style={styles.authen}>Xu hướng</Text>
           </View>
 
           <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
             <TouchableOpacity>
               <Image style={styles.tok} source={require('../assets/images/search.png')} />
             </TouchableOpacity>
-            <Image style={styles.profile} source={{ uri: infoUser.avatar }} />
+            <TouchableOpacity onPress={settings}>
+
+              <Image style={styles.profile} source={{ uri: infoUser.avatar }} />
+            </TouchableOpacity>
+
           </View>
         </View>
       </View>

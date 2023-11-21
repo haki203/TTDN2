@@ -24,6 +24,8 @@ const Welcome = (props) => {
   //---------------------- login google ---------------------- //
   const onLoginGG = async () => {
     try {
+      setIsLoading(true)
+
       await GoogleSignin.hasPlayServices();
       console.log('LoginGG');
       const userInfor = await GoogleSignin.signIn();
@@ -35,12 +37,10 @@ const Welcome = (props) => {
         setinfoUser(infoUser);
         console.log(res.user);
         ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
-        setIsLoading(true)
-
         setTimeout(() => {
-          setIsLogin(true);
-
+          setIsLoading(false)
         }, 3000)
+        setIsLogin(true);
 
 
       } else {
@@ -83,6 +83,8 @@ const Welcome = (props) => {
       console.log('loginFB');
       console.log("data fb ne: ", data);
       // loginnnnnnnnnnnnnnnnnnnnnnn api
+      setIsLoading(true)
+
       const res = await AxiosIntance().post("/user/login", { email: data.userID });
       if (res.result) {
         setTimeout(() => {
@@ -131,8 +133,7 @@ const Welcome = (props) => {
                     <View style={styles.textView}>
                       <Text style={styles.textView_1}>Athens</Text>
                       <Text style={styles.textView_2}>
-                        AudioBox allowing you to listen to your favourite books anytime,
-                        anywhere
+                        Athens cho phép bạn nghe những cuốn sách yêu thích mọi lúc, mọi nơi
                       </Text>
                     </View>
                   </View>
@@ -141,12 +142,12 @@ const Welcome = (props) => {
                   <View style={styles.touchable}>
                     <TouchableOpacity style={styles.touchableFB} onPress={() => onFacebookButtonPress()}>
                       <Image style={styles.icon} source={require('../assets/images/ic_fb.png')}></Image>
-                      <Text style={styles.textView_GG}>Continue with Facebook</Text>
+                      <Text style={styles.textView_GG}>Đăng nhập bằng Facebook</Text>
                     </TouchableOpacity>
-                    <Text style={styles.textView_3}>OR</Text>
+                    <Text style={styles.textView_3}>HOẶC</Text>
                     <TouchableOpacity style={styles.touchableGG} onPress={onLoginGG}>
                       <Image style={styles.icon} source={require('../assets/images/ic_gg.png')}></Image>
-                      <Text style={styles.textView_GG}>Continue with Google</Text>
+                      <Text style={styles.textView_GG}>Đăng nhập bằng Google</Text>
                     </TouchableOpacity>
 
                   </View>
