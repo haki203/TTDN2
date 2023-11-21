@@ -2,10 +2,11 @@ import { StyleSheet, Text, View, ScrollView, FlatList, Image, TouchableOpacity, 
 
 import React, { useContext, useEffect, useState } from 'react'
 import AxiosIntance from '../axios/AxiosIntance'
-
+import { useFocusEffect } from '@react-navigation/native';
 import ItemListView from './ItemListView';
 import Icon from "react-native-vector-icons/AntDesign"
 import { AppContext } from '../navigation/AppContext';
+import { route } from '../../server/routes';
 const { width, height } = Dimensions.get('window');
 
 const color_text = "#272956";
@@ -64,6 +65,17 @@ const FavouriteScreen = (props) => {
       console.error("Error fetching data: ", error);
     }
   };
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsLoading(true)
+      console.log("reloadr ne: ");
+      fetchData();
+
+      return () => {
+        // Cleanup code (optional) when the screen loses focus
+      };
+    }, [])
+  );
   useEffect(() => {
 
     const unsubscribe = navigation.addListener('focus', () => {
@@ -73,13 +85,9 @@ const FavouriteScreen = (props) => {
     fetchData();
 
 
-    return unsubscribe;
   },
     []);
 
-  const reload = () => {
-    fetchData();
-  }
 
   return (
     <View style={styles.container}>
@@ -168,7 +176,7 @@ const styles = StyleSheet.create({
   }, profile: {
     width: 40,
     height: 40,
-    borderRadius: 30
+    borderRadius:40
   },
   authen: {
     marginLeft: 8,

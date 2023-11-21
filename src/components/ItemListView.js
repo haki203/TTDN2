@@ -21,15 +21,6 @@ const ItemListView = (props) => {
   };
 
 
-  const rightSwipeable = () => {
-    return (
-      <View style={{ marginTop: 16, height: 80 }}>
-        <TouchableOpacity onPress={showalert} style={{ width: 80, height: 80, backgroundColor: '#C4C4C4', justifyContent: 'center', alignItems: 'center' }}>
-          <Icon2 name='delete' size={20} />
-        </TouchableOpacity>
-      </View>
-    )
-  };
   const showalert = () => {
     Alert.alert(
       //title
@@ -42,7 +33,9 @@ const ItemListView = (props) => {
           onPress: () => deleteFavorite()
         },
         {
-          text: 'Không'
+          text: 'Không',
+          onPress: () => setModalVisible(!isModalVisible)
+
         },
       ],
       { cancelable: false },
@@ -72,8 +65,6 @@ const ItemListView = (props) => {
 
   return (
     <View style={styles.container}>
-      <GestureHandlerRootView>
-        <Swipeable renderLeftActions={false} renderRightActions={rightSwipeable}>
 
           <TouchableOpacity onPress={() => navigation.navigate('Detail', { itemId: dulieu.book._id })} >
             <View style={styles.body}>
@@ -119,9 +110,7 @@ const ItemListView = (props) => {
             </View>
           </TouchableOpacity>
 
-        </Swipeable>
 
-      </GestureHandlerRootView>
     </View>
   );
 }
