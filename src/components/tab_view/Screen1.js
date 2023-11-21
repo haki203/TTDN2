@@ -86,7 +86,8 @@ const Screen1 = ({ navigation, id }) => {
 
         {/* Text */}
         <View style={styles.containerText}>
-          <Text style={styles.rendername}>{title}</Text>
+          <Text style={styles.rendername}>{title.substring(0, 20)}</Text>
+
           <Text style={styles.renderauthor}>{authorId}</Text>
         </View>
         {/* IconAdd */}
@@ -163,8 +164,8 @@ const styles = StyleSheet.create({
     margin: 20,
     borderRadius: 10
   },
-  renderauthor:{
-    color:'black'
+  renderauthor: {
+    color: 'black'
   }
 })
 
