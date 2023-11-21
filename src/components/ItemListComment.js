@@ -45,7 +45,7 @@ const ItemListComment = (props) => {
                     </View>
                     <View style={styles.Star}>
                         {dulieu.rate > 4.5 ? (
-                            <View  style={styles.Star}>
+                            <View style={styles.Star}>
                                 <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
                                 <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
                                 <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
@@ -55,7 +55,7 @@ const ItemListComment = (props) => {
                         ) : (
                             <View >
                                 {dulieu.rate > 3.5 && dulieu.rate < 4.5 ? (
-                                    <View  style={styles.Star}>
+                                    <View style={styles.Star}>
                                         <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
                                         <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
                                         <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
@@ -65,7 +65,7 @@ const ItemListComment = (props) => {
                                 ) : (
                                     <View>
                                         {dulieu.rate > 2.5 && dulieu.rate < 3.5 ? (
-                                            <View  style={styles.Star}>
+                                            <View style={styles.Star}>
                                                 <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
                                                 <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
                                                 <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
@@ -76,7 +76,7 @@ const ItemListComment = (props) => {
                                         ) : (
                                             <View>
                                                 {dulieu.rate > 1.5 && dulieu.rate < 2.5 ? (
-                                                    <View  style={styles.Star}>
+                                                    <View style={styles.Star}>
                                                         <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
                                                         <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
                                                         <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
@@ -85,7 +85,7 @@ const ItemListComment = (props) => {
 
                                                     </View>
                                                 ) : (
-                                                    <View  style={styles.Star}>
+                                                    <View style={styles.Star}>
                                                         <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
                                                         <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
                                                         <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
@@ -113,13 +113,25 @@ const ItemListComment = (props) => {
 
                     </View>
                     <View>
-                        {showFullText ? (
-                            <Text style={{ fontWeight: '400', color: '#272956', fontSize: 16 }}>Nội dung: {dulieu.content}
-                                <Text onPress={() => setShowFullText(!showFullText)} style={{ fontWeight: 'bold', color: 'black' }}>{showFullText ? "Ẩn bớt" : "Xem thêm..."}</Text>
-                            </Text>
+                        {dulieu.content.length > 50 ? (
+                            showFullText ? (
+                                <Text style={{ fontWeight: '400', color: '#272956', fontSize: 16 }}>
+                                    Nội dung: {dulieu.content}
+                                    <Text onPress={() => setShowFullText(!showFullText)} style={{ fontWeight: 'bold', color: 'black' }}>
+                                        {showFullText ? " Ẩn bớt" : "Xem thêm..."}
+                                    </Text>
+                                </Text>
+                            ) : (
+                                <Text style={{ fontWeight: '400', color: '#272956', fontSize: 16 }}>
+                                    Nội dung: {dulieu.content.substring(0, 50)}...
+                                    <Text onPress={() => setShowFullText(!showFullText)} style={{ fontWeight: 'bold', color: 'black' }}>
+                                        {" Xem thêm"}
+                                    </Text>
+                                </Text>
+                            )
                         ) : (
-                            <Text style={{ fontWeight: '400', color: '#272956', fontSize: 16 }}>Nội dung: {dulieu.content.substring(0, 120)}...
-                                <Text onPress={() => setShowFullText(!showFullText)} style={{ fontWeight: 'bold', color: 'black' }}>{showFullText ? "Ẩn bớt" : "Xem thêm"}</Text>
+                            <Text style={{ fontWeight: '400', color: '#272956', fontSize: 16 }}>
+                                Nội dung: {dulieu.content}
                             </Text>
                         )}
                     </View>

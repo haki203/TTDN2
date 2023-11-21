@@ -231,7 +231,11 @@ const BookDetail = (props) => {
                 console.log("Kết quả nè", response);
                 if (response.result) {
                     Alert.alert('Đăng thành công');
+                    setTitle("")
+                    setContent("")
+                    setRating(0)
                     setDobModalVisible1(false);
+                    Comment(postData.bookId)
 
                 }
                 else {
@@ -654,7 +658,7 @@ const BookDetail = (props) => {
                                     <Icon_3 onPress={() => setDobModalVisible(false)} style={styles.Close} name="closecircleo" size={28} color="#272956" />
                                 </View>
                                 <FlatList style={styles.List_Comment}
-                                    data={dataCmt}
+                                    data={dataCmt.slice().reverse()}
                                     renderItem={({ item }) => <ItemListComment dulieu={item} navigation={navigation} />}
                                     keyExtractor={item => item._id}
                                     showsVerticalScrollIndicator={false}
