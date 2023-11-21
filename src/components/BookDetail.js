@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button, Modal, ActivityIndicator, TextInput } from 'react-native'
 import React, { useState, useContext, useEffect,useCallback ,useRef } from 'react';
 import Icon_1 from 'react-native-vector-icons/Ionicons';
@@ -153,7 +154,7 @@ const BookDetail = (props) => {
     // const { isTabVisible, setIsTabVisible } = useContext(AppContext);
     const longText = "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời.";
     const Read = () => {
-        navigation.navigate('Read',{id:bookData._id})
+        navigation.navigate('Read',{id:bookData.id})
     }
     const Back = useCallback(() => {
         if (route.params && route.params.fromItem) {
