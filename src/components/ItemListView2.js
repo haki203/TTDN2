@@ -34,7 +34,7 @@ const ItemListView2 = (props) => {
                         <Text style={{ marginTop: 3, fontSize: 10, fontFamily: 'Poppins-Medium' }}>Audio Book</Text>
                         <View style={{ width: 200, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <View style={styles.click}>
-                                <Icon name="playcircleo" size={20} color='black' />
+                                <Icon name="playcircleo" size={20} color='black' onPress={() => navigation.navigate('Play')} />
                                 <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium' }}>
                                     Nghe
                                 </Text>
@@ -56,8 +56,7 @@ const ItemListView2 = (props) => {
                                     </Text>}
                             </View>
                             <View style={styles.click}>
-                                <Icon name="infocirlceo" size={20} color='black' />
-
+                                <Icon name="infocirlceo" size={20} color='black' onPress={() => navigation.navigate('Detail', { itemId: dulieu._id },)} />
 
                                 <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium' }}>
                                     Chi tiết
