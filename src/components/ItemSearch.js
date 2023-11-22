@@ -30,18 +30,18 @@ const ItemSearch = (props) => {
     }
 
   }, []);
-  const onClickDetail = async () =>{
+  const onClickDetail = async () => {
     // console.log(id);
     navigation.navigate('Detail', { itemId: id });
     const reponse = await AxiosIntance().get(`/product/search/select/${id}`);
     console.log("response day: ", reponse)
     if (reponse.result == true) {
-      
+
     }
-   
+
   }
   return (
-    <TouchableOpacity onPress={() => onClickDetail()}>
+    <TouchableOpacity onLongPress={() => onClickDetail()}>
       <View style={{ flexDirection: 'row', marginTop: 20 }}>
         <Image style={styles.image1} source={{ uri: product.image }}></Image>
         <View style={{ justifyContent: 'center' }}>
