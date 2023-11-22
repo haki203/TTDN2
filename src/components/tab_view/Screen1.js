@@ -16,8 +16,7 @@ const namebook_color = "#272956";
 
 const Screen1 = ({ navigation, id }) => {
 
-  const [datasearch, setDatasearch] = useState([]);
-  const [datapublicAt, setDatapublicAt] = useState([]);
+  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [author, setAuthor] = useState('Đang cập nhật');
   const [textHot, setTextHot] = useState("Sách hot");
@@ -49,11 +48,7 @@ const Screen1 = ({ navigation, id }) => {
           }
 
         }
-
-        const sortedpublicAt = arrayData.slice().sort((a, b) => b.publicAt - a.publicAt);
-        const sortedsearch = arrayData.slice().sort((a, b) => b.search - a.search);
-        setDatasearch(sortedsearch);
-        setDatapublicAt(sortedpublicAt);
+        setData(arrayData);
         setIsLoading(false)
       }
 
@@ -86,8 +81,7 @@ const Screen1 = ({ navigation, id }) => {
 
         {/* Text */}
         <View style={styles.containerText}>
-          <Text style={styles.rendername}>{title.substring(0, 20)}</Text>
-
+          <Text style={styles.rendername}>{title}</Text>
           <Text style={styles.renderauthor}>{authorId}</Text>
         </View>
         {/* IconAdd */}
@@ -111,7 +105,7 @@ const Screen1 = ({ navigation, id }) => {
       }
       <FlatList
         style={{ flexGrow: 0, paddingBottom: 20 }}
-        data={datasearch}
+        data={data}
         renderItem={({ item }) => <ItemBook item={item} navigation={navigation} />}
         keyExtractor={item => item.id}
         horizontal={true}
@@ -132,7 +126,7 @@ const Screen1 = ({ navigation, id }) => {
       }
       <FlatList
         style={{ flexGrow: 0 }}
-        data={datapublicAt}
+        data={data}
         renderItem={({ item }) => <ItemBook item={item} navigation={navigation} />}
         keyExtractor={item => item.id}
         horizontal={true}
@@ -164,8 +158,14 @@ const styles = StyleSheet.create({
     margin: 20,
     borderRadius: 10
   },
-  renderauthor: {
-    color: 'black'
+  renderauthor:{
+    color:'black'
   }
 })
 
+const dataImagePopularDeals = [
+  { id: 0, book_name: 'Catcher in the Rye', author_name: 'J.D. Salinger', img: require('../tab_view/image/image103.png') },
+  { id: 1, book_name: 'Mango', author_name: '1kg', img: require('../tab_view/image/image98.png'), },
+  { id: 2, book_name: 'Banana', author_name: '1kg', img: require('../tab_view/image/image103.png') },
+  { id: 3, book_name: 'Strawberry', author_name: '1kg', img: require('../tab_view/image/image98.png'), },
+];

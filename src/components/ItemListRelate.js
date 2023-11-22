@@ -8,15 +8,13 @@ import ItemListComment from './ItemListComment';
 import AxiosIntance from '../axios/AxiosIntance';
 import { URI } from '../../server/public/assets/vendor/tinymce/tinymce';
 const { width, height } = Dimensions.get('window');
+
 const ItemListRelate = (props) => {
     const {dulieu,navigation} = props;
-    const OnClick=() =>{
-        navigation.navigate('Navigate', { itemId:dulieu._id, navigation: navigation })
-    }
     return (
         <View>
             <View>
-                <TouchableOpacity onPress={()=>OnClick()}>
+                <TouchableOpacity onPress={()=> navigation.navigate('Detail', { itemId:dulieu._id })}>
                     <Image source={{uri: dulieu.image}} style={styles.FlatList_Image} />
                     <Text style={styles.FlatList_Name1}>{dulieu.title}</Text>
                     {/* <Text style={styles.FlatList_Name2}>{dulieu.authorId}</Text> */}

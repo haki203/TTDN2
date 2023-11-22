@@ -21,6 +21,15 @@ const ItemListView = (props) => {
   };
 
 
+  const rightSwipeable = () => {
+    return (
+      <View style={{ marginTop: 16, height: 80 }}>
+        <TouchableOpacity onPress={showalert} style={{ width: 80, height: 80, backgroundColor: '#C4C4C4', justifyContent: 'center', alignItems: 'center' }}>
+          <Icon2 name='delete' size={20} />
+        </TouchableOpacity>
+      </View>
+    )
+  };
   const showalert = () => {
     Alert.alert(
       //title
@@ -33,9 +42,7 @@ const ItemListView = (props) => {
           onPress: () => deleteFavorite()
         },
         {
-          text: 'Không',
-          onPress: () => setModalVisible(!isModalVisible)
-
+          text: 'Không'
         },
       ],
       { cancelable: false },
@@ -65,52 +72,56 @@ const ItemListView = (props) => {
 
   return (
     <View style={styles.container}>
+      <GestureHandlerRootView>
+        <Swipeable renderLeftActions={false} renderRightActions={rightSwipeable}>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Detail', { itemId: dulieu.book._id })} >
-        <View style={styles.body}>
-          <Image style={styles.image} source={{ uri: dulieu.book.image }} />
-          <View style={styles.name}>
-            <View style={{ flexDirection: 'column' }}>
-              <Text style={styles.book_name} >{dulieu.book.title}</Text>
-              <Text style={{ color: 'black' }}>{dulieu.book.authorId}</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Detail', { itemId: dulieu.book._id })} >
+            <View style={styles.body}>
+              <Image style={styles.image} source={{ uri: dulieu.book.image }} />
+              <View style={styles.name}>
+                <View style={{ flexDirection: 'column' }}>
+                  <Text style={styles.book_name} >{dulieu.book.title}</Text>
+                  <Text style={styles.author_name}>{dulieu.book.authorId}</Text>
+                </View>
+              </View>
+              <TouchableOpacity onPress={toggleModal}>
+                <Icon style={styles.icon} name='dots-three-vertical' size={20} />
+              </TouchableOpacity>
+
+              <Modal animationType="slide" transparent={true} visible={isModalVisible}>
+                <View style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', width: '100%', height: '100%' }}>
+                  <View style={styles.containerModal}>
+                    <Text style={styles.titleModal}>Tùy chọn</Text>
+                    <View style={styles.bodyModal}>
+                      <TouchableOpacity onPress={showalert}>
+                        <View style={styles.itembody}>
+                          <View style={styles.itemicon}>
+                            <Icon2 name='delete' color="#272956" size={13} />
+                          </View>
+                          <Text style={styles.itemTxt}>Xóa khỏi mục yêu thích</Text>
+                        </View >
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => navigation.navigate('Detail', { itemId: dulieu.book._id }, toggleModal())}>
+                        <View style={styles.itembody}>
+                          <View style={styles.itemicon}>
+                            <Icon2 name='info' color="#272956" size={15} />
+                          </View>
+                          <Text style={styles.itemTxt}>Thông tin sách</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                    <Icon2 onPress={toggleModal} style={styles.Close} name="closecircleo" size={28} color="#272956" />
+                  </View>
+                </View>
+              </Modal>
+
+
             </View>
-          </View>
-          <TouchableOpacity onPress={toggleModal}>
-            <Icon style={styles.icon} name='dots-three-vertical' size={20} color={'black'} />
           </TouchableOpacity>
 
-          <Modal animationType="slide" transparent={true} visible={isModalVisible}>
-            <View style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', width: '100%', height: '100%' }}>
-              <View style={styles.containerModal}>
-                <Text style={styles.titleModal}>Tùy chọn</Text>
-                <View style={styles.bodyModal}>
-                  <TouchableOpacity onPress={showalert}>
-                    <View style={styles.itembody}>
-                      <View style={styles.itemicon}>
-                        <Icon2 name='delete' color="#272956" size={13} />
-                      </View>
-                      <Text style={styles.itemTxt}>Xóa khỏi mục yêu thích</Text>
-                    </View >
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => navigation.navigate('Detail', { itemId: dulieu.book._id }, toggleModal())}>
-                    <View style={styles.itembody}>
-                      <View style={styles.itemicon}>
-                        <Icon2 name='info' color="#272956" size={15} />
-                      </View>
-                      <Text style={styles.itemTxt}>Thông tin sách</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <Icon2 onPress={toggleModal} style={styles.Close} name="closecircleo" size={28} color="#272956" />
-              </View>
-            </View>
-          </Modal>
+        </Swipeable>
 
-
-        </View>
-      </TouchableOpacity>
-
-
+      </GestureHandlerRootView>
     </View>
   );
 }
@@ -121,9 +132,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingLeft: 10,
-    paddingRight: 5,
-    backgroundColor: '#FFFFFF',
-
+    paddingRight: 5
   }, image: {
     margin: 10,
     width: 60,
