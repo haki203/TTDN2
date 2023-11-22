@@ -3,11 +3,10 @@ import React, { useState, useEffect } from 'react'
 import { useRoute } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import AxiosIntance from '../axios/AxiosIntance';
-import Icon from 'react-native-vector-icons/AntDesign';
 const bacroundColor = '#272956';
 const ColorAuthor = '#4838D1';
 const ItemSearch = (props) => {
-  const { product, navigation, onDeleteItem  } = props;
+  const { product, navigation } = props;
   const [name, setName] = useState("Chưa có");
   const [id, setId] = useState(product._id);
 
@@ -31,26 +30,19 @@ const ItemSearch = (props) => {
     }
 
   }, []);
-  const onClickDetail = async () =>{
+  const onClickDetail = async () => {
     // console.log(id);
     navigation.navigate('Detail', { itemId: id });
     const reponse = await AxiosIntance().get(`/product/search/select/${id}`);
-    // console.log("response day: ", reponse)
+    console.log("response day: ", reponse)
     if (reponse.result == true) {
-      
-    }
-   
-  }
 
-  const onClickItem = () =>{
-    onDeleteItem(product._id);
+    }
+
   }
   return (
-    <TouchableOpacity onPress={() => onClickDetail()}>
-      {/* <TouchableOpacity style={styles.closes} onPress={() => onClickItem()}>
-          <Icon name="close" size={25} color="#000" />
-        </TouchableOpacity> */}
-      <View style={{ flexDirection: 'row', marginTop: 20,  }}>
+    <TouchableOpacity onLongPress={() => onClickDetail()}>
+      <View style={{ flexDirection: 'row', marginTop: 20 }}>
         <Image style={styles.image1} source={{ uri: product.image }}></Image>
         <View style={{ justifyContent: 'center' }}>
           <Text style={styles.nameBook}>{product.title}</Text>
@@ -86,10 +78,4 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     lineHeight: 18,
   },
-  closes:{
-    position: 'absolute',
-    right: 0,
-    marginRight: '4%',
-    marginTop: '12%'
-  }
 })

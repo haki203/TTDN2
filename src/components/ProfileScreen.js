@@ -8,9 +8,9 @@ const bgcolor = "#FFFFFF";
 const txtcolor = "#2E2E5D";
 const color_upload = "#FF97A3";
 import { AppContext } from '../navigation/AppContext';
-// import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import AxiosIntance from '../axios/AxiosIntance';
-// import storage from '@react-native-firebase/storage';
+import storage from '@react-native-firebase/storage';
 const log_outcolor = "#F77A55";
 const ProfileScreen = (props) => {
     const { navigation } = props;
@@ -30,37 +30,37 @@ const ProfileScreen = (props) => {
         setshowImage(result.assets[0].uri);
 
 
-    const imageUri = result.assets[0].uri;
-    const filename = imageUri.substring(imageUri.lastIndexOf('/') + 1);
+        const imageUri = result.assets[0].uri;
+        const filename = imageUri.substring(imageUri.lastIndexOf('/') + 1);
 
-    const storageRef = storage().ref('images/' + filename);
-    const task = storageRef.putFile(imageUri);
+        const storageRef = storage().ref('images/' + filename);
+        const task = storageRef.putFile(imageUri);
 
-    task.on('state_changed', snapshot => {
-        
-    }, error => {
-        console.error('Firebase storage error:', error);
-    }, async () => {
-        // up thành công dowload link ảnh về
-        const downloadURL = await storageRef.getDownloadURL();
-        console.log('File available at:', downloadURL);
+        task.on('state_changed', snapshot => {
 
-        // sửa dụng dowmloadURL để update thông tin 
-        setinfoUser({ ...infoUser, avatar: downloadURL });
-    });
+        }, error => {
+            console.error('Firebase storage error:', error);
+        }, async () => {
+            // up thành công dowload link ảnh về
+            const downloadURL = await storageRef.getDownloadURL();
+            console.log('File available at:', downloadURL);
+
+            // sửa dụng dowmloadURL để update thông tin 
+            setinfoUser({ ...infoUser, avatar: downloadURL });
+        });
     };
 
     const updateProfile = async () => {
         try {
-            const response = await AxiosIntance().post("/user/update-user", { id:infoUser.id,name: infoUser.name, email: infoUser.email, phone: infoUser.phone, avatar: infoUser.avatar })
+            const response = await AxiosIntance().post("/user/update-user", { id: infoUser.id, name: infoUser.name, email: infoUser.email, phone: infoUser.phone, avatar: infoUser.avatar })
             if (response.result == true) {
                 ToastAndroid.show("Cap nhat thanh cong", ToastAndroid.SHORT);
             } else {
                 ToastAndroid.show("Cap nhat that bai", ToastAndroid.SHORT);
             }
-        
+
         } catch (error) {
-            console.log("loi ne: ",error);
+            console.log("loi ne: ", error);
         }
 
     }

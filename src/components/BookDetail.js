@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button, Modal, ActivityIndicator, TextInput } from 'react-native'
-import React, { useState, useContext, useEffect,useCallback  } from 'react';
+/* eslint-disable prettier/prettier */
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button, Modal, ActivityIndicator, TextInput, ToastAndroid } from 'react-native'
+import React, { useState, useContext, useEffect, useCallback, useRef } from 'react';
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/FontAwesome';
 import Icon_3 from 'react-native-vector-icons/AntDesign';
@@ -14,7 +15,10 @@ import { useRoute } from '@react-navigation/native';
 import { Alert } from 'react-native';
 const BookDetail = (props) => {
     const { infoUser } = useContext(AppContext);
-
+    const [, updateState] = useState();
+    const scrollViewRef = useRef()
+    // Hàm để buộc render lại màn hình
+    const forceUpdate = () => updateState({});
     const { itemId } = props.route.params;
     const route = props.route;
     const [authorData, setAuthorData] = useState([]);
@@ -68,6 +72,7 @@ const BookDetail = (props) => {
             }
             else {
                 setIsHearted(false);
+
             }
         }
         //------------------
@@ -75,10 +80,16 @@ const BookDetail = (props) => {
     }
 
     useEffect(() => {
-        console.log("reload ne");
+        setIsLoading(true)
+
+        console.log("đang reload ne----------------");
+        forceUpdate()
+        scrollViewRef.current.scrollTo({ y: 0, animated: true });
+
         DetailBook();
 
     }, [route.params]);
+
     // useFocusEffect(
     //     React.useCallback(() => {
     //         DetailBook();
@@ -144,17 +155,17 @@ const BookDetail = (props) => {
     // const { isTabVisible, setIsTabVisible } = useContext(AppContext);
     const longText = "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời.";
     const Read = () => {
-        navigation.navigate('Read',{id:bookData._id})
+        navigation.navigate('Read', { id: bookData.id })
     }
     const Back = useCallback(() => {
         if (route.params && route.params.fromItem) {
-          // Nếu từ màn hình Item navigate đến Detail, thì quay lại màn hình Item
-          navigation.goBack(null); // Sử dụng null để tránh quay lại màn hình trước đó (Item)
+            // Nếu từ màn hình Item navigate đến Detail, thì quay lại màn hình Item
+            navigation.goBack(null); // Sử dụng null để tránh quay lại màn hình trước đó (Item)
         } else {
-          // Nếu không, thì quay lại màn hình Home
-          navigation.goBack();
+            // Nếu không, thì quay lại màn hình Home
+            navigation.goBack();
         }
-      }, [route.params, navigation]);
+    }, [route.params, navigation]);
 
     const toggleShowMore = () => {
         setShowMore(prevShowMore => !prevShowMore);
@@ -173,11 +184,14 @@ const BookDetail = (props) => {
             const response = await AxiosIntance().post("/product/favourite/new/", favouriteData);
             console.log("Data trả về nè: ", response);
 
-            if (response.result) {
+            if (response.message == "yeu thich thanh cong") {
                 setIsHearted(!isHearted, true);
+                ToastAndroid.show("Yêu thích thành công ", ToastAndroid.SHORT);
             }
             else {
                 setIsHearted(!isHearted, false);
+                ToastAndroid.show("Hủy yêu thích thành công ", ToastAndroid.SHORT);
+
             }
         } catch (error) {
         }
@@ -277,7 +291,7 @@ const BookDetail = (props) => {
                     <Icon_2 name={isHearted ? 'heart' : 'heart-o'} size={30} color="red" />
                 </TouchableOpacity>
             </View>
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
                 <View style={styles.Image_Container}>
                     <View>
                         <Image style={styles.View_Image} source={{ uri: bookData.image }} />
@@ -683,8 +697,42 @@ const BookDetail = (props) => {
     )
 }
 
-export default BookDetail
+export default BookDetail;
+export const DetailBookCC = async (itemId) => {
+    const response = await AxiosIntance().get("/product/" + itemId)
+    const Data2 = {
+        id: response.product._id,
+        title: response.product.title,
+        image: response.product.image,
+        description: response.product.description,
+        rate: response.product.rate,
+        category: response.product.categoryId,
+    }
+    setBookData(Data2);
+    AuthorBook(response.product.authorId)
+    Relate(response.product.categoryId)
+    Comment(response.product._id)
 
+    // ---------------------
+    console.log("------dang goi api getHeart-----");
+
+    const res = await AxiosIntance().get("/product/favourite/get-book-by-user/" + infoUser.id);
+    console.log("Sách nè: ", res);
+    console.log("id sach detail ne ", Data2.id);
+    for (let index = 0; index < res.data.length; index++) {
+        console.log("id sach api ne ", res.data[index].favourite.bookId);
+        if (res.data[index].favourite.bookId == Data2.id) {
+            setIsHearted(true);
+            console.log("id sach trung ne ", res.data[index].favourite.bookId);
+            return;
+        }
+        else {
+            setIsHearted(false);
+        }
+    }
+    //------------------
+    setIsLoading(false)
+}
 const styles = StyleSheet.create({
     Container: {
         flex: 1,

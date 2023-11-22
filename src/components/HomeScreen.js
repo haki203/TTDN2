@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, TextInput, FlatList, ScrollView, ToastAndroid } from 'react-native'
+import { Image, StyleSheet, Text, View, TextInput, FlatList, ScrollView, ToastAndroid, ActivityIndicator } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import Icon from "react-native-vector-icons/Feather"
 import Icon2 from "react-native-vector-icons/AntDesign"
@@ -22,6 +22,7 @@ const HomeScreen = (props) => {
   const { infoUser } = useContext(AppContext);
   const { navigation } = props;
   const [dataNe, setdataNe] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
 
@@ -63,6 +64,7 @@ const HomeScreen = (props) => {
 
   useEffect(() => {
     const getAllCate = async () => {
+
       const respone = await AxiosIntance().get("/product/category/getAlls");
 
 
@@ -120,6 +122,7 @@ const HomeScreen = (props) => {
   );
   return (
     <View style={styles.container}>
+
       <View style={styles.header}>
         <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
           <Image style={styles.menu} source={require('../assets/images/logo2.png')} size={22} />
@@ -211,10 +214,10 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5
 
   },
-  label:{
-    fontWeight:'700',
-    fontSize:16,
-    color:'#cdcdcd',
+  label: {
+    fontWeight: '700',
+    fontSize: 16,
+    color: '#cdcdcd',
 
   },
   activeLabel: {

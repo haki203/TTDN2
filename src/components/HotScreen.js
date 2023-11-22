@@ -1,10 +1,12 @@
 import {
   StyleSheet, Text,
   View, Image, ScrollView,
-  FlatList, Animated, TouchableOpacity
+  FlatList, Animated, TouchableOpacity, ActivityIndicator
 } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../navigation/AppContext';
+import { useFocusEffect } from '@react-navigation/native';
+
 import AxiosIntance from '../axios/AxiosIntance';
 
 import ItemListView2 from './ItemListView2';
@@ -17,26 +19,46 @@ const HotScreen = (props) => {
   const { navigation } = props;
   const { infoUser } = useContext(AppContext);
   const [dataNe, setdataNe] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+
+  const settings = () => (
+    navigation.navigate('Setting')
+
+  );
+
+  const getAllCate = async () => {
+
+    const respone = await AxiosIntance().get("/product");
+    if (respone.result == true) {
+      for (let i = 0; i < respone.product.length; i++) {
+
+        const sortedData = respone.product.slice().sort((a, b) => b.search - a.search);
+        setdataNe(sortedData)
+        setIsLoading(false)
+
+      }
+
+    } else {
+      ToastAndroid.show("get data", ToastAndroid.SHORT);
+    }
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsLoading(true)
+      console.log("reloadr ne: ");
+      getAllCate();
+
+      return () => {
+        // Cleanup code (optional) when the screen loses focus
+      };
+    }, [])
+  );
 
   useEffect(() => {
-    const getAllCate = async () => {
-      const respone = await AxiosIntance().get("/product");
-      if (respone.result == true) {
-        for (let i = 0; i < respone.product.length; i++) {
-          const data1 = {
-            search: respone.product[i].search
-          }
-          const sortedData = respone.product.slice().sort((a, b) => b.search - a.search);
 
-          setdataNe(sortedData)
 
-        }
-
-      } else {
-        ToastAndroid.show("get data", ToastAndroid.SHORT);
-      }
-    }
     getAllCate();
 
   }, [])
@@ -46,25 +68,41 @@ const HotScreen = (props) => {
       <View style={[styles.Headers]}>
         <View style={styles.header}>
           <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
-            <Text style={styles.authen}>Hots</Text>
+            <Text style={styles.authen}>Xu hướng</Text>
           </View>
 
           <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
             <TouchableOpacity>
               <Image style={styles.tok} source={require('../assets/images/search.png')} />
             </TouchableOpacity>
-            <Image style={styles.profile} source={{ uri: infoUser.avatar }} />
+            <TouchableOpacity onPress={settings}>
+
+              <Image style={styles.profile} source={{ uri: infoUser.avatar }} />
+            </TouchableOpacity>
+
           </View>
         </View>
       </View>
-      <View style={styles.body}>
-        <FlatList
-          data={dataNe}
-          renderItem={({ item }) => <ItemListView2 dulieu={item} navigation={navigation} />}
-          keyExtractor={item => item._id}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
+      {
+        isLoading ?
+          (
+            <View style={{ width: '100%', height: '100%', alignContent: 'center', justifyContent: 'center' }}><ActivityIndicator size={30} color={'black'} /></View>
+          ) :
+
+          (
+            <View style={styles.body}>
+
+              <FlatList
+                data={dataNe}
+                renderItem={({ item }) => <ItemListView2 dulieu={item} navigation={navigation} />}
+                keyExtractor={item => item._id}
+                showsVerticalScrollIndicator={false}
+              />
+            </View>
+
+          )
+      }
+
     </View>
   )
 }
@@ -102,7 +140,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     width: '100%',
-    paddingTop: 10,
+    paddingBottom: 75
 
   },
   header: {
