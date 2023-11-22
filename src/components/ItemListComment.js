@@ -5,6 +5,7 @@ import Icon_2 from 'react-native-vector-icons/FontAwesome';
 import Icon_3 from 'react-native-vector-icons/AntDesign';
 import { AppContext } from '../navigation/AppContext'
 const { width, height } = Dimensions.get('window');
+import moment from 'moment-timezone';
 
 const ItemListComment = (props) => {
     const [showMore, setShowMore] = useState(false);
@@ -31,10 +32,6 @@ const ItemListComment = (props) => {
     };
 
     const [isDobModalVisible, setDobModalVisible] = useState(false);
-
-
-
-
     return (
         <View>
             <View>
@@ -136,7 +133,6 @@ const ItemListComment = (props) => {
                         )}
                     </View>
                     <Text style={[styles.Text_NoiDung_DocGia, { fontSize: 12, fontWeight: 'bold', textAlign: 'right' }]}>{dulieu.time}</Text>
-                    {/* <Text style={styles.Text_NoiDung_DocGia}> {dulieu.likeBy.length}</Text> */}
                 </View>
             </View>
         </View>
