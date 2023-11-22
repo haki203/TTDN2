@@ -2,10 +2,11 @@ import { StyleSheet, Text, View, ScrollView, FlatList, Image, TouchableOpacity, 
 
 import React, { useContext, useEffect, useState } from 'react'
 import AxiosIntance from '../axios/AxiosIntance'
-
+import { useFocusEffect } from '@react-navigation/native';
 import ItemListView from './ItemListView';
 import Icon from "react-native-vector-icons/AntDesign"
 import { AppContext } from '../navigation/AppContext';
+import { route } from '../../server/routes';
 const { width, height } = Dimensions.get('window');
 
 const color_text = "#272956";
@@ -22,6 +23,10 @@ const FavouriteScreen = (props) => {
 
 
 
+  const settings = () => (
+    navigation.navigate('Setting')
+
+  );
   const { navigation } = props;
   const search = () => (
     navigation.navigate('SearchScreen')
@@ -32,17 +37,11 @@ const FavouriteScreen = (props) => {
 
     setTextNoti("")
     try {
-      const getId = {
-        id: infoUser.id
-      }
+
       let arrayData = [];
-      console.log("id ne: ", infoUser.id);
       const response = await AxiosIntance().get("product/favourite/get-book-by-user/" + infoUser.id);
-      console.log("res ne: ", response);
       if (response.result == true) {
-        console.log("dataindex");
         if (response.data.length < 1) {
-          console.log("chua co sach yeu thichh");
           setIsLoading(false)
           setTextNoti('Chưa có sách nào trong mục yêu thích.')
         } else {
@@ -52,7 +51,6 @@ const FavouriteScreen = (props) => {
               let dataIndex = response.data[i]
               // lay author
               const res = await AxiosIntance().get("/product/author/" + response.data[i].book.authorId)
-              console.log("----");
 
               dataIndex.book.authorId = res.author.name;
               arrayData.push(dataIndex);
@@ -68,6 +66,17 @@ const FavouriteScreen = (props) => {
       console.error("Error fetching data: ", error);
     }
   };
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsLoading(true)
+      console.log("reloadr ne: ");
+      fetchData();
+
+      return () => {
+        // Cleanup code (optional) when the screen loses focus
+      };
+    }, [])
+  );
   useEffect(() => {
 
     const unsubscribe = navigation.addListener('focus', () => {
@@ -77,13 +86,9 @@ const FavouriteScreen = (props) => {
     fetchData();
 
 
-    return unsubscribe;
   },
     []);
 
-  const reload = () => {
-    fetchData();
-  }
 
   return (
     <View style={styles.container}>
@@ -95,15 +100,20 @@ const FavouriteScreen = (props) => {
         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
           <TouchableOpacity onPress={search}>
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
+          </TouchableOpacity >
+          <TouchableOpacity onPress={settings}>
+
+
+            <Image style={styles.profile} source={{ uri: infoUser.avatar }} />
           </TouchableOpacity>
-          <Image style={styles.profile} source={{uri:infoUser.avatar}} />
         </View>
       </View>
-      <Text style={styles.title1} onPress={() => fetchData()}>
-        Các sách yêu thích
-      </Text>
+
 
       <View style={styles.flatlist}>
+        <Text style={styles.title1} onPress={() => fetchData()}>
+          Các sách yêu thích
+        </Text>
         <Text style={{ fontSize: 16, color: 'black', fontWeight: 500, position: 'absolute', start: 25, top: '15%' }}>{textNoti}</Text>
         {
           isLoading ?
@@ -117,7 +127,7 @@ const FavouriteScreen = (props) => {
             )
         }
         <FlatList
-          data={data}
+          data={data.slice().reverse()}
           renderItem={({ item }) => <ItemListView dulieu={item} navigation={navigation} reloadItem={fetchData} />}
           keyExtractor={item => item._id}
           showsVerticalScrollIndicator={false}
@@ -134,7 +144,6 @@ export default FavouriteScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: bgcolor,
   }, title: {
     color: color_text,
     fontFamily: 'Poppins',
@@ -149,10 +158,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     paddingLeft: 25,
-    marginBottom: 5
+    marginBottom: 5,
+    backgroundColor: '#FFFFFF',
+
   }, flatlist: {
     width: '100%',
-    height: '100%'
+    height: '100%',
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30
+
   }, plus: {
     width: 290,
     padding: 25,
@@ -171,7 +186,8 @@ const styles = StyleSheet.create({
     marginRight: 8
   }, profile: {
     width: 40,
-    height: 40
+    height: 40,
+    borderRadius: 40
   },
   authen: {
     marginLeft: 8,
@@ -184,57 +200,3 @@ const styles = StyleSheet.create({
 
   }
 })
-
-const DATAne = [
-  {
-    "id": 1,
-    "book_name": "Manusia Setengah Dewa",
-    "author_name": "Bonifas",
-    "image": require('../assets/images/Rectangle1.png'),
-  }, {
-    "id": 2,
-    "book_name": "Tanpa Karena",
-    "author_name": "Takos",
-    "image": require('../assets/images/Rectangle2.png'),
-  }, {
-    "id": 3,
-    "book_name": "Persahabatan Bagai Kepompong",
-    "author_name": "Rosberg",
-    "image": require('../assets/images/Rectangle3.png'),
-  }, {
-    "id": 4,
-    "book_name": "Sahabat Sejati",
-    "author_name": "Coviello",
-    "image": require('../assets/images/Rectangle4.png'),
-  }, {
-    "id": 5,
-    "book_name": "Sahabat Sejati",
-    "author_name": "Chugg",
-    "image": require('../assets/images/Rectangle5.png'),
-  }, {
-    "id": 6,
-    "book_name": "Ana",
-    "author_name": "Gerger",
-    "image": require('../assets/images/Rectangle1.png'),
-  }, {
-    "id": 7,
-    "book_name": "Stevana",
-    "author_name": "Riddle",
-    "image": require('../assets/images/Rectangle1.png'),
-  }, {
-    "id": 8,
-    "book_name": "Rad",
-    "author_name": "Parfrey",
-    "image": require('../assets/images/Rectangle1.png'),
-  }, {
-    "id": 9,
-    "book_name": "Billye",
-    "author_name": "Itzhaki",
-    "image": require('../assets/images/Rectangle1.png'),
-  }, {
-    "id": 10,
-    "book_name": "Roselle",
-    "author_name": "Joberne",
-    "image": require('../assets/images/Rectangle1.png'),
-  }
-]

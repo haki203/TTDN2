@@ -1,60 +1,118 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Icon from "react-native-vector-icons/AntDesign"
+import AxiosIntance from '../axios/AxiosIntance';
+import { AppContext } from '../navigation/AppContext';
+
 
 const ItemListView2 = (props) => {
-    const { dulieu, navigation } = props;
-    const [isLiked, setIsLiked] = useState(false);
+    const { dulieu, navigation, id } = props;
+    const [data, setData] = useState([]);
+    const { infoUser } = useContext(AppContext);
+    const [bookData, setBookData] = useState([]);
+
+    const route = props.route;
+    const [isHearted, setIsHearted] = useState(false);
+
     const handleLike = () => {
         setIsLiked(!isLiked);
     };
 
+    const DetailBook = async () => {
+        const response = await AxiosIntance().get("/product/" + dulieu._id)
+        const Data2 = {
+            id: response.product._id,
+            title: response.product.title,
+            image: response.product.image,
+            description: response.product.description,
+            rate: response.product.rate,
+            category: response.product.categoryId,
+        }
+        setBookData(Data2);
+
+        // ---------------------
+
+
+        const res = await AxiosIntance().get("/product/favourite/get-book-by-user/" + infoUser.id);
+
+        for (let index = 0; index < res.data.length; index++) {
+
+            if (res.data[index].favourite.bookId == Data2.id) {
+                setIsHearted(true);
+
+                return;
+            }
+            else {
+                setIsHearted(false);
+            }
+        }
+        //------------------
+    }
+
+    useEffect(() => {
+
+        DetailBook();
+
+    }, []);
+
+    const handleHeartPress = async () => {
+        // setIsHearted(!isHearted);
+        try {
+            const favouriteData = {
+                idUser: infoUser.id,
+                idBook: bookData.id,
+            };
+            console.log("favouriteData nè: ", favouriteData);
+            const response = await AxiosIntance().post("/product/favourite/new/", favouriteData);
+            console.log("Data trả về nè: ", response);
+
+            if (response.result) {
+                setIsHearted(!isHearted, true);
+            }
+            else {
+                setIsHearted(!isHearted, false);
+            }
+        } catch (error) {
+        }
+    }
+
+
     return (
         <View style={styles.container}>
-            <View style={styles.datetime}>
-                <View style={styles.date}>
-                    <Text style={{ fontWeight: 'bold', fontSize: 17, color: '#000000', textAlign: 'center', marginTop: 10 }}>
-                        26
-                    </Text>
-                    <Text style={{ fontSize: 15, color: '#000000', textAlign: 'center' }}>
-                        T.8
-                    </Text>
-                </View>
-            </View>
+
             <View style={styles.body}>
                 <View style={styles.bodyimage}>
                     <Image style={styles.image} source={{ uri: dulieu.image }} />
                     <View style={styles.iconimage}>
-                        <Text style={{ color: "#000000", fontFamily: 'Poppins-Medium', fontSize: 13 }} >{dulieu.category}</Text>
-                        <Text style={{ marginTop: 3, fontSize: 10, fontFamily: 'Poppins-Medium' }}>Kinh Doanh - Lãnh Đạo</Text>
+                        <Text style={{ color: "#000000", fontFamily: 'Poppins-Medium', fontSize: 15 }} >{dulieu.title}</Text>
+                        <Text style={{ marginTop: 3, fontSize: 10, fontFamily: 'Poppins-Medium', color: 'black' }}>Sách nghe - Sách nói</Text>
                         <View style={{ width: 200, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <View style={styles.click}>
-                                <Icon name="playcircleo" size={20} color='black' />
-                                <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium' }}>
+                                <Icon name="playcircleo" size={20} color='black' onPress={() => navigation.navigate('Play')} />
+                                <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
                                     Nghe
                                 </Text>
                             </View>
                             <View style={styles.click}>
-                                <TouchableOpacity onPress={handleLike}>
+                                <TouchableOpacity onPress={handleHeartPress}>
                                     <View >
                                         <Icon
-                                            name={isLiked ? 'heart' : 'hearto'}
+                                            name={isHearted ? 'heart' : 'hearto'}
                                             size={20}
-                                            color={isLiked ? 'black' : 'black'}
+                                            color={isHearted ? 'black' : 'black'}
                                         />
                                     </View>
                                 </TouchableOpacity>
-                                {isLiked && <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium' }}>
+                                {isHearted && <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
                                     Đã thích
-                                </Text> || <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium' }}>
+                                </Text> || <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
                                         Yêu thích
                                     </Text>}
                             </View>
                             <View style={styles.click}>
-                                <Icon name="infocirlceo" size={20} color='black' />
+                                <Icon name="infocirlceo" size={20} color='black' onPress={() => navigation.navigate('Detail', { itemId: dulieu._id },)} />
 
-
-                                <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium' }}>
+                                <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
                                     Chi tiết
                                 </Text>
                             </View>
@@ -65,13 +123,13 @@ const ItemListView2 = (props) => {
                     </View>
                 </View>
                 <View style={styles.bodytext}>
-                    <Text style={styles.namebook}>{dulieu.bookname}</Text>
-                    <Text numberOfLines={2} style={styles.content}>{dulieu.content}</Text>
+                    <Text style={styles.namebook}>Tổng quan về sách</Text>
+                    <Text numberOfLines={2} style={styles.content}>{dulieu.description}</Text>
                 </View>
 
             </View>
 
-        </View>
+        </View >
     )
 }
 
@@ -84,17 +142,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingLeft: 10,
         paddingTop: 10,
-        borderBottomWidth:3,
-        borderBottomColor:'#f3f3f3',
-        paddingTop:30,
-        borderRadius:25,
+        borderBottomWidth: 3,
+        borderBottomColor: '#f3f3f3',
+        paddingTop: 30,
+        borderRadius: 25,
     }, datetime: {
         height: 300,
         width: 60
     }, body: {
         height: "100%",
         flexDirection: 'column',
-        display: 'flex'
+        display: 'flex',
+        paddingLeft: 25
     }, bodyimage: {
         width: '100%',
         height: "auto",
@@ -147,7 +206,8 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 2,
         fontFamily: 'Poppins-Medium',
-        marginBottom: 15
+        marginBottom: 15,
+        color: 'black'
     },
 
 })

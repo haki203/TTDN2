@@ -12,7 +12,9 @@ const schema = new Schema({
     audio: { type: String },
     createAt: { type: String},
     updateAt: { type: String },
-    publicAt: { type: String },
+    last_search: { type: Date },
+    search: { type: Number },
+    publicAt: { type: Number },
     rate: { type: Number },
 });
 // Đảm bảo rằng bảng Products chưa được định nghĩa trước đó

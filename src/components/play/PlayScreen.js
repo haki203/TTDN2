@@ -13,8 +13,9 @@ const fontFamily = 'Poppins';
 const sizeIcon = 26;
 const baseImgPath = '../../assets/images/';
 const colorProgressText = '#5849B7';
-const PlayScreen = () => {
+const PlayScreen = (props) => {
     const {isTabVisible, setIsTabVisible} = useContext(AppContext);
+    const {navigation} = props
     //----------------------------------------------------------------------
     const [trackName, setTrackName] = useState("");
     const [onVolume, setOnVolume] = useState(false);
@@ -191,7 +192,7 @@ const PlayScreen = () => {
             <View style={styles.container}>
 
                 <View style={styles.headerContainer}>
-                    <Icon name="caret-down" color={colorTitle} size={sizeIcon} />
+                    <Icon onPress={()=>navigation.goBack()} name="caret-down" color={colorTitle} size={sizeIcon} />
                     <Text style={styles.nameTrack}>{limitText(trackName)}</Text>
                     <Icon name="ellipsis-h" color={colorTitle} size={sizeIcon} />
                 </View>

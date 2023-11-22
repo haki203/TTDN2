@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, Dimensions, Image, FlatList, ScrollView, TextInput, TouchableOpacity, ToastAndroid, ActivityIndicator } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react'
 import ItemSearch from './ItemSearch';
+import { useFocusEffect } from '@react-navigation/native';
 import { AppContext } from '../navigation/AppContext';
 import AxiosIntance from '../axios/AxiosIntance';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -17,6 +18,7 @@ const SearchScreen = (props) => {
   const [imagee, setImagee] = useState([]);
   const [nameauthor, setNameauthor] = useState([]);
   const [isLoading, setisLoading] = useState(true);
+  const [dataRecent, setDataRecent] = useState([]);
   const [searchText, setSearchText] = useState('');
   let timeout = null;
   const countDownSearch = (text) => {
@@ -29,201 +31,61 @@ const SearchScreen = (props) => {
   }
   const search = async (text) => {
     setisLoading(true);
-    const respone = await AxiosIntance().get("/product/search/name?keyword=" + text);
-    respone.product.forEach((product) => {
-      setNameauthor(product.authorId);
-      console.log("Rate:", nameauthor);
-    });
-    // const imageproduct = respone.product.map(product => product.image);
-    // setNameauthor(authorId);
-    if (respone.result == true) {
-      // lay du lieu
-      setdataNe(respone.product);
-      console.log("data ne " + respone.product)
-      // console.log("search " + respone.product);
-      setisLoading(false);
-    }
-    else {
-      ToastAndroid.show("Lay du lieu that bai", ToastAndroid.SHORT);
-    }
-  }
-
-  // const Issearch = async () => {
-  //   setisLoading(true);
-  //   const respone = await AxiosIntance().get("product/search/name?keyword=");
-  //   console.log(respone.result);
-  //   if (respone.result == false) {
-  //     // lay du lieu
-  //     setdataNe(respone.product);
-  //     console.log(respone.product);
-  //     setisLoading(false);
-  //   }
-  //   else {
-  //     ToastAndroid.show("Lay du lieu that bai", ToastAndroid.SHORT);
-  //   }
-  // }
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('focus', () => {
-  //     setIsTabVisible(false)
-  //   });
-
-  //   return unsubscribe;
-  // }, []);
-  const HandleChangeText = (text) => {
-    setSearchText(text)
-    countDownSearch(text)
-    console.log(text);
-
-  }
-  useEffect(() => {
-    const getNews = async () => {
-      setisLoading(true);
-      const respone = await AxiosIntance().get("/product/");
-      // const authorId = respone.product.map(product => product.authorId);
-      // const imageproduct = respone.product.map(product => product.image);
-      // setdataNe(imageproduct)
+    if (text.length > 0) {
+      const respone = await AxiosIntance().get("/product/search/name?keyword=" + text);
       if (respone.result == true) {
-        setdataNe(respone.product)
-        console.log('error product', respone.product);
+        // lay du lieu
+        setdataNe(respone.product);
+        console.log("data neee " + respone.product)
         setisLoading(false);
-      } else {
-        ToastAndroid.show("get product", ToastAndroid.SHORT);
+      }
+      else {
+        ToastAndroid.show("Lay du lieu that bai", ToastAndroid.SHORT);
       }
     }
-    getNews();
+  }
 
+  const HandleChangeText = async (text) => {
+    setSearchText(text)
+    if (text.length > 0) {
+
+      countDownSearch(text)
+    }
+    console.log(text);
+    getNews()
+    console.log(dataNe.length);
+  }
+
+  const getNews = async () => {
+    setisLoading(true);
+    const respone = await AxiosIntance().get("/product/");
+    if (respone.result == true) {
+      setdataNe(respone.product)
+      setisLoading(false);
+    } else {
+      ToastAndroid.show("get product recent", ToastAndroid.SHORT);
+    }
+  }
+  useEffect(() => {
+    getNews();
     return () => {
     }
   }, [])
+  useFocusEffect(
+    React.useCallback(() => {
+      // Code to run when the screen is focused
+      getNews();
+      setSearchText('')
+      return () => {
+        // Cleanup code (optional) when the screen loses focus
+      };
+    }, [])
+  );
 
-  const [data, setData] = useState([
-    {
-      "name": "Herzog - Hane",
-      "category": "Turlock",
-      "image": "https://www.dtv-ebook.com/images/files_2/2020/vuong-gia,-di-thong-tha-dich-lam-an.jpg",
-      "_id": "1"
-    },
-    {
-      "name": "Botsford, Schimmel and Kovacek",
-      "category": "Grapevine",
-      "image": "https://vcdn1-dulich.vnecdn.net/2021/07/16/1-1626437591.jpg?w=460&h=0&q=100&dpr=2&fit=crop&s=i2M2IgCcw574LT-bXFY92g",
-      "_id": "2"
-    },
-    {
-      "name": "Collins - Gutkowski",
-      "category": "Rochester Hills",
-      "image": "https://pos.nvncdn.net/fd5775-40602/ps/20200224_rlGHQmvUk1Lv5YZdipd7evrW.png",
-      "_id": "3"
-    },
-    {
-      "name": "Corwin, Romaguera and Schinner",
-      "category": "Collierville",
-      "image": "https://is4-ssl.mzstatic.com/image/thumb/PurpleSource126/v4/5f/1d/64/5f1d646b-fced-d892-9474-dc8cdf150630/08e8e709-17c9-4186-9881-d34815fca8d2_5.png/643x0w.jpg",
-      "_id": "4"
-    },
-    {
-      "name": "Reinger, Smitham and Osinski",
-      "category": "Spring Hill",
-      "image": "https://www.dtv-ebook.com/images/files_2/2019/am-anh-tu-kiep-truoc-dr.-brian-l.-weiss.jpg",
-      "_id": "5"
-    },
-    {
-      "name": "Dooley Group",
-      "category": "Encinitas",
-      "image": "https://isach.info/images/story/cover/am_anh_tu_kiep_truoc_bi_mat_cua_su_song_va_cai_chet__brian_l_weiss.jpg",
-      "_id": "6"
-    },
-    {
-      "name": "Wiegand Group",
-      "category": "Conway",
-      "image": "https://atlan.edu.vn/wp-content/uploads/2022/11/Sach-Kiep-Nao-Ta-Cung-Tim-Thay-Nhau.jpg",
-      "_id": "7"
-    },
-    {
-      "name": "Renner - Kuphal",
-      "category": "Spring Hill",
-      "image": "https://www.dtv-ebook.com/images/truyen-online/ebook-xac-am-prc-pdf-epub.jpg",
-      "_id": "8"
-    },
-    {
-      "name": "Hansen LLC",
-      "category": "Town 'n' Country",
-      "image": "https://www.dtv-ebook.com/images/Cover/34756774223_86debeda04_b.jpg",
-      "_id": "9"
-    },
-    {
-      "name": "Feil - Zboncak",
-      "category": "Decatur",
-      "image": "https://www.dtv-ebook.com/images/Cover/36363352494_ae04b1563f_o.jpg",
-      "_id": "10"
-    },
-    {
-      "name": "Paucek, Connelly and Blanda",
-      "category": "Richmond",
-      "image": "https://www.dtv-ebook.com/images/truyen-online/ebook-em-khong-biet-prc-pdf-epub.jpg",
-      "_id": "11"
-    },
-    {
-      "name": "Bruen - Goodwin",
-      "category": "Ames",
-      "image": "https://www.dtv-ebook.com/images/truyen-online/ebook-Thuong-nhau-de-do-full-prc-pdf-epub.jpg",
-      "_id": "12"
-    },
-    {
-      "name": "Dooley Inc",
-      "category": "Castro Valley",
-      "image": "https://www.dtv-ebook.com/images/files_2/2019/chuyen-chu-nghia-tieng-anh-nguyen-van-phu.jpg",
-      "_id": "13"
-    },
-    {
-      "name": "Morissette Group",
-      "category": "Broken Arrow",
-      "image": "https://www.dtv-ebook.com/images/cover_1/lac-rung-trung-trung-dinh.jpg",
-      "_id": "14"
-    },
-    {
-      "name": "Schuppe and Sons",
-      "category": "South Hill",
-      "image": "https://www.dtv-ebook.com/images/files_2/2021/112021/hoi-sinh-tu-kiep-quy.jpg",
-      "_id": "15"
-    },
-    {
-      "name": "Grimes, Cummings and Harris",
-      "category": "Centennial",
-      "image": "https://www.dtv-ebook.com/images/Cover/33704613011_12730a2d82.jpg",
-      "_id": "16"
-    },
-    {
-      "name": "Mante - Hills",
-      "category": "Coconut Creek",
-      "image": "https://www.dtv-ebook.com/images/files_2/2023/012023/ngoi-nha-mat-troi.jpg",
-      "_id": "17"
-    },
-    {
-      "name": "Cassin - Hintz",
-      "category": "Pflugerville",
-      "image": "https://www.dtv-ebook.com/images/files_2/2019/nuoc-mat-dang-duong-thien-ly.jpg",
-      "_id": "18"
-    },
-    {
-      "name": "Swift - Kessler",
-      "category": "St. Peters",
-      "image": "https://www.dtv-ebook.com/images/files_2/2020/gia-tu-mua-dong-nguyen-thi-ngoc-tu.jpg",
-      "_id": "19"
-    },
-    {
-      "name": "McDermott, Tremblay and Skiles",
-      "category": "Bothell",
-      "image": "https://www.dtv-ebook.com/images/files_2/2020/tim-trong-noi-nho-le-ngoc-mai.jpg",
-      "_id": "20"
-    },
-  ])
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredData, setFilteredData] = useState(data);
   const textInputRef = React.createRef(); // Tạo một ref cho TextInput
 
   // const filtered = data.filter(item => item.name.includes(searchQuery));
-  // const latestText = dataNe.length > 0 ? 'Results' : 'Lastest';
+  const latestText = searchText.length > 0 ? 'Kết quả tìm kiếm' : 'Tìm kiếm gần đây';
   // const latestText2 = dataNe.length > 0 ? 'Results' : 'Lastest';
   const resetSearch = () => {
     navigation.goBack();
@@ -235,18 +97,18 @@ const SearchScreen = (props) => {
           <TouchableOpacity style={styles.search} onPress={search}>
             <Image source={require('../assets/images/manerge.png')}></Image>
           </TouchableOpacity>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-          <TextInput
-            ref={textInputRef}
-            value={searchText}
-            onChangeText={(text) => {HandleChangeText(text)}}
-            placeholderTextColor="black"
-            placeholder='Search'
-          >
-          </TextInput>
-          <TouchableOpacity onPress={() => HandleChangeText("")}>
-          {searchText.length > 0 && <Icon name="close" size={25} color="#000" right="15%"/> /* Hiển thị Icon khi searchText có độ dài lớn hơn 1 */}
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <TextInput
+              ref={textInputRef}
+              value={searchText}
+              onChangeText={(text) => { HandleChangeText(text) }}
+              placeholderTextColor="black"
+              placeholder='Tìm kiếm sách...'
+            >
+            </TextInput>
+            <TouchableOpacity onPress={() => HandleChangeText("")}>
+              {searchText.length > 0 && <Icon name="close" size={25} color="#000" right="15%" /> /* Hiển thị Icon khi searchText có độ dài lớn hơn 1 */}
+            </TouchableOpacity>
           </View>
         </View>
         <TouchableOpacity style={styles.huy1} onPress={resetSearch}>
@@ -255,7 +117,7 @@ const SearchScreen = (props) => {
       </View>
       <View style={styles.listContainer}>
         <View style={{ flexDirection: 'row' }}>
-          <Text style={styles.content}>Lastest</Text>
+          <Text style={styles.content}>{latestText}</Text>
           {/* <Text style={styles.content1}></Text> */}
         </View>
         <View style={styles.container1}>
@@ -266,12 +128,18 @@ const SearchScreen = (props) => {
                 <Text style={{ color: 'black', fontSize: 14, fontWeight: '600', textAlign: 'center' }}>Loading...</Text>
               </View>
             ) : (
-              <FlatList
-                data={dataNe}
-                renderItem={({ item }) => <ItemSearch author={item} product={item} navigation={navigation} />}
-                keyExtractor={item => item._id}
-                showsVerticalScrollIndicator={false}
-              />
+
+
+              <View style={{ paddingBottom: 100, paddingTop: 20 }}
+              >
+
+                <FlatList
+                  data={dataNe}
+                  renderItem={({ item }) => <ItemSearch author={item} product={item} navigation={navigation} />}
+                  keyExtractor={item => item._id}
+                  showsVerticalScrollIndicator={false}
+                />
+              </View>
             )}
         </View>
       </View>
@@ -327,7 +195,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontStyle: 'normal',
     fontFamily: 'Poppins',
-    justifyContent:'center', 
+    justifyContent: 'center',
     // paddingRight: 50
   },
   search: {
@@ -351,7 +219,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.408,
     lineHeight: 22,
     left: '80%',
-    top: '3%'
+    top: '3%',
   },
   huy: {
     color: bacroundColor,

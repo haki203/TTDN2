@@ -8,12 +8,10 @@ const mongoose =require('mongoose');
 require('./components/products/ProductModel');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
 const productApiRouter = require('./routes/api/ProductAPI');
 const userApiRouter = require('./routes/api/UserAPI');
 const productCpanelRouter = require('./routes/cpanel/ProductCPanel');
 const userCpanelRouter = require('./routes/cpanel/UserCpanel');
-const ProductModel = require('./components/products/ProductModel');
 
 const firebaseConfig = {
   apiKey: "AIzaSyAyhWnSyHSvXHnKEGzUemayimWlpLQfo7I",
@@ -52,7 +50,6 @@ mongoose.connect('mongodb+srv://xuong:844666@cluster0.0urhouz.mongodb.net/datn',
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
 app.use('/api/user', userApiRouter);
 app.use('/api/product', productApiRouter);
 app.use('/cpanel/user', userCpanelRouter);

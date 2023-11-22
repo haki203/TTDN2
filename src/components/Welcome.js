@@ -17,28 +17,34 @@ const Welcome = (props) => {
   });
   const { navigation } = props;
   const { setIsLogin, setinfoUser } = useContext(AppContext);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+
 
 
   //---------------------- login google ---------------------- //
   const onLoginGG = async () => {
-
     try {
-      setIsLoading(false);
+      setIsLoading(true)
+
       await GoogleSignin.hasPlayServices();
       console.log('LoginGG');
       const userInfor = await GoogleSignin.signIn();
       const res = await AxiosIntance().post("/user/login", { email: userInfor.user.email });
       if (res.result) {
         const infoUser = {
-          name: res.user.full_name, avatar: res.user.avatar,id:res.user._id,phone:res.user.phone,email:res.user.email
+          name: res.user.full_name, avatar: res.user.avatar, id: res.user._id, phone: res.user.phone, email: res.user.email
         }
         setinfoUser(infoUser);
         console.log(res.user);
         ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 3000)
         setIsLogin(true);
-      }else{
-      ToastAndroid.show("Đăng nhập thất bại ", ToastAndroid.SHORT);
+
+
+      } else {
+        ToastAndroid.show("Đăng nhập thất bại ", ToastAndroid.SHORT);
 
       }
 
@@ -75,17 +81,22 @@ const Welcome = (props) => {
       const userData = await getFacebookUserData(data.accessToken);
       console.log('Thông tin người dùng Facebook:', userData);
       console.log('loginFB');
-
       console.log("data fb ne: ", data);
       // loginnnnnnnnnnnnnnnnnnnnnnn api
+      setIsLoading(true)
+
       const res = await AxiosIntance().post("/user/login", { email: data.userID });
       if (res.result) {
+        setTimeout(() => {
+          setIsLoading(false)
+        }, 3000)
         setIsLogin(true);
+
         const infoUser = {
-          name: res.user.full_name, avatar: res.user.avatar,id:res.user._id,phone:res.user.phone,email:res.user.email
+          name: res.user.full_name, avatar: res.user.avatar, id: res.user._id, phone: res.user.phone, email: res.user.email
         }
         setinfoUser(infoUser);
-        console.log("result login fb ",res.user);
+        console.log("result login fb ", res.user);
         ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
       }
     }
@@ -106,30 +117,47 @@ const Welcome = (props) => {
   //---------------------- login google ---------------------- //
 
   return (
-    <View style={styles.container}>
-      {isLoading ? (<View style={styles.loading}><ActivityIndicator size={35} color={'black'} /></View>) : (<View></View>)}
-      <ImageBackground style={{ position: 'absolute', width: width, height: height }} source={require('../assets/images/bg_welcome.png')} />
-      <ImageBackground style={styles.image} source={require('../assets/images/logo-athens.png')} />
-      <View style={styles.textView}>
-        <Text style={styles.textView_1}>Athens</Text>
-        <Text style={styles.textView_2}>
-          AudioBox allowing you to listen to your favourite books anytime,
-          anywhere
-        </Text>
-      </View>
+    <View>
+      {
+        isLoading ?
+          (
+            <View style={{ width: width, height: height, alignContent: 'center', justifyContent: 'center' }}><ActivityIndicator size={30} color={'black'} /></View>
+          ) :
 
-      <View style={styles.touchable}>
-        <TouchableOpacity style={styles.touchableFB} onPress={() => onFacebookButtonPress()}>
-          <Image style={styles.icon} source={require('../assets/images/ic_fb.png')}></Image>
-          <Text style={styles.textView_GG}>Continue with Facebook</Text>
-        </TouchableOpacity>
-        <Text style={styles.textView_3}>OR</Text>
-        <TouchableOpacity style={styles.touchableGG} onPress={onLoginGG}>
-          <Image style={styles.icon} source={require('../assets/images/ic_gg.png')}></Image>
-          <Text style={styles.textView_GG}>Continue with Google</Text>
-        </TouchableOpacity>
+          (
+            <View style={styles.container}>
+              <ImageBackground style={{ width: width, height: height }} source={require('../assets/images/bg_welcome.png')}>
+                <View style={styles.body}>
+                  <View style={styles.title}>
+                    <Image style={styles.image} source={require('../assets/images/logo-athens.png')} />
+                    <View style={styles.textView}>
+                      <Text style={styles.textView_1}>Athens</Text>
+                      <Text style={styles.textView_2}>
+                        Athens cho phép bạn nghe những cuốn sách yêu thích mọi lúc, mọi nơi
+                      </Text>
+                    </View>
+                  </View>
 
-      </View>
+
+                  <View style={styles.touchable}>
+                    <TouchableOpacity style={styles.touchableFB} onPress={() => onFacebookButtonPress()}>
+                      <Image style={styles.icon} source={require('../assets/images/ic_fb.png')}></Image>
+                      <Text style={styles.textView_GG}>Đăng nhập bằng Facebook</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.textView_3}>HOẶC</Text>
+                    <TouchableOpacity style={styles.touchableGG} onPress={onLoginGG}>
+                      <Image style={styles.icon} source={require('../assets/images/ic_gg.png')}></Image>
+                      <Text style={styles.textView_GG}>Đăng nhập bằng Google</Text>
+                    </TouchableOpacity>
+
+                  </View>
+                </View>
+              </ImageBackground>
+            </View>
+          )
+      }
+
+
     </View>
   );
 };
@@ -138,26 +166,37 @@ export default Welcome;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     // backgroundColor: backgroundColor,
-    display: 'flex',
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingTop: 100,
-    paddingBottom: 70,
-  },
+    backgroundColor: 'blue'
 
+  },
+  body: {
+
+    flex: 1,
+    height: '100%',
+    width: '100%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   image: {
     backgroundColor: '#D9D9D9',
     borderRadius: 150,
     width: 100,
     height: 100,
   },
+  title: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   textView: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop: -50,
+
   },
   textView_1: {
     color: color,
@@ -166,10 +205,10 @@ const styles = StyleSheet.create({
   },
   textView_2: {
     color: '#d5d5d5',
-    textAlign: 'center',
     width: 300,
     fontSize: 15,
     paddingTop: 20,
+    textAlign: 'center'
   },
   touchable: {
     display: 'flex',
