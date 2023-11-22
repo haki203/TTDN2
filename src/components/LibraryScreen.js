@@ -8,6 +8,8 @@ const color_view = "#4838D1";
 const bgcolor = "#FFFFFF";
 const pluscolor = "#CDCDCD";
 const color_logo = '#272956';
+const { width, height } = Dimensions.get('window');
+const progress = '80%'
 const LibraryScreen = (props) => {
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
 
@@ -41,121 +43,43 @@ const LibraryScreen = (props) => {
         </View>
       </View>
       <View View style={styles.bodyContainer}>
-        <View style={styles.body}>
-          <View style={styles.textAllNumberSort}>
-            <View style={styles.textAllNumber}>
-              <Text style={styles.textAll} >All (1)</Text>
-            </View>
-            <View style={styles.sort}>
-              <Image source={require('../../src/assets/images/icsort.png')} />
-              <Text>Sort</Text>
-            </View>
-
-          </View>
-          <View style={styles.book}>
-            <Image style={styles.imagebook} source={require('../../src/assets/images/Dac-Nhan-Tam.jpg')} />
-            <View style={styles.in4book}>
-              <Text style={styles.nameBook}> Tên Sách</Text>
-              <Text style={styles.nameAuthor}> Tên tác giả</Text>
-              <View style={{ alignItems: 'flex-start' }}>
-                <View style={styles.doneprocess}>
-                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-                  <View style={styles.process}>
-                    <Text style={{ color: '#272956', fontWeight: "500" }}>50%</Text>
-                  </View>
-                </View>
-
-                <View style={styles.processbar}>
-                  <View style={{ // Thanh màu xám
-                    height: 10,
-                    width: '70%',
-                    backgroundColor: '#cdcdcd',
-                    borderRadius: 5
-                  }} />
-                  <View style={styles.processbar2}>
-                    <View style={{
-                      height: 10,
-                      width: '35%',
-                      borderRadius: 5,
-                      backgroundColor: '#D44445'
-
-                    }} />
-                  </View>
-                </View>
-
-
-
-              </View>
-            </View>
-            <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
-          </View>
-          <View style={styles.book}>
-            <Image style={styles.imagebook} source={require('../../src/assets/images/Dac-Nhan-Tam.jpg')} />
-            <View style={styles.in4book}>
-              <Text style={styles.nameBook}> Tên Sách</Text>
-              <Text style={styles.nameAuthor}> Tên tác giả</Text>
-              <View style={{ alignItems: 'flex-start' }}>
-                <View style={styles.doneprocess}>
-                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-                  <View style={styles.process}>
-                    <Text style={{ color: '#272956', fontWeight: "500" }}>50%</Text>
-                  </View>
-                </View>
-                <View style={styles.processbar}>
-                  <View style={{ // Thanh màu xám
-                    height: 10,
-                    width: '70%',
-                    backgroundColor: '#cdcdcd',
-                    borderRadius: 5
-                  }} />
-                  <View style={styles.processbar2}>
-                    <View style={{
-                      height: 10,
-                      width: '35%',
-                      borderRadius: 5,
-                      backgroundColor: '#D44445'
-
-                    }} />
-                  </View>
-                </View>
-              </View>
-            </View>
-            <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
-          </View>
-          <View style={styles.book}>
-            <Image style={styles.imagebook} source={require('../../src/assets/images/Dac-Nhan-Tam.jpg')} />
-            <View style={styles.in4book}>
-              <Text style={styles.nameBook}> Tên Sách</Text>
-              <Text style={styles.nameAuthor}> Tên tác giả</Text>
-              <View style={{ alignItems: 'flex-start' }}>
-                <View style={styles.doneprocess}>
-                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-                  <View style={styles.process}>
-                    <Text style={{ color: '#272956', fontWeight: "500" }}>50%</Text>
-                  </View>
-                </View>
-                <View style={styles.processbar}>
-                  <View style={{ // Thanh màu xám
-                    height: 10,
-                    width: '70%',
-                    backgroundColor: '#cdcdcd',
-                    borderRadius: 5
-                  }} />
-                  <View style={styles.processbar2}>
-                    <View style={{
-                      height: 10,
-                      width: '35%',
-                      borderRadius: 5,
-                      backgroundColor: '#D44445'
-
-                    }} />
-                  </View>
-                </View>
-              </View>
-            </View>
-            <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
-          </View>
+        <View style={styles.textAllNumber}>
+          <Text style={styles.textAll} >All (1)</Text>
         </View>
+
+
+        <View style={styles.book}>
+          <Image style={styles.imagebook} source={require('../../src/assets/images/Dac-Nhan-Tam.jpg')} />
+          <View style={styles.in4book}>
+            <Text style={styles.nameBook}> Tên Sách</Text>
+            <Text style={styles.nameAuthor}> Tên tác giả</Text>
+            <View style={styles.doneprocess}>
+              <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
+              <View style={styles.process}>
+                <Text style={{ color: '#272956', fontWeight: "500" }}>{progress}</Text>
+              </View>
+            </View>
+            <View style={styles.processbar}>
+              <View style={{ // Thanh màu xám
+                height: 10,
+                width: progress,
+                position: 'absolute',
+                left: 0,
+                backgroundColor: 'red',
+                borderRadius: 5
+              }} />
+              <View style={{
+                height: 10,
+                width: '20%',
+                right: 0,
+                position: 'absolute',
+
+              }} />
+            </View>
+          </View>
+          <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
+        </View>
+
       </View>
     </View>
   );
@@ -205,11 +129,12 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     overflow: 'hidden',
     flex: 1,
-    padding: 10
+    padding: 10,
+    paddingStart: 15
+
   },
   body: {
 
-    marginStart: 15
 
   },
 
@@ -282,7 +207,12 @@ const styles = StyleSheet.create({
   processbar: {
     flexDirection: 'row',
     marginLeft: 7,
-    marginTop: 7
+    marginTop: 7,
+    borderRadius: 5,
+
+    height: 10,
+    width: width * 0.4,
+    backgroundColor: '#d6d6d6'
   },
   processbar2: {
     position: 'absolute',
