@@ -1,5 +1,6 @@
-import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity,FlatList } from 'react-native';
 import { AppContext } from '../navigation/AppContext'
+import ItemListViewLibrary from './ItemListViewLibrary';
 
 import React, { useContext, useEffect, useState } from 'react'
 
@@ -12,7 +13,7 @@ const { width, height } = Dimensions.get('window');
 const progress = '80%'
 const LibraryScreen = (props) => {
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
-
+  const { infoUser} = useContext(AppContext);
   const [isEnabled, setIsEnabled] = useState(false);
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
@@ -33,52 +34,27 @@ const LibraryScreen = (props) => {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
-          <Text style={styles.authen}>Librarys</Text>
+          <Text style={styles.authen}>Thư Viện</Text>
         </View>
         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
           <TouchableOpacity onPress={search}>
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
           </TouchableOpacity>
-          <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
+          <Image style={{width:45,height:45,borderRadius:60}} source={{uri:infoUser.avatar}} />
         </View>
       </View>
       <View View style={styles.bodyContainer}>
         <View style={styles.textAllNumber}>
-          <Text style={styles.textAll} >All (1)</Text>
+          <Text style={styles.textAll} >Tất cả (1)</Text>
+
+          
         </View>
+        <FlatList
+        data={dataNe}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => <ItemListViewLibrary dulieu={item} />}
+      />
 
-
-        <View style={styles.book}>
-          <Image style={styles.imagebook} source={require('../../src/assets/images/Dac-Nhan-Tam.jpg')} />
-          <View style={styles.in4book}>
-            <Text style={styles.nameBook}> Tên Sách</Text>
-            <Text style={styles.nameAuthor}> Tên tác giả</Text>
-            <View style={styles.doneprocess}>
-              <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-              <View style={styles.process}>
-                <Text style={{ color: '#272956', fontWeight: "500" }}>{progress}</Text>
-              </View>
-            </View>
-            <View style={styles.processbar}>
-              <View style={{ // Thanh màu xám
-                height: 10,
-                width: progress,
-                position: 'absolute',
-                left: 0,
-                backgroundColor: 'red',
-                borderRadius: 5
-              }} />
-              <View style={{
-                height: 10,
-                width: '20%',
-                right: 0,
-                position: 'absolute',
-
-              }} />
-            </View>
-          </View>
-          <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
-        </View>
 
       </View>
     </View>
@@ -227,16 +203,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   tok: {
-    width: 40,
-    height: 40,
-    marginRight: 8
+    width: 35,
+    height: 35,
+    marginRight: 10
   }, profile: {
     width: 40,
     height: 40
   },
   authen: {
     marginLeft: 8,
-    fontSize: 24,
+    fontSize: 26,
     fontStyle: 'normal',
     fontWeight: '700',
     fontFamily: 'Poppins',
@@ -249,3 +225,15 @@ const styles = StyleSheet.create({
 });
 
 export default LibraryScreen;
+const dataNe = [
+  { id: '1', title: 'Tên Sách 1',
+   author: 'Tác Giả 1', 
+   imageSource: require('../../src/assets/images/Dac-Nhan-Tam.jpg') },
+   { id: '2', title: 'Tên Sách 1',
+   author: 'Tác Giả 1', 
+   imageSource: require('../../src/assets/images/Dac-Nhan-Tam.jpg') },
+   { id: '3', title: 'Tên Sách 1',
+   author: 'Tác Giả 1', 
+   imageSource: require('../../src/assets/images/Dac-Nhan-Tam.jpg') },
+  // Thêm các mục khác nếu cần
+];
