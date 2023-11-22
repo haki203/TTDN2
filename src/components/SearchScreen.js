@@ -90,6 +90,10 @@ const SearchScreen = (props) => {
   const resetSearch = () => {
     navigation.goBack();
   }
+  const onDeleteItem = (itemId) => {
+    const newData = dataNe.filter(item => item._id !== itemId);
+    setdataNe(newData);
+  };
   return (
     <View style={styles.container}>
       <View style={styles.hearderContainer}>
@@ -131,7 +135,7 @@ const SearchScreen = (props) => {
               <FlatList
                 style={{ paddingBottom: 100 }}
                 data={dataNe}
-                renderItem={({ item }) => <ItemSearch author={item} product={item} navigation={navigation} />}
+                renderItem={({ item }) => <ItemSearch author={item} product={item} navigation={navigation} onDeleteItem={onDeleteItem}/>}
                 keyExtractor={item => item._id}
                 showsVerticalScrollIndicator={false}
               />
