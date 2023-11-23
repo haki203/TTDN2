@@ -68,9 +68,15 @@ const ProfileScreen = (props) => {
 
     }
 
+    const [tempName, setTempName] = useState(infoUser.name);
     const [isModalVisible, setModalVisible] = useState(false);
-    const handleSave = () => {
+    const handleSave = async ()  => {
         setModalVisible(false);
+        setinfoUser({ ...infoUser, name: tempName });
+    };
+    const handleCancel = () => {
+        setModalVisible(false);
+        setTempName(infoUser.name);
     };
 
     const [isEmailModalVisible, setEmailModalVisible] = useState(false);
@@ -154,13 +160,14 @@ const ProfileScreen = (props) => {
                             style={styles.input}
                             placeholder="Nhập tên mới"
                             placeholderTextColor='black'
-                            onChangeText={(text) => setinfoUser({ ...infoUser, name: text })}>{infoUser.name}</TextInput>
+                            onChangeText={(text) => setTempName(text)}
+                        >{tempName}</TextInput>
                         <View style={{ flexDirection: 'row' }}>
                             <TouchableOpacity onPress={handleSave} style={styles.button}>
                                 <Text style={styles.button_text}>Lưu</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.button}>
+                            <TouchableOpacity onPress={handleCancel} style={styles.button}>
                                 <Text style={styles.button_text}>Hủy</Text>
                             </TouchableOpacity>
                         </View>
