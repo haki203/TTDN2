@@ -72,21 +72,90 @@ const ProfileScreen = (props) => {
     const [isModalVisible, setModalVisible] = useState(false);
     const handleSave = async ()  => {
         setModalVisible(false);
-        setinfoUser({ ...infoUser, name: tempName });
+        try {
+            setinfoUser({ ...infoUser, name: tempName });
+    
+            const response = await AxiosIntance().post("/user/update-user", {
+                id: infoUser.id,
+                name: tempName,
+                email: infoUser.email,
+                phone: infoUser.phone,
+                avatar: infoUser.avatar
+            });
+    
+            if (response.result === true) {
+                ToastAndroid.show("Cập nhật thành công", ToastAndroid.SHORT);
+            } else {
+                ToastAndroid.show("Cập nhật thất bại", ToastAndroid.SHORT);
+            }
+        } catch (error) {
+            console.log("Lỗi ne: ", error);
+            // Xử lý lỗi tại đây (hiển thị thông báo lỗi hoặc thực hiện các bước khác)
+        }
     };
     const handleCancel = () => {
         setModalVisible(false);
         setTempName(infoUser.name);
     };
 
+    const [tempEmail, setTempEmail] = useState(infoUser.email);
     const [isEmailModalVisible, setEmailModalVisible] = useState(false);
-    const handleEmailSave = () => {
+    const handleEmailSave = async ()  => {
         setEmailModalVisible(false);
+        try {
+            setinfoUser({ ...infoUser, email: tempEmail });
+    
+            const response = await AxiosIntance().post("/user/update-user", {
+                id: infoUser.id,
+                name: infoUser.name,
+                email: tempEmail,
+                phone: infoUser.phone,
+                avatar: infoUser.avatar
+            });
+    
+            if (response.result === true) {
+                ToastAndroid.show("Cập nhật thành công", ToastAndroid.SHORT);
+            } else {
+                ToastAndroid.show("Cập nhật thất bại", ToastAndroid.SHORT);
+            }
+        } catch (error) {
+            console.log("Lỗi ne: ", error);
+            // Xử lý lỗi tại đây (hiển thị thông báo lỗi hoặc thực hiện các bước khác)
+        }
+    };
+    const handleEmailCancel = () => {
+        setEmailModalVisible(false);
+        setTempEmail(infoUser.email);
     };
 
+    const [tempPhone, setTempPhone] = useState(infoUser.phone);
     const [isPhonelModalVisible, setPhoneModalVisible] = useState(false);
-    const handlePhoneSave = () => {
+    const handlePhoneSave = async () => {
         setPhoneModalVisible(false);
+        try {
+            setinfoUser({ ...infoUser, phone: tempPhone });
+    
+            const response = await AxiosIntance().post("/user/update-user", {
+                id: infoUser.id,
+                name: infoUser.name,
+                email: infoUser.email,
+                phone: tempPhone,
+                avatar: infoUser.avatar
+            });
+    
+            if (response.result === true) {
+                ToastAndroid.show("Cập nhật thành công", ToastAndroid.SHORT);
+            } else {
+                ToastAndroid.show("Cập nhật thất bại", ToastAndroid.SHORT);
+            }
+        } catch (error) {
+            console.log("Lỗi ne: ", error);
+            // Xử lý lỗi tại đây (hiển thị thông báo lỗi hoặc thực hiện các bước khác)
+        }
+    };
+    const handlePhoneCancel = () => {
+        setPhoneModalVisible(false);
+        setTempPhone(infoUser.phone);
     };
 
     return (
@@ -203,13 +272,13 @@ const ProfileScreen = (props) => {
                             style={styles.input}
                             placeholder="Nhập Email mới"
                             placeholderTextColor='black'
-                            onChangeText={(text) => setinfoUser({ ...infoUser, email: text })}>{infoUser.email}</TextInput>
-
+                            onChangeText={(text) => setTempEmail(text)}
+                        >{tempEmail}</TextInput>
                         <View style={{ flexDirection: 'row' }}>
                             <TouchableOpacity onPress={handleEmailSave} style={styles.button}>
                                 <Text style={styles.button_text}>Lưu</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setEmailModalVisible(false)} style={styles.button}>
+                            <TouchableOpacity onPress={handleEmailCancel} style={styles.button}>
                                 <Text style={styles.button_text}>Hủy</Text>
                             </TouchableOpacity>
                         </View>
@@ -245,13 +314,14 @@ const ProfileScreen = (props) => {
                             style={styles.input}
                             placeholder="Nhập số điện thoại mới"
                             placeholderTextColor='black'
-                            onChangeText={(text) => setinfoUser({ ...infoUser, phone: text })}>{infoUser.phone}  </TextInput>
+                            onChangeText={(text) => setTempPhone(text)}
+                        >{tempPhone}</TextInput>
 
                         <View style={{ flexDirection: 'row' }}>
                             <TouchableOpacity onPress={handlePhoneSave} style={styles.button}>
                                 <Text style={styles.button_text}>Lưu</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={() => setPhoneModalVisible(false)} style={styles.button}>
+                            <TouchableOpacity onPress={handlePhoneCancel} style={styles.button}>
                                 <Text style={styles.button_text}>Hủy</Text>
                             </TouchableOpacity>
                         </View>
