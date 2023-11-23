@@ -19,7 +19,6 @@ const ProfileScreen = (props) => {
     const { navigation } = props;
     const { infoUser, setinfoUser } = useContext(AppContext);
     const [image, setshowImage] = useState('')
-    console.log(infoUser);
     const capture = async () => {
         const result = await launchCamera();
         console.log(result.assets[0].uri);
@@ -31,7 +30,6 @@ const ProfileScreen = (props) => {
         const result = await launchImageLibrary();
         console.log(result.assets[0].uri);
         setshowImage(result.assets[0].uri);
-
 
         const imageUri = result.assets[0].uri;
         const filename = imageUri.substring(imageUri.lastIndexOf('/') + 1);
@@ -54,108 +52,59 @@ const ProfileScreen = (props) => {
     };
 
     const updateProfile = async () => {
+        console.log(name,phone,infoUser.avatar);
+        const body={id: infoUser.id, name: name, email: infoUser.email, phone:phone.toString(), avatar: infoUser.avatar};
+        console.log("body ne: ",body);
         try {
-            const response = await AxiosIntance().post("/user/update-user", { id: infoUser.id, name: infoUser.name, email: infoUser.email, phone: infoUser.phone, avatar: infoUser.avatar })
-            if (response.result == true) {
+            const responses = await AxiosIntance().post("/user/update-user", { id: infoUser.id, name: name, email: infoUser.email, phone:phone.toString(), avatar: infoUser.avatar })
+            const res = await AxiosIntance().post("/user/update-user", { id: infoUser.id, name: name, email: infoUser.email, phone:phone.toString(), avatar: infoUser.avatar })
+            console.log(res);
+            if (res.result == true) {
                 ToastAndroid.show("Cập nhật thành công", ToastAndroid.SHORT);
+                console.log(res);
+                const infoUser = {
+                    name: res.user.full_name, avatar: res.user.avatar, id: res.user._id, phone: res.user.phone, email: res.user.email
+                  }
+                setinfoUser(infoUser)
             } else {
                 ToastAndroid.show("Cập nhật thất bại", ToastAndroid.SHORT);
             }
 
         } catch (error) {
             console.log("loi ne: ", error);
+            ToastAndroid.show("Cập nhật thất bại", ToastAndroid.SHORT);
         }
 
     }
 
+    const [name, setName] = useState(infoUser.name)
+    const [phone, setPhone] = useState(infoUser.phone)
+    const [avt, setAvt] = useState(infoUser.avatar)
+
+
     const [tempName, setTempName] = useState(infoUser.name);
     const [isModalVisible, setModalVisible] = useState(false);
-    const handleSave = async ()  => {
+    const handleSave = async () => {
+        console.log("ok");
+
         setModalVisible(false);
-        try {
-            setinfoUser({ ...infoUser, name: tempName });
-    
-            const response = await AxiosIntance().post("/user/update-user", {
-                id: infoUser.id,
-                name: tempName,
-                email: infoUser.email,
-                phone: infoUser.phone,
-                avatar: infoUser.avatar
-            });
-    
-            if (response.result === true) {
-                ToastAndroid.show("Cập nhật thành công", ToastAndroid.SHORT);
-            } else {
-                ToastAndroid.show("Cập nhật thất bại", ToastAndroid.SHORT);
-            }
-        } catch (error) {
-            console.log("Lỗi ne: ", error);
-            // Xử lý lỗi tại đây (hiển thị thông báo lỗi hoặc thực hiện các bước khác)
-        }
-    };
+        setTempName(name);
+    }
     const handleCancel = () => {
         setModalVisible(false);
-        setTempName(infoUser.name);
+        // setTempName(infoUser.name);
     };
 
-    const [tempEmail, setTempEmail] = useState(infoUser.email);
-    const [isEmailModalVisible, setEmailModalVisible] = useState(false);
-    const handleEmailSave = async ()  => {
-        setEmailModalVisible(false);
-        try {
-            setinfoUser({ ...infoUser, email: tempEmail });
-    
-            const response = await AxiosIntance().post("/user/update-user", {
-                id: infoUser.id,
-                name: infoUser.name,
-                email: tempEmail,
-                phone: infoUser.phone,
-                avatar: infoUser.avatar
-            });
-    
-            if (response.result === true) {
-                ToastAndroid.show("Cập nhật thành công", ToastAndroid.SHORT);
-            } else {
-                ToastAndroid.show("Cập nhật thất bại", ToastAndroid.SHORT);
-            }
-        } catch (error) {
-            console.log("Lỗi ne: ", error);
-            // Xử lý lỗi tại đây (hiển thị thông báo lỗi hoặc thực hiện các bước khác)
-        }
-    };
-    const handleEmailCancel = () => {
-        setEmailModalVisible(false);
-        setTempEmail(infoUser.email);
-    };
-
+ 
     const [tempPhone, setTempPhone] = useState(infoUser.phone);
     const [isPhonelModalVisible, setPhoneModalVisible] = useState(false);
     const handlePhoneSave = async () => {
         setPhoneModalVisible(false);
-        try {
-            setinfoUser({ ...infoUser, phone: tempPhone });
-    
-            const response = await AxiosIntance().post("/user/update-user", {
-                id: infoUser.id,
-                name: infoUser.name,
-                email: infoUser.email,
-                phone: tempPhone,
-                avatar: infoUser.avatar
-            });
-    
-            if (response.result === true) {
-                ToastAndroid.show("Cập nhật thành công", ToastAndroid.SHORT);
-            } else {
-                ToastAndroid.show("Cập nhật thất bại", ToastAndroid.SHORT);
-            }
-        } catch (error) {
-            console.log("Lỗi ne: ", error);
-            // Xử lý lỗi tại đây (hiển thị thông báo lỗi hoặc thực hiện các bước khác)
-        }
+        setTempPhone(phone);
+
     };
     const handlePhoneCancel = () => {
         setPhoneModalVisible(false);
-        setTempPhone(infoUser.phone);
     };
 
     return (
@@ -177,13 +126,6 @@ const ProfileScreen = (props) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            {/* <View style={styles.header}>
-                <Icon onPress={() => navigation.goBack()} style={styles.icon_arrow} name='arrowleft' color={color_arrow} />
-                <Text style={styles.txt_settings}>Thông tin người dùng</Text>
-                <TouchableOpacity onPress={updateProfile}>
-                    <Text style={{ color: color_view, fontWeight: '500' }}>Lưu</Text>
-                </TouchableOpacity>
-            </View> */}
             <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
             </View>
 
@@ -196,16 +138,6 @@ const ProfileScreen = (props) => {
                     <Icon_2 name="upload" size={18} color="#FF97A3" />
                 </TouchableOpacity>
             </View>
-
-            {/* <View>
-                <View style={styles.avatarContainer}>
-                    <Image style={styles.avatar} source={{ uri: infoUser.avatar }} />
-                </View>
-                <TouchableOpacity style={styles.icon_upload_outside} onPress={getImageLibrary}>
-                    <Icon style={styles.icon_upload} name='cloudupload' color={color_upload} />
-                </TouchableOpacity>
-            </View> */}
-
             <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
 
             <TouchableOpacity onPress={() => setModalVisible(true)}>
@@ -213,7 +145,7 @@ const ProfileScreen = (props) => {
                 <View style={styles.View_Container1}>
                     <View style={styles.View_Back2}>
                         <View>
-                            <Text style={styles.Text_Back}>{infoUser.name}</Text>
+                            <Text style={styles.Text_Back}>{tempName}</Text>
                         </View>
                     </View>
                     <View>
@@ -229,8 +161,8 @@ const ProfileScreen = (props) => {
                             style={styles.input}
                             placeholder="Nhập tên mới"
                             placeholderTextColor='black'
-                            onChangeText={(text) => setTempName(text)}
-                        >{tempName}</TextInput>
+                            onChangeText={(text) => setName(text)}
+                        >{name}</TextInput>
                         <View style={{ flexDirection: 'row' }}>
                             <TouchableOpacity onPress={handleSave} style={styles.button}>
                                 <Text style={styles.button_text}>Lưu</Text>
@@ -244,52 +176,11 @@ const ProfileScreen = (props) => {
                 </View>
             </Modal>
 
-            {/* <View style={styles.body}>
-                <Text style={styles.body1}>Tên người dùng</Text>
-                <TextInput style={styles.body2} onChangeText={(text) => setinfoUser({ ...infoUser, name: text })} > {infoUser.name}</TextInput>
-            </View> */}
+
 
             <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
 
-            <TouchableOpacity onPress={() => setEmailModalVisible(true)}>
-                <Text style={styles.Text_YourName}>Email</Text>
-                <View style={styles.View_Container1}>
-                    <View style={styles.View_Back2}>
-                        <View style={styles.View_Text_Profile}>
-                            <Text style={styles.Text_Back}>{infoUser.email}</Text>
-                        </View>
-                    </View>
-                    <View>
-                        <Icon_1 name="chevron-forward-outline" size={24} color="#000000" />
-                    </View>
-                </View>
-            </TouchableOpacity>
-            <Modal animationType="slide" transparent={true} visible={isEmailModalVisible}>
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.button_text1}>Chỉnh sửa Email</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Nhập Email mới"
-                            placeholderTextColor='black'
-                            onChangeText={(text) => setTempEmail(text)}
-                        >{tempEmail}</TextInput>
-                        <View style={{ flexDirection: 'row' }}>
-                            <TouchableOpacity onPress={handleEmailSave} style={styles.button}>
-                                <Text style={styles.button_text}>Lưu</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={handleEmailCancel} style={styles.button}>
-                                <Text style={styles.button_text}>Hủy</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
-
-            {/* <View style={styles.body}>
-                <Text style={styles.body1}>Email </Text>
-                <TextInput style={styles.body2} placeholder='john@mail.com' onChangeText={(text) => setinfoUser({ ...infoUser, email: text })}  >{infoUser.email}</TextInput>
-            </View> */}
+         
 
             <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
 
@@ -298,7 +189,7 @@ const ProfileScreen = (props) => {
                 <View style={styles.View_Container1}>
                     <View style={styles.View_Back2}>
                         <View style={styles.View_Text_Profile}>
-                            <Text style={styles.Text_Back}>{infoUser.phone}</Text>
+                            <Text style={styles.Text_Back}>{tempPhone}</Text>
                         </View>
                     </View>
                     <View>
@@ -314,7 +205,7 @@ const ProfileScreen = (props) => {
                             style={styles.input}
                             placeholder="Nhập số điện thoại mới"
                             placeholderTextColor='black'
-                            onChangeText={(text) => setTempPhone(text)}
+                            onChangeText={(text) => setPhone(text)}
                         >{tempPhone}</TextInput>
 
                         <View style={{ flexDirection: 'row' }}>
