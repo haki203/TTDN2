@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState,useCallback  } from 'react'
 import { useSelector } from 'react-redux';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -25,6 +25,7 @@ import SettingScreen from '../components/SettingScreen';
 import ProfileScreen from '../components/ProfileScreen';
 import LoginUser from '../components/LoginUser';
 import WaitScreen from '../components/WaitScreen';
+import Navigate from '../components/Navigate';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Users = () => {
@@ -42,6 +43,7 @@ const Mains = () => {
         <Stack.Navigator initialRouteName='Home' screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name='Detail' component={BookDetail} />
+            <Stack.Screen name='Navigate' component={Navigate} />
             <Stack.Screen name='Play' component={PlayScreen} />
             <Stack.Screen name='Read' component={Read} />
             <Stack.Screen name='Setting' component={SettingScreen} />
