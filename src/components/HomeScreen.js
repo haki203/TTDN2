@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, TextInput, FlatList, ScrollView, ToastAndroid } from 'react-native'
+import { Image, StyleSheet, Text, View, TextInput, FlatList,TouchableOpacity, ScrollView, ToastAndroid, ActivityIndicator } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import Icon from "react-native-vector-icons/Feather"
 import Icon2 from "react-native-vector-icons/AntDesign"
@@ -6,7 +6,6 @@ import Icon3 from "react-native-vector-icons/FontAwesome"
 import { AppContext } from '../navigation/AppContext'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Screen1 from './tab_view/Screen1'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import AxiosIntance from '../axios/AxiosIntance'
 
 const color_txt1 = "#9D9D9D";
@@ -22,6 +21,7 @@ const HomeScreen = (props) => {
   const { infoUser } = useContext(AppContext);
   const { navigation } = props;
   const [dataNe, setdataNe] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
 
@@ -63,6 +63,7 @@ const HomeScreen = (props) => {
 
   useEffect(() => {
     const getAllCate = async () => {
+
       const respone = await AxiosIntance().get("/product/category/getAlls");
 
 
@@ -120,6 +121,7 @@ const HomeScreen = (props) => {
   );
   return (
     <View style={styles.container}>
+
       <View style={styles.header}>
         <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
           <Image style={styles.menu} source={require('../assets/images/logo2.png')} size={22} />
@@ -130,7 +132,7 @@ const HomeScreen = (props) => {
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
           </TouchableOpacity>
           <TouchableOpacity onPress={settings}>
-            <Image style={styles.profile} source={{uri:infoUser.avatar}} />
+            <Image style={styles.profile} source={{ uri: infoUser.avatar }} />
           </TouchableOpacity>
         </View>
       </View>
@@ -172,7 +174,7 @@ const styles = StyleSheet.create({
   }, profile: {
     width: 40,
     height: 40,
-    borderRadius:35,
+    borderRadius: 35,
   }, title: {
     marginLeft: 21
   }, search: {
@@ -211,14 +213,14 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5
 
   },
-  label:{
-    fontWeight:'700',
-    fontSize:16,
-    color:'#cdcdcd',
+  label: {
+    fontWeight: '700',
+    fontSize: 16,
+    color: '#cdcdcd',
 
   },
-  activeLabel:{
-    color:'black',
+  activeLabel: {
+    color: 'black',
 
   }
 
