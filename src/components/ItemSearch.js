@@ -1,7 +1,6 @@
-import { StyleSheet, Text, View, Image } from 'react-native'
+import { StyleSheet, Text, View, Image,TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useRoute } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import AxiosIntance from '../axios/AxiosIntance';
 const bacroundColor = '#272956';
 const ColorAuthor = '#4838D1';
