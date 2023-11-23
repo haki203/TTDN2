@@ -15,7 +15,6 @@ import {
 import React, {useContext, useState, useEffect} from 'react';
 import {AppContext} from '../navigation/AppContext';
 import PDF from 'react-native-pdf';
-import AxiosIntance from '../axios/AxiosIntance';
 const backgroundColor1 = '#FDFDFD';
 const headerNameBoColorBo = '#272956';
 const headerNameBoColorAu = '#9D9D9D';
@@ -24,45 +23,22 @@ const noidungColor = '#9D9D9D';
 const Read = props => {
   const {isTabVisible, setIsTabVisible} = useContext(AppContext);
   const {navigation} = props;
-  const {id} = props.route.params;
-  const route = props.route;
 
-  const [AuthorData, setAuthorData] = useState({});
-  const [bookData, setBookData] = useState({});
-  const [pdfResource, setPdfResource] = useState('');
+  const PdfResource1 = require('../assets/pdf/dacnhantam.pdf');
 
-  useEffect(() => {
-    const DetailBook = async () => {
-      const response = await AxiosIntance().get('/product/' + id);
-      const Data2 = {
-        id: response.product._id,
-        title: response.product.title,
-        pdfLink: response.product.pdf,
-        authorId: response.product.authorId,
-        category: response.product.categoryId,
-      };
-      setBookData(Data2);
-      setPdfResource(Data2.pdfLink);
-      AuthorBook(Data2.authorId);
-    };
-    DetailBook();
+  
+  // link gốc: https://drive.google.com/drive/folders/1LxljCHjba8sudki7KuXFHffAPY6c9rQ-
 
-    const AuthorBook = async id => {
-      const response = await AxiosIntance().get('/product/author/' + id);
-      const Data1 = {
-        id: response.author._id,
-        authorname: response.author.name,
-      };
-      setAuthorData(Data1);
-    };
+  const pdfResource = {
+    uri: 'https://drive.google.com/u/0/uc?id=11rVuFsMvencggcCrkPPlZYV1yel0TcvI&export=download',
+    cache: true, // Lưu trữ tệp PDF trong bộ nhớ cache
 
-    AuthorBook();
-  }, []);
+    
+  };
 
   const Back = () => {
     navigation.goBack();
   };
-
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       setIsTabVisible(false);
@@ -77,8 +53,8 @@ const Read = props => {
           <Image source={require('../assets/images/ic_left.png')} />
         </TouchableOpacity>
         <View style={styles.header_Name}>
-          <Text style={styles.header_Name_Bo}>{bookData.title}</Text>
-          <Text style={styles.header_Name_Au}>{AuthorData.authorname}</Text>
+          <Text style={styles.header_Name_Bo}>Catcher in the Rye</Text>
+          <Text style={styles.header_Name_Au}>J.D. Salinger</Text>
         </View>
         <TouchableOpacity>
           <Image source={require('../assets/images/ic_3cham.png')} />
@@ -88,10 +64,7 @@ const Read = props => {
         <PDF
           style={styles.body_NoiDung}
           trustAllCerts={false} // bỏ qua chứng chỉ ssl
-          source={{
-            uri: pdfResource,
-            cache: true,
-          }}
+          source={pdfResource}
           page={1} //hiển thị trang số 1 đầu tiên
           scale={1} // tỉ lệ phóng ban đầu
           minScale={1} // tỉ lệ phóng nhỏ nhất
