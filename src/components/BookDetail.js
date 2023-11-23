@@ -157,6 +157,9 @@ const BookDetail = (props) => {
     const Read = () => {
         navigation.navigate('Read', { id: bookData.id })
     }
+    const Play = () => {
+        navigation.navigate('Play' ,{ id: bookData.id })
+    }
     const Back = useCallback(() => {
         if (route.params && route.params.fromItem) {
             // Nếu từ màn hình Item navigate đến Detail, thì quay lại màn hình Item
@@ -457,7 +460,7 @@ const BookDetail = (props) => {
                         <Icon_1 name="document-text" size={16} color="white" />
                         <Text style={styles.Text_Click}>Đọc</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.View_Click1} onPress={() => navigation.navigate('Play')}>
+                    <TouchableOpacity style={styles.View_Click1} onPress={Play}>
                         <Icon_1 name="play-circle" size={16} color="white" />
                         <Text style={styles.Text_Click}>Nghe</Text>
                     </TouchableOpacity>
