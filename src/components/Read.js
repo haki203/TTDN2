@@ -41,6 +41,7 @@ const Read = props => {
         authorId: response.product.authorId,
         category: response.product.categoryId,
       };
+      console.log(response.product.pdf);
       setBookData(Data2);
       setPdfResource(Data2.pdfLink);
       AuthorBook(Data2.authorId);
@@ -49,8 +50,8 @@ const Read = props => {
 
     const AuthorBook = async id => {
       const response = await AxiosIntance().get('/product/author/' + id);
+      console.log(response,"author");
       const Data1 = {
-        id: response.author._id,
         authorname: response.author.name,
       };
       setAuthorData(Data1);
@@ -137,6 +138,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
+    paddingBottom:10,
   },
   header_Name: {
     display: 'flex',
@@ -154,7 +156,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   body: {
-    marginTop: 20,
     marginBottom: 20,
     flex: 1,
     justifyContent: 'flex-start',
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
   },
   body_NoiDung: {
     flex: 1,
-    width: Dimensions.get('window').width + 40,
+    width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
     fontSize: 12,
     backgroundColor: 'black',

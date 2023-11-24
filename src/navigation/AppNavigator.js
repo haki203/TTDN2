@@ -59,8 +59,10 @@ const Mains = () => {
 const Favourite = () => {
     return (
         <Stack.Navigator initialRouteName='Favourite' screenOptions={{ headerShown: false }}>
-            <Stack.Screen name='FavouriteScreen' component={FavouriteScreen} />
+            <Stack.Screen name='Favourite' component={FavouriteScreen} />
             <Stack.Screen name="SearchScreen" component={SearchScreen} />
+            <Stack.Screen name="DetailScreen" component={BookDetail} />
+            <Stack.Screen name="SettingScreen" component={SettingScreen} />
         </Stack.Navigator>
     )
 }
@@ -68,7 +70,10 @@ const Hot = () => {
     return (
         <Stack.Navigator initialRouteName='HotScreen' screenOptions={{ headerShown: false }}>
             <Stack.Screen name='HotScreen' component={HotScreen} />
-            <Stack.Screen name="SearchScreen" component={SearchScreen} />
+            <Stack.Screen name='SettingHot' component={SettingScreen} />
+            <Stack.Screen name="SearchHot" component={SearchScreen} />
+            <Stack.Screen name="PlayHot" component={PlayScreen} />
+            <Stack.Screen name="DetailHot" component={BookDetail} />
         </Stack.Navigator>
     )
 }
