@@ -8,9 +8,9 @@ const bgcolor = "#FFFFFF";
 const txtcolor = "#2E2E5D";
 const color_upload = "#FF97A3";
 import { AppContext } from '../navigation/AppContext';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+// import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import AxiosIntance from '../axios/AxiosIntance';
-import storage from '@react-native-firebase/storage';
+// import storage from '@react-native-firebase/storage';
 const log_outcolor = "#F77A55";
 const ProfileScreen = (props) => {
     const { navigation } = props;
