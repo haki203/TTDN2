@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, TextInput, FlatList, ScrollView, ToastAndroid, ActivityIndicator } from 'react-native'
+import { Image, StyleSheet, Text, View, TextInput, FlatList,TouchableOpacity, ScrollView, ToastAndroid, ActivityIndicator } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import Icon from "react-native-vector-icons/Feather"
 import Icon2 from "react-native-vector-icons/AntDesign"
@@ -6,7 +6,6 @@ import Icon3 from "react-native-vector-icons/FontAwesome"
 import { AppContext } from '../navigation/AppContext'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Screen1 from './tab_view/Screen1'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 import AxiosIntance from '../axios/AxiosIntance'
 
 const color_txt1 = "#9D9D9D";
