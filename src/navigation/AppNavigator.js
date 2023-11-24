@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
-import React, { useContext, useEffect, useState,useCallback  } from 'react'
+import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { useSelector } from 'react-redux';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -26,6 +26,9 @@ import ProfileScreen from '../components/ProfileScreen';
 import LoginUser from '../components/LoginUser';
 import WaitScreen from '../components/WaitScreen';
 import Navigate from '../components/Navigate';
+import Viewdetail from '../components/tab_view/Viewdetail';
+import Theloai from '../components/tab_view/Theloai';
+import Viewauthor from '../components/tab_view/Viewauthor';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Users = () => {
@@ -42,6 +45,8 @@ const Mains = () => {
     return (
         <Stack.Navigator initialRouteName='Home' screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Viewauthor" component={Viewauthor} />
+            <Stack.Screen name="Viewdetail" component={Viewdetail} />
             <Stack.Screen name='Detail' component={BookDetail} />
             <Stack.Screen name='Navigate' component={Navigate} />
             <Stack.Screen name='Play' component={PlayScreen} />
@@ -99,15 +104,15 @@ const ManChao = () => {
 
 const Home = ({ scrollY }) => {
     // const isTabVisibleRedux = useSelector(state => state.scroll.isTabVisible);
-    const {isTabVisible, setIsTabVisible} = useContext(AppContext);
+    const { isTabVisible, setIsTabVisible } = useContext(AppContext);
     const [display, setDisplay] = useState("");
-     
+
     // Sử dụng useEffect để theo dõi thay đổi của isTabVisible trong Redux
     useEffect(() => {
-        if(isTabVisible){
+        if (isTabVisible) {
             setDisplay('flex');
         }
-        else{
+        else {
             setDisplay('none');
         }
     }, [isTabVisible]);
@@ -116,9 +121,9 @@ const Home = ({ scrollY }) => {
             screenOptions={({ route }) => ({
                 headerShown: false,
                 color: 'red',
-                tabBarLabelStyle: { display:'none'},
-                tabBarActiveTintColor:'#D45555',
-                tabBarStyle: { height: 75, borderTopLeftRadius:40,borderTopRightRadius:40,display:display ,backgroundColor:'white'},
+                tabBarLabelStyle: { display: 'none' },
+                tabBarActiveTintColor: '#D45555',
+                tabBarStyle: { height: 75, borderTopLeftRadius: 40, borderTopRightRadius: 40, display: display, backgroundColor: 'white' },
             })}
         >
             <Tab.Screen
@@ -144,7 +149,7 @@ const Home = ({ scrollY }) => {
                 }}
             >
                 {() => (
-                    <Favourite/>
+                    <Favourite />
                 )}
             </Tab.Screen>
             <Tab.Screen
@@ -224,7 +229,7 @@ const AppNavigator = () => {
     const { isLogin, setIsLogin } = useContext(AppContext);
     return (
         <>
-            {isLogin == false ? <Users /> : <View style={{flex:1,backgroundColor:'white'}}><Home /></View>}
+            {isLogin == false ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}
         </>
 
     )
