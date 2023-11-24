@@ -157,6 +157,9 @@ const BookDetail = (props) => {
     const Read = () => {
         navigation.navigate('Read', { id: bookData.id })
     }
+    const Play = () => {
+        navigation.navigate('Play' ,{ id: bookData.id })
+    }
     const Back = useCallback(() => {
         if (route.params && route.params.fromItem) {
             // Nếu từ màn hình Item navigate đến Detail, thì quay lại màn hình Item
@@ -211,17 +214,16 @@ const BookDetail = (props) => {
                     Alert.alert('Vui lòng đánh giá sao');
                     return;
                 };
-                if (content) {
-                    setContent(content);
-                } else {
-                    Alert.alert('Vui lòng đánh tiêu đề');
-                    return;
-                };
-
                 if (title) {
                     setTitle(title);
                 } else {
-                    Alert.alert('Vui lòng đánh giá nội dung');
+                    Alert.alert('Vui lòng ghi tiêu đề');
+                    return;
+                };
+                if (content) {
+                    setContent(content);
+                } else {
+                    Alert.alert('Vui lòng ghi nội dung');
                     return;
                 };
                 console.log(title, "123");
@@ -441,7 +443,7 @@ const BookDetail = (props) => {
 
                         </View>
                     </View>
-                    <Text style={styles.Text_DocGia}> {tbRate}</Text>
+                    <Text style={styles.Text_DocGia}>{tbRate !== 0 ? tbRate : null}</Text>
                 </View>
                 <View style={styles.View_MoTa}>
                     <View>
@@ -458,7 +460,7 @@ const BookDetail = (props) => {
                         <Icon_1 name="document-text" size={16} color="white" />
                         <Text style={styles.Text_Click}>Đọc</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.View_Click1} onPress={() => navigation.navigate('Play')}>
+                    <TouchableOpacity style={styles.View_Click1} onPress={Play}>
                         <Icon_1 name="play-circle" size={16} color="white" />
                         <Text style={styles.Text_Click}>Nghe</Text>
                     </TouchableOpacity>
@@ -471,7 +473,7 @@ const BookDetail = (props) => {
                         <View style={[styles.View_ImageBook, { backgroundColor: '#dddddd', flex: 1, marginLeft: 10, alignItems: 'center' }]}>
                             <View style={{}}>
                                 <View style={styles.View_Danhgiane1}>
-                                    <Text style={styles.Text_Cmt}>{tbRate}</Text>
+                                    <Text style={styles.Text_Cmt}>{tbRate !== 0 ? tbRate : null}</Text>
                                     <View>
                                         <View style={styles.Star}>
                                             {tbRate > 4.7 ? (
@@ -616,28 +618,28 @@ const BookDetail = (props) => {
                                 </View>
                             </View>
                             <View style={{ borderBottomWidth: 1, width: '80%', borderBottomColor: 'grey', paddingTop: 10 }}></View>
-                            <TouchableOpacity style={{ paddingBottom: 5 }} onPress={() => setDobModalVisible1(true)}>
-                                <Text style={styles.Text_Danhgia12}>Đánh Giá</Text>
+                            <TouchableOpacity style={{
+                                padding: 5, marginTop: 5,
+                            }} onPress={() => setDobModalVisible1(true)}>
+                                <Text style={styles.Text_Danhgia12}>Viết bài đánh giá</Text>
                             </TouchableOpacity>
                             <Modal animationType="slide" transparent={true} visible={isDobModalVisible1}>
                                 <View style={styles.modalContainer}>
                                     <View style={styles.modalContent}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <TouchableOpacity onPress={() => handleSave()} style={styles.button}>
-                                                <Text style={styles.button_text}>Đăng</Text>
-                                            </TouchableOpacity>
-
                                             <TouchableOpacity onPress={() => setDobModalVisible1(false)} style={styles.button}>
                                                 <Text style={styles.button_text}>Hủy</Text>
                                             </TouchableOpacity>
+
+                                            <TouchableOpacity onPress={() => handleSave()} style={styles.button}>
+                                                <Text style={styles.button_text}>Đăng</Text>
+                                            </TouchableOpacity>
                                         </View>
-                                        {/* <Text style={styles.label}>Đánh giá của bạn:</Text> */}
                                         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
 
                                             <View style={styles.starContainer}>
                                                 {renderStars()}
                                             </View>
-                                            {/* <Text style={styles.ratingText}>{rating} sao</Text> */}
                                         </View>
 
                                         <TextInput
@@ -698,41 +700,41 @@ const BookDetail = (props) => {
 }
 
 export default BookDetail;
-export const DetailBookCC = async (itemId) => {
-    const response = await AxiosIntance().get("/product/" + itemId)
-    const Data2 = {
-        id: response.product._id,
-        title: response.product.title,
-        image: response.product.image,
-        description: response.product.description,
-        rate: response.product.rate,
-        category: response.product.categoryId,
-    }
-    setBookData(Data2);
-    AuthorBook(response.product.authorId)
-    Relate(response.product.categoryId)
-    Comment(response.product._id)
+// export const DetailBookCC = async (itemId) => {
+//     const response = await AxiosIntance().get("/product/" + itemId)
+//     const Data2 = {
+//         id: response.product._id,
+//         title: response.product.title,
+//         image: response.product.image,
+//         description: response.product.description,
+//         rate: response.product.rate,
+//         category: response.product.categoryId,
+//     }
+//     setBookData(Data2);
+//     AuthorBook(response.product.authorId)
+//     Relate(response.product.categoryId)
+//     Comment(response.product._id)
 
-    // ---------------------
-    console.log("------dang goi api getHeart-----");
+//     // ---------------------
+//     console.log("------dang goi api getHeart-----");
 
-    const res = await AxiosIntance().get("/product/favourite/get-book-by-user/" + infoUser.id);
-    console.log("Sách nè: ", res);
-    console.log("id sach detail ne ", Data2.id);
-    for (let index = 0; index < res.data.length; index++) {
-        console.log("id sach api ne ", res.data[index].favourite.bookId);
-        if (res.data[index].favourite.bookId == Data2.id) {
-            setIsHearted(true);
-            console.log("id sach trung ne ", res.data[index].favourite.bookId);
-            return;
-        }
-        else {
-            setIsHearted(false);
-        }
-    }
-    //------------------
-    setIsLoading(false)
-}
+//     const res = await AxiosIntance().get("/product/favourite/get-book-by-user/" + infoUser.id);
+//     console.log("Sách nè: ", res);
+//     console.log("id sach detail ne ", Data2.id);
+//     for (let index = 0; index < res.data.length; index++) {
+//         console.log("id sach api ne ", res.data[index].favourite.bookId);
+//         if (res.data[index].favourite.bookId == Data2.id) {
+//             setIsHearted(true);
+//             console.log("id sach trung ne ", res.data[index].favourite.bookId);
+//             return;
+//         }
+//         else {
+//             setIsHearted(false);
+//         }
+//     }
+//     //------------------
+//     setIsLoading(false)
+// }
 const styles = StyleSheet.create({
     Container: {
         flex: 1,
