@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingTop: 15,
-    paddingBottom: 85
+    paddingBottom: '25%'
   },
   hearderContainer: {
     height: height * 0.1,

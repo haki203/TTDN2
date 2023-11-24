@@ -24,7 +24,6 @@ const LibraryScreen = (props) => {
     const unsubscribe = navigation.addListener('focus', () => {
       setIsTabVisible(true)
     });
-
     return unsubscribe;
   }, []);
   return (
