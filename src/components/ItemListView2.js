@@ -88,7 +88,7 @@ const ItemListView2 = (props) => {
                         <Text style={{ marginTop: 3, fontSize: 10, fontFamily: 'Poppins-Medium', color: 'black' }}>Sách nghe - Sách nói</Text>
                         <View style={{ width: 200, flexDirection: 'row', justifyContent: 'space-between' }}>
                             <View style={styles.click}>
-                                <Icon name="playcircleo" size={20} color='black' onPress={() => navigation.navigate('Play')} />
+                                <Icon name="playcircleo" size={20} color='black' onPress={() => navigation.navigate('PlayHot',{ id: dulieu._id })} />
                                 <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
                                     Nghe
                                 </Text>
@@ -110,7 +110,7 @@ const ItemListView2 = (props) => {
                                     </Text>}
                             </View>
                             <View style={styles.click}>
-                                <Icon name="infocirlceo" size={20} color='black' onPress={() => navigation.navigate('Detail', { itemId: dulieu._id },)} />
+                                <Icon name="infocirlceo" size={20} color='black' onPress={() => navigation.navigate('DetailHot', { itemId: dulieu._id },)} />
 
                                 <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
                                     Chi tiết

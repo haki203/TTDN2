@@ -91,7 +91,7 @@ const PlayScreen = props => {
   };
   // Khởi tạo thoi gian hien tai
   useEffect(() => {
-    setIsTabVisible(false);
+    //setIsTabVisible(false);
     const interval = setInterval(updatePosition, 1000);
     return () => {
       clearInterval(interval);
