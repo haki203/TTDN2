@@ -1,173 +1,44 @@
-import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity,FlatList } from 'react-native';
 import { AppContext } from '../navigation/AppContext'
-
+import ItemListViewLibrary from './ItemListViewLibrary';
 import React, { useContext, useEffect, useState } from 'react'
-
-const color_text = "#272956";
-const color_view = "#4838D1";
-const bgcolor = "#FFFFFF";
-const pluscolor = "#CDCDCD";
+const progress = '80%'
 const color_logo = '#272956';
 const LibraryScreen = (props) => {
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+  const { infoUser} = useContext(AppContext);
   const [isEnabled, setIsEnabled] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
-  const { navigation } = props;
   const search = () => (
     navigation.navigate('SearchScreen')
 
   );
-  useEffect(() => {
-
-    const unsubscribe = navigation.addListener('focus', () => {
-      setIsTabVisible(true)
-    });
-    return unsubscribe;
-  }, []);
-  return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
-          <Text style={styles.authen}>Librarys</Text>
+          <Text style={styles.authen}>Thư Viện</Text>
         </View>
         <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
           <TouchableOpacity onPress={search}>
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
           </TouchableOpacity>
-          <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
+          <Image style={{width:45,height:45,borderRadius:60}} source={{uri:infoUser.avatar}} />
         </View>
       </View>
       <View View style={styles.bodyContainer}>
-        <View style={styles.body}>
-          {/* <View style={styles.textAllNumberSort}>
-            <View style={styles.textAllNumber}>
-              <Text style={styles.textAll} >All (1)</Text>
-            </View>
-            <View style={styles.sort}>
-              <Image source={require('../../src/assets/images/icsort.png')} />
-              <Text>Sort</Text>
-            </View>
-
-          </View> */}
-                {
-        isLoading ?
-          (
-            <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: '80%' }}><ActivityIndicator size={35} color={'#fff00'} /></View>
-          ) :
-
-          (
-            <View style={styles.book}>
-            <Image style={styles.imagebook} source={require('../../src/assets/images/Dac-Nhan-Tam.jpg')} />
-            <View style={styles.in4book}>
-              <Text style={styles.nameBook}> Tên Sách</Text>
-              <Text style={styles.nameAuthor}> Tên tác giả</Text>
-              <View style={{ alignItems: 'flex-start' }}>
-                <View style={styles.doneprocess}>
-                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-                  <View style={styles.process}>
-                    <Text style={{ color: '#272956', fontWeight: "500" }}>50%</Text>
-                  </View>
-                </View>
-
-                <View style={styles.processbar}>
-                  <View style={{ // Thanh màu xám
-                    height: 10,
-                    width: '70%',
-                    backgroundColor: '#cdcdcd',
-                    borderRadius: 5
-                  }} />
-                  <View style={styles.processbar2}>
-                    <View style={{
-                      height: 10,
-                      width: '35%',
-                      borderRadius: 5,
-                      backgroundColor: '#D44445'
-
-                    }} />
-                  </View>
-                </View>
-              </View>
-            </View>
-            <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
-          </View>
-
-          )
-      }
-
-          {/* <View style={styles.book}>
-            <Image style={styles.imagebook} source={require('../../src/assets/images/Dac-Nhan-Tam.jpg')} />
-            <View style={styles.in4book}>
-              <Text style={styles.nameBook}> Tên Sách</Text>
-              <Text style={styles.nameAuthor}> Tên tác giả</Text>
-              <View style={{ alignItems: 'flex-start' }}>
-                <View style={styles.doneprocess}>
-                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-                  <View style={styles.process}>
-                    <Text style={{ color: '#272956', fontWeight: "500" }}>50%</Text>
-                  </View>
-                </View>
-                <View style={styles.processbar}>
-                  <View style={{ // Thanh màu xám
-                    height: 10,
-                    width: '70%',
-                    backgroundColor: '#cdcdcd',
-                    borderRadius: 5
-                  }} />
-                  <View style={styles.processbar2}>
-                    <View style={{
-                      height: 10,
-                      width: '35%',
-                      borderRadius: 5,
-                      backgroundColor: '#D44445'
-
-                    }} />
-                  </View>
-                </View>
-              </View>
-            </View>
-            <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
-          </View>
-          <View style={styles.book}>
-            <Image style={styles.imagebook} source={require('../../src/assets/images/Dac-Nhan-Tam.jpg')} />
-            <View style={styles.in4book}>
-              <Text style={styles.nameBook}> Tên Sách</Text>
-              <Text style={styles.nameAuthor}> Tên tác giả</Text>
-              <View style={{ alignItems: 'flex-start' }}>
-                <View style={styles.doneprocess}>
-                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-                  <View style={styles.process}>
-                    <Text style={{ color: '#272956', fontWeight: "500" }}>50%</Text>
-                  </View>
-                </View>
-                <View style={styles.processbar}>
-                  <View style={{ // Thanh màu xám
-                    height: 10,
-                    width: '70%',
-                    backgroundColor: '#cdcdcd',
-                    borderRadius: 5
-                  }} />
-                  <View style={styles.processbar2}>
-                    <View style={{
-                      height: 10,
-                      width: '35%',
-                      borderRadius: 5,
-                      backgroundColor: '#D44445'
-
-                    }} />
-                  </View>
-                </View>
-              </View>
-            </View>
-            <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
-          </View> */}
+        <View style={styles.textAllNumber}>
+          <Text style={styles.textAll} >Tất cả (1)</Text>
+          
         </View>
+        <FlatList
+        data={dataNe}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => <ItemListViewLibrary dulieu={item} />}
+      />
       </View>
     </View>
-  );
 }
-
 const styles = StyleSheet.create({
   trackColor: {
     false: '#000000',
@@ -324,5 +195,11 @@ const styles = StyleSheet.create({
 
 
 });
-
+const dataNe = [
+  { id: '1', 
+  title: 'Tên Sách 1', 
+  author: 'Tác Giả 1', 
+  imageSource: require('../../src/assets/images/Dac-Nhan-Tam.jpg') },
+  // Thêm các mục khác nếu cần
+];
 export default LibraryScreen;
