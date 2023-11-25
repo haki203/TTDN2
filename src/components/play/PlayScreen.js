@@ -195,14 +195,10 @@ const PlayScreen = props => {
   //----------------------------------------------------------------------
 
   const limitText = text => {
-    try {
-      if (text.length > 20) {
-        return text.substring(0, 20) + '...';
-      } else {
-        return text;
-      }
-    } catch (error) {
-      console.log(error);
+    if (text.length > 30) {
+      return text.substring(0, 30) + '...';
+    } else {
+      return text;
     }
   };
 
@@ -255,7 +251,7 @@ const PlayScreen = props => {
                 color={'#d6d6d6'}></ActivityIndicator>
             </Text>
           ) : (
-            <Text style={styles.nameTrack}>{limitText(bookData.title)}</Text>
+            <Text style={styles.nameTrack}>{bookData.title}</Text>
           )}
           {/* <Text style={styles.nameTrack}>{bookData.title}</Text> */}
           <Icon name="ellipsis-h" color={colorTitle} size={sizeIcon} />
@@ -306,7 +302,7 @@ const PlayScreen = props => {
                 fontSize: 18,
                 color: '#272956',
               }}>
-              {limitText(AuthorData.authorname)}
+              {AuthorData.authorname}
             </Text>
           )}
         </View>
