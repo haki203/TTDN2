@@ -51,9 +51,10 @@ export default ItemListViewLibrary
 const styles = StyleSheet.create({
     
   imagebook: {
-    height: 110,
-    width: 110,
-    borderRadius: 20
+    margin: 10,
+    width: 60,
+    height: 90,
+    borderRadius: 10,
   },
   textAll: {
     fontSize: 23,
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
 
   },
   book: {
-    marginTop: 15,
+    marginTop: 17,
     flexDirection: 'row',
     borderBottomWidth: 1,
     paddingBottom: 15,
@@ -90,12 +91,15 @@ const styles = StyleSheet.create({
     marginEnd: 15
   },
   nameBook: {
-    fontSize: 20,
-    color: '#2E2E5D',
-    fontWeight: '500'
+    fontFamily: 'Poppins',
+    fontSize: 15,
+    fontStyle: 'normal',
+    fontWeight: '700',
+    color: color_text,
+    marginTop:5
   },
   nameAuthor: {
-    fontSize: 17,
+    fontSize: 14,
     color: '#4838D1',
   
 
@@ -103,7 +107,7 @@ const styles = StyleSheet.create({
   process: {
 
     fontWeight: "500",
-    marginTop: 15,
+    marginTop: 14,
     marginStart: 3
 
   },

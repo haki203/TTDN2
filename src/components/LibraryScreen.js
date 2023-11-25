@@ -7,6 +7,7 @@ const color_logo = '#272956';
 const LibraryScreen = (props) => {
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
   const { infoUser} = useContext(AppContext);
+  const { navigation } = props;
   const [isEnabled, setIsEnabled] = useState(false);
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
@@ -14,6 +15,7 @@ const LibraryScreen = (props) => {
     navigation.navigate('SearchScreen')
 
   );
+  return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
@@ -23,7 +25,7 @@ const LibraryScreen = (props) => {
           <TouchableOpacity onPress={search}>
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
           </TouchableOpacity>
-          <Image style={{width:45,height:45,borderRadius:60}} source={{uri:infoUser.avatar}} />
+          <Image style={{width: 40,height: 40,borderRadius: 30}} source={{uri:infoUser.avatar}} />
         </View>
       </View>
       <View View style={styles.bodyContainer}>
@@ -38,6 +40,7 @@ const LibraryScreen = (props) => {
       />
       </View>
     </View>
+  )
 }
 const styles = StyleSheet.create({
   trackColor: {
@@ -97,7 +100,8 @@ const styles = StyleSheet.create({
     borderRadius: 20
   },
   textAll: {
-    fontSize: 23,
+    fontSize: 22,
+    marginStart:5,
 
     color: '#000000',
     fontWeight: 'bold',
@@ -175,9 +179,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   tok: {
-    width: 40,
-    height: 40,
-    marginRight: 8
+    width: 35,
+    height: 35,
+    marginRight: 10
   }, profile: {
     width: 40,
     height: 40
@@ -197,8 +201,8 @@ const styles = StyleSheet.create({
 });
 const dataNe = [
   { id: '1', 
-  title: 'Tên Sách 1', 
-  author: 'Tác Giả 1', 
+  title: 'Đắc Nhân Tâm', 
+  author: 'Tony buổi sáng', 
   imageSource: require('../../src/assets/images/Dac-Nhan-Tam.jpg') },
   // Thêm các mục khác nếu cần
 ];
