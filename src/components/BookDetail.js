@@ -448,11 +448,15 @@ const BookDetail = (props) => {
                 <View style={styles.View_MoTa}>
                     <View>
                         <Text style={styles.Text_MoTa1}>Giới thiệu về tác giả</Text>
-                        <Text style={styles.Text_MoTa2}>{authorData.introduce}</Text>
+                        <Text style={styles.Text_MoTa2}>
+                        {authorData.introduce}
+                        </Text>
                     </View>
                     <View style={styles.View_Text3}>
                         <Text style={styles.Text_MoTa1}>Tổng quan về sách</Text>
-                        <Text style={styles.Text_MoTa2}>{bookData.description}</Text>
+                        <Text style={styles.Text_MoTa2}>
+                        {bookData.description}
+                        </Text>
                     </View>
                 </View>
                 <View style={styles.View_Click}>
