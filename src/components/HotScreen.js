@@ -1,7 +1,8 @@
+/* eslint-disable prettier/prettier */
 import {
   StyleSheet, Text,
   View, Image, ScrollView,
-  FlatList, Animated, TouchableOpacity, ActivityIndicator
+  FlatList, Animated, TouchableOpacity, ActivityIndicator,ToastAndroid
 } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../navigation/AppContext';
