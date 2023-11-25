@@ -10,8 +10,10 @@ const LibraryScreen = (props) => {
   const { infoUser } = useContext(AppContext);
   const { navigation } = props;
   const [isEnabled, setIsEnabled] = useState(false);
+  const [sum, setSum] = useState(0);
   const [data, setData] = useState([]);
   const [arrayLB, setArrayLB] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [arrayBook, setArrayBook] = useState([]);
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
@@ -19,31 +21,39 @@ const LibraryScreen = (props) => {
     navigation.navigate('SearchScreen')
 
   );
+  const getLB = async () => {
+    try {
+      const response = await AxiosIntance().get('/product/library/' + infoUser.id);
+      console.log(infoUser.id);
+      console.log(response);
+      let arrayBook = [];
+      for (let i = 0; i < response.library.length; i++) {
+        const res = await AxiosIntance().get('/product/' + response.library[i].bookId);
+        console.log(res);
 
-  useEffect(() => {
-    const getLB = async () => {
-      try {
-        const response = await AxiosIntance().get('/product/library/' + infoUser.id);
-
-        let arrayBook = [];
-        for (let i = 0; i < response.library.length; i++) {
-          const res = await AxiosIntance().get('/product/' + response.library[i].bookId);
-          const lb = {
-            image: res.product.image,
-            title: res.product.title, 
-            userId: response.library[i].userId,
-            progress: response.library[i].progress,
-            bookId: response.library[i].bookId
-          }
-          arrayBook.push(lb)
+        const ress = await AxiosIntance().get('/product/author/' + res.product.authorId);
+        console.log(" author ne: ", res.product.authorId);
+        console.log("ress author ne: ", ress);
+        const lb = {
+          image: res.product.image,
+          nameAuthor: ress.author.name,
+          title: res.product.title,
+          userId: response.library[i].userId,
+          progress: response.library[i].progress,
+          bookId: response.library[i].bookId
         }
-        setData(arrayBook)
-        console.log("data lb ne: ", data);
-
-      } catch (error) {
-        console.log("error: ", error);
+        arrayBook.push(lb)
       }
-    };
+      setSum(arrayBook.length)
+      setData(arrayBook)
+      console.log("data lb ne: ", data);
+
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
+  useEffect(() => {
+
     getLB();
 
   }, []);
@@ -51,10 +61,11 @@ const LibraryScreen = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
+
+        <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1, backgroundColor: '#f3f3f3', height: 80 }}>
           <Text style={styles.authen}>Thư Viện</Text>
         </View>
-        <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
+        <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21, backgroundColor: '#f3f3f3', height: 80 }}>
           <TouchableOpacity onPress={search}>
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
           </TouchableOpacity>
@@ -63,13 +74,13 @@ const LibraryScreen = (props) => {
       </View>
       <View View style={styles.bodyContainer}>
         <View style={styles.textAllNumber}>
-          <Text style={styles.textAll} >Tất cả (1)</Text>
+          <Text onPress={() => getLB()} style={styles.textAll} >Tất cả ({sum})</Text>
 
         </View>
         <FlatList
           data={data}
           keyExtractor={item => item.id}
-          renderItem={({ item }) => <ItemListViewLibrary dulieu={item} />}
+          renderItem={({ item }) => <ItemListViewLibrary dulieu={item} isLoading={isLoading} />}
         />
       </View>
     </View>
@@ -102,24 +113,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 25,
-  },
+
 
   container: {
-    backgroundColor: '#ffffff',
     flex: 1,
   },
   bodyContainer: {
-    backgroundColor: '#f3f3f3',
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    overflow: 'hidden',
-    flex: 1,
-    padding: 10
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
+    padding: 10,
+    paddingTop: 20,
+    backgroundColor: 'white',
+    height: '100%',
   },
   body: {
 
@@ -207,9 +212,13 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '100%',
-    height: 70,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: 80,
+    backgroundColor: 'black',
   },
   tok: {
     width: 35,
