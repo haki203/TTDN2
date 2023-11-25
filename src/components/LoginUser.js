@@ -16,13 +16,7 @@ const colorText = '#FFF';
 const LoginUser = props => {
   const { navigation } = props;
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      setIsTabVisible(false);
-    });
 
-    return unsubscribe;
-  }, []);
   return (
     <LinearGradient
       colors={['#4682B4', '#B0C4DE', '#ADD8E6']}
@@ -32,11 +26,11 @@ const LoginUser = props => {
       </TouchableOpacity>
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
         <View style={styles.leader}>
-          <Image
+          {/* <Image
             style={styles.profile}
           // source={require('../components/tab_view/image/profiles.png')}
-          ></Image>
-          <Text style={styles.txt}>Đăng nhập để lưu lại quá trình</Text>
+          ></Image> */}
+          <Text style={styles.txt}>Đăng nhập để tiếp tục</Text>
           <LinearGradient
             style={styles.btn}
             colors={['#FFD700', '#FFA500', '#FF8C00']}
@@ -46,9 +40,6 @@ const LoginUser = props => {
               <Text style={styles.txt2}>Đăng nhập</Text>
             </TouchableOpacity>
           </LinearGradient>
-          <TouchableOpacity style={styles.txt1}>
-            <Text style={styles.txt}>Tạo tài khoản mới</Text>
-          </TouchableOpacity>
         </View>
       </View>
     </LinearGradient>
