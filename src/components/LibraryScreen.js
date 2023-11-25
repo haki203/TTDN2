@@ -1,20 +1,53 @@
-import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity,FlatList } from 'react-native';
+import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity, FlatList } from 'react-native';
 import { AppContext } from '../navigation/AppContext'
 import ItemListViewLibrary from './ItemListViewLibrary';
 import React, { useContext, useEffect, useState } from 'react'
+import AxiosIntance from '../axios/AxiosIntance';
 const progress = '80%'
 const color_logo = '#272956';
 const LibraryScreen = (props) => {
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
-  const { infoUser} = useContext(AppContext);
+  const { infoUser } = useContext(AppContext);
   const { navigation } = props;
   const [isEnabled, setIsEnabled] = useState(false);
+  const [data, setData] = useState([]);
+  const [arrayLB, setArrayLB] = useState([]);
+  const [arrayBook, setArrayBook] = useState([]);
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
   const search = () => (
     navigation.navigate('SearchScreen')
 
   );
+
+  useEffect(() => {
+    const getLB = async () => {
+      try {
+        const response = await AxiosIntance().get('/product/library/' + infoUser.id);
+
+        let arrayBook = [];
+        for (let i = 0; i < response.library.length; i++) {
+          const res = await AxiosIntance().get('/product/' + response.library[i].bookId);
+          const lb = {
+            image: res.product.image,
+            title: res.product.title, 
+            userId: response.library[i].userId,
+            progress: response.library[i].progress,
+            bookId: response.library[i].bookId
+          }
+          arrayBook.push(lb)
+        }
+        setData(arrayBook)
+        console.log("data lb ne: ", data);
+
+      } catch (error) {
+        console.log("error: ", error);
+      }
+    };
+    getLB();
+
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -25,19 +58,19 @@ const LibraryScreen = (props) => {
           <TouchableOpacity onPress={search}>
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
           </TouchableOpacity>
-          <Image style={{width: 40,height: 40,borderRadius: 30}} source={{uri:infoUser.avatar}} />
+          <Image style={{ width: 40, height: 40, borderRadius: 30 }} source={{ uri: infoUser.avatar }} />
         </View>
       </View>
       <View View style={styles.bodyContainer}>
         <View style={styles.textAllNumber}>
           <Text style={styles.textAll} >Tất cả (1)</Text>
-          
+
         </View>
         <FlatList
-        data={dataNe}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => <ItemListViewLibrary dulieu={item} />}
-      />
+          data={data}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => <ItemListViewLibrary dulieu={item} />}
+        />
       </View>
     </View>
   )
@@ -101,7 +134,7 @@ const styles = StyleSheet.create({
   },
   textAll: {
     fontSize: 22,
-    marginStart:5,
+    marginStart: 5,
 
     color: '#000000',
     fontWeight: 'bold',
@@ -200,10 +233,12 @@ const styles = StyleSheet.create({
 
 });
 const dataNe = [
-  { id: '1', 
-  title: 'Đắc Nhân Tâm', 
-  author: 'Tony buổi sáng', 
-  imageSource: require('../../src/assets/images/Dac-Nhan-Tam.jpg') },
+  {
+    id: '1',
+    title: 'Đắc Nhân Tâm',
+    author: 'Tony buổi sáng',
+    imageSource: require('../../src/assets/images/Dac-Nhan-Tam.jpg')
+  },
   // Thêm các mục khác nếu cần
 ];
 export default LibraryScreen;
