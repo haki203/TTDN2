@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingTop: 15,
-    paddingBottom: '26%'
+    paddingBottom: '25%'
   },
   hearderContainer: {
     height: height * 0.1,
@@ -258,10 +258,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: '400',
-    color: '#000',
-    // backgroundColor: '#000',
-    width: '90%'
-    // paddingTop: 110
+    width:'80%',
+    color: '#000'
   }
 })
 

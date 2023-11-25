@@ -13,8 +13,8 @@ const { width, height } = Dimensions.get('window');
 import { useFocusEffect } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import { Alert } from 'react-native';
-const BookDetail = (props) => {
-    const { infoUser } = useContext(AppContext);
+const BookDetailDemo = (props) => {
+    //const { infoUser } = useContext(AppContext);
     const [, updateState] = useState();
     const scrollViewRef = useRef()
     // Hàm để buộc render lại màn hình
@@ -26,8 +26,6 @@ const BookDetail = (props) => {
     const [numCmt, setNumCmt] = useState(0);
     const [tbRate, setTbRate] = useState(0);
     const [dataCmt, setDataCmt] = useState([]);
-    const [numSeeAll, setNumSeeAll] = useState(true);
-    const [numSeeAll1, setNumSeeAll1] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
 
     const [RelateData2, setRelateData2] = useState([]);
@@ -57,26 +55,11 @@ const BookDetail = (props) => {
         setBookData(Data2);
         AuthorBook(response.product.authorId)
         Relate(response.product.categoryId)
-        Comment(response.product._id)
 
         // ---------------------
         console.log("------dang goi api getHeart-----");
 
-        const res = await AxiosIntance().get("/product/favourite/get-book-by-user/" + infoUser.id);
-        console.log("Sách nè: ", res);
-        console.log("id sach detail ne ", Data2.id);
-        for (let index = 0; index < res.data.length; index++) {
-            console.log("id sach api ne ", res.data[index].favourite.bookId);
-            if (res.data[index].favourite.bookId == Data2.id) {
-                setIsHearted(true);
-                console.log("id sach trung ne ", res.data[index].favourite.bookId);
-                return;
-            }
-            else {
-                setIsHearted(false);
-
-            }
-        }
+        
         //------------------
         setIsLoading(false)
     }
@@ -114,71 +97,21 @@ const BookDetail = (props) => {
 
         // setIsLoading(false)
     }
-    const Comment = async (bookId) => {
-        //setIsLoading(true);
-        const response = await AxiosIntance().get('/product/comment/get-by-id/' + bookId);
-        if (response.result) {
-            if (response.comments.length >= 1) {
-                setNumCmt(response.comments.length)
 
-                let arraycmt = []
-                let arrayratecmt = []
-                for (let index = 0; index < response.comments.length; index++) {
-                    arraycmt.push(response.comments[index]);
-                    arrayratecmt.push(response.comments[index].rate);
-
-                }
-                let sum = 0;
-                let tong = 0;
-                for (let index = 0; index < arrayratecmt.length; index++) {
-                    sum = parseFloat(sum) + 1.0;
-                    tong += parseFloat(arrayratecmt[index]);
-                }
-                setTbRate(parseFloat(parseFloat(tong) / parseFloat(sum)).toFixed(1))
-                setDataCmt(arraycmt)
-                setIsLoading(false)
-            }
-            else {
-                setIsLoading(false)
-                setTbRate(0)
-                setDataCmt([])
-                setNumCmt(0)
-            }
-
-        }
-    }
 
     const handleStarPress = (newRating) => {
         setRating(newRating);
     };
 
-    const onSeeAll=()=>{
-        setNumSeeAll(!numSeeAll)
 
-    }
-    const onSeeAll1=()=>{
-        setNumSeeAll1(!numSeeAll1)
 
-    }
-    const limitText = (text,num) => {
-        console.log(num);
-        try {
-          if (text.length > num) {
-            return text.substring(0, num) + '...';
-          } else {
-            return text;
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
     // const { isTabVisible, setIsTabVisible } = useContext(AppContext);
     const longText = "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời.";
     const Read = () => {
-        navigation.navigate('Read', { id: bookData.id })
+        navigation.navigate('GoLogin')
     }
     const Play = () => {
-        navigation.navigate('Play' ,{ id: bookData.id })
+        navigation.navigate('GoLogin')
     }
     const Back = useCallback(() => {
         if (route.params && route.params.fromItem) {
@@ -196,94 +129,13 @@ const BookDetail = (props) => {
 
     const [isHearted, setIsHearted] = useState(false);
 
-    const handleHeartPress = async () => {
-        // setIsHearted(!isHearted);
-        try {
-            const favouriteData = {
-                idUser: infoUser.id,
-                idBook: bookData.id,
-            };
-            console.log("favouriteData nè: ", favouriteData);
-            const response = await AxiosIntance().post("/product/favourite/new/", favouriteData);
-            console.log("Data trả về nè: ", response);
-
-            if (response.message == "yeu thich thanh cong") {
-                setIsHearted(!isHearted, true);
-                ToastAndroid.show("Yêu thích thành công ", ToastAndroid.SHORT);
-            }
-            else {
-                setIsHearted(!isHearted, false);
-                ToastAndroid.show("Hủy yêu thích thành công ", ToastAndroid.SHORT);
-
-            }
-        } catch (error) {
-        }
-    }
 
     const [isDobModalVisible, setDobModalVisible] = useState(false);
     const [isDobModalVisible1, setDobModalVisible1] = useState(false);
     const [content, setContent] = useState('');
     const [title, setTitle] = useState('');
 
-    const handleSave = async () => {
-        try {
-            try {
-                if (rating) {
-                    setRating(rating);
-                } else {
-                    Alert.alert('Vui lòng đánh giá sao');
-                    return;
-                };
-                if (title) {
-                    setTitle(title);
-                } else {
-                    Alert.alert('Vui lòng ghi tiêu đề');
-                    return;
-                };
-                if (content) {
-                    setContent(content);
-                } else {
-                    Alert.alert('Vui lòng ghi nội dung');
-                    return;
-                };
-                console.log(title, "123");
-                console.log(content, "123");
-                console.log(rating, "123");
-            } catch (error) {
-
-            }
-
-
-            try {
-                const postData = {
-                    userId: infoUser.id,
-                    bookId: bookData.id,
-                    title: title,
-                    content: content,
-                    rate: rating,
-                };
-                console.log("postData ne: ", postData);
-                const response = await AxiosIntance().post('/product/comment/new', postData);
-                console.log("Kết quả nè", response);
-                if (response.result) {
-                    Alert.alert('Đăng thành công');
-                    setTitle("")
-                    setContent("")
-                    setRating(0)
-                    setDobModalVisible1(false);
-                    Comment(postData.bookId)
-
-                }
-                else {
-                    Alert.alert('Đăng thất bại', response.message);
-                }
-            } catch (error) {
-                Alert.alert('Đăng thất bại', error);
-            }
-        } catch (error) {
-            console.log("lỗi đăng nè: ", error);
-        }
-    };
+ 
 
     const [rating, setRating] = useState(0);
 
@@ -309,9 +161,7 @@ const BookDetail = (props) => {
                 <TouchableOpacity onPress={Back}>
                     <Icon_1 name="chevron-back" size={30} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={handleHeartPress}>
-                    <Icon_2 name={isHearted ? 'heart' : 'heart-o'} size={30} color="red" />
-                </TouchableOpacity>
+
             </View>
             <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
                 <View style={styles.Image_Container}>
@@ -468,15 +318,11 @@ const BookDetail = (props) => {
                 <View style={styles.View_MoTa}>
                     <View>
                         <Text style={styles.Text_MoTa1}>Giới thiệu về tác giả</Text>
-                        <Text onPress={()=>onSeeAll1()} style={styles.Text_MoTa2}>
-                        {limitText(authorData.introduce, numSeeAll1 ? 250 : 1900)}
-                        </Text>
+                        <Text style={styles.Text_MoTa2}>{authorData.introduce}</Text>
                     </View>
                     <View style={styles.View_Text3}>
                         <Text style={styles.Text_MoTa1}>Tổng quan về sách</Text>
-                        <Text onPress={()=>onSeeAll()} style={styles.Text_MoTa2}>
-                        {limitText(bookData.description, numSeeAll ? 250 : 1900)}
-                        </Text>
+                        <Text style={styles.Text_MoTa2}>{bookData.description}</Text>
                     </View>
                 </View>
                 <View style={styles.View_Click}>
@@ -489,228 +335,7 @@ const BookDetail = (props) => {
                         <Text style={styles.Text_Click}>Nghe</Text>
                     </TouchableOpacity>
                 </View>
-                <View style={styles.View_BinhLuan}>
-                    <Text style={styles.Text_BinhLuan}>Bình luận</Text>
-                    <View style={{ flexDirection: 'row' }}>
-                        <Image style={styles.View_ImageBook} source={{ uri: bookData.image }} />
 
-                        <View style={[styles.View_ImageBook, { backgroundColor: '#dddddd', flex: 1, marginLeft: 10, alignItems: 'center' }]}>
-                            <View style={{}}>
-                                <View style={styles.View_Danhgiane1}>
-                                    <Text style={styles.Text_Cmt}>{tbRate !== 0 ? tbRate : null}</Text>
-                                    <View>
-                                        <View style={styles.Star}>
-                                            {tbRate > 4.7 ? (
-                                                <View style={styles.Star}>
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                </View>
-                                            ) : (
-                                                <View >
-                                                    {tbRate > 4.2 && tbRate < 4.7 ? (
-                                                        <View style={styles.Star}>
-                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
-                                                        </View>
-                                                    ) : (
-                                                        <View>
-                                                            {tbRate >= 3.7 && tbRate < 4.2 ? (
-                                                                <View style={styles.Star}>
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-
-                                                                </View>
-                                                            ) : (
-                                                                <View>
-                                                                    {tbRate >= 3.2 && tbRate < 3.7 ? (
-                                                                        <View style={styles.Star}>
-                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
-                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-
-                                                                        </View>
-                                                                    ) : (
-                                                                        <View>
-                                                                            {tbRate >= 2.7 && tbRate < 3.2 ? (
-                                                                                <View style={styles.Star}>
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-
-                                                                                </View>
-                                                                            ) : (
-                                                                                <View>
-                                                                                    {tbRate >= 2.2 && tbRate < 2.7 ? (
-                                                                                        <View style={styles.Star}>
-                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
-                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-
-                                                                                        </View>
-                                                                                    ) : (
-                                                                                        <View>
-                                                                                            {tbRate >= 1.7 && tbRate < 2.2 ? (
-                                                                                                <View style={styles.Star}>
-                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-
-                                                                                                </View>
-                                                                                            ) : (
-                                                                                                <View>
-                                                                                                    {tbRate >= 1.2 && tbRate < 1.7 ? (
-                                                                                                        <View style={styles.Star}>
-                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
-                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                        </View>
-                                                                                                    ) : (
-                                                                                                        <View>
-                                                                                                            {tbRate >= 0.7 && tbRate < 1.2 ? (
-                                                                                                                <View style={styles.Star}>
-                                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                                </View>
-                                                                                                            ) : (
-                                                                                                                <View>
-                                                                                                                    {tbRate >= 0.1 && tbRate < 0.7 ? (
-                                                                                                                        <View style={styles.Star}>
-                                                                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
-                                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
-                                                                                                                        </View>
-                                                                                                                    ) : (
-                                                                                                                        <View style={styles.Star}>
-                                                                                                                            <Text style={styles.Text_MoTa1}>Chưa có đánh giá</Text>
-                                                                                                                        </View>
-                                                                                                                    )}
-
-                                                                                                                </View>
-                                                                                                            )}
-
-                                                                                                        </View>
-                                                                                                    )}
-
-                                                                                                </View>
-                                                                                            )}
-
-                                                                                        </View>
-                                                                                    )}
-
-                                                                                </View>
-                                                                            )}
-
-                                                                        </View>
-                                                                    )}
-
-                                                                </View>
-                                                            )}
-
-                                                        </View>
-                                                    )}
-
-                                                </View>
-                                            )}
-                                        </View>
-                                    </View>
-
-                                    <Text style={styles.Text_Cmt1}>{numCmt} lượt</Text>
-                                </View>
-                            </View>
-                            <View style={{ borderBottomWidth: 1, width: '80%', borderBottomColor: 'grey', paddingTop: 10 }}></View>
-                            <TouchableOpacity style={{
-                                padding: 5,
-                                marginTop: 5,
-                                borderRadius: 10, 
-                                borderWidth: 2, 
-                                borderColor: '#ccc',
-                            }} onPress={() => setDobModalVisible1(true)}>
-                                <Text style={styles.Text_Danhgia12}>Viết bài đánh giá</Text>
-                            </TouchableOpacity>
-                            <Modal animationType="slide" transparent={true} visible={isDobModalVisible1}>
-                                <View style={styles.modalContainer}>
-                                    <View style={styles.modalContent}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <TouchableOpacity onPress={() => setDobModalVisible1(false)} style={styles.button}>
-                                                <Text style={styles.button_text}>Hủy</Text>
-                                            </TouchableOpacity>
-
-                                            <TouchableOpacity onPress={() => handleSave()} style={styles.button}>
-                                                <Text style={styles.button_text}>Đăng</Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-
-                                            <View style={styles.starContainer}>
-                                                {renderStars()}
-                                            </View>
-                                        </View>
-
-                                        <TextInput
-                                            style={styles.input}
-                                            placeholder="Tiêu đề"
-                                            placeholderTextColor='#CDCDCD'
-                                            onChangeText={(text) => setTitle(text)}
-                                            value={title}
-                                        />
-                                        <TextInput
-                                            style={styles.input1}
-                                            placeholder="Nội dung"
-                                            placeholderTextColor='#CDCDCD'
-                                            onChangeText={(text) => setContent(text)}
-                                            value={content}
-                                        />
-
-                                    </View>
-                                </View>
-                            </Modal>
-                        </View>
-                    </View>
-                    <TouchableOpacity onPress={() => setDobModalVisible(true)} style={styles.Xem_All}>
-                        <Text style={styles.Xem_All_Cmt}>Xem tất cả đánh giá ({numCmt})</Text>
-                        <Icon_2 style={styles.Next} name="caret-down" size={26} color="white" />
-                    </TouchableOpacity>
-                    <Modal animationType="slide" transparent={true} visible={isDobModalVisible}>
-                        <View style={styles.modalContainer}>
-                            <View style={styles.modalContent}>
-                                <View>
-                                    <Text onPress={() => Comment(bookData.id)} style={styles.Text_Modal_DanhGia}>Tất cả đánh giá ({numCmt})</Text>
-                                    <Icon_3 onPress={() => setDobModalVisible(false)} style={styles.Close} name="closecircleo" size={28} color="#272956" />
-                                </View>
-                                <FlatList style={styles.List_Comment}
-                                    data={dataCmt.slice().reverse()}
-                                    renderItem={({ item }) => <ItemListComment dulieu={item} navigation={navigation} />}
-                                    keyExtractor={item => item._id}
-                                    showsVerticalScrollIndicator={false}
-                                />
-                            </View>
-                        </View>
-                    </Modal>
-                </View>
                 <View style={styles.Separator}></View>
                 <View style={styles.View_SachLienQuan}>
                     <Text style={styles.Text_BinhLuan}>Những sách liên quan</Text>
@@ -727,7 +352,7 @@ const BookDetail = (props) => {
     )
 }
 
-export default BookDetail;
+export default BookDetailDemo;
 // export const DetailBookCC = async (itemId) => {
 //     const response = await AxiosIntance().get("/product/" + itemId)
 //     const Data2 = {
@@ -1033,9 +658,9 @@ const styles = StyleSheet.create({
     Separator: {
         borderBottomColor: '#272956',
         borderBottomWidth: 0.5,
-        marginBottom: 5,
         marginRight: 20,
         marginLeft: 20,
+        marginTop: 15
     },
     View_SachLienQuan: {
         padding: 20
@@ -1154,66 +779,3 @@ const styles = StyleSheet.create({
     },
 });
 
-const dataNe = [
-    {
-        "id": 1,
-        "name": "Mac",
-        "date": "12/10/2022",
-        "star": 5,
-        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-    }, {
-        "id": 2,
-        "name": "Lorita",
-        "date": "12/6/2022",
-        "star": 2,
-        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-    }, {
-        "id": 3,
-        "name": "Tadeo",
-        "date": "9/16/2023",
-        "star": 2,
-        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-    }, {
-        "id": 4,
-        "name": "Levey",
-        "date": "3/16/2023",
-        "star": 5,
-        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-    }, {
-        "id": 5,
-        "name": "Ketti",
-        "date": "12/30/2022",
-        "star": 1,
-        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-    }, {
-        "id": 6,
-        "name": "Callean",
-        "date": "5/18/2023",
-        "star": 3,
-        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-    }, {
-        "id": 7,
-        "name": "Sophey",
-        "date": "5/9/2023",
-        "star": 3,
-        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-    }, {
-        "id": 8,
-        "name": "Erminia",
-        "date": "12/31/2022",
-        "star": 5,
-        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-    }, {
-        "id": 9,
-        "name": "Judon",
-        "date": "2/3/2023",
-        "star": 1,
-        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-    }, {
-        "id": 10,
-        "name": "Farrell",
-        "date": "5/29/2023",
-        "star": 4,
-        "content": "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời."
-    }
-]

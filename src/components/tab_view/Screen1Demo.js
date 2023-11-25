@@ -14,7 +14,7 @@ const colorsearch = "#F2F2F2";
 const icon_color = "#C4C4C4";
 const namebook_color = "#272956";
 
-const Screen1 = ({ navigation, id }) => {
+const Screen1Demo = ({ navigation, id }) => {
 
   const [datasearch, setDatasearch] = useState([]);
   const [datapublicAt, setDatapublicAt] = useState([]);
@@ -67,7 +67,7 @@ const Screen1 = ({ navigation, id }) => {
   const ItemBook = ({ item, navigation, isLoading }) => {
     const { _id, title, authorId, image } = item;
     const onPressItem = () => {
-      navigation.navigate('Detail', { itemId: _id });
+      navigation.navigate('DetailDemo', { itemId: _id });
     }
 
     return (
@@ -90,7 +90,7 @@ const Screen1 = ({ navigation, id }) => {
 
         {/* Text */}
         <View style={styles.containerText}>
-          <Text numberOfLines={1} style={styles.rendername}>{title}</Text>
+          <Text style={styles.rendername}>{title.substring(0, 20)}</Text>
 
           <Text style={styles.renderauthor}>{authorId}</Text>
         </View>
@@ -109,7 +109,7 @@ const Screen1 = ({ navigation, id }) => {
         isLoading ?
           (
             <View>
-              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>{textHot}</Text>
+              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2,}}>{textHot}</Text>
               <FlatList
 
                 data={["name","aav"]}
@@ -119,7 +119,7 @@ const Screen1 = ({ navigation, id }) => {
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
               />
-              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2}}>{textNew}</Text>
+              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>{textNew}</Text>
               <FlatList
 
                 data={["name","aav"]}
@@ -134,7 +134,7 @@ const Screen1 = ({ navigation, id }) => {
 
           (
             <View>
-              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>{textHot}</Text>
+              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, }}>{textHot}</Text>
               <FlatList
                 style={{ flexGrow: 0 }}
                 data={datasearch}
@@ -142,8 +142,9 @@ const Screen1 = ({ navigation, id }) => {
                 keyExtractor={item => item.id}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
               />
-              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2}}>{textNew}</Text>
+              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2,}}>{textNew}</Text>
               <FlatList
                 style={{ flexGrow: 0 }}
                 data={datapublicAt}
@@ -151,6 +152,8 @@ const Screen1 = ({ navigation, id }) => {
                 keyExtractor={item => item.id}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+
               />
             </View>
 
@@ -159,34 +162,32 @@ const Screen1 = ({ navigation, id }) => {
 
 
 
-      <Text style={{ fontSize: 20, fontWeight: '500', color: color_txt2, marginLeft: 10 }}>{textNoti}</Text>
+      <Text style={{ fontSize: 20, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>{textNoti}</Text>
 
     </View>
   )
 }
 
-export default Screen1
+export default Screen1Demo
 
 const styles = StyleSheet.create({
   container: {
     flex: 1
   },
   containerText: {
-    marginLeft: 5,
-    marginTop: -10
+
+    marginTop: -10,
   }, rendername: {
     color: namebook_color,
     fontSize: 16,
     fontWeight: '700',
-    fontFamily: 'Poppins',
-    width:140
-    
+    fontFamily: 'Poppins'
   }, renderImagePopularDeals: {
     width: 150,
     height: 220,
     margin: 20,
-    borderRadius: 10,
-    marginLeft:1
+    marginLeft:0,
+    borderRadius: 10
   },
   renderauthor: {
     color: 'black'

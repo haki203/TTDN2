@@ -10,16 +10,17 @@ import {
   TouchableWithoutFeedback,
   ActivityIndicator,
 } from 'react-native';
-import React, {useEffect, useState, useContext} from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import TrackPlayer from 'react-native-track-player';
-import {AppContext} from '../../navigation/AppContext';
+import { AppContext } from '../../navigation/AppContext';
 import Slider from 'react-native-slider';
 import AxiosIntance from '../../axios/AxiosIntance';
+import { err } from 'react-native-svg/lib/typescript/xml';
 
 const colorTitle = '#272956';
 const colorContent = 'white';
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const backgroundHeader = '#272956';
 const backgroundBody = 'white';
 const fontFamily = 'Poppins';
@@ -27,9 +28,9 @@ const sizeIcon = 26;
 const baseImgPath = '../../assets/images/';
 const colorProgressText = '#5849B7';
 const PlayScreen = props => {
-  const {isTabVisible, setIsTabVisible} = useContext(AppContext);
-  const {navigation} = props;
-  const {id} = props.route.params;
+  const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+  const { navigation } = props;
+  const { id } = props.route.params;
   const route = props.route;
   //----------------------------------------------------------------------
   const [AuthorData, setAuthorData] = useState({});
@@ -136,11 +137,15 @@ const PlayScreen = props => {
     }
   }, [isSetup]);
   const getInfo = async () => {
-    const duration = await TrackPlayer.getDuration();
-    setDuration(duration);
-    setIsSetup(true);
-    const name = await TrackPlayer.getCurrentTrack();
-    setTrackName(trackList[name].title);
+    try {
+      const duration = await TrackPlayer.getDuration();
+      setDuration(duration);
+      setIsSetup(true);
+      const name = await TrackPlayer.getCurrentTrack();
+      setTrackName(trackList[name].title);
+    } catch (error) {
+      console.log(error);
+    }
   };
   // Bắt đầu chơi
 
@@ -195,28 +200,36 @@ const PlayScreen = props => {
   //----------------------------------------------------------------------
 
   const limitText = text => {
-    if (text.length > 30) {
-      return text.substring(0, 30) + '...';
-    } else {
-      return text;
+    try {
+      if (text.length > 20) {
+        return text.substring(0, 20) + '...';
+      } else {
+        return text;
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   useEffect(() => {
     const DetailBook = async () => {
-      const response = await AxiosIntance().get('/product/' + id);
-      const Data2 = {
-        id: response.product._id,
-        title: response.product.title,
-        authorId: response.product.authorId,
-        category: response.product.categoryId,
-        image: response.product.image,
-        audio: response.product.audio,
-      };
-      setBookData(Data2);
-      AuthorBook(Data2.authorId);
-      setAudioUrl(Data2.audio);
-      setIsLoading(false);
+      try {
+        const response = await AxiosIntance().get('/product/' + id);
+        const Data2 = {
+          id: response.product._id,
+          title: response.product.title,
+          authorId: response.product.authorId,
+          category: response.product.categoryId,
+          image: response.product.image,
+          audio: response.product.audio,
+        };
+        setBookData(Data2);
+        AuthorBook(Data2.authorId);
+        setAudioUrl(Data2.audio);
+        setIsLoading(false);
+      } catch (error) {
+        console.log("error get detail book ",error);
+      }
     };
     DetailBook();
 
@@ -233,230 +246,234 @@ const PlayScreen = props => {
     AuthorBook();
   }, []);
 
-  return (
-    <TouchableWithoutFeedback onPress={handlePressScreen}>
-      <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <Icon
-            onPress={() => navigation.goBack()}
-            name="caret-down"
-            color={colorTitle}
-            size={sizeIcon}
-          />
-          {isLoading ? (
-            <Text style={styles.nameTrack}>
-              Tên sách...
-              <ActivityIndicator
-                size={30}
-                color={'#d6d6d6'}></ActivityIndicator>
-            </Text>
-          ) : (
-            <Text style={styles.nameTrack}>{bookData.title}</Text>
-          )}
-          {/* <Text style={styles.nameTrack}>{bookData.title}</Text> */}
-          <Icon name="ellipsis-h" color={colorTitle} size={sizeIcon} />
-        </View>
-
-        <View style={styles.playContainer}>
-          {isLoading ? (
-            <View
-              style={{
-                width: 240,
-                height: 320,
-                borderRadius: 20,
-                backgroundColor: 'white',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <ActivityIndicator
-                size={30}
-                color={'#d6d6d6'}></ActivityIndicator>
-            </View>
-          ) : (
-            <Image
-              style={{width: 240, height: 320, borderRadius: 20}}
-              source={{uri: bookData.image}}
+  try {
+    return (
+      <TouchableWithoutFeedback onPress={handlePressScreen}>
+        <View style={styles.container}>
+          <View style={styles.headerContainer}>
+            <Icon
+              onPress={() => navigation.goBack()}
+              name="caret-down"
+              color={colorTitle}
+              size={sizeIcon}
             />
-          )}
-        </View>
-        <View
-          style={{height: 40, justifyContent: 'center', alignItems: 'center'}}>
-          {isLoading ? (
-            <Text
-              style={{
-                fontWeight: '700',
-                fontFamily: 'Poppins',
-                fontSize: 18,
-                color: '#272956',
-              }}>
-              Tên tác giả....
-              <ActivityIndicator
-                size={30}
-                color={'#d6d6d6'}></ActivityIndicator>
-            </Text>
-          ) : (
-            <Text
-              style={{
-                fontWeight: '700',
-                fontFamily: 'Poppins',
-                fontSize: 18,
-                color: '#272956',
-              }}>
-              {AuthorData.authorname}
-            </Text>
-          )}
-        </View>
-        <View style={styles.progressContainer}>
-          <View style={{width: '80%'}}>
-            <View style={{height: 30}}>
-              <Slider
-                minimumTrackTintColor={colorProgressText} // Màu của phần dưới thanh tua
-                maximumTrackTintColor="#7B7B7B" // Màu của phần trên thanh tua
-                thumbTintColor={colorProgressText} // Màu của nút tua
-                thumbStyle={{width: 12, height: 12}}
-                value={position}
-                minimumValue={0}
-                maximumValue={duration}
-                onValueChange={handleSeek}
-              />
-            </View>
+            {isLoading ? (
+              <Text style={styles.nameTrack}>
+                Tên sách...
+                <ActivityIndicator
+                  size={30}
+                  color={'#d6d6d6'}></ActivityIndicator>
+              </Text>
+            ) : (
+              <Text style={styles.nameTrack}>{limitText(bookData.title)}</Text>
+            )}
+            {/* <Text style={styles.nameTrack}>{bookData.title}</Text> */}
+            <Icon name="ellipsis-h" color={colorTitle} size={sizeIcon} />
+          </View>
+
+          <View style={styles.playContainer}>
             {isLoading ? (
               <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={styles.progressText}>00:00</Text>
-                <Text style={styles.progressText}>00:00</Text>
+                style={{
+                  width: 240,
+                  height: 320,
+                  borderRadius: 20,
+                  backgroundColor: 'white',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <ActivityIndicator
+                  size={30}
+                  color={'#d6d6d6'}></ActivityIndicator>
               </View>
             ) : (
-              <View
-                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={styles.progressText}>0{formatTime(position)}</Text>
-                <Text style={styles.progressText}>0{formatTime(duration)}</Text>
-              </View>
+              <Image
+                style={{ width: 240, height: 320, borderRadius: 20 }}
+                source={{ uri: bookData.image }}
+              />
             )}
           </View>
-        </View>
-
-        <View style={styles.menuContainer}>
           <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: '80%',
-            }}>
-            <TouchableOpacity onPress={() => setOnVolume(!onVolume)}>
-              <Image source={require(baseImgPath + 'VolumeUp.png')} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={skipToPreviousTrack}>
-              <Image source={require(baseImgPath + 'back.png')} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.btnPlay} onPress={playPlayer}>
-              {!isPlay ? (
-                <Image source={require(baseImgPath + 'PlayMusic.png')} />
-              ) : (
-                // <Image source={require(baseImgPath + "PlayMusic.png")} />
+            style={{ height: 40, justifyContent: 'center', alignItems: 'center' }}>
+            {isLoading ? (
+              <Text
+                style={{
+                  fontWeight: '700',
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
+                  color: '#272956',
+                }}>
+                Tên tác giả....
+                <ActivityIndicator
+                  size={30}
+                  color={'#d6d6d6'}></ActivityIndicator>
+              </Text>
+            ) : (
+              <Text
+                style={{
+                  fontWeight: '700',
+                  fontFamily: 'Poppins',
+                  fontSize: 18,
+                  color: '#272956',
+                }}>
+                {limitText(AuthorData.authorname)}
+              </Text>
+            )}
+          </View>
+          <View style={styles.progressContainer}>
+            <View style={{ width: '80%' }}>
+              <View style={{ height: 30 }}>
+                <Slider
+                  minimumTrackTintColor={colorProgressText} // Màu của phần dưới thanh tua
+                  maximumTrackTintColor="#7B7B7B" // Màu của phần trên thanh tua
+                  thumbTintColor={colorProgressText} // Màu của nút tua
+                  thumbStyle={{ width: 12, height: 12 }}
+                  value={position}
+                  minimumValue={0}
+                  maximumValue={duration}
+                  onValueChange={handleSeek}
+                />
+              </View>
+              {isLoading ? (
                 <View
-                  style={{
-                    backgroundColor: '#0000cc',
-                    width: 60,
-                    height: 60,
-                    borderRadius: 50,
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <View
-                    style={{
-                      height: 30,
-                      width: 12,
-                      backgroundColor: 'white',
-                      margin: 2,
-                      borderRadius: 10,
-                    }}></View>
-                  <View
-                    style={{
-                      height: 30,
-                      width: 12,
-                      backgroundColor: 'white',
-                      margin: 2,
-                      borderRadius: 10,
-                    }}></View>
+                  style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={styles.progressText}>00:00</Text>
+                  <Text style={styles.progressText}>00:00</Text>
+                </View>
+              ) : (
+                <View
+                  style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={styles.progressText}>0{formatTime(position)}</Text>
+                  <Text style={styles.progressText}>0{formatTime(duration)}</Text>
                 </View>
               )}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={skipToNextTrack}>
-              <Image source={require(baseImgPath + 'next.png')} />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image source={require(baseImgPath + 'Upload.png')} />
-            </TouchableOpacity>
+            </View>
           </View>
-          {onVolume ? (
+
+          <View style={styles.menuContainer}>
             <View
               style={{
-                position: 'absolute',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
                 width: '80%',
-                start: '10%',
-                top: '110%',
+              }}>
+              <TouchableOpacity onPress={() => setOnVolume(!onVolume)}>
+                <Image source={require(baseImgPath + 'VolumeUp.png')} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={skipToPreviousTrack}>
+                <Image source={require(baseImgPath + 'back.png')} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.btnPlay} onPress={playPlayer}>
+                {!isPlay ? (
+                  <Image source={require(baseImgPath + 'PlayMusic.png')} />
+                ) : (
+                  // <Image source={require(baseImgPath + "PlayMusic.png")} />
+                  <View
+                    style={{
+                      backgroundColor: '#0000cc',
+                      width: 60,
+                      height: 60,
+                      borderRadius: 50,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <View
+                      style={{
+                        height: 30,
+                        width: 12,
+                        backgroundColor: 'white',
+                        margin: 2,
+                        borderRadius: 10,
+                      }}></View>
+                    <View
+                      style={{
+                        height: 30,
+                        width: 12,
+                        backgroundColor: 'white',
+                        margin: 2,
+                        borderRadius: 10,
+                      }}></View>
+                  </View>
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity onPress={skipToNextTrack}>
+                <Image source={require(baseImgPath + 'next.png')} />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Image source={require(baseImgPath + 'Upload.png')} />
+              </TouchableOpacity>
+            </View>
+            {onVolume ? (
+              <View
+                style={{
+                  position: 'absolute',
+                  width: '80%',
+                  start: '10%',
+                  top: '110%',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                <Text style={[styles.textFooter, { marginRight: 10 }]}>
+                  Âm lượng
+                </Text>
+                <Slider
+                  style={{ width: 200, height: 40 }}
+                  minimumValue={0}
+                  minimumTrackTintColor={colorProgressText} // Màu của phần dưới thanh tua
+                  maximumTrackTintColor="#7B7B7B" // Màu của phần trên thanh tua
+                  thumbTintColor={colorProgressText} // Màu của nút tua
+                  maximumValue={1}
+                  value={volume}
+                  onValueChange={newVolume => changeVolume(newVolume)}
+                />
+              </View>
+            ) : (
+              <View></View>
+            )}
+          </View>
+
+          <View style={styles.footerContainer}>
+            <View
+              style={{
+                marginTop: height * 0.08,
                 flexDirection: 'row',
                 alignItems: 'center',
+                justifyContent: 'space-between',
+                width: '80%',
               }}>
-              <Text style={[styles.textFooter, {marginRight: 10}]}>
-                Âm lượng
-              </Text>
-              <Slider
-                style={{width: 200, height: 40}}
-                minimumValue={0}
-                minimumTrackTintColor={colorProgressText} // Màu của phần dưới thanh tua
-                maximumTrackTintColor="#7B7B7B" // Màu của phần trên thanh tua
-                thumbTintColor={colorProgressText} // Màu của nút tua
-                maximumValue={1}
-                value={volume}
-                onValueChange={newVolume => changeVolume(newVolume)}
-              />
+              <TouchableOpacity style={styles.itemFooter}>
+                <Image
+                  style={[styles.iconFooter, { width: 30 }]}
+                  source={require(baseImgPath + 'bookmark.png')}
+                />
+                <Text style={styles.textFooter}>Lưu</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={styles.itemFooter}>
+                <Image
+                  style={styles.iconFooter}
+                  source={require(baseImgPath + 'chapter.png')}
+                />
+                <Text style={styles.textFooter}>Chương</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={changeSpeed} style={styles.itemFooter}>
+                <Image
+                  style={styles.iconFooter}
+                  source={require(baseImgPath + 'speed.png')}
+                />
+                <Text style={styles.textFooter}>Tốc độ {speed.toFixed(1)}</Text>
+              </TouchableOpacity>
             </View>
-          ) : (
-            <View></View>
-          )}
-        </View>
-
-        <View style={styles.footerContainer}>
-          <View
-            style={{
-              marginTop: height * 0.08,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              width: '80%',
-            }}>
-            <TouchableOpacity style={styles.itemFooter}>
-              <Image
-                style={[styles.iconFooter, {width: 30}]}
-                source={require(baseImgPath + 'bookmark.png')}
-              />
-              <Text style={styles.textFooter}>Lưu</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.itemFooter}>
-              <Image
-                style={styles.iconFooter}
-                source={require(baseImgPath + 'chapter.png')}
-              />
-              <Text style={styles.textFooter}>Chương</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={changeSpeed} style={styles.itemFooter}>
-              <Image
-                style={styles.iconFooter}
-                source={require(baseImgPath + 'speed.png')}
-              />
-              <Text style={styles.textFooter}>Tốc độ {speed.toFixed(1)}</Text>
-            </TouchableOpacity>
           </View>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
-  );
+      </TouchableWithoutFeedback>
+    );
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export default PlayScreen;
@@ -526,13 +543,13 @@ const styles = StyleSheet.create({
 const trackList = [
   {
     id: '0',
-    url: require('../../common/ai-la-gi.mp3'),
+    url: 'https://drive.google.com/u/0/uc?id=1tqxWFFV2xUtAHUfHGGZfaul3CEQF_y8_&export=download',
     title: 'Trí tuệ nhân tạo',
     artist: 'Artist 1',
   },
   {
     id: '1',
-    url: require('../../common/dacnhantam.mp3'),
+    url: 'https://drive.google.com/u/0/uc?id=1tqxWFFV2xUtAHUfHGGZfaul3CEQF_y8_&export=download',
     title: 'Đắc nhân tâm',
     artist: 'Artist 2',
   },

@@ -1,173 +1,91 @@
-import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity, FlatList } from 'react-native';
 import { AppContext } from '../navigation/AppContext'
-
+import ItemListViewLibrary from './ItemListViewLibrary';
 import React, { useContext, useEffect, useState } from 'react'
-
-const color_text = "#272956";
-const color_view = "#4838D1";
-const bgcolor = "#FFFFFF";
-const pluscolor = "#CDCDCD";
+import AxiosIntance from '../axios/AxiosIntance';
+const progress = '80%'
 const color_logo = '#272956';
 const LibraryScreen = (props) => {
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+  const { infoUser } = useContext(AppContext);
+  const { navigation } = props;
   const [isEnabled, setIsEnabled] = useState(false);
+  const [sum, setSum] = useState(0);
+  const [data, setData] = useState([]);
+  const [arrayLB, setArrayLB] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [arrayBook, setArrayBook] = useState([]);
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
-  const { navigation } = props;
   const search = () => (
     navigation.navigate('SearchScreen')
 
   );
+  const getLB = async () => {
+    try {
+      const response = await AxiosIntance().get('/product/library/' + infoUser.id);
+      console.log(infoUser.id);
+      console.log(response);
+      let arrayBook = [];
+      for (let i = 0; i < response.library.length; i++) {
+        const res = await AxiosIntance().get('/product/' + response.library[i].bookId);
+        console.log(res);
+
+        const ress = await AxiosIntance().get('/product/author/' + res.product.authorId);
+        console.log(" author ne: ", res.product.authorId);
+        console.log("ress author ne: ", ress);
+        const lb = {
+          image: res.product.image,
+          nameAuthor: ress.author.name,
+          title: res.product.title,
+          userId: response.library[i].userId,
+          progress: response.library[i].progress,
+          bookId: response.library[i].bookId
+        }
+        arrayBook.push(lb)
+      }
+      setSum(arrayBook.length)
+      setData(arrayBook)
+      console.log("data lb ne: ", data);
+
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
   useEffect(() => {
 
-    const unsubscribe = navigation.addListener('focus', () => {
-      setIsTabVisible(true)
-    });
-    return unsubscribe;
+    getLB();
+
   }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1 }}>
-          <Text style={styles.authen}>Librarys</Text>
+
+        <View style={{ alignItems: 'center', flexDirection: 'row', paddingLeft: 21, flex: 1, backgroundColor: '#f3f3f3', height: 80 }}>
+          <Text style={styles.authen}>Thư Viện</Text>
         </View>
-        <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
+        <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21, backgroundColor: '#f3f3f3', height: 80 }}>
           <TouchableOpacity onPress={search}>
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
           </TouchableOpacity>
-          <Image style={styles.profile} source={require('../assets/images/profile1.png')} />
+          <Image style={{ width: 40, height: 40, borderRadius: 30 }} source={{ uri: infoUser.avatar }} />
         </View>
       </View>
       <View View style={styles.bodyContainer}>
-        <View style={styles.body}>
-          {/* <View style={styles.textAllNumberSort}>
-            <View style={styles.textAllNumber}>
-              <Text style={styles.textAll} >All (1)</Text>
-            </View>
-            <View style={styles.sort}>
-              <Image source={require('../../src/assets/images/icsort.png')} />
-              <Text>Sort</Text>
-            </View>
+        <View style={styles.textAllNumber}>
+          <Text onPress={() => getLB()} style={styles.textAll} >Tất cả ({sum})</Text>
 
-          </View> */}
-                {
-        isLoading ?
-          (
-            <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: '80%' }}><ActivityIndicator size={35} color={'#fff00'} /></View>
-          ) :
-
-          (
-            <View style={styles.book}>
-            <Image style={styles.imagebook} source={require('../../src/assets/images/Dac-Nhan-Tam.jpg')} />
-            <View style={styles.in4book}>
-              <Text style={styles.nameBook}> Tên Sách</Text>
-              <Text style={styles.nameAuthor}> Tên tác giả</Text>
-              <View style={{ alignItems: 'flex-start' }}>
-                <View style={styles.doneprocess}>
-                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-                  <View style={styles.process}>
-                    <Text style={{ color: '#272956', fontWeight: "500" }}>50%</Text>
-                  </View>
-                </View>
-
-                <View style={styles.processbar}>
-                  <View style={{ // Thanh màu xám
-                    height: 10,
-                    width: '70%',
-                    backgroundColor: '#cdcdcd',
-                    borderRadius: 5
-                  }} />
-                  <View style={styles.processbar2}>
-                    <View style={{
-                      height: 10,
-                      width: '35%',
-                      borderRadius: 5,
-                      backgroundColor: '#D44445'
-
-                    }} />
-                  </View>
-                </View>
-              </View>
-            </View>
-            <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
-          </View>
-
-          )
-      }
-
-          {/* <View style={styles.book}>
-            <Image style={styles.imagebook} source={require('../../src/assets/images/Dac-Nhan-Tam.jpg')} />
-            <View style={styles.in4book}>
-              <Text style={styles.nameBook}> Tên Sách</Text>
-              <Text style={styles.nameAuthor}> Tên tác giả</Text>
-              <View style={{ alignItems: 'flex-start' }}>
-                <View style={styles.doneprocess}>
-                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-                  <View style={styles.process}>
-                    <Text style={{ color: '#272956', fontWeight: "500" }}>50%</Text>
-                  </View>
-                </View>
-                <View style={styles.processbar}>
-                  <View style={{ // Thanh màu xám
-                    height: 10,
-                    width: '70%',
-                    backgroundColor: '#cdcdcd',
-                    borderRadius: 5
-                  }} />
-                  <View style={styles.processbar2}>
-                    <View style={{
-                      height: 10,
-                      width: '35%',
-                      borderRadius: 5,
-                      backgroundColor: '#D44445'
-
-                    }} />
-                  </View>
-                </View>
-              </View>
-            </View>
-            <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
-          </View>
-          <View style={styles.book}>
-            <Image style={styles.imagebook} source={require('../../src/assets/images/Dac-Nhan-Tam.jpg')} />
-            <View style={styles.in4book}>
-              <Text style={styles.nameBook}> Tên Sách</Text>
-              <Text style={styles.nameAuthor}> Tên tác giả</Text>
-              <View style={{ alignItems: 'flex-start' }}>
-                <View style={styles.doneprocess}>
-                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-                  <View style={styles.process}>
-                    <Text style={{ color: '#272956', fontWeight: "500" }}>50%</Text>
-                  </View>
-                </View>
-                <View style={styles.processbar}>
-                  <View style={{ // Thanh màu xám
-                    height: 10,
-                    width: '70%',
-                    backgroundColor: '#cdcdcd',
-                    borderRadius: 5
-                  }} />
-                  <View style={styles.processbar2}>
-                    <View style={{
-                      height: 10,
-                      width: '35%',
-                      borderRadius: 5,
-                      backgroundColor: '#D44445'
-
-                    }} />
-                  </View>
-                </View>
-              </View>
-            </View>
-            <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
-          </View> */}
         </View>
+        <FlatList
+          data={data}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => <ItemListViewLibrary dulieu={item} isLoading={isLoading} />}
+        />
       </View>
     </View>
-  );
+  )
 }
-
 const styles = StyleSheet.create({
   trackColor: {
     false: '#000000',
@@ -195,24 +113,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 25,
-  },
+
 
   container: {
-    backgroundColor: '#ffffff',
     flex: 1,
   },
   bodyContainer: {
-    backgroundColor: '#f3f3f3',
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    overflow: 'hidden',
-    flex: 1,
-    padding: 10
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
+    padding: 10,
+    paddingTop: 20,
+    backgroundColor: 'white',
+    height: '100%',
   },
   body: {
 
@@ -226,7 +138,8 @@ const styles = StyleSheet.create({
     borderRadius: 20
   },
   textAll: {
-    fontSize: 23,
+    fontSize: 22,
+    marginStart: 5,
 
     color: '#000000',
     fontWeight: 'bold',
@@ -299,14 +212,18 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '100%',
-    height: 70,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: 80,
+    backgroundColor: 'black',
   },
   tok: {
-    width: 40,
-    height: 40,
-    marginRight: 8
+    width: 35,
+    height: 35,
+    marginRight: 10
   }, profile: {
     width: 40,
     height: 40
@@ -324,5 +241,13 @@ const styles = StyleSheet.create({
 
 
 });
-
+const dataNe = [
+  {
+    id: '1',
+    title: 'Đắc Nhân Tâm',
+    author: 'Tony buổi sáng',
+    imageSource: require('../../src/assets/images/Dac-Nhan-Tam.jpg')
+  },
+  // Thêm các mục khác nếu cần
+];
 export default LibraryScreen;

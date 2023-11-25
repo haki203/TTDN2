@@ -31,6 +31,8 @@ import Navigate from '../components/Navigate';
 import Viewdetail from '../components/tab_view/Viewdetail';
 import Theloai from '../components/tab_view/Theloai';
 import Viewauthor from '../components/tab_view/Viewauthor';
+import HomeDemo from '../components/HomeDemo';
+import BookDetailDemo from '../components/BookDetailDemo';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Users = () => {
@@ -227,14 +229,33 @@ const Play = () => {
         </Stack.Navigator>
     );
 };
+const ChuaLogin = () => {
+    return (
+        <Stack.Navigator initialRouteName='HomeDemo' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='HomeDemo' component={HomeDemo} />
+            <Stack.Screen name="DetailDemo" component={BookDetailDemo} />
+            <Stack.Screen name="SettingDemo" component={SettingScreen} />
+            <Stack.Screen name="GoLogin" component={LoginUser} />
+        </Stack.Navigator>
+    )
+}
 const AppNavigator = () => {
     const { isLogin, setIsLogin } = useContext(AppContext);
+    const { test } = useContext(AppContext);
     return (
         <>
-            {isLogin == false ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}
-        </>
+            {
+                test ?
+                    <>{!isLogin ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
 
+                    :
+                    <ChuaLogin />
+            }
+        </>
     )
+    // return(
+    //     <ChuaLogin/>
+    // )
 }
 
 export default AppNavigator;
