@@ -26,6 +26,7 @@ const Read = props => {
   const {navigation} = props;
   const {id} = props.route.params;
   const route = props.route;
+  const [isLoading, setIsLoading] = useState(true);
 
   const [AuthorData, setAuthorData] = useState({});
   const [bookData, setBookData] = useState({});
@@ -45,16 +46,18 @@ const Read = props => {
       setBookData(Data2);
       setPdfResource(Data2.pdfLink);
       AuthorBook(Data2.authorId);
+      setIsLoading(false);
     };
     DetailBook();
 
     const AuthorBook = async id => {
       const response = await AxiosIntance().get('/product/author/' + id);
-      console.log(response,"author");
+      console.log(response, 'author');
       const Data1 = {
         authorname: response.author.name,
       };
       setAuthorData(Data1);
+      setIsLoading(false);
     };
 
     AuthorBook();
@@ -86,40 +89,52 @@ const Read = props => {
         </TouchableOpacity>
       </View>
       <View style={styles.body}>
-        <PDF
-          style={styles.body_NoiDung}
-          trustAllCerts={false} // bỏ qua chứng chỉ ssl
-          source={{
-            uri: pdfResource,
-            cache: true,
-          }}
-          page={1} //hiển thị trang số 1 đầu tiên
-          scale={1} // tỉ lệ phóng ban đầu
-          minScale={1} // tỉ lệ phóng nhỏ nhất
-          maxScale={2.0} // tỉ lệ phóng lớn nhất
-          cache={true} // lưu trữ tệp PDF trong bộ nhớ cache
-          renderActivityIndicator={() => (
-            <ActivityIndicator color="black" size="large" />
-          )} // hiển thị loading
-          enablePaging={false} // bật chế độ phân trang
-          onLoadProgress={percentage =>
-            console.log(`---------------------Loading :${percentage}`)
-          } // hiển thị phần trăm loading
-          onLoadComplete={(numberOfPage, filePath) => {
-            console.log(
-              `---------------Loading complete. Number of pages: ${numberOfPage}`,
-            );
-          }} // hiển thị khi load xong
-          onPageChanged={(page, totalPages) =>
-            console.log(`-----------------------${page}/${totalPages}`)
-          } //  hiển thị số trang
-          onError={error => console.log(error)} // hiển thị lỗi
-          // onPageSingleTap={page => alert(page)} // hiển thị khi click vào trang
-          onPressLink={link => Linking.openURL(link)} // hiển thị khi click vào link
-          // onScaleChanged={scale => console.log(scale)} // hiển thị khi thay đổi tỉ lệ phóng
-          // singlePage={true}
-          spacing={5} // khoảng cách giữa 2 trang
-        />
+        {isLoading ? (
+          <View
+            style={{
+              width: '100%',
+              height: '100%',
+              alignContent: 'center',
+              justifyContent: 'center',
+            }}>
+            <ActivityIndicator size={30} color={'black'} />
+          </View>
+        ) : (
+          <PDF
+            style={styles.body_NoiDung}
+            trustAllCerts={false} // bỏ qua chứng chỉ ssl
+            source={{
+              uri: pdfResource,
+              cache: true,
+            }}
+            page={1} //hiển thị trang số 1 đầu tiên
+            scale={1} // tỉ lệ phóng ban đầu
+            minScale={1} // tỉ lệ phóng nhỏ nhất
+            maxScale={2.0} // tỉ lệ phóng lớn nhất
+            cache={true} // lưu trữ tệp PDF trong bộ nhớ cache
+            renderActivityIndicator={() => (
+              <ActivityIndicator color="black" size="large" />
+            )} // hiển thị loading
+            enablePaging={false} // bật chế độ phân trang
+            onLoadProgress={percentage =>
+              console.log(`---------------------Loading :${percentage}`)
+            } // hiển thị phần trăm loading
+            onLoadComplete={(numberOfPage, filePath) => {
+              console.log(
+                `---------------Loading complete. Number of pages: ${numberOfPage}`,
+              );
+            }} // hiển thị khi load xong
+            onPageChanged={(page, totalPages) =>
+              console.log(`-----------------------${page}/${totalPages}`)
+            } //  hiển thị số trang
+            onError={error => console.log(error)} // hiển thị lỗi
+            // onPageSingleTap={page => alert(page)} // hiển thị khi click vào trang
+            onPressLink={link => Linking.openURL(link)} // hiển thị khi click vào link
+            // onScaleChanged={scale => console.log(scale)} // hiển thị khi thay đổi tỉ lệ phóng
+            // singlePage={true}
+            spacing={5} // khoảng cách giữa 2 trang
+          />
+        )}
       </View>
     </View>
   );
@@ -138,7 +153,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 20,
-    paddingBottom:10,
+    paddingBottom: 10,
   },
   header_Name: {
     display: 'flex',

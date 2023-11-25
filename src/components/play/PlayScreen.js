@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Dimensions,
   TouchableWithoutFeedback,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState, useContext} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -34,6 +35,7 @@ const PlayScreen = props => {
   const [AuthorData, setAuthorData] = useState({});
   const [bookData, setBookData] = useState({});
   const [audioUrl, setAudioUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   const [trackName, setTrackName] = useState('');
   const [onVolume, setOnVolume] = useState(false);
   const [speed, setSpeed] = useState(1);
@@ -214,6 +216,7 @@ const PlayScreen = props => {
       setBookData(Data2);
       AuthorBook(Data2.authorId);
       setAudioUrl(Data2.audio);
+      setIsLoading(false);
     };
     DetailBook();
 
@@ -224,6 +227,7 @@ const PlayScreen = props => {
         authorname: response.author.name,
       };
       setAuthorData(Data1);
+      setIsLoading(false);
     };
 
     AuthorBook();
@@ -239,27 +243,68 @@ const PlayScreen = props => {
             color={colorTitle}
             size={sizeIcon}
           />
-          <Text style={styles.nameTrack}>{bookData.title}</Text>
+          {isLoading ? (
+            <Text style={styles.nameTrack}>
+              Tên sách...
+              <ActivityIndicator
+                size={30}
+                color={'#d6d6d6'}></ActivityIndicator>
+            </Text>
+          ) : (
+            <Text style={styles.nameTrack}>{bookData.title}</Text>
+          )}
+          {/* <Text style={styles.nameTrack}>{bookData.title}</Text> */}
           <Icon name="ellipsis-h" color={colorTitle} size={sizeIcon} />
         </View>
 
         <View style={styles.playContainer}>
-          <Image
-            style={{width: 240, height: 320, borderRadius: 20}}
-            source={{uri: bookData.image}}
-          />
+          {isLoading ? (
+            <View
+              style={{
+                width: 240,
+                height: 320,
+                borderRadius: 20,
+                backgroundColor: 'white',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <ActivityIndicator
+                size={30}
+                color={'#d6d6d6'}></ActivityIndicator>
+            </View>
+          ) : (
+            <Image
+              style={{width: 240, height: 320, borderRadius: 20}}
+              source={{uri: bookData.image}}
+            />
+          )}
         </View>
         <View
           style={{height: 40, justifyContent: 'center', alignItems: 'center'}}>
-          <Text
-            style={{
-              fontWeight: '700',
-              fontFamily: 'Poppins',
-              fontSize: 18,
-              color: '#272956',
-            }}>
-            {AuthorData.authorname}
-          </Text>
+          {isLoading ? (
+            <Text
+              style={{
+                fontWeight: '700',
+                fontFamily: 'Poppins',
+                fontSize: 18,
+                color: '#272956',
+              }}>
+              Tên tác giả....
+              <ActivityIndicator
+                size={30}
+                color={'#d6d6d6'}></ActivityIndicator>
+            </Text>
+          ) : (
+            <Text
+              style={{
+                fontWeight: '700',
+                fontFamily: 'Poppins',
+                fontSize: 18,
+                color: '#272956',
+              }}>
+              {AuthorData.authorname}
+            </Text>
+          )}
         </View>
         <View style={styles.progressContainer}>
           <View style={{width: '80%'}}>
@@ -275,11 +320,19 @@ const PlayScreen = props => {
                 onValueChange={handleSeek}
               />
             </View>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text style={styles.progressText}>{formatTime(position)}</Text>
-              <Text style={styles.progressText}>{formatTime(duration)}</Text>
-            </View>
+            {isLoading ? (
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text style={styles.progressText}>00:00</Text>
+                <Text style={styles.progressText}>00:00</Text>
+              </View>
+            ) : (
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text style={styles.progressText}>0{formatTime(position)}</Text>
+                <Text style={styles.progressText}>0{formatTime(duration)}</Text>
+              </View>
+            )}
           </View>
         </View>
 

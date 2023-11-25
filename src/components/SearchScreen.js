@@ -15,6 +15,7 @@ const SearchScreen = (props) => {
   const { navigation } = props;
   // const { isTabVisible, setIsTabVisible } = useContext(AppContext);
   const [dataNe, setdataNe] = useState([]);
+  const [data1Ne, setdata1Ne] = useState([]);
   const [imagee, setImagee] = useState([]);
   const [nameauthor, setNameauthor] = useState([]);
   const [isLoading, setisLoading] = useState(true);
@@ -22,25 +23,28 @@ const SearchScreen = (props) => {
   const [searchText, setSearchText] = useState('');
   let timeout = null;
   let searchPerformed = false;
-  const countDownSearch = (text) => {
-    if (timeout) {
-      clearTimeout(timeout);
-    }
-    if (!searchPerformed) {
-      timeout = setTimeout(() => {
-        search(text);
-        searchPerformed = true;
-      }, 3000);
-    }
+  // const countDownSearch = (text) => {
+  //   if (timeout) {
+  //     clearTimeout(timeout);
+  //   }
+  //   if (!searchPerformed) {
+  //     timeout = setTimeout(() => {
+  //       search(text);
+  //       searchPerformed = true;
+  //     }, 3000);
+  //   }
     
-  }
+  // }
   const search = async (text) => {
+    setdataNe([]);
     setisLoading(true);
+    //setisLoading(true);
     if (text.length > 0) {
       const respone = await AxiosIntance().get("/product/search/name?keyword=" + text);
       if (respone.result == true) {
         // lay du lieu
         setdataNe(respone.product);
+        setdata1Ne(respone.product);
         console.log("data neee " + respone.product)
         setisLoading(false);
       }
@@ -49,8 +53,18 @@ const SearchScreen = (props) => {
       }
     }
   }
+  useEffect(() => {
+    const delaySearch = setTimeout(() => {
+      if (searchText.length > 0) {
+        search(searchText);
+      }
+    }, 2000); // Đợi 1 giây trước khi gọi hàm search
 
+    return () => clearTimeout(delaySearch); // Xóa timeout nếu component bị unmounted
+  }, [searchText]);
   const HandleChangeText = async (text) => {
+    setisLoading(true);
+
     setSearchText(text)
     if (text.length > 0) {
       countDownSearch(text)
