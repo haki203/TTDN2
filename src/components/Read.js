@@ -12,6 +12,8 @@ import {
   Alert,
   fetch,
   Modal,
+  FlatList,
+  ToastAndroid,
 } from 'react-native';
 import React, {useContext, useState, useEffect} from 'react';
 import {AppContext} from '../navigation/AppContext';
@@ -37,6 +39,7 @@ const Read = props => {
   const [bookData, setBookData] = useState({});
   const [pdfResource, setPdfResource] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const DetailBook = async () => {
@@ -94,6 +97,25 @@ const Read = props => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
+
+  const ItemChuong = ({item}) => {
+    const {id, title, chuong} = item;
+    const onPressItem = () => {
+      setPage(item.position);
+      console.log('chuyen sang trang doc', id);
+    };
+
+    return (
+      <View>
+        <TouchableOpacity onPress={onPressItem}>
+          <Text style={styles.itemTxt}>
+            Chương {chuong}: {title}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -133,7 +155,7 @@ const Read = props => {
           animationType="slide"
           transparent={true}
           visible={isModalVisible}>
-          <TouchableOpacity
+          <View
             onPress={toggleModal}
             style={{
               backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -141,23 +163,17 @@ const Read = props => {
               height: '100%',
             }}>
             <View style={styles.containerModal}>
-              <Text style={styles.titleModal}>Tùy chọn</Text>
+              <Text style={styles.titleModal}>Chọn Chương</Text>
               <View style={styles.bodyModal}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate(
-                      'Detail',
-                      {itemId: bookData.id},
-                      toggleModal(),
-                    )
-                  }>
-                  <View style={styles.itembody}>
-                    <View style={styles.itemicon}>
-                      <Icon2 name="info" color="#272956" size={15} />
-                    </View>
-                    <Text style={styles.itemTxt}>Thông tin sách</Text>
-                  </View>
-                </TouchableOpacity>
+                <View style={styles.itembody}></View>
+                <FlatList
+                  data={dataChuong}
+                  renderItem={({item}) => (
+                    <ItemChuong item={item} navigation={navigation} />
+                  )}
+                  keyExtractor={item => item.id}
+                  showsVerticalScrollIndicator={true}
+                />
               </View>
               <Icon2
                 onPress={toggleModal}
@@ -167,7 +183,7 @@ const Read = props => {
                 color="#272956"
               />
             </View>
-          </TouchableOpacity>
+          </View>
         </Modal>
       </View>
 
@@ -190,7 +206,7 @@ const Read = props => {
               uri: pdfResource,
               cache: true,
             }}
-            page={1} //hiển thị trang số 1 đầu tiên
+            page={page} //hiển thị trang số 1 đầu tiên
             scale={1} // tỉ lệ phóng ban đầu
             minScale={1} // tỉ lệ phóng nhỏ nhất
             maxScale={2.0} // tỉ lệ phóng lớn nhất
@@ -301,16 +317,15 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-around',
   },
-  itembody: {
-    flexDirection: 'row',
-  },
+
   itemTxt: {
     color: color_text,
     fontFamily: 'Poppins',
-    fontSize: 15,
+    fontSize: 16,
     fontStyle: 'normal',
     fontWeight: '600',
     marginLeft: 15,
+    paddingTop: 60,
   },
   itemicon: {
     width: 25,
@@ -321,3 +336,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+const dataChuong = [
+  {id: 1, title: 'Chuyến hành trình của giấc mơ', chuong: 1, position: 1},
+  {id: 2, title: 'Lời mách bảo của trái tim', chuong: 2, position: 10},
+  {id: 3, title: 'Người bán dầu thơm', chuong: 3, position: 19},
+];
