@@ -616,7 +616,11 @@ const BookDetail = (props) => {
                             </View>
                             <View style={{ borderBottomWidth: 1, width: '80%', borderBottomColor: 'grey', paddingTop: 10 }}></View>
                             <TouchableOpacity style={{
-                                padding: 5, marginTop: 5,
+                                padding: 5,
+                                marginTop: 5,
+                                borderRadius: 10, // Set border radius for rounded corners
+                                borderWidth: 2, // Set border width
+                                borderColor: '#ccc', // Set border color
                             }} onPress={() => setDobModalVisible1(true)}>
                                 <Text style={styles.Text_Danhgia12}>Viết bài đánh giá</Text>
                             </TouchableOpacity>
