@@ -23,7 +23,7 @@ const HotScreen = (props) => {
 
 
   const settings = () => (
-    navigation.navigate('Setting')
+    navigation.navigate('SettingHot')
 
   );
 
@@ -44,17 +44,17 @@ const HotScreen = (props) => {
     }
   }
 
-  useFocusEffect(
-    React.useCallback(() => {
-      setIsLoading(true)
-      console.log("reloadr ne: ");
-      getAllCate();
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     setIsLoading(true)
+  //     console.log("reloadr ne: ");
+  //     getAllCate();
 
-      return () => {
-        // Cleanup code (optional) when the screen loses focus
-      };
-    }, [])
-  );
+  //     return () => {
+  //       // Cleanup code (optional) when the screen loses focus
+  //     };
+  //   }, [])
+  // );
 
   useEffect(() => {
 
@@ -72,7 +72,7 @@ const HotScreen = (props) => {
           </View>
 
           <View style={{ alignItems: 'center', flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 21 }}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>navigation.navigate('SearchHot')}>
               <Image style={styles.tok} source={require('../assets/images/search.png')} />
             </TouchableOpacity>
             <TouchableOpacity onPress={settings}>

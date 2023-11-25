@@ -66,7 +66,7 @@ const ItemListView = (props) => {
   return (
     <View style={styles.container}>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Detail', { itemId: dulieu.book._id })} >
+      <TouchableOpacity onPress={() => navigation.navigate('DetailScreen', { itemId: dulieu.book._id })} >
         <View style={styles.body}>
           <Image style={styles.image} source={{ uri: dulieu.book.image }} />
           <View style={styles.name}>

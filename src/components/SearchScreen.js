@@ -21,13 +21,18 @@ const SearchScreen = (props) => {
   const [dataRecent, setDataRecent] = useState([]);
   const [searchText, setSearchText] = useState('');
   let timeout = null;
+  let searchPerformed = false;
   const countDownSearch = (text) => {
     if (timeout) {
       clearTimeout(timeout);
     }
-    timeout = setTimeout(() => {
-      search(text);
-    }, 2000);
+    if (!searchPerformed) {
+      timeout = setTimeout(() => {
+        search(text);
+        searchPerformed = true;
+      }, 3000);
+    }
+    
   }
   const search = async (text) => {
     setisLoading(true);
@@ -48,7 +53,6 @@ const SearchScreen = (props) => {
   const HandleChangeText = async (text) => {
     setSearchText(text)
     if (text.length > 0) {
-
       countDownSearch(text)
     }
     console.log(text);
@@ -58,9 +62,9 @@ const SearchScreen = (props) => {
 
   const getNews = async () => {
     setisLoading(true);
-    const respone = await AxiosIntance().get("/product/");
+    const respone = await AxiosIntance().get("/product/search/recent");
     if (respone.result == true) {
-      setdataNe(respone.product)
+      setdataNe(respone.top5Products)
       setisLoading(false);
     } else {
       ToastAndroid.show("get product recent", ToastAndroid.SHORT);
@@ -99,6 +103,7 @@ const SearchScreen = (props) => {
           </TouchableOpacity>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <TextInput
+              style={styles.texxt}
               ref={textInputRef}
               value={searchText}
               onChangeText={(text) => { HandleChangeText(text) }}
@@ -128,18 +133,12 @@ const SearchScreen = (props) => {
                 <Text style={{ color: 'black', fontSize: 14, fontWeight: '600', textAlign: 'center' }}>Loading...</Text>
               </View>
             ) : (
-
-
-              <View style={{ paddingBottom: 100, paddingTop: 20 }}
-              >
-
-                <FlatList
-                  data={dataNe}
-                  renderItem={({ item }) => <ItemSearch author={item} product={item} navigation={navigation} />}
-                  keyExtractor={item => item._id}
-                  showsVerticalScrollIndicator={false}
-                />
-              </View>
+              <FlatList
+                data={dataNe}
+                renderItem={({ item }) => <ItemSearch author={item} product={item} navigation={navigation} />}
+                keyExtractor={item => item._id}
+                showsVerticalScrollIndicator={false}
+              />
             )}
         </View>
       </View>
@@ -156,6 +155,8 @@ const styles = StyleSheet.create({
   container1: {
     flex: 1,
     justifyContent: 'center',
+    paddingTop: 15,
+    paddingBottom: '25%'
   },
   hearderContainer: {
     height: height * 0.1,
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
   },
   search: {
     position: 'absolute',
-    top: '37%',
+    top: '35%',
     left: 22
     // // left: '17%',
     // // top: '45%'
@@ -218,8 +219,8 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     letterSpacing: 0.408,
     lineHeight: 22,
-    left: '80%',
-    top: '3%',
+    left: '100%',
+    top: '4%',
   },
   huy: {
     color: bacroundColor,
@@ -237,6 +238,13 @@ const styles = StyleSheet.create({
     // marginRight: 12,
     // top: '40%'
     left: '18%'
+  }, 
+  texxt:{
+    fontSize: 14,
+    fontFamily: 'Poppins',
+    fontStyle: 'normal',
+    fontWeight: '400',
+    color: '#000'
   }
 })
 

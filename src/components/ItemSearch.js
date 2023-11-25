@@ -40,8 +40,8 @@ const ItemSearch = (props) => {
 
   }
   return (
-    <TouchableOpacity onLongPress={() => onClickDetail()}>
-      <View style={{ flexDirection: 'row', marginTop: 20 }}>
+    <TouchableOpacity onPress={() => onClickDetail()}>
+      <View style={{ flexDirection: 'row', marginTop: 15 }}>
         <Image style={styles.image1} source={{ uri: product.image }}></Image>
         <View style={{ justifyContent: 'center' }}>
           <Text style={styles.nameBook}>{product.title}</Text>

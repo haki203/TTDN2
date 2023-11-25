@@ -24,7 +24,7 @@ const FavouriteScreen = (props) => {
 
 
   const settings = () => (
-    navigation.navigate('Setting')
+    navigation.navigate('SettingScreen')
 
   );
   const { navigation } = props;
