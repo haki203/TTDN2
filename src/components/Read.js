@@ -31,7 +31,6 @@ const Read = props => {
   const [AuthorData, setAuthorData] = useState({});
   const [bookData, setBookData] = useState({});
   const [pdfResource, setPdfResource] = useState('');
-
   useEffect(() => {
     const DetailBook = async () => {
       const response = await AxiosIntance().get('/product/' + id);
@@ -74,6 +73,18 @@ const Read = props => {
     return unsubscribe;
   }, []);
 
+  const limitText = text => {
+    try {
+      if (text.length > 20) {
+        return text.substring(0, 20) + '...';
+      } else {
+        return text;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -81,8 +92,26 @@ const Read = props => {
           <Image source={require('../assets/images/ic_left.png')} />
         </TouchableOpacity>
         <View style={styles.header_Name}>
-          <Text style={styles.header_Name_Bo}>{bookData.title}</Text>
-          <Text style={styles.header_Name_Au}>{AuthorData.authorname}</Text>
+          {isLoading ? (
+            <Text style={styles.header_Name_Bo}>
+              Tên sách...
+              <ActivityIndicator size={30} color={'#d6d6d6'} />
+            </Text>
+          ) : (
+            <Text style={styles.header_Name_Bo}>
+              {limitText(bookData.title)}
+            </Text>
+          )}
+          {isLoading ? (
+            <Text style={styles.header_Name_Au}>
+              Tên tác giả...
+              <ActivityIndicator size={30} color={'#d6d6d6'} />
+            </Text>
+          ) : (
+            <Text style={styles.header_Name_Au}>
+              {limitText(AuthorData.authorname)}
+            </Text>
+          )}
         </View>
         <TouchableOpacity>
           <Image source={require('../assets/images/ic_3cham.png')} />
@@ -164,11 +193,13 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     color: headerNameBoColorBo,
+    textAlign: 'center',
   },
   header_Name_Au: {
     fontSize: 17,
     color: headerNameBoColorAu,
     fontWeight: '600',
+    textAlign: 'center',
   },
   body: {
     marginBottom: 20,
