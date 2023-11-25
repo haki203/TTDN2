@@ -90,7 +90,7 @@ const Screen1 = ({ navigation, id }) => {
 
         {/* Text */}
         <View style={styles.containerText}>
-          <Text style={styles.rendername}>{title.substring(0, 20)}</Text>
+          <Text numberOfLines={1} style={styles.rendername}>{title}</Text>
 
           <Text style={styles.renderauthor}>{authorId}</Text>
         </View>
@@ -109,7 +109,7 @@ const Screen1 = ({ navigation, id }) => {
         isLoading ?
           (
             <View>
-              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>{textHot}</Text>
+              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>{textHot}</Text>
               <FlatList
 
                 data={["name","aav"]}
@@ -119,7 +119,7 @@ const Screen1 = ({ navigation, id }) => {
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
               />
-              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>{textNew}</Text>
+              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2}}>{textNew}</Text>
               <FlatList
 
                 data={["name","aav"]}
@@ -134,7 +134,7 @@ const Screen1 = ({ navigation, id }) => {
 
           (
             <View>
-              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>{textHot}</Text>
+              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>{textHot}</Text>
               <FlatList
                 style={{ flexGrow: 0 }}
                 data={datasearch}
@@ -143,7 +143,7 @@ const Screen1 = ({ navigation, id }) => {
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
               />
-              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>{textNew}</Text>
+              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2}}>{textNew}</Text>
               <FlatList
                 style={{ flexGrow: 0 }}
                 data={datapublicAt}
@@ -159,7 +159,7 @@ const Screen1 = ({ navigation, id }) => {
 
 
 
-      <Text style={{ fontSize: 20, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>{textNoti}</Text>
+      <Text style={{ fontSize: 20, fontWeight: '500', color: color_txt2, marginLeft: 10 }}>{textNoti}</Text>
 
     </View>
   )
@@ -172,18 +172,21 @@ const styles = StyleSheet.create({
     flex: 1
   },
   containerText: {
-    marginLeft: 16,
+    marginLeft: 5,
     marginTop: -10
   }, rendername: {
     color: namebook_color,
     fontSize: 16,
     fontWeight: '700',
-    fontFamily: 'Poppins'
+    fontFamily: 'Poppins',
+    width:140
+    
   }, renderImagePopularDeals: {
     width: 150,
     height: 220,
     margin: 20,
-    borderRadius: 10
+    borderRadius: 10,
+    marginLeft:1
   },
   renderauthor: {
     color: 'black'

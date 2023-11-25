@@ -41,15 +41,17 @@ const HomeDemo = (props) => {
 
 
   const search = () => (
-    navigation.navigate('SearchScreen')
+    navigation.navigate('GoLogin')
 
   );
   const settings = () => (
-    navigation.navigate('SettingDemo')
+    navigation.navigate('GoLogin')
 
   );
   const RomanceRoute = (id) => (
-    <ScrollView style={{backgroundColor:'black',marginStart:10}}>
+    <ScrollView
+    showsVerticalScrollIndicator={false}
+     style={{marginStart:10}}>
       <Screen1Demo navigation={navigation} id={id} />
     </ScrollView>
 
@@ -119,11 +121,11 @@ const HomeDemo = (props) => {
 
     <TabBar
       {...props}
-      indicatorStyle={{ backgroundColor: '#FF5E00', height: 3 }}
+      indicatorStyle={{ backgroundColor: '#FF5E00', height: 3, marginLeft:10    }}
       style={{ backgroundColor: 'transparent' }}
       scrollEnabled={true}
       gap={10}
-      tabStyle={{ width: "auto" }}
+      tabStyle={{ width:110 }}
       onLayout={event => {
         const { width } = event.nativeEvent.layout;
         props.setTabBarWidth(props.navigationState.index, width);
@@ -187,7 +189,7 @@ const HomeDemo = (props) => {
         </View>
       </View>
       <View style={styles.title}>
-        {/* <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Chào mừng bạn trở lại, {infoUser.name}!</Text> */}
+        <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Chào mừng bạn đến với Athens!</Text>
         <View style={{flexDirection:'row',alignItems:'center'}}>
           <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>Bạn muốn đọc sách gì?</Text>
           <View style={styles.viewall}>
@@ -266,7 +268,7 @@ const styles = StyleSheet.create({
   }, tab: {
     marginLeft: 10,
     height: 'auto',
-
+    marginRight:10
   },
   menu: {
     width: 40,

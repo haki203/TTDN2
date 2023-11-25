@@ -658,9 +658,9 @@ const styles = StyleSheet.create({
     Separator: {
         borderBottomColor: '#272956',
         borderBottomWidth: 0.5,
-        marginBottom: 5,
         marginRight: 20,
         marginLeft: 20,
+        marginTop: 15
     },
     View_SachLienQuan: {
         padding: 20

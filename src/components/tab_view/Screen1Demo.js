@@ -142,6 +142,7 @@ const Screen1Demo = ({ navigation, id }) => {
                 keyExtractor={item => item.id}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
               />
               <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2,}}>{textNew}</Text>
               <FlatList
@@ -151,6 +152,8 @@ const Screen1Demo = ({ navigation, id }) => {
                 keyExtractor={item => item.id}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+
               />
             </View>
 
@@ -172,8 +175,8 @@ const styles = StyleSheet.create({
     flex: 1
   },
   containerText: {
-    marginLeft: 16,
-    marginTop: -10
+
+    marginTop: -10,
   }, rendername: {
     color: namebook_color,
     fontSize: 16,

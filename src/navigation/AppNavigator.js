@@ -240,16 +240,16 @@ const ChuaLogin = () => {
     )
 }
 const AppNavigator = () => {
-    // const { isLogin, setIsLogin } = useContext(AppContext);
-    // return (
-    //     <>
-    //         {isLogin == false ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}
-    //     </>
+    const { isLogin, setIsLogin } = useContext(AppContext);
+    return (
+        <>
+            {isLogin == false ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}
+        </>
 
-    // )
-    return(
-        <ChuaLogin/>
     )
+    // return(
+    //     <ChuaLogin/>
+    // )
 }
 
 export default AppNavigator;
