@@ -9,6 +9,7 @@ import Screen1 from './tab_view/Screen1'
 import AxiosIntance from '../axios/AxiosIntance'
 import Theloai from './tab_view/Theloai'
 import Tacgia from './tab_view/Tacgia'
+import Screen1Demo from './tab_view/Screen1Demo'
 
 const color_txt1 = "#9D9D9D";
 const color_txt2 = "#272956";
@@ -19,9 +20,8 @@ const color_logo = '#272956';
 const color_text = "#272956";
 
 
-const HomeScreen = (props) => {
+const HomeDemo = (props) => {
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
-  const { infoUser } = useContext(AppContext);
   const { navigation } = props;
   const [dataNe, setdataNe] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,12 +45,12 @@ const HomeScreen = (props) => {
 
   );
   const settings = () => (
-    navigation.navigate('Setting')
+    navigation.navigate('SettingDemo')
 
   );
   const RomanceRoute = (id) => (
-    <ScrollView>
-      <Screen1 navigation={navigation} id={id} />
+    <ScrollView style={{backgroundColor:'black',marginStart:10}}>
+      <Screen1Demo navigation={navigation} id={id} />
     </ScrollView>
 
   );
@@ -182,12 +182,12 @@ const HomeScreen = (props) => {
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
           </TouchableOpacity>
           <TouchableOpacity onPress={settings}>
-            <Image style={styles.profile} source={{ uri: infoUser.avatar }} />
+            <Image style={styles.profile} source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/User_icon-cp.svg/1656px-User_icon-cp.svg.png' }} />
           </TouchableOpacity>
         </View>
       </View>
       <View style={styles.title}>
-        <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Chào mừng bạn trở lại, {infoUser.name}!</Text>
+        {/* <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Chào mừng bạn trở lại, {infoUser.name}!</Text> */}
         <View style={{flexDirection:'row',alignItems:'center'}}>
           <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>Bạn muốn đọc sách gì?</Text>
           <View style={styles.viewall}>
@@ -226,7 +226,7 @@ const HomeScreen = (props) => {
   )
 }
 
-export default HomeScreen
+export default HomeDemo
 
 const styles = StyleSheet.create({
   container: {
