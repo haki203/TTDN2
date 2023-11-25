@@ -1,5 +1,5 @@
-import {Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity } from 'react-native'
-import React ,{useEffect}from 'react'
+import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity } from 'react-native'
+import React, { useEffect } from 'react'
 
 
 const { width, height } = Dimensions.get('window');
@@ -10,50 +10,56 @@ const pluscolor = "#CDCDCD";
 const color_logo = '#272956';
 const progress = '80%'
 const ItemListViewLibrary = (props) => {
-    const { dulieu } = props;
-  return (
-    <View style={styles.book}>
-    <Image style={styles.imagebook} source={dulieu.imageSource} />
-    <View style={styles.in4book}>
-      <Text style={styles.nameBook}> {dulieu.title}</Text>
-      <Text style={styles.nameAuthor}> {dulieu.author}</Text>
-      <View style={styles.doneprocess}>
-        <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-        <View style={styles.process}>
-          <Text style={{ color: '#272956', fontWeight: "500" }}>{progress}</Text>
-        </View>
-      </View>
-      <View style={styles.processbar}>
-        <View style={{ // Thanh màu xám
-          height: 10,
-          width: progress,
-          position: 'absolute',
-          left: 0,
-          backgroundColor: 'red',
-          borderRadius: 5
-        }} />
-        <View style={{
-          height: 10,
-          width: '20%',
-          right: 0,
-          position: 'absolute',
+  const { dulieu } = props;
 
-        }} />
+  try {
+    return (
+      <View style={styles.book}>
+        <Image style={styles.imagebook} source={{uri:dulieu.image}} />
+        <View style={styles.in4book}>
+          <Text style={styles.nameBook}> {dulieu.title}</Text>
+          {/* <Text style={styles.nameAuthor}> cc</Text> */}
+          <View style={styles.doneprocess}>
+            <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
+            <View style={styles.process}>
+              <Text style={{ color: '#272956', fontWeight: "500" }}>{dulieu.progress}%</Text>
+            </View>
+          </View>
+          <View style={styles.processbar}>
+            <View style={{ // Thanh màu xám
+              height: 10,
+              width: dulieu.progress,
+              position: 'absolute',
+              left: 0,
+              backgroundColor: 'red',
+              borderRadius: 5
+            }} />
+            <View style={{
+              height: 10,
+              width: '20%',
+              right: 0,
+              position: 'absolute',
+
+            }} />
+          </View>
+        </View>
+        <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
       </View>
-    </View>
-    <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
-  </View>
-  )
+    )
+  } catch (error) {
+
+  }
 }
 
 export default ItemListViewLibrary
 
 const styles = StyleSheet.create({
-    
+
   imagebook: {
-    height: 110,
-    width: 110,
-    borderRadius: 20
+    margin: 10,
+    width: 60,
+    height: 90,
+    borderRadius: 10,
   },
   textAll: {
     fontSize: 23,
@@ -73,7 +79,7 @@ const styles = StyleSheet.create({
 
   },
   book: {
-    marginTop: 15,
+    marginTop: 17,
     flexDirection: 'row',
     borderBottomWidth: 1,
     paddingBottom: 15,
@@ -90,20 +96,23 @@ const styles = StyleSheet.create({
     marginEnd: 15
   },
   nameBook: {
-    fontSize: 20,
-    color: '#2E2E5D',
-    fontWeight: '500'
+    fontFamily: 'Poppins',
+    fontSize: 15,
+    fontStyle: 'normal',
+    fontWeight: '700',
+    color: color_text,
+    marginTop: 5
   },
   nameAuthor: {
-    fontSize: 17,
+    fontSize: 14,
     color: '#4838D1',
-  
+
 
   },
   process: {
 
     fontWeight: "500",
-    marginTop: 15,
+    marginTop: 14,
     marginStart: 3
 
   },

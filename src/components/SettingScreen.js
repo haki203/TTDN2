@@ -43,7 +43,7 @@ const SettingScreen = (props) => {
                 <View>
                     <View style={styles.thongtin}>
                         <Text style={styles.Text_Name}>{infoUser.name}</Text>
-                        <Text style={styles.Text_Email}>{infoUser.email}</Text>
+                        <Text style={styles.Text_Email}>{infoUser.phone}</Text>
                     </View>
                 </View>
             </View>
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     Text_Email: {
         fontSize: 14,
         color: 'black',
-        marginLeft: 20,
+        marginLeft: 10,
     },
 
     header: {

@@ -14,7 +14,7 @@ const colorsearch = "#F2F2F2";
 const icon_color = "#C4C4C4";
 const namebook_color = "#272956";
 
-const Screen1 = ({ navigation, id }) => {
+const Screen1Demo = ({ navigation, id }) => {
 
   const [datasearch, setDatasearch] = useState([]);
   const [datapublicAt, setDatapublicAt] = useState([]);
@@ -67,7 +67,7 @@ const Screen1 = ({ navigation, id }) => {
   const ItemBook = ({ item, navigation, isLoading }) => {
     const { _id, title, authorId, image } = item;
     const onPressItem = () => {
-      navigation.navigate('Detail', { itemId: _id });
+      navigation.navigate('DetailDemo', { itemId: _id });
     }
 
     return (
@@ -109,7 +109,7 @@ const Screen1 = ({ navigation, id }) => {
         isLoading ?
           (
             <View>
-              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>{textHot}</Text>
+              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2,}}>{textHot}</Text>
               <FlatList
 
                 data={["name","aav"]}
@@ -134,7 +134,7 @@ const Screen1 = ({ navigation, id }) => {
 
           (
             <View>
-              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>{textHot}</Text>
+              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, }}>{textHot}</Text>
               <FlatList
                 style={{ flexGrow: 0 }}
                 data={datasearch}
@@ -143,7 +143,7 @@ const Screen1 = ({ navigation, id }) => {
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
               />
-              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>{textNew}</Text>
+              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2,}}>{textNew}</Text>
               <FlatList
                 style={{ flexGrow: 0 }}
                 data={datapublicAt}
@@ -165,7 +165,7 @@ const Screen1 = ({ navigation, id }) => {
   )
 }
 
-export default Screen1
+export default Screen1Demo
 
 const styles = StyleSheet.create({
   container: {
@@ -183,6 +183,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 220,
     margin: 20,
+    marginLeft:0,
     borderRadius: 10
   },
   renderauthor: {
