@@ -80,7 +80,7 @@ const ItemListView = (props) => {
           </TouchableOpacity>
 
           <Modal animationType="slide" transparent={true} visible={isModalVisible}>
-            <View style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', width: '100%', height: '100%' }}>
+            <TouchableOpacity onPress={toggleModal} style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', width: '100%', height: '100%' }}>
               <View style={styles.containerModal}>
                 <Text style={styles.titleModal}>Tùy chọn</Text>
                 <View style={styles.bodyModal}>
@@ -103,7 +103,7 @@ const ItemListView = (props) => {
                 </View>
                 <Icon2 onPress={toggleModal} style={styles.Close} name="closecircleo" size={28} color="#272956" />
               </View>
-            </View>
+            </TouchableOpacity >
           </Modal>
 
 
