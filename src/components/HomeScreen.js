@@ -1,20 +1,23 @@
-import { Image, StyleSheet, Text, View, TextInput, FlatList,TouchableOpacity, ScrollView, ToastAndroid, ActivityIndicator } from 'react-native'
+import { Image, StyleSheet, Text, View, TextInput, FlatList, TouchableOpacity, ScrollView, ToastAndroid, ActivityIndicator, Modal } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
-import Icon from "react-native-vector-icons/Feather"
+import Icon from "react-native-vector-icons/MaterialIcons"
 import Icon2 from "react-native-vector-icons/AntDesign"
 import Icon3 from "react-native-vector-icons/FontAwesome"
 import { AppContext } from '../navigation/AppContext'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import Screen1 from './tab_view/Screen1'
 import AxiosIntance from '../axios/AxiosIntance'
+import Theloai from './tab_view/Theloai'
+import Tacgia from './tab_view/Tacgia'
 
 const color_txt1 = "#9D9D9D";
 const color_txt2 = "#272956";
 const colorsearch = "#e6e6e6";
 const icon_color = "#C4C4C4";
-const namebook_color = "#272956";
 const color_search = "black";
 const color_logo = '#272956';
+const color_text = "#272956";
+
 
 const HomeScreen = (props) => {
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
@@ -22,7 +25,11 @@ const HomeScreen = (props) => {
   const { navigation } = props;
   const [dataNe, setdataNe] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalVisible, setModalVisible] = useState(false);
 
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
   useEffect(() => {
 
     const unsubscribe = navigation.addListener('focus', () => {
@@ -47,48 +54,64 @@ const HomeScreen = (props) => {
     </ScrollView>
 
   );
+  const TheloaiRoute = (id) => (
+
+    <Theloai navigation={navigation} toggleModal={toggleModal} id={id} />
+
+
+  );
+  const TacgiaRoute = () => (
+
+    <Tacgia navigation={navigation} toggleModal={toggleModal} />
+
+
+  );
+
 
 
 
   const renderScene = ({ route }) => {
 
-    return (RomanceRoute(route.key));
-  }
-  const [index, setIndex] = React.useState(0);
-  const [routes, setRoutes] = React.useState([
+    return RomanceRoute(route.key);
 
-  ]);
+
+  }
+  const SecondTabRenderScene = SceneMap({
+    first: TheloaiRoute,
+    second: TacgiaRoute,
+    // Thêm các tab khác nếu cần
+  });
+
+  const [index, setIndex] = React.useState(0);
+  const [routes, setRoutes] = React.useState([]);
+  const [secondTabIndex, setSecondTabIndex] = useState(0);
+
+  const secondTabRoutes = [
+    { key: 'first', title: 'Thể loại' },
+    { key: 'second', title: 'Tác giả' },
+  ];
   const { } = useState([]);
 
 
   useEffect(() => {
     const getAllCate = async () => {
-
       const respone = await AxiosIntance().get("/product/category/getAlls");
-
-
       const newArray = [];
-
       for (const item of respone.category) {
         const newItem = { key: item._id, title: item.name };
         newArray.push(newItem);
       }
-
       if (newArray.length > 0) {
         setRoutes(newArray);
         setIndex(0);
       }
-
       if (respone.result == true) {
-
         setdataNe(respone.category)
       } else {
         ToastAndroid.show("get data", ToastAndroid.SHORT);
       }
     }
     getAllCate();
-
-
   }, [])
 
 
@@ -100,6 +123,33 @@ const HomeScreen = (props) => {
       style={{ backgroundColor: 'transparent' }}
       scrollEnabled={true}
       gap={10}
+      tabStyle={{ width: "auto" }}
+      onLayout={event => {
+        const { width } = event.nativeEvent.layout;
+        props.setTabBarWidth(props.navigationState.index, width);
+      }}
+      renderLabel={({ route, focused }) => {
+        return (
+          <Text
+            style={[styles.label, focused ? styles.activeLabel : styles.label]}
+          >
+            {route.title}
+          </Text>
+        );
+      }}
+      pressColor={'transparent'}
+
+    />
+
+  );
+  const renderTabBar2 = props => (
+
+    <TabBar
+      {...props}
+      indicatorStyle={{ backgroundColor: '#FF5E00', height: 3 }}
+      style={{ backgroundColor: 'transparent' }}
+      scrollEnabled={true}
+
       tabStyle={{ width: "auto" }}
       onLayout={event => {
         const { width } = event.nativeEvent.layout;
@@ -139,6 +189,25 @@ const HomeScreen = (props) => {
       <View style={styles.title}>
         <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Chào mừng bạn trở lại, {infoUser.name}!</Text>
         <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>Bạn muốn đọc sách gì?</Text>
+        <View style={styles.viewall}>
+          <TouchableOpacity onPress={toggleModal}>
+            <Icon style={styles.menuall} name="menu-book" size={25} color='#2D5ED5' />
+          </TouchableOpacity>
+
+        </View>
+        <Modal animationType="slide" transparent={true} visible={isModalVisible}>
+          <View style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', width: '100%', height: '100%' }}>
+            <View style={styles.containerModal}>
+              <TabView
+                navigationState={{ index: secondTabIndex, routes: secondTabRoutes }}
+                renderScene={SecondTabRenderScene}
+                onIndexChange={setSecondTabIndex}
+                renderTabBar={renderTabBar2}
+              />
+              <Icon2 onPress={toggleModal} style={styles.Close} name="closecircleo" size={28} color="#272956" />
+            </View>
+          </View>
+        </Modal>
       </View>
       <>{
         routes.length > 0 &&
@@ -222,6 +291,68 @@ const styles = StyleSheet.create({
   activeLabel: {
     color: 'black',
 
+  }, menuall: {
+
+
+  }, viewall: {
+    height: 45,
+    width: 45,
+    backgroundColor: '#C5BFDD',
+    marginTop: -30,
+    position: 'absolute',
+    right: 20,
+    marginTop: 17,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }, containerModal: {
+    width: '100%',
+    height: '60%',
+    position: 'absolute',
+    backgroundColor: '#FFFFFF',
+    bottom: 0,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    padding: 10
+  }, Close: {
+    position: 'absolute',
+    right: 15,
+    top: 15
+  }, titleModal: {
+    color: color_text,
+    fontFamily: 'Poppins',
+    fontSize: 20,
+    fontStyle: 'normal',
+    fontWeight: '700',
+    position: 'absolute',
+    left: 20,
+    top: 15
+  }, bodyModal: {
+    width: '100%',
+    height: '60%',
+    position: 'absolute',
+    top: 50,
+    paddingLeft: 20,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+  },
+  itembody: {
+    flexDirection: 'row',
+  },
+  itemTxt: {
+    color: color_text,
+    fontFamily: 'Poppins',
+    fontSize: 15,
+    fontStyle: 'normal',
+    fontWeight: '600',
+    marginLeft: 15
+  }, itemicon: {
+    width: 25,
+    height: 25,
+    borderRadius: 20,
+    backgroundColor: '#D8F2F3',
+    alignItems: 'center',
+    justifyContent: 'center',
   }
 
 })
