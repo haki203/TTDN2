@@ -1,12 +1,10 @@
 import { Image, StyleSheet, Text, View, TextInput, Dimensions, FlatList, useWindowDimensions, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import Icon from "react-native-vector-icons/Feather"
-import Icon2 from "react-native-vector-icons/AntDesign"
-import Icon3 from "react-native-vector-icons/FontAwesome"
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+
 import { _isDomSupported } from '../../../server/public/assets/vendor/chart.js/helpers'
 import AxiosIntance from '../../axios/AxiosIntance'
 const { width, height } = Dimensions.get('window');
+import Icon_1 from 'react-native-vector-icons/Ionicons';
 
 const color_txt1 = "#9D9D9D";
 const color_txt2 = "#272956";
@@ -14,54 +12,47 @@ const colorsearch = "#F2F2F2";
 const icon_color = "#C4C4C4";
 const namebook_color = "#272956";
 
-const Screen1 = ({ navigation, id }) => {
+const Viewauthor = ({ navigation, route }) => {
 
   const [datasearch, setDatasearch] = useState([]);
   const [datapublicAt, setDatapublicAt] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [author, setAuthor] = useState('Đang cập nhật');
-  const [textHot, setTextHot] = useState("Sách hot");
-  const [textNew, setTextNew] = useState("Sách mới xuất bản");
   const [textNoti, setTextNoti] = useState("");
+  const { id, name } = route.params;
 
+  const Back = () => {
+    navigation.goBack();
+  }
+
+  console.log(name);
   useEffect(() => {
     const getAllCate = async () => {
       let arrayData = [];
-      const respone = await AxiosIntance().get("/product/get-by-category/" + id);
+      const respone = await AxiosIntance().get("/product/get-book-by-author/" + id);
       setTextNoti("")
-      if (respone.product.length < 1) {
+      if (respone.products.length < 1) {
         console.log("chua co sach");
-        setTextHot("");
-        setTextNew("");
         setTextNoti("Danh mục đang được cập nhật")
         setIsLoading(false);
       } else {
-
-
-        for (let i = 0; i < respone.product.length; i++) {
-          if (respone.product[i]) {
-            let dataIndex = respone.product[i];
+        for (let i = 0; i < respone.products.length; i++) {
+          if (respone.products[i]) {
+            let dataIndex = respone.products[i];
             // lay author
-            const res = await AxiosIntance().get("/product/author/" + respone.product[i].authorId)
+            const res = await AxiosIntance().get("/product/author/" + respone.products[i].authorId)
             dataIndex.authorId = res.author.name;
             arrayData.push(dataIndex);
           }
-
         }
-
-        const sortedpublicAt = arrayData.slice().sort((a, b) => b.publicAt - a.publicAt);
-        const sortedsearch = arrayData.slice().sort((a, b) => b.search - a.search);
-        setDatasearch(sortedsearch);
-        setDatapublicAt(sortedpublicAt);
+        setDatasearch(arrayData);
         setIsLoading(false)
       }
-
     }
 
     getAllCate();
 
 
-  }, [])
+  }, [id, name])
 
 
   const ItemBook = ({ item, navigation }) => {
@@ -96,7 +87,13 @@ const Screen1 = ({ navigation, id }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>{textHot}</Text>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={Back}>
+          <Icon_1 style={styles.iconback} name="chevron-back" size={30} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.name}>{name}</Text>
+      </View>
+
       {
         isLoading ?
           (
@@ -113,37 +110,18 @@ const Screen1 = ({ navigation, id }) => {
         data={datasearch}
         renderItem={({ item }) => <ItemBook item={item} navigation={navigation} />}
         keyExtractor={item => item.id}
-        horizontal={true}
+        numColumns={2}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
       />
-      <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>{textNew}</Text>
-      {
-        isLoading ?
-          (
-            <View style={{ width: '100%', height: 300, alignContent: 'center', justifyContent: 'center' }}><ActivityIndicator size={30} color={'black'} /></View>
-          ) :
-
-          (
-            <View></View>
-
-          )
-      }
-      <FlatList
-        style={{ flexGrow: 0 }}
-        data={datapublicAt}
-        renderItem={({ item }) => <ItemBook item={item} navigation={navigation} />}
-        keyExtractor={item => item.id}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-      />
       <Text style={{ fontSize: 20, fontWeight: '500', color: color_txt2, marginLeft: 20 }}>{textNoti}</Text>
+
 
     </View>
   )
 }
 
-export default Screen1
+export default Viewauthor
 
 const styles = StyleSheet.create({
   container: {
@@ -162,9 +140,24 @@ const styles = StyleSheet.create({
     height: 220,
     margin: 20,
     borderRadius: 10
+  }, header: {
+    flexDirection: 'row',
+    width: '100%',
+    height: '13%',
+    alignItems: 'center', // Căn giữa theo chiều dọc
+    justifyContent: 'space-between', // Canh lề giữa iconback và name
+    paddingHorizontal: 20,
   },
-  renderauthor: {
-    color: 'black'
+  iconback: {
+
+  },
+  name: {
+    width: '70%',
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: 'black',
+    textAlign: 'center',
+    marginRight: '15%',
   }
 })
 

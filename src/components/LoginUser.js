@@ -6,16 +6,16 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import React, {useEffect, useContext} from 'react';
+import React, { useEffect, useContext } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {AppContext} from '../navigation/AppContext';
+import { AppContext } from '../navigation/AppContext';
 
 const backgroundleader = '#8CA1D6';
 const colorText = '#FFF';
 const LoginUser = props => {
-  const {navigation} = props;
-  const {isTabVisible, setIsTabVisible} = useContext(AppContext);
+  const { navigation } = props;
+  const { isTabVisible, setIsTabVisible } = useContext(AppContext);
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       setIsTabVisible(false);
@@ -30,23 +30,24 @@ const LoginUser = props => {
       <TouchableOpacity onPress={() => navigation.goBack()} style={styles.left}>
         <Icon name="left" size={25} color="white" />
       </TouchableOpacity>
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{ justifyContent: 'center', alignItems: 'center' }}>
         <View style={styles.leader}>
           <Image
             style={styles.profile}
-            source={require('../components/tab_view/image/profiles.png')}></Image>
+          // source={require('../components/tab_view/image/profiles.png')}
+          ></Image>
           <Text style={styles.txt}>Đăng nhập để lưu lại quá trình</Text>
           <LinearGradient
             style={styles.btn}
             colors={['#FFD700', '#FFA500', '#FF8C00']}
-            start={{x: 1, y: 0.5}}
-            end={{x: 0.5, y: 1.75}}>
+            start={{ x: 1, y: 0.5 }}
+            end={{ x: 0.5, y: 1.75 }}>
             <TouchableOpacity onPress={() => navigation.navigate('Welcome')}>
               <Text style={styles.txt2}>Đăng nhập</Text>
             </TouchableOpacity>
           </LinearGradient>
           <TouchableOpacity style={styles.txt1}>
-          <Text style={styles.txt}>Tạo tài khoản mới</Text>
+            <Text style={styles.txt}>Tạo tài khoản mới</Text>
           </TouchableOpacity>
         </View>
       </View>
