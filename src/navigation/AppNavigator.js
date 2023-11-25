@@ -4,7 +4,9 @@ import { useSelector } from 'react-redux';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Icon1 from 'react-native-vector-icons/Ionicons';
+import Icon1 from 'react-native-vector-icons/AntDesign';
+import Icon2 from 'react-native-vector-icons/MaterialIcons';
+import Icon3 from 'react-native-vector-icons/Feather';
 import { connect } from 'react-redux';
 import HomeScreen from '../components/HomeScreen';
 import LoginScreen from '../components/LoginScreen';
@@ -120,9 +122,9 @@ const Home = ({ scrollY }) => {
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 headerShown: false,
-                color: 'red',
+                color: '#FF6347',
                 tabBarLabelStyle: { display: 'none' },
-                tabBarActiveTintColor: '#D45555',
+                tabBarActiveTintColor: '#FF6347',
                 tabBarStyle: { height: 75, borderTopLeftRadius: 40, borderTopRightRadius: 40, display: display, backgroundColor: 'white' },
             })}
         >
@@ -131,7 +133,7 @@ const Home = ({ scrollY }) => {
                 options={{
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => (
-                        <Icon name="home" color={color} size={30} />
+                        <Icon3 name="home" color={color} size={30} />
                     ),
                 }}
             >
@@ -144,7 +146,7 @@ const Home = ({ scrollY }) => {
                 options={{
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => (
-                        <Icon name="heart" color={color} size={30} />
+                        <Icon name="heart-o" color={color} size={30} />
                     ),
                 }}
             >
@@ -157,7 +159,7 @@ const Home = ({ scrollY }) => {
                 options={{
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => (
-                        <Icon name="fire" color={color} size={30} />
+                        <Icon2 name="whatshot" color={color} size={30} />
                     ),
                 }}
             >
@@ -171,7 +173,7 @@ const Home = ({ scrollY }) => {
                 options={{
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => (
-                        <Icon name="bookmark" color={color} size={30} />
+                        <Icon2 name="book" color={color} size={30} />
                     ),
                 }}
             >
