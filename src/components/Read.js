@@ -36,14 +36,29 @@ const Read = props => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [AuthorData, setAuthorData] = useState({});
+  const [dataMucluc, setDataMucluc] = useState([]);
   const [bookData, setBookData] = useState({});
   const [pdfResource, setPdfResource] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
   const [page, setPage] = useState(1);
+  const AuthorBook = async (id) => {
+    try {
+      const response = await AxiosIntance().get('/product/author/' + id);
+      //console.log(response, 'author');
+      if(response.result){
+        const Data1 = {
+          authorname: response.author.name,
+        };
+        setAuthorData(Data1);
+        mucluc();
+      }
+    } catch (error) {
 
-  useEffect(() => {
-    const DetailBook = async () => {
-      const response = await AxiosIntance().get('/product/' + id);
+    }
+  };
+  const DetailBook = async () => {
+    const response = await AxiosIntance().get('/product/' + id);
+    if (response.result) {
       const Data2 = {
         id: response.product._id,
         title: response.product.title,
@@ -55,21 +70,23 @@ const Read = props => {
       setBookData(Data2);
       setPdfResource(Data2.pdfLink);
       AuthorBook(Data2.authorId);
+    }
+    //setIsLoading(false);
+  };
+  const mucluc = async () => {
+    try {
+      const response = await AxiosIntance().get('/product/get-muc-luc/' + id);
+      console.log(response);
+      if (response.result) {
+        setDataMucluc(response.ml);
+      }
       setIsLoading(false);
-    };
+    } catch (error) {
+
+    }
+  };
+  useEffect(() => {
     DetailBook();
-
-    const AuthorBook = async id => {
-      const response = await AxiosIntance().get('/product/author/' + id);
-      console.log(response, 'author');
-      const Data1 = {
-        authorname: response.author.name,
-      };
-      setAuthorData(Data1);
-      setIsLoading(false);
-    };
-
-    AuthorBook();
   }, []);
 
   const Back = () => {
@@ -110,7 +127,7 @@ const Read = props => {
       <View>
         <TouchableOpacity onPress={onPressItem}>
           <Text style={styles.itemTxt}>
-            Chương {chuong}: {title}
+            {title}
           </Text>
         </TouchableOpacity>
       </View>
@@ -127,8 +144,7 @@ const Read = props => {
           <View style={styles.header_Name}>
             {isLoading ? (
               <Text style={styles.header_Name_Bo}>
-                Tên sách...
-                <ActivityIndicator size={30} color={'#d6d6d6'} />
+                ...
               </Text>
             ) : (
               <Text style={styles.header_Name_Bo}>
@@ -137,8 +153,7 @@ const Read = props => {
             )}
             {isLoading ? (
               <Text style={styles.header_Name_Au}>
-                Tên tác giả...
-                <ActivityIndicator size={30} color={'#d6d6d6'} />
+                ...
               </Text>
             ) : (
               <Text style={styles.header_Name_Au}>
@@ -168,7 +183,7 @@ const Read = props => {
                 <Text style={styles.titleModal}>Chọn Chương</Text>
                 <View style={styles.bodyModal}>
                   <FlatList
-                    data={dataChuong}
+                    data={dataMucluc}
                     renderItem={({ item }) => (
                       <ItemChuong item={item} navigation={navigation} />
                     )}
@@ -224,6 +239,7 @@ const Read = props => {
                 console.log(
                   `---------------Loading complete. Number of pages: ${numberOfPage}`,
                 );
+                setIsLoading(false)
               }} // hiển thị khi load xong
               onPageChanged={(page, totalPages) =>
                 console.log(`-----------------------${page}/${totalPages}`)
@@ -240,7 +256,7 @@ const Read = props => {
       </View>
     );
   } catch (error) {
-    console.log("loi ne: ",error);
+    console.log("loi ne: ", error);
     setIsLoading(true)
   }
 };

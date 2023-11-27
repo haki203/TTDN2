@@ -107,16 +107,22 @@ const PlayScreen = props => {
   // Khởi tạo tong thoi gian
   useEffect(() => {
     async function initDuration() {
-      const duration = await TrackPlayer.getDuration();
-      setDuration(duration);
-      const name = await TrackPlayer.getCurrentTrack();
-      setTrackName(trackList[name].title);
+      try {
+        const duration = await TrackPlayer.getDuration();
+        setDuration(duration);
+        const name = await TrackPlayer.getCurrentTrack();
+        setTrackName(trackList[name].title);
+      } catch (error) {
+        console.log(error);
+      }
     }
     initDuration();
   }, [isPlay]);
 
   // Khởi tạo trình phát âm nhạc
   useEffect(() => {
+    initPlayer();
+    
     try {
       if (isSetup) {
       } else {
@@ -126,6 +132,7 @@ const PlayScreen = props => {
             // Thêm danh sách phát vào trình phát
             await TrackPlayer.add(trackList);
             getInfo();
+            setIsSetup(true)
           } catch (error) {
             console.log(error);
           }
@@ -135,7 +142,7 @@ const PlayScreen = props => {
     } catch (error) {
       console.log(error);
     }
-  }, [isSetup]);
+  }, []);
   const getInfo = async () => {
     try {
       const duration = await TrackPlayer.getDuration();
@@ -228,7 +235,7 @@ const PlayScreen = props => {
         setAudioUrl(Data2.audio);
         setIsLoading(false);
       } catch (error) {
-        console.log("error get detail book ",error);
+        console.log("error get detail book ", error);
       }
     };
     DetailBook();
@@ -543,13 +550,13 @@ const styles = StyleSheet.create({
 const trackList = [
   {
     id: '0',
-    url: 'https://drive.google.com/u/0/uc?id=1tqxWFFV2xUtAHUfHGGZfaul3CEQF_y8_&export=download',
+    url: 'https://drive.usercontent.google.com/download?id=1gYmliovYIFcSJpgGjQKqUbk94JId9lDY&export=download&authuser=0&confirm=t&uuid=e6269e25-e56f-4dcd-bb53-30fd181e40e5&at=APZUnTWjpnITc9eJCw_1qsvhCKaj:1700929717334',
     title: 'Trí tuệ nhân tạo',
     artist: 'Artist 1',
   },
   {
     id: '1',
-    url: 'https://drive.google.com/u/0/uc?id=1tqxWFFV2xUtAHUfHGGZfaul3CEQF_y8_&export=download',
+    url: 'https://drive.usercontent.google.com/download?id=1U51zQbFQZit7Sf22O9tWHGQch1EtCh1g&export=download&authuser=0&confirm=t&uuid=895a8b68-c29e-43ca-a0e7-94e7d818489f&at=APZUnTUH2VIBGwK7vBfQqnjQKyQ9:1700928676054',
     title: 'Đắc nhân tâm',
     artist: 'Artist 2',
   },
