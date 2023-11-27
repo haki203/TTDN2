@@ -26,6 +26,8 @@ const BookDetail = (props) => {
     const [numCmt, setNumCmt] = useState(0);
     const [tbRate, setTbRate] = useState(0);
     const [dataCmt, setDataCmt] = useState([]);
+    const [numSeeAll, setNumSeeAll] = useState(true);
+    const [numSeeAll1, setNumSeeAll1] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
 
     const [RelateData2, setRelateData2] = useState([]);
@@ -150,8 +152,26 @@ const BookDetail = (props) => {
         setRating(newRating);
     };
 
+    const onSeeAll=()=>{
+        setNumSeeAll(!numSeeAll)
 
+    }
+    const onSeeAll1=()=>{
+        setNumSeeAll1(!numSeeAll1)
 
+    }
+    const limitText = (text,num) => {
+        console.log(num);
+        try {
+          if (text.length > num) {
+            return text.substring(0, num) + '...';
+          } else {
+            return text;
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
     // const { isTabVisible, setIsTabVisible } = useContext(AppContext);
     const longText = "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời.";
     const Read = () => {
@@ -448,14 +468,14 @@ const BookDetail = (props) => {
                 <View style={styles.View_MoTa}>
                     <View>
                         <Text style={styles.Text_MoTa1}>Giới thiệu về tác giả</Text>
-                        <Text style={styles.Text_MoTa2}>
-                        {authorData.introduce}
+                        <Text onPress={()=>onSeeAll1()} style={styles.Text_MoTa2}>
+                        {limitText(authorData.introduce, numSeeAll1 ? 250 : 1900)}
                         </Text>
                     </View>
                     <View style={styles.View_Text3}>
                         <Text style={styles.Text_MoTa1}>Tổng quan về sách</Text>
-                        <Text style={styles.Text_MoTa2}>
-                        {bookData.description}
+                        <Text onPress={()=>onSeeAll()} style={styles.Text_MoTa2}>
+                        {limitText(bookData.description, numSeeAll ? 250 : 1900)}
                         </Text>
                     </View>
                 </View>

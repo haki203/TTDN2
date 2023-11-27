@@ -241,11 +241,18 @@ const ChuaLogin = () => {
 }
 const AppNavigator = () => {
     const { isLogin, setIsLogin } = useContext(AppContext);
+    const { test } = useContext(AppContext);
     return (
-        <>
-            {isLogin == false ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}
-        </>
+        // <>
+        //     {
+        //         test ?
+        //             <>{!isLogin ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
 
+        //             :
+        //             <ChuaLogin />
+        //     }
+        // </>
+        <>{!isLogin ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
     )
     // return(
     //     <ChuaLogin/>

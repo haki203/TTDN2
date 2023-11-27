@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity } from 'react-native'
+import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useEffect } from 'react'
 
 
@@ -8,43 +8,50 @@ const color_view = "#4838D1";
 const bgcolor = "#FFFFFF";
 const pluscolor = "#CDCDCD";
 const color_logo = '#272956';
-const progress = '80%'
 const ItemListViewLibrary = (props) => {
-  const { dulieu } = props;
+  const { dulieu, isLoading } = props;
+  const progress = dulieu.progress + '%';
 
   try {
     return (
-      <View style={styles.book}>
-        <Image style={styles.imagebook} source={{uri:dulieu.image}} />
-        <View style={styles.in4book}>
-          <Text style={styles.nameBook}> {dulieu.title}</Text>
-          {/* <Text style={styles.nameAuthor}> cc</Text> */}
-          <View style={styles.doneprocess}>
-            <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-            <View style={styles.process}>
-              <Text style={{ color: '#272956', fontWeight: "500" }}>{dulieu.progress}%</Text>
-            </View>
-          </View>
-          <View style={styles.processbar}>
-            <View style={{ // Thanh màu xám
-              height: 10,
-              width: dulieu.progress,
-              position: 'absolute',
-              left: 0,
-              backgroundColor: 'red',
-              borderRadius: 5
-            }} />
-            <View style={{
-              height: 10,
-              width: '20%',
-              right: 0,
-              position: 'absolute',
+      <>
+        {
+          isLoading ? (
+            <View style={styles.book}>
+              <Image style={styles.imagebook} source={{ uri: dulieu.image }} />
+              <View style={styles.in4book}>
+                <Text style={styles.nameBook}>{dulieu.title}</Text>
+                <Text style={styles.nameAuthor}>{dulieu.nameAuthor}</Text>
+                <View style={styles.doneprocess}>
+                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
+                  <View style={styles.process}>
+                    <Text style={{ color: '#272956', fontWeight: "500" }}>{dulieu.progress}%</Text>
+                  </View>
+                </View>
+                <View style={styles.processbar}>
+                  <View style={{ // Thanh màu xám
+                    height: 10,
+                    width: progress,
+                    position: 'absolute',
+                    left: 0,
+                    backgroundColor: 'red',
+                    borderRadius: 5
+                  }} />
+                  <View style={{
+                    height: 10,
+                    width: '20%',
+                    right: 0,
+                    position: 'absolute',
 
-            }} />
-          </View>
-        </View>
-        <Image style={styles.image3cham} source={require('../../src/assets/images/ic3cham.png')} />
-      </View>
+                  }} />
+                </View>
+              </View>
+            </View>
+          ) : (<View style={{width:'100%',height:120,justifyContent:'center',alignItems:'center',backgroundColor:'#f3f3f3',marginTop:20,borderRadius:20}}><ActivityIndicator color={'gray'} size={30}/></View>)
+        }
+      </>
+
+
     )
   } catch (error) {
 

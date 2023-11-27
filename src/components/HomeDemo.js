@@ -22,6 +22,7 @@ const color_text = "#272956";
 
 const HomeDemo = (props) => {
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+  const { test,setTest } = useContext(AppContext);
   const { navigation } = props;
   const [dataNe, setdataNe] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

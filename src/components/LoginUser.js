@@ -15,7 +15,7 @@ const backgroundleader = '#8CA1D6';
 const colorText = '#FFF';
 const LoginUser = props => {
   const { navigation } = props;
-  const { isTabVisible, setIsTabVisible } = useContext(AppContext);
+  const { test, setTest } = useContext(AppContext);
 
   return (
     <LinearGradient
@@ -36,7 +36,7 @@ const LoginUser = props => {
             colors={['#FFD700', '#FFA500', '#FF8C00']}
             start={{ x: 1, y: 0.5 }}
             end={{ x: 0.5, y: 1.75 }}>
-            <TouchableOpacity onPress={() => navigation.navigate('Welcome')}>
+            <TouchableOpacity onPress={() => setTest(true)}>
               <Text style={styles.txt2}>Đăng nhập</Text>
             </TouchableOpacity>
           </LinearGradient>

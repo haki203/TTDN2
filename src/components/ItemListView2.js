@@ -87,12 +87,12 @@ const ItemListView2 = (props) => {
                         <Text style={{ color: "#000000", fontFamily: 'Poppins-Medium', fontSize: 15 }} >{dulieu.title}</Text>
                         <Text style={{ marginTop: 3, fontSize: 10, fontFamily: 'Poppins-Medium', color: 'black' }}>Sách nghe - Sách nói</Text>
                         <View style={{ width: 200, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <View style={styles.click}>
-                                <Icon name="playcircleo" size={20} color='black' onPress={() => navigation.navigate('PlayHot',{ id: dulieu._id })} />
+                            <TouchableOpacity onPress={() => navigation.navigate('PlayHot',{ id: dulieu._id })} style={styles.click}>
+                                <Icon name="playcircleo" size={20} color='black'  />
                                 <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
                                     Nghe
                                 </Text>
-                            </View>
+                            </TouchableOpacity>
                             <View style={styles.click}>
                                 <TouchableOpacity onPress={handleHeartPress}>
                                     <View >
@@ -109,13 +109,13 @@ const ItemListView2 = (props) => {
                                         Yêu thích
                                     </Text>}
                             </View>
-                            <View style={styles.click}>
-                                <Icon name="infocirlceo" size={20} color='black' onPress={() => navigation.navigate('DetailHot', { itemId: dulieu._id },)} />
+                            <TouchableOpacity onPress={() => navigation.navigate('DetailHot', { itemId: dulieu._id },)} style={styles.click}>
+                                <Icon name="infocirlceo" size={20} color='black'  />
 
                                 <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
                                     Chi tiết
                                 </Text>
-                            </View>
+                            </TouchableOpacity>
 
                         </View>
 
