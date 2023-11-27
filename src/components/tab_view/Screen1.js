@@ -35,9 +35,27 @@ const Screen1 = ({ navigation, id }) => {
         setTextNew("");
         setTextNoti("Danh mục đang được cập nhật")
         setIsLoading(false);
+      } else if (respone.product.length < 3) {
+        setTextHot("Tất cả sách");
+        setTextNew("");
+        setIsLoading(false);
+        for (let i = 0; i < respone.product.length; i++) {
+          if (respone.product[i]) {
+            let dataIndex = respone.product[i];
+            // lay author
+            const res = await AxiosIntance().get("/product/author/" + respone.product[i].authorId)
+            dataIndex.authorId = res.author.name;
+            arrayData.push(dataIndex);
+          }
+
+        }
+
+        const sortedpublicAt = arrayData.slice().sort((a, b) => b.publicAt - a.publicAt);
+        const sortedsearch = arrayData.slice().sort((a, b) => b.search - a.search);
+        setDatasearch(sortedsearch);
+        setDatapublicAt(null);
+        setIsLoading(false)
       } else {
-
-
         for (let i = 0; i < respone.product.length; i++) {
           if (respone.product[i]) {
             let dataIndex = respone.product[i];
@@ -100,7 +118,9 @@ const Screen1 = ({ navigation, id }) => {
   }
   const ItemBook1 = ({ }) => {
     return (
-      <View style={[styles.renderImagePopularDeals, { justifyContent: 'center', backgroundColor: '#d6d6d6' }]}><ActivityIndicator size={25} color={'gray'} /></View>
+      <View style={{ paddingRight: 7, paddingLeft: 7 }}>
+        <View style={[styles.renderImagePopularDeals, { justifyContent: 'center', backgroundColor: '#d6d6d6' }]}><ActivityIndicator size={25} color={'gray'} /></View>
+      </View>
     );
   }
   return (
@@ -112,17 +132,17 @@ const Screen1 = ({ navigation, id }) => {
               <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>{textHot}</Text>
               <FlatList
 
-                data={["name","aav"]}
+                data={["name", "aav"]}
                 renderItem={({ item }) => <ItemBook1 />}
                 keyExtractor={item => item.id}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
               />
-              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2}}>{textNew}</Text>
+              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>{textNew}</Text>
               <FlatList
 
-                data={["name","aav"]}
+                data={["name", "aav"]}
                 renderItem={({ item }) => <ItemBook1 />}
                 keyExtractor={item => item.id}
                 horizontal={true}
@@ -143,7 +163,7 @@ const Screen1 = ({ navigation, id }) => {
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
               />
-              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2}}>{textNew}</Text>
+              <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>{textNew}</Text>
               <FlatList
                 style={{ flexGrow: 0 }}
                 data={datapublicAt}
@@ -179,14 +199,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     fontFamily: 'Poppins',
-    width:140
-    
+    width: 140
+
   }, renderImagePopularDeals: {
     width: 150,
     height: 220,
     margin: 20,
     borderRadius: 10,
-    marginLeft:1
+    marginLeft: 1
   },
   renderauthor: {
     color: 'black'
