@@ -161,7 +161,7 @@ const BookDetail = (props) => {
 
     }
     const limitText = (text,num) => {
-        console.log(num);
+        // console.log(num);
         try {
           if (text.length > num) {
             return text.substring(0, num) + '...';
@@ -1137,7 +1137,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     filledStar: {
-        color: '#272956',
+        color: '#FFCC00',
         fontSize: 40,
         margin: 10
     },
