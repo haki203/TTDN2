@@ -35,9 +35,11 @@ const PlayScreen = props => {
   //----------------------------------------------------------------------
   const [AuthorData, setAuthorData] = useState({});
   const [bookData, setBookData] = useState({});
-  const [audioUrl, setAudioUrl] = useState('');
+  const [audioUrl, setAudioUrl] = useState('...');
+  const [dataAudio, setDataAudio] = useState([]);
+  const [dataML, setDataML] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [trackName, setTrackName] = useState('');
+  const [trackName, setTrackName] = useState('...');
   const [onVolume, setOnVolume] = useState(false);
   const [speed, setSpeed] = useState(1);
   const [isPlay, setIsPlay] = useState(false);
@@ -104,25 +106,40 @@ const PlayScreen = props => {
     TrackPlayer.seekTo(value);
   };
 
-  // Khởi tạo tong thoi gian
-  useEffect(() => {
-    async function initDuration() {
-      try {
-        const duration = await TrackPlayer.getDuration();
-        setDuration(duration);
-        const name = await TrackPlayer.getCurrentTrack();
-        setTrackName(trackList[name].title);
-      } catch (error) {
-        console.log(error);
+  const getAudio = async (id) => {
+    const response = await AxiosIntance().get('/product/get-audio/' + id);
+    let dataAudioNe=[];
+    if (response.result) {
+      const res = await AxiosIntance().get('/product/get-muc-luc/' + id);
+      if (res.result) {
+        const newBody0={chuong:0,title:"Giới thiệu chung",url:response.audios.audio0};
+        const newBody1={chuong:1,title:res.ml[0].title,url:response.audios.audio0};
+        const newBody2={chuong:2,title:res.ml[1].title,url:response.audios.audio0};
+        const newBody3={chuong:3,title:res.ml[2].title,url:response.audios.audio0};
+        dataAudioNe.push(newBody0);
+        dataAudioNe.push(newBody1);
+        dataAudioNe.push(newBody2);
+        dataAudioNe.push(newBody3);
       }
     }
-    initDuration();
-  }, [isPlay]);
+    setDataAudio(dataAudioNe);
 
+  }
+  async function initDuration() {
+    try {
+      const duration = await TrackPlayer.getDuration();
+      setDuration(duration);
+      const name = await TrackPlayer.getCurrentTrack();
+    } catch (error) {
+      console.log(error);
+    }
+  }
   // Khởi tạo trình phát âm nhạc
   useEffect(() => {
+    initDuration();
+
     initPlayer();
-    
+    getAudio(id);
     try {
       if (isSetup) {
       } else {
