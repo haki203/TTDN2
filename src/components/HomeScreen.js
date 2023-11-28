@@ -49,8 +49,8 @@ const HomeScreen = (props) => {
 
   );
   const RomanceRoute = (id) => (
-    <ScrollView 
-    showsVerticalScrollIndicator={false}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}>
       <Screen1 navigation={navigation} id={id} />
     </ScrollView>
 
@@ -151,7 +151,7 @@ const HomeScreen = (props) => {
       style={{ backgroundColor: 'transparent' }}
       scrollEnabled={true}
 
-      tabStyle={{ width: "auto",textAlign:'left',alignItems:'flex-start' }}
+      tabStyle={{ width: "auto", textAlign: 'left', alignItems: 'flex-start' }}
       onLayout={event => {
         const { width } = event.nativeEvent.layout;
         props.setTabBarWidth(props.navigationState.index, width);
@@ -189,7 +189,7 @@ const HomeScreen = (props) => {
       </View>
       <View style={styles.title}>
         <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Chào mừng bạn trở lại, {infoUser.name}!</Text>
-        <View style={{flexDirection:'row',alignItems:'center'}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>Bạn muốn đọc sách gì?</Text>
           <View style={styles.viewall}>
             <TouchableOpacity onPress={toggleModal}>
@@ -267,7 +267,6 @@ const styles = StyleSheet.create({
   }, tab: {
     marginLeft: 20,
     height: 'auto',
-    marginRight:10
   },
   menu: {
     width: 40,
@@ -288,13 +287,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 16,
     color: '#cdcdcd',
-    textAlign:'left',
-    marginLeft:-7
-    
+    textAlign: 'left',
+    marginLeft: -7
+
   },
   activeLabel: {
     color: 'black',
-    textAlign:'left'
+    textAlign: 'left'
   }, menuall: {
 
   }, viewall: {
