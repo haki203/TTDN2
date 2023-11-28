@@ -10,6 +10,7 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Modal,
+  Alert, Share,
   ActivityIndicator,
 } from 'react-native';
 import React, { useEffect, useState, useContext } from 'react';
@@ -347,6 +348,26 @@ const PlayScreen = props => {
       console.log(error);
     }
   }
+  // share ne
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          bookData.title,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
   try {
     return (
       <TouchableWithoutFeedback onPress={handlePressScreen}>
@@ -477,7 +498,8 @@ const PlayScreen = props => {
               <TouchableOpacity onPress={skipToNextTrack}>
                 <Image source={require(baseImgPath + 'next.png')} />
               </TouchableOpacity>
-              <TouchableOpacity>
+
+              <TouchableOpacity onPress={()=>onShare()}>
                 <Image source={require(baseImgPath + 'Upload.png')} />
               </TouchableOpacity>
             </View>
