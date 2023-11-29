@@ -3,20 +3,25 @@ import {
   StyleSheet,
   Text,
   View,
+  FlatList,
   Image,
   Button,
   TouchableOpacity,
   Dimensions,
   TouchableWithoutFeedback,
+  Modal,
+  Alert, Share,
   ActivityIndicator,
 } from 'react-native';
 import React, { useEffect, useState, useContext } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import TrackPlayer from 'react-native-track-player';
 import { AppContext } from '../../navigation/AppContext';
 import Slider from 'react-native-slider';
 import AxiosIntance from '../../axios/AxiosIntance';
 import { err } from 'react-native-svg/lib/typescript/xml';
+import { useFocusEffect } from '@react-navigation/native';
 
 const colorTitle = '#272956';
 const colorContent = 'white';
@@ -25,6 +30,7 @@ const backgroundHeader = '#272956';
 const backgroundBody = 'white';
 const fontFamily = 'Poppins';
 const sizeIcon = 26;
+const sizeIconFooter = 36;
 const baseImgPath = '../../assets/images/';
 const colorProgressText = '#5849B7';
 const PlayScreen = props => {
@@ -35,16 +41,22 @@ const PlayScreen = props => {
   //----------------------------------------------------------------------
   const [AuthorData, setAuthorData] = useState({});
   const [bookData, setBookData] = useState({});
-  const [audioUrl, setAudioUrl] = useState('');
+  const [audioUrl, setAudioUrl] = useState('...');
+  const [dataAudio, setDataAudio] = useState([]);
+  const [dataML, setDataML] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [trackName, setTrackName] = useState('');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [trackName, setTrackName] = useState('...');
   const [onVolume, setOnVolume] = useState(false);
   const [speed, setSpeed] = useState(1);
   const [isPlay, setIsPlay] = useState(false);
+  const { isPlayAudio, setIsPlayAudio } = useContext(AppContext);
+  const { lastIdPlay, setLastIdPlay } = useContext(AppContext);
   const [isSetup, setIsSetup] = useState(false);
   const [duration, setDuration] = useState(0);
   const [position, setPosition] = useState(0);
-  const [volume, setVolume] = useState(0.5); // Giá trị mặc định
+  const [index, setIndex] = useState(0);
+  const [volume, setVolume] = useState(1); // Giá trị mặc định
 
   const changeSpeed = async () => {
     let newSpeed;
@@ -104,44 +116,57 @@ const PlayScreen = props => {
     TrackPlayer.seekTo(value);
   };
 
-  // Khởi tạo tong thoi gian
-  useEffect(() => {
-    async function initDuration() {
-      try {
-        const duration = await TrackPlayer.getDuration();
-        setDuration(duration);
-        const name = await TrackPlayer.getCurrentTrack();
-        setTrackName(trackList[name].title);
-      } catch (error) {
-        console.log(error);
+  const getAudio = async (id) => {
+    console.log("isPlayAudio ne: ", isPlayAudio);
+    setIsLoading(true)
+    const response = await AxiosIntance().get('/product/get-audio/' + id);
+    let dataAudioNe = [];
+    if (response.result) {
+      const res = await AxiosIntance().get('/product/get-muc-luc/' + id);
+      if (res.result) {
+        const newBody0 = { id: '0', chuong: 0, title: "Giới thiệu chung", url: response.audios[0].audio0 };
+        const newBody1 = { id: '1', chuong: 1, title: res.ml[0].title, url: response.audios[0].audio1 };
+        const newBody2 = { id: '2', chuong: 2, title: res.ml[1].title, url: response.audios[0].audio2 };
+        const newBody3 = { id: '3', chuong: 3, title: res.ml[2].title, url: response.audios[0].audio3 };
+        dataAudioNe.push(newBody0);
+        dataAudioNe.push(newBody1);
+        dataAudioNe.push(newBody2);
+        dataAudioNe.push(newBody3);
       }
     }
+    setDataAudio(dataAudioNe);
     initDuration();
-  }, [isPlay]);
+    initPlayer(dataAudioNe);
+    getInfo();
+    setIsLoading(false)
 
-  // Khởi tạo trình phát âm nhạc
-  useEffect(() => {
-    initPlayer();
-    
+  }
+  async function initDuration() {
     try {
-      if (isSetup) {
-      } else {
-        async function initPlayer() {
-          try {
-            await TrackPlayer.setupPlayer();
-            // Thêm danh sách phát vào trình phát
-            await TrackPlayer.add(trackList);
-            getInfo();
-            setIsSetup(true)
-          } catch (error) {
-            console.log(error);
-          }
-        }
-        initPlayer();
-      }
+      const duration = await TrackPlayer.getDuration();
+      setDuration(duration);
+      const name = await TrackPlayer.getCurrentTrack();
     } catch (error) {
       console.log(error);
     }
+  }
+  async function initPlayer(dataAudio) {
+    try {
+      const setUp = await TrackPlayer.setupPlayer();
+
+      console.log("setUp ne: ", setUp);
+      // Thêm danh sách phát vào trình phát
+      await TrackPlayer.add(dataAudio);
+      getInfo();
+      setIsSetup(true)
+    } catch (error) {
+      console.log("error when setup: ", error);
+    }
+  }
+  // Khởi tạo trình phát âm nhạc
+  useEffect(() => {
+
+    getAudio(id);
   }, []);
   const getInfo = async () => {
     try {
@@ -149,15 +174,16 @@ const PlayScreen = props => {
       setDuration(duration);
       setIsSetup(true);
       const name = await TrackPlayer.getCurrentTrack();
-      setTrackName(trackList[name].title);
+      setIndex(name)
+
     } catch (error) {
       console.log(error);
     }
   };
   // Bắt đầu chơi
-
   async function playPlayer() {
-    if (isPlay) {
+    getInfo();
+    if (isPlayAudio) {
       try {
         await TrackPlayer.pause();
       } catch (error) {
@@ -170,28 +196,70 @@ const PlayScreen = props => {
         console.log(error);
       }
     }
-    setIsPlay(!isPlay);
+    setIsPlayAudio(!isPlayAudio)
+    setIsPlay(!isPlay)
   }
+  async function playPlayer2(bol) {
+    getInfo();
+    if (bol) {
 
+    } else {
+      try {
+
+        await TrackPlayer.pause();
+        // huy va dk lai cac track
+        await TrackPlayer.reset()
+        const response = await AxiosIntance().get('/product/get-audio/' + id);
+        let dataAudioNe = [];
+        if (response.result) {
+          const res = await AxiosIntance().get('/product/get-muc-luc/' + id);
+          if (res.result) {
+            const newBody0 = { id: '0', chuong: 0, title: "Giới thiệu chung", url: response.audios[0].audio0 };
+            const newBody1 = { id: '1', chuong: 1, title: res.ml[0].title, url: response.audios[0].audio1 };
+            const newBody2 = { id: '2', chuong: 2, title: res.ml[1].title, url: response.audios[0].audio2 };
+            const newBody3 = { id: '3', chuong: 3, title: res.ml[2].title, url: response.audios[0].audio3 };
+            dataAudioNe.push(newBody0);
+            dataAudioNe.push(newBody1);
+            dataAudioNe.push(newBody2);
+            dataAudioNe.push(newBody3);
+            console.log("add track ne: ", await TrackPlayer.add(dataAudioNe));
+          }
+        }
+        setDataAudio(dataAudioNe);
+        getInfo();
+        setIsSetup(true)
+        setIsPlayAudio(false)
+        setIsPlay(false)
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+  }
   // Chuyển sang bài hát tiếp theo
   async function skipToNextTrack() {
     try {
+      setOnVolume(false)
       await TrackPlayer.skipToNext();
       await TrackPlayer.pause();
-      setIsPlay(false);
+      setIsPlayAudio(false);
       getInfo();
     } catch (error) {
       console.log(error);
     }
   }
-
-  // Chuyển đến bài hát trước đó
   async function skipToPreviousTrack() {
     try {
+      setOnVolume(false)
       await TrackPlayer.skipToPrevious();
       await TrackPlayer.pause();
-      setIsPlay(false);
+      setIsPlayAudio(false);
       getInfo();
+      if (index > 0) {
+        setIndex(index - 1);
+      } else {
+        setIndex(3);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -205,11 +273,10 @@ const PlayScreen = props => {
     setOnVolume(false);
   };
   //----------------------------------------------------------------------
-
-  const limitText = text => {
+  const limitText1 = (text, num) => {
     try {
-      if (text.length > 20) {
-        return text.substring(0, 20) + '...';
+      if (text.length > num) {
+        return text.substring(0, num) + '...';
       } else {
         return text;
       }
@@ -217,42 +284,90 @@ const PlayScreen = props => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    const DetailBook = async () => {
-      try {
-        const response = await AxiosIntance().get('/product/' + id);
-        const Data2 = {
-          id: response.product._id,
-          title: response.product.title,
-          authorId: response.product.authorId,
-          category: response.product.categoryId,
-          image: response.product.image,
-          audio: response.product.audio,
-        };
-        setBookData(Data2);
-        AuthorBook(Data2.authorId);
-        setAudioUrl(Data2.audio);
-        setIsLoading(false);
-      } catch (error) {
-        console.log("error get detail book ", error);
-      }
-    };
-    DetailBook();
-
-    const AuthorBook = async id => {
-      const response = await AxiosIntance().get('/product/author/' + id);
+  const DetailBook = async () => {
+    try {
+      const response = await AxiosIntance().get('/product/' + id);
+      const Data2 = {
+        id: response.product._id,
+        title: response.product.title,
+        authorId: response.product.authorId,
+        category: response.product.categoryId,
+        image: response.product.image,
+        audio: response.product.audio,
+      };
+      setBookData(Data2);
+      setAudioUrl(Data2.audio);
+      const res = await AxiosIntance().get('/product/author/' + id);
       const Data1 = {
-        id: response.author._id,
-        authorname: response.author.name,
+        id: res.author._id,
+        authorname: res.author.name,
       };
       setAuthorData(Data1);
-      setIsLoading(false);
-    };
+    } catch (error) {
+      console.log("error get detail book ", error);
+    }
+  };
 
-    AuthorBook();
-  }, []);
+  const resetComponent = async () => {
+    DetailBook();
+    if (lastIdPlay == id) {
+      console.log("id trung ne");
+    } else {
+      console.log("id khacs ne");
+      playPlayer2(false)
+      setIsPlayAudio(false)
 
+      //await TrackPlayer.play()
+    }
+  }
+  useFocusEffect(
+    React.useCallback(() => {
+      resetComponent();
+      return () => {
+        setLastIdPlay(id)
+        //await TrackPlayer.
+      };
+    }, [])
+  );
+  const onClickItemML = async (id) => {
+    try {
+      await TrackPlayer.skip(parseInt(id));
+      await TrackPlayer.pause();
+      setIsPlayAudio(false);
+      getInfo();
+      setIsModalVisible(false)
+      setOnVolume(false)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  const onClickSave = async () => {
+    try {
+      console.log("save");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  // share ne
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          bookData.title,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+  };
   try {
     return (
       <TouchableWithoutFeedback onPress={handlePressScreen}>
@@ -264,18 +379,8 @@ const PlayScreen = props => {
               color={colorTitle}
               size={sizeIcon}
             />
-            {isLoading ? (
-              <Text style={styles.nameTrack}>
-                Tên sách...
-                <ActivityIndicator
-                  size={30}
-                  color={'#d6d6d6'}></ActivityIndicator>
-              </Text>
-            ) : (
-              <Text style={styles.nameTrack}>{limitText(bookData.title)}</Text>
-            )}
-            {/* <Text style={styles.nameTrack}>{bookData.title}</Text> */}
-            <Icon name="ellipsis-h" color={colorTitle} size={sizeIcon} />
+            <Text style={styles.nameTrack}>{!isLoading ? limitText1(bookData.title, 25) : "..."}</Text>
+            <View></View>
           </View>
 
           <View style={styles.playContainer}>
@@ -302,30 +407,15 @@ const PlayScreen = props => {
           </View>
           <View
             style={{ height: 40, justifyContent: 'center', alignItems: 'center' }}>
-            {isLoading ? (
-              <Text
-                style={{
-                  fontWeight: '700',
-                  fontFamily: 'Poppins',
-                  fontSize: 18,
-                  color: '#272956',
-                }}>
-                Tên tác giả....
-                <ActivityIndicator
-                  size={30}
-                  color={'#d6d6d6'}></ActivityIndicator>
-              </Text>
-            ) : (
-              <Text
-                style={{
-                  fontWeight: '700',
-                  fontFamily: 'Poppins',
-                  fontSize: 18,
-                  color: '#272956',
-                }}>
-                {limitText(AuthorData.authorname)}
-              </Text>
-            )}
+            <Text
+              style={{
+                fontWeight: 'bold',
+                fontFamily: 'Poppins',
+                fontSize: 16,
+                color: '#272956',
+              }}>
+              {!isLoading ? limitText1(dataAudio[index].title, 45) : '...'}
+            </Text>
           </View>
           <View style={styles.progressContainer}>
             <View style={{ width: '80%' }}>
@@ -345,7 +435,7 @@ const PlayScreen = props => {
                 <View
                   style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text style={styles.progressText}>00:00</Text>
-                  <Text style={styles.progressText}>00:00</Text>
+                  <Text style={styles.progressText}>09:00</Text>
                 </View>
               ) : (
                 <View
@@ -372,7 +462,7 @@ const PlayScreen = props => {
                 <Image source={require(baseImgPath + 'back.png')} />
               </TouchableOpacity>
               <TouchableOpacity style={styles.btnPlay} onPress={playPlayer}>
-                {!isPlay ? (
+                {!isPlayAudio ? (
                   <Image source={require(baseImgPath + 'PlayMusic.png')} />
                 ) : (
                   // <Image source={require(baseImgPath + "PlayMusic.png")} />
@@ -408,7 +498,8 @@ const PlayScreen = props => {
               <TouchableOpacity onPress={skipToNextTrack}>
                 <Image source={require(baseImgPath + 'next.png')} />
               </TouchableOpacity>
-              <TouchableOpacity>
+
+              <TouchableOpacity onPress={()=>onShare()}>
                 <Image source={require(baseImgPath + 'Upload.png')} />
               </TouchableOpacity>
             </View>
@@ -450,30 +541,62 @@ const PlayScreen = props => {
                 justifyContent: 'space-between',
                 width: '80%',
               }}>
-              <TouchableOpacity style={styles.itemFooter}>
-                <Image
-                  style={[styles.iconFooter, { width: 30 }]}
-                  source={require(baseImgPath + 'bookmark.png')}
+              <TouchableOpacity onPress={() => onClickSave()} style={styles.itemFooter}>
+                <Icon
+                  name="heart-o"
+                  color={colorTitle}
+                  size={sizeIconFooter}
                 />
                 <Text style={styles.textFooter}>Lưu</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.itemFooter}>
-                <Image
-                  style={styles.iconFooter}
-                  source={require(baseImgPath + 'chapter.png')}
+              <TouchableOpacity onPress={() => setIsModalVisible(true)} style={styles.itemFooter}>
+                <IconMCI
+                  name="playlist-play"
+                  color={colorTitle}
+                  size={sizeIconFooter}
                 />
                 <Text style={styles.textFooter}>Chương</Text>
               </TouchableOpacity>
 
               <TouchableOpacity onPress={changeSpeed} style={styles.itemFooter}>
-                <Image
-                  style={styles.iconFooter}
-                  source={require(baseImgPath + 'speed.png')}
+                <IconMCI
+                  name="play-speed"
+                  color={colorTitle}
+                  size={sizeIconFooter}
                 />
                 <Text style={styles.textFooter}>Tốc độ {speed.toFixed(1)}</Text>
               </TouchableOpacity>
             </View>
+            <Modal
+              style={{ height: '100%', width: '100%', backgroundColor: 'red' }}
+              animationType="slide"
+              transparent={true}
+              visible={isModalVisible}>
+              <View
+                style={{
+                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  width: '100%',
+                  height: '100%',
+                }}>
+                <View style={{ paddingVertical: 10, backgroundColor: 'white', position: 'absolute', bottom: 0, width: '100%' }}>
+                  <Icon onPress={() => setIsModalVisible(false)} style={{ position: 'absolute', right: 10 }} name="sort-desc" color={colorTitle} size={sizeIconFooter} />
+                  <Text style={[styles.nameTrack, { fontSize: 18, paddingStart: 10 }]}>Chọn chương</Text>
+                  <FlatList
+                    style={{ marginTop: 20 }}
+                    data={dataAudio}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity onPress={() => onClickItemML(item.id)} style={{ paddingVertical: 10, backgroundColor: '#f2f2f2', marginBottom: 10, paddingStart: 10, }}>
+                        <Text style={[styles.nameTrack, { fontWeight: '500', fontSize: 16 }]}>{item.title}</Text>
+                      </TouchableOpacity>
+                    )}
+                    keyExtractor={item => item.id}
+                    showsVerticalScrollIndicator={true}
+                  />
+                </View>
+              </View>
+
+            </Modal>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -501,7 +624,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: colorTitle,
     fontFamily: fontFamily,
-    fontWeight: '500',
+    fontWeight: '700',
   },
   playContainer: {
     flexDirection: 'column',
@@ -538,7 +661,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    width: '24%',
+    padding: 10
   },
   textFooter: {
     fontSize: 14,
