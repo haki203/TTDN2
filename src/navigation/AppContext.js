@@ -12,13 +12,11 @@ export const AppContextProvider = (props) =>{
     const [lastIdPlay,setLastIdPlay] = useState(false);
     const [isTabVisible, setIsTabVisible] = useState(true);
     const [data,setdata] = useState("false");
-    const [isHearted, setIsHearted] = useState(false);
-
     // them in4 user de them thong tin ng dung luc login
     const [infoUser,setinfoUser] = useState({});
     const [passwordNe,setpasswordNe] = useState({});
     return (
-        <AppContext.Provider value={{isLogin,setIsLogin,data,setdata,infoUser,setinfoUser,passwordNe,setpasswordNe,isTabVisible,setIsTabVisible,test,setTest,isPlayAudio,setIsPlayAudio,lastIdPlay,setLastIdPlay,isHearted,setIsHearted}}>
+        <AppContext.Provider value={{isLogin,setIsLogin,data,setdata,infoUser,setinfoUser,passwordNe,setpasswordNe,isTabVisible,setIsTabVisible,test,setTest,isPlayAudio,setIsPlayAudio,lastIdPlay,setLastIdPlay}}>
             {children}
             {/*     // children la man hinh cho kho context
                     // value la du lieu sd chung */}
