@@ -5,7 +5,7 @@ import store from './store/store';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AppNavigator from './navigation/AppNavigator';
-import ItemListView from './components/ItemListView';
+import ItemListView from './components/ItemFlatList/ItemListView';
 import PlayScreen from './components/play/PlayScreen';
 import LibraryScreen from './components/LibraryScreen';
 import HomeScreen from './components/HomeScreen';
@@ -13,6 +13,7 @@ import { AppContextProvider } from './navigation/AppContext';
 import BookDetail from './components/BookDetail';
 console.disableYellowBox = true;
 import { LogBox } from "react-native"
+import Notification from './components/notification/Notification';
 
 LogBox.ignoreAllLogs(true)
 
@@ -25,7 +26,6 @@ const App = () => {
         <AppNavigator />
       </NavigationContainer>
     </AppContextProvider>
-
   );
 };
 

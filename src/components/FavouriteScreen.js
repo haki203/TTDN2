@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView, FlatList, Image, TouchableOpacity, 
 import React, { useContext, useEffect, useState } from 'react'
 import AxiosIntance from '../axios/AxiosIntance'
 import { useFocusEffect } from '@react-navigation/native';
-import ItemListView from './ItemListView';
+import ItemListView from './ItemFlatList/ItemListView';
 import Icon from "react-native-vector-icons/AntDesign"
 import { AppContext } from '../navigation/AppContext';
 import { route } from '../../server/routes';

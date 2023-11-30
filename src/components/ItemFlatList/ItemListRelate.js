@@ -3,9 +3,9 @@ import React, { useState, useContext, useEffect } from 'react';
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/FontAwesome';
 import Icon_3 from 'react-native-vector-icons/AntDesign';
-import { AppContext } from '../navigation/AppContext'
+import { AppContext } from '../../navigation/AppContext'
 import ItemListComment from './ItemListComment';
-import AxiosIntance from '../axios/AxiosIntance';
+import AxiosIntance from '../../axios/AxiosIntance';
 import { URI } from '../../server/public/assets/vendor/tinymce/tinymce';
 const { width, height } = Dimensions.get('window');
 const ItemListRelate = (props) => {

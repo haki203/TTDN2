@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/Entypo';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import {SwipeListView} from 'react-native-swipe-list-view';
 import {GestureHandlerRootView, Swipeable} from 'react-native-gesture-handler';
-import AxiosIntance from '../axios/AxiosIntance';
+import AxiosIntance from '../../axios/AxiosIntance';
 
 const color_text = '#272956';
 const color_view = '#4838D1';
