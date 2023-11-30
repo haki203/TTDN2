@@ -3,7 +3,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/FontAwesome';
 import Icon_3 from 'react-native-vector-icons/AntDesign';
-import { AppContext } from '../../navigation/AppContext'
+import { AppContext } from '../navigation/AppContext'
 const { width, height } = Dimensions.get('window');
 import moment from 'moment-timezone';
 

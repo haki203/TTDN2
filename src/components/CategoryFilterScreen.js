@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, Dimensions } from 'react-native'
 import React, { useState } from 'react'
-import ItemFilter from './ItemFlatList/ItemFilter'
-import ItemButtonFilter from './ItemFlatList/ItemButtonFilter'
-import ItemSearch from './ItemFlatList/ItemSearch'
+import ItemFilter from './ItemFilter'
+import ItemButtonFilter from './ItemButtonFilter'
+import ItemSearch from './ItemSearch'
 const { width, height } = Dimensions.get('window');
 const CategoryFilterScreen = (props) => {
     const { navigation } = props;

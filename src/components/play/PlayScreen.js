@@ -17,13 +17,12 @@ import React, { useEffect, useState, useContext } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import TrackPlayer from 'react-native-track-player';
-import notifee, { EventType } from '@notifee/react-native';
 import { AppContext } from '../../navigation/AppContext';
 import Slider from 'react-native-slider';
 import AxiosIntance from '../../axios/AxiosIntance';
 import { err } from 'react-native-svg/lib/typescript/xml';
 import { useFocusEffect } from '@react-navigation/native';
-import Notification from '../notification/Notification';
+
 const colorTitle = '#272956';
 const colorContent = 'white';
 const { width, height } = Dimensions.get('window');
@@ -43,16 +42,14 @@ const PlayScreen = props => {
   const [AuthorData, setAuthorData] = useState({});
   const [bookData, setBookData] = useState({});
   const [audioUrl, setAudioUrl] = useState('...');
-  const [state, setState] = useState(1);
   const [dataAudio, setDataAudio] = useState([]);
   const [dataML, setDataML] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [trackName, setTrackName] = useState('...');
   const [onVolume, setOnVolume] = useState(false);
-  const [speed, setSpeed] = useState(0.5);
+  const [speed, setSpeed] = useState(1);
   const [isPlay, setIsPlay] = useState(false);
-  const [titleChuong, setTitleChuong] = useState("");
   const { isPlayAudio, setIsPlayAudio } = useContext(AppContext);
   const { lastIdPlay, setLastIdPlay } = useContext(AppContext);
   const [isSetup, setIsSetup] = useState(false);
@@ -61,19 +58,40 @@ const PlayScreen = props => {
   const [index, setIndex] = useState(0);
   const [volume, setVolume] = useState(1); // Giá trị mặc định
 
-
   const changeSpeed = async () => {
-    const speedValues = [1.0, 1.5, 2.0, 0.25, 0.5];
-    const currentIndex = speedValues.indexOf(speed);
-    const nextIndex = (currentIndex + 1) % speedValues.length;
-    const newSpeed = speedValues[nextIndex];
+    let newSpeed;
 
+    switch (speed) {
+      case 1.0:
+        newSpeed = 1.5;
+        break;
+      case 1.5:
+        newSpeed = 2.0;
+        break;
+      case 2.0:
+        newSpeed = 0.25;
+        break;
+      case 0.25:
+        newSpeed = 0.5;
+        break;
+      case 0.5:
+        newSpeed = 1;
+        break;
+      case 1:
+        newSpeed = 1.5;
+        break;
+      case 1.5:
+        newSpeed = 2;
+        break;
+      default:
+        newSpeed = 1.0; // Giá trị mặc định ban đầu
+        break;
+    }
     try {
       await TrackPlayer.setRate(newSpeed);
     } catch (error) {
       console.log(error);
     }
-
     setSpeed(newSpeed);
   };
 
@@ -94,23 +112,6 @@ const PlayScreen = props => {
       clearInterval(interval);
     };
   }, []);
-  const update = () => {
-    setIsPlay(false)
-    setIsPlayAudio(false)
-    getInfo()
-    skipToNextTrack()
-    skipToNextTrack()
-    setIsPlay(true)
-    setIsPlayAudio(true)
-  }
-  useEffect(() => {
-
-    if (parseInt(position) > (parseInt(duration) - 2)) {
-      setIsPlay(false)
-      setIsPlayAudio(false)
-      update()
-    }
-  }, [position]);
   const handleSeek = value => {
     TrackPlayer.seekTo(value);
   };
@@ -184,22 +185,19 @@ const PlayScreen = props => {
     getInfo();
     if (isPlayAudio) {
       try {
-        setIsPlayAudio(false)
-        setIsPlay(false)
         await TrackPlayer.pause();
       } catch (error) {
         console.log(error);
       }
     } else {
       try {
-        setIsPlayAudio(true)
-        setIsPlay(true)
         await TrackPlayer.play();
       } catch (error) {
         console.log(error);
       }
     }
-
+    setIsPlayAudio(!isPlayAudio)
+    setIsPlay(!isPlay)
   }
   async function playPlayer2(bol) {
     getInfo();
@@ -240,12 +238,11 @@ const PlayScreen = props => {
   }
   // Chuyển sang bài hát tiếp theo
   async function skipToNextTrack() {
-
     try {
       setOnVolume(false)
       await TrackPlayer.skipToNext();
-      await TrackPlayer.play();
-
+      await TrackPlayer.pause();
+      setIsPlayAudio(false);
       getInfo();
     } catch (error) {
       console.log(error);
@@ -255,7 +252,8 @@ const PlayScreen = props => {
     try {
       setOnVolume(false)
       await TrackPlayer.skipToPrevious();
-      await TrackPlayer.play();
+      await TrackPlayer.pause();
+      setIsPlayAudio(false);
       getInfo();
       if (index > 0) {
         setIndex(index - 1);
@@ -296,7 +294,6 @@ const PlayScreen = props => {
         category: response.product.categoryId,
         image: response.product.image,
         audio: response.product.audio,
-        description: response.product.description,
       };
       setBookData(Data2);
       setAudioUrl(Data2.audio);
@@ -333,13 +330,12 @@ const PlayScreen = props => {
     }, [])
   );
   const onClickItemML = async (id) => {
-    setIsModalVisible(false)
-
     try {
       await TrackPlayer.skip(parseInt(id));
       await TrackPlayer.pause();
       setIsPlayAudio(false);
       getInfo();
+      setIsModalVisible(false)
       setOnVolume(false)
     } catch (error) {
       console.log(error);
@@ -347,7 +343,7 @@ const PlayScreen = props => {
   }
   const onClickSave = async () => {
     try {
-      setState(state + 1)
+      console.log("save");
     } catch (error) {
       console.log(error);
     }
@@ -356,9 +352,8 @@ const PlayScreen = props => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        title: bookData.title,
-        message: bookData.title + '\n' + bookData.description,
-        url: 'https://thonguyen.onrender.com'
+        message:
+          bookData.title,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -387,13 +382,6 @@ const PlayScreen = props => {
             <Text style={styles.nameTrack}>{!isLoading ? limitText1(bookData.title, 25) : "..."}</Text>
             <View></View>
           </View>
-          <Notification
-            key={state} // Sử dụng state làm key để render lại component khi state thay đổi
-            title={bookData.title}
-            chuong={titleChuong}
-            isPlay={isPlayAudio}
-            state={state}
-          />
 
           <View style={styles.playContainer}>
             {isLoading ? (
@@ -447,13 +435,13 @@ const PlayScreen = props => {
                 <View
                   style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text style={styles.progressText}>00:00</Text>
-                  <Text style={styles.progressText}>09:30</Text>
+                  <Text style={styles.progressText}>09:00</Text>
                 </View>
               ) : (
                 <View
                   style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text style={styles.progressText}>{formatTime(position)}</Text>
-                  <Text style={styles.progressText}>{formatTime(duration) ? formatTime(duration) : '03:10'}</Text>
+                  <Text style={styles.progressText}>0{formatTime(position)}</Text>
+                  <Text style={styles.progressText}>0{formatTime(duration)}</Text>
                 </View>
               )}
             </View>
@@ -511,7 +499,7 @@ const PlayScreen = props => {
                 <Image source={require(baseImgPath + 'next.png')} />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => onShare()}>
+              <TouchableOpacity onPress={()=>onShare()}>
                 <Image source={require(baseImgPath + 'Upload.png')} />
               </TouchableOpacity>
             </View>
@@ -581,7 +569,7 @@ const PlayScreen = props => {
               </TouchableOpacity>
             </View>
             <Modal
-              style={{ height: '100%', width: '100%', }}
+              style={{ height: '100%', width: '100%', backgroundColor: 'red' }}
               animationType="slide"
               transparent={true}
               visible={isModalVisible}>
@@ -591,17 +579,14 @@ const PlayScreen = props => {
                   width: '100%',
                   height: '100%',
                 }}>
-                <View style={{ paddingVertical: 10, backgroundColor: 'white', position: 'absolute', bottom: 0, width: '100%',borderTopRightRadius:30,borderTopLeftRadius:30,paddingTop:20 }}>
-                  <TouchableOpacity style={{ position: 'absolute', right: 5, borderRadius: 20, top: 5, width: 30, height: 30, backgroundColor: '#f3f3f3', alignItems: 'center', justifyContent: 'center' }}
-                    onPress={() => setIsModalVisible(false)}>
-                    <Text style={{ fontWeight: 'bold', fontSize: 18, }}>x</Text>
-                  </TouchableOpacity>
+                <View style={{ paddingVertical: 10, backgroundColor: 'white', position: 'absolute', bottom: 0, width: '100%' }}>
+                  <Icon onPress={() => setIsModalVisible(false)} style={{ position: 'absolute', right: 10 }} name="sort-desc" color={colorTitle} size={sizeIconFooter} />
                   <Text style={[styles.nameTrack, { fontSize: 18, paddingStart: 10 }]}>Chọn chương</Text>
                   <FlatList
                     style={{ marginTop: 20 }}
                     data={dataAudio}
                     renderItem={({ item }) => (
-                      <TouchableOpacity onPress={() => onClickItemML(item.id)} style={{ paddingVertical: 10, backgroundColor: '#fffff', marginBottom: 10, paddingStart: 10, }}>
+                      <TouchableOpacity onPress={() => onClickItemML(item.id)} style={{ paddingVertical: 10, backgroundColor: '#f2f2f2', marginBottom: 10, paddingStart: 10, }}>
                         <Text style={[styles.nameTrack, { fontWeight: '500', fontSize: 16 }]}>{item.title}</Text>
                       </TouchableOpacity>
                     )}
@@ -685,4 +670,18 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
   },
 });
-
+const trackList = [
+  {
+    id: '0',
+    url: 'https://drive.usercontent.google.com/download?id=1gYmliovYIFcSJpgGjQKqUbk94JId9lDY&export=download&authuser=0&confirm=t&uuid=e6269e25-e56f-4dcd-bb53-30fd181e40e5&at=APZUnTWjpnITc9eJCw_1qsvhCKaj:1700929717334',
+    title: 'Trí tuệ nhân tạo',
+    artist: 'Artist 1',
+  },
+  {
+    id: '1',
+    url: 'https://drive.usercontent.google.com/download?id=1U51zQbFQZit7Sf22O9tWHGQch1EtCh1g&export=download&authuser=0&confirm=t&uuid=895a8b68-c29e-43ca-a0e7-94e7d818489f&at=APZUnTUH2VIBGwK7vBfQqnjQKyQ9:1700928676054',
+    title: 'Đắc nhân tâm',
+    artist: 'Artist 2',
+  },
+  // Thêm các bài hát khác vào đây
+];

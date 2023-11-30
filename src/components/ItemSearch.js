@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image,TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useRoute } from '@react-navigation/native';
-import AxiosIntance from '../../axios/AxiosIntance';
+import AxiosIntance from '../axios/AxiosIntance';
 const bacroundColor = '#272956';
 const ColorAuthor = '#4838D1';
 const ItemSearch = (props) => {

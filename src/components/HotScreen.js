@@ -10,7 +10,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import AxiosIntance from '../axios/AxiosIntance';
 
-import ItemListView2 from './ItemFlatList/ItemListView2';
+import ItemListView2 from './ItemListView2';
 const color_text = "#272956";
 const color_view = "#4838D1";
 const bgcolor = "#FFFFFF";

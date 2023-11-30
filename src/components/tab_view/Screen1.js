@@ -118,8 +118,8 @@ const Screen1 = ({ navigation, id }) => {
   }
   const ItemBook1 = ({ }) => {
     return (
-      <View style={{ paddingRight: 7, paddingLeft: 7,width:width/2 }}>
-        <View style={[styles.renderImagePopularDeals, { justifyContent: 'center', backgroundColor: '#d6d6d6',width:'80%' }]}><ActivityIndicator size={25} color={'gray'} /></View>
+      <View style={{ paddingRight: 7, paddingLeft: 7 }}>
+        <View style={[styles.renderImagePopularDeals, { justifyContent: 'center', backgroundColor: '#d6d6d6' }]}><ActivityIndicator size={25} color={'gray'} /></View>
       </View>
     );
   }

@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from 'react-native'
 import React, { useState, useEffect, useContext } from 'react'
 import Icon from "react-native-vector-icons/AntDesign"
-import AxiosIntance from '../../axios/AxiosIntance';
-import { AppContext } from '../../navigation/AppContext';
+import AxiosIntance from '../axios/AxiosIntance';
+import { AppContext } from '../navigation/AppContext';
 
 
 const ItemListView2 = (props) => {

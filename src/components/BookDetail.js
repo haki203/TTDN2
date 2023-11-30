@@ -5,10 +5,10 @@ import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/FontAwesome';
 import Icon_3 from 'react-native-vector-icons/AntDesign';
 import { AppContext } from '../navigation/AppContext'
-import ItemListComment from './ItemFlatList/ItemListComment';
+import ItemListComment from './ItemListComment';
 import AxiosIntance from '../axios/AxiosIntance';
 import { URI } from '../../server/public/assets/vendor/tinymce/tinymce';
-import ItemListRelate from './ItemFlatList/ItemListRelate';
+import ItemListRelate from './ItemListRelate';
 const { width, height } = Dimensions.get('window');
 import { useFocusEffect } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
@@ -29,7 +29,6 @@ const BookDetail = (props) => {
     const [numSeeAll, setNumSeeAll] = useState(true);
     const [numSeeAll1, setNumSeeAll1] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
-    const [isLoadingCMT, setIsLoadingCMT] = useState(true);
 
     const [RelateData2, setRelateData2] = useState([]);
     const [showMore, setShowMore] = useState(false);
@@ -61,11 +60,16 @@ const BookDetail = (props) => {
         Comment(response.product._id)
 
         // ---------------------
+        console.log("------dang goi api getHeart-----");
 
         const res = await AxiosIntance().get("/product/favourite/get-book-by-user/" + infoUser.id);
+        console.log("Sách nè: ", res);
+        console.log("id sach detail ne ", Data2.id);
         for (let index = 0; index < res.data.length; index++) {
+            console.log("id sach api ne ", res.data[index].favourite.bookId);
             if (res.data[index].favourite.bookId == Data2.id) {
                 setIsHearted(true);
+                console.log("id sach trung ne ", res.data[index].favourite.bookId);
                 return;
             }
             else {
@@ -80,6 +84,7 @@ const BookDetail = (props) => {
     useEffect(() => {
         setIsLoading(true)
 
+        console.log("đang reload ne----------------");
         forceUpdate()
         scrollViewRef.current.scrollTo({ y: 0, animated: true });
 
@@ -131,6 +136,7 @@ const BookDetail = (props) => {
                 }
                 setTbRate(parseFloat(parseFloat(tong) / parseFloat(sum)).toFixed(1))
                 setDataCmt(arraycmt)
+                setIsLoading(false)
             }
             else {
                 setIsLoading(false)
@@ -155,6 +161,7 @@ const BookDetail = (props) => {
 
     }
     const limitText = (text,num) => {
+        console.log(num);
         try {
           if (text.length > num) {
             return text.substring(0, num) + '...';
@@ -196,7 +203,9 @@ const BookDetail = (props) => {
                 idUser: infoUser.id,
                 idBook: bookData.id,
             };
+            console.log("favouriteData nè: ", favouriteData);
             const response = await AxiosIntance().post("/product/favourite/new/", favouriteData);
+            console.log("Data trả về nè: ", response);
 
             if (response.message == "yeu thich thanh cong") {
                 setIsHearted(!isHearted, true);
@@ -237,7 +246,9 @@ const BookDetail = (props) => {
                     Alert.alert('Vui lòng ghi nội dung');
                     return;
                 };
-
+                console.log(title, "123");
+                console.log(content, "123");
+                console.log(rating, "123");
             } catch (error) {
 
             }
@@ -251,7 +262,9 @@ const BookDetail = (props) => {
                     content: content,
                     rate: rating,
                 };
+                console.log("postData ne: ", postData);
                 const response = await AxiosIntance().post('/product/comment/new', postData);
+                console.log("Kết quả nè", response);
                 if (response.result) {
                     Alert.alert('Đăng thành công');
                     setTitle("")
