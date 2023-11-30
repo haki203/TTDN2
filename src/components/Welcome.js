@@ -18,6 +18,8 @@ const Welcome = (props) => {
   const { navigation } = props;
   const { setIsLogin, setinfoUser } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoading1, setIsLoading1] = useState(false);
+  const [isLoading2, setIsLoading2] = useState(false);
 
 
 
@@ -25,6 +27,7 @@ const Welcome = (props) => {
   const onLoginGG = async () => {
     try {
       setIsLoading(true)
+      setIsLoading1(true)
 
       await GoogleSignin.hasPlayServices();
       console.log('LoginGG');
@@ -39,6 +42,7 @@ const Welcome = (props) => {
         ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
         setTimeout(() => {
           setIsLoading(false)
+          setIsLoading1(false)
         }, 3000)
         setIsLogin(true);
 
@@ -84,11 +88,13 @@ const Welcome = (props) => {
       console.log("data fb ne: ", data);
       // loginnnnnnnnnnnnnnnnnnnnnnn api
       setIsLoading(true)
+      setIsLoading2(true)
 
       const res = await AxiosIntance().post("/user/login", { email: data.userID });
       if (res.result) {
         setTimeout(() => {
           setIsLoading(false)
+          setIsLoading2(false)
         }, 3000)
         setIsLogin(true);
 
@@ -118,47 +124,52 @@ const Welcome = (props) => {
 
   return (
     <View>
-      {
-        isLoading ?
-          (
-            <View style={{ width: width, height: height, alignContent: 'center', justifyContent: 'center' }}><ActivityIndicator size={30} color={'black'} /></View>
-          ) :
-
-          (
-            <View style={styles.container}>
-              <ImageBackground style={{ width: width, height: height }} source={require('../assets/images/bg_welcome.png')}>
-                <View style={styles.body}>
-                  <View style={styles.title}>
-                    <Image style={styles.image} source={require('../assets/images/logo-athens.png')} />
-                    <View style={styles.textView}>
-                      <Text style={styles.textView_1}>Athens</Text>
-                      <Text style={styles.textView_2}>
-                        Athens cho phép bạn nghe những cuốn sách yêu thích mọi lúc, mọi nơi
-                      </Text>
-                    </View>
-                  </View>
-
-
-                  <View style={styles.touchable}>
-                    <TouchableOpacity style={styles.touchableFB} onPress={() => onFacebookButtonPress()}>
-                      <Image style={styles.icon} source={require('../assets/images/ic_fb.png')}></Image>
-                      <Text style={styles.textView_GG}>Đăng nhập bằng Facebook</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.textView_3}>HOẶC</Text>
-                    <TouchableOpacity style={styles.touchableGG} onPress={onLoginGG}>
-                      <Image style={styles.icon} source={require('../assets/images/ic_gg.png')}></Image>
-                      <Text style={styles.textView_GG}>Đăng nhập bằng Google</Text>
-                    </TouchableOpacity>
-
-                  </View>
-                </View>
-              </ImageBackground>
+      <View style={styles.container}>
+        <ImageBackground style={{ width: width, height: height }} source={require('../assets/images/bg_welcome.png')}>
+          <View style={styles.body}>
+            <View style={styles.title}>
+              <Image style={styles.image} source={require('../assets/images/logo-athens.png')} />
+              <View style={styles.textView}>
+                <Text style={styles.textView_1}>Athens</Text>
+                <Text style={styles.textView_2}>
+                  Athens cho phép bạn nghe những cuốn sách yêu thích mọi lúc, mọi nơi
+                </Text>
+              </View>
             </View>
-          )
-      }
 
 
-    </View>
+            <View style={styles.touchable}>
+              {isLoading2 ? (
+                <View style={styles.touchableGG} >
+                  <ActivityIndicator size={30} color={'white'} />
+                </View>
+              ) : (
+                <TouchableOpacity style={styles.touchableFB} onPress={() => onFacebookButtonPress()}>
+                  <Image style={styles.icon} source={require('../assets/images/ic_fb.png')}></Image>
+                  <Text style={styles.textView_GG}>Đăng nhập bằng Facebook</Text>
+                </TouchableOpacity>
+              )}
+
+              <Text style={styles.textView_3}>HOẶC</Text>
+              {isLoading1 ? (
+                <View style={styles.touchableGG} >
+                  <ActivityIndicator size={30} color={'white'} />
+                </View>
+              ) : (
+                <TouchableOpacity style={styles.touchableGG} onPress={onLoginGG}>
+                  <Image style={styles.icon} source={require('../assets/images/ic_gg.png')}></Image>
+                  <Text style={styles.textView_GG}>Đăng nhập bằng Google</Text>
+                </TouchableOpacity>
+              )}
+
+
+            </View>
+          </View>
+        </ImageBackground>
+      </View >
+
+
+    </View >
   );
 };
 

@@ -5,10 +5,10 @@ import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/FontAwesome';
 import Icon_3 from 'react-native-vector-icons/AntDesign';
 import { AppContext } from '../navigation/AppContext'
-import ItemListComment from './ItemListComment';
+import ItemListComment from './ItemFlatList/ItemListComment';
 import AxiosIntance from '../axios/AxiosIntance';
 import { URI } from '../../server/public/assets/vendor/tinymce/tinymce';
-import ItemListRelate from './ItemListRelate';
+import ItemListRelate from './ItemFlatList/ItemListRelate';
 const { width, height } = Dimensions.get('window');
 import { useFocusEffect } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
