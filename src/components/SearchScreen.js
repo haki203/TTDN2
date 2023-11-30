@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Dimensions, Image, FlatList, ScrollView, TextInput, TouchableOpacity, ToastAndroid, ActivityIndicator } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react'
-import ItemSearch from './ItemSearch';
+import ItemSearch from './ItemFlatList/ItemSearch';
 import { useFocusEffect } from '@react-navigation/native';
 import { AppContext } from '../navigation/AppContext';
 import AxiosIntance from '../axios/AxiosIntance';
@@ -66,12 +66,9 @@ const SearchScreen = (props) => {
     setisLoading(true);
 
     setSearchText(text)
-    if (text.length > 0) {
-      countDownSearch(text)
+    if(!text){
+      getNews()
     }
-    console.log(text);
-    getNews()
-    console.log(dataNe.length);
   }
 
   const getNews = async () => {
