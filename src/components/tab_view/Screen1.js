@@ -102,12 +102,7 @@ const Screen1 = ({ navigation, id }) => {
     const { _id, title, authorId, image, free } = item;
     console.log('-------------->', free);
     const onPressItem = () => {
-      if (!free) {
-        ToastAndroid.show("Sách này cần đăng ký hội viên", ToastAndroid.SHORT);
-      } else {
-        navigation.navigate('Detail', { itemId: _id });
-
-      }
+      navigation.navigate('Detail', { itemId: _id });
     }
 
     return (

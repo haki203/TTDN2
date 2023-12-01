@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button, Modal, ActivityIndicator, TextInput, ToastAndroid } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button, Modal, ActivityIndicator, TextInput, ToastAndroid, Linking } from 'react-native'
 import React, { useState, useContext, useEffect, useCallback, useRef } from 'react';
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/FontAwesome';
@@ -13,6 +13,12 @@ const { width, height } = Dimensions.get('window');
 import { useFocusEffect } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import { Alert } from 'react-native';
+
+import crypto from 'crypto-js';
+import moment from 'moment';
+import axios from 'axios';
+
+
 const BookDetail = (props) => {
     const { infoUser } = useContext(AppContext);
     const [, updateState] = useState();
@@ -35,6 +41,66 @@ const BookDetail = (props) => {
     const { navigation } = props;
     const [heightView, setHeightView] = useState(0);
     const [showFullText, setShowFullText] = useState(false);
+    const [isfree, setIsfree] = useState(true);
+
+
+    const config = {
+        app_id: '2553',
+        key1: 'PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL',
+        key2: 'kLtgPl8HHhfvMuDHPwKfgfsY4Ydm9eIz',
+        endpoint: 'https://sb-openapi.zalopay.vn/v2/create',
+    };
+
+    const embed_data = {};
+
+    const items = [{}];
+    const transID = Math.floor(Math.random() * 1000000);
+    const order = {
+        app_id: config.app_id,
+        app_trans_id: `${moment().format('YYMMDD')}_${transID}`,
+        app_user: 'user123',
+        app_time: Date.now(),
+        item: JSON.stringify(items),
+        embed_data: JSON.stringify(embed_data),
+        amount: 50000,
+        description: `Demon - Payment for the order #${transID}`,
+        bank_code: 'zalopayapp',
+    };
+
+    const data =
+        config.app_id +
+        '|' +
+        order.app_trans_id +
+        '|' +
+        order.app_user +
+        '|' +
+        order.amount +
+        '|' +
+        order.app_time +
+        '|' +
+        order.embed_data +
+        '|' +
+        order.item;
+    order.mac = crypto.HmacSHA256(data, config.key1).toString();
+
+    const goiapi = async () => {
+        try {
+            const response = await axios.post(config.endpoint, null, { params: order });
+            console.log(response.data);
+            Linking.openURL(response.data.order_url);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+
+
+
+
+
+
+
+
     const AuthorBook = async (id) => {
         //setIsLoading(true);
         const response = await AxiosIntance().get("/product/author/" + id)
@@ -53,23 +119,24 @@ const BookDetail = (props) => {
             description: response.product.description,
             rate: response.product.rate,
             category: response.product.categoryId,
+            free: response.product.free
         }
+        if (!Data2.free) {
+            setIsfree(false)
+        }
+
         setBookData(Data2);
         AuthorBook(response.product.authorId)
         Relate(response.product.categoryId)
         Comment(response.product._id)
 
+
         // ---------------------
-        console.log("------dang goi api getHeart-----");
 
         const res = await AxiosIntance().get("/product/favourite/get-book-by-user/" + infoUser.id);
-        console.log("Sách nè: ", res);
-        console.log("id sach detail ne ", Data2.id);
         for (let index = 0; index < res.data.length; index++) {
-            console.log("id sach api ne ", res.data[index].favourite.bookId);
             if (res.data[index].favourite.bookId == Data2.id) {
                 setIsHearted(true);
-                console.log("id sach trung ne ", res.data[index].favourite.bookId);
                 return;
             }
             else {
@@ -84,7 +151,6 @@ const BookDetail = (props) => {
     useEffect(() => {
         setIsLoading(true)
 
-        console.log("đang reload ne----------------");
         forceUpdate()
         scrollViewRef.current.scrollTo({ y: 0, animated: true });
 
@@ -152,33 +218,32 @@ const BookDetail = (props) => {
         setRating(newRating);
     };
 
-    const onSeeAll=()=>{
+    const onSeeAll = () => {
         setNumSeeAll(!numSeeAll)
 
     }
-    const onSeeAll1=()=>{
+    const onSeeAll1 = () => {
         setNumSeeAll1(!numSeeAll1)
 
     }
-    const limitText = (text,num) => {
-        console.log(num);
+    const limitText = (text, num) => {
         try {
-          if (text.length > num) {
-            return text.substring(0, num) + '...';
-          } else {
-            return text;
-          }
+            if (text.length > num) {
+                return text.substring(0, num) + '...';
+            } else {
+                return text;
+            }
         } catch (error) {
-          console.log(error);
+            console.log(error);
         }
-      };
+    };
     // const { isTabVisible, setIsTabVisible } = useContext(AppContext);
     const longText = "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời.";
     const Read = () => {
         navigation.navigate('Read', { id: bookData.id })
     }
     const Play = () => {
-        navigation.navigate('Play' ,{ id: bookData.id })
+        navigation.navigate('Play', { id: bookData.id })
     }
     const Back = useCallback(() => {
         if (route.params && route.params.fromItem) {
@@ -203,9 +268,7 @@ const BookDetail = (props) => {
                 idUser: infoUser.id,
                 idBook: bookData.id,
             };
-            console.log("favouriteData nè: ", favouriteData);
             const response = await AxiosIntance().post("/product/favourite/new/", favouriteData);
-            console.log("Data trả về nè: ", response);
 
             if (response.message == "yeu thich thanh cong") {
                 setIsHearted(!isHearted, true);
@@ -246,9 +309,7 @@ const BookDetail = (props) => {
                     Alert.alert('Vui lòng ghi nội dung');
                     return;
                 };
-                console.log(title, "123");
-                console.log(content, "123");
-                console.log(rating, "123");
+
             } catch (error) {
 
             }
@@ -262,9 +323,9 @@ const BookDetail = (props) => {
                     content: content,
                     rate: rating,
                 };
-                console.log("postData ne: ", postData);
+
                 const response = await AxiosIntance().post('/product/comment/new', postData);
-                console.log("Kết quả nè", response);
+
                 if (response.result) {
                     Alert.alert('Đăng thành công');
                     setTitle("")
@@ -301,6 +362,8 @@ const BookDetail = (props) => {
         }
         return stars;
     };
+
+
 
     return (
         <View style={styles.Container} >
@@ -468,26 +531,34 @@ const BookDetail = (props) => {
                 <View style={styles.View_MoTa}>
                     <View>
                         <Text style={styles.Text_MoTa1}>Giới thiệu về tác giả</Text>
-                        <Text onPress={()=>onSeeAll1()} style={styles.Text_MoTa2}>
-                        {limitText(authorData.introduce, numSeeAll1 ? 250 : 1900)}
+                        <Text onPress={() => onSeeAll1()} style={styles.Text_MoTa2}>
+                            {limitText(authorData.introduce, numSeeAll1 ? 250 : 1900)}
                         </Text>
                     </View>
                     <View style={styles.View_Text3}>
                         <Text style={styles.Text_MoTa1}>Tổng quan về sách</Text>
-                        <Text onPress={()=>onSeeAll()} style={styles.Text_MoTa2}>
-                        {limitText(bookData.description, numSeeAll ? 250 : 1900)}
+                        <Text onPress={() => onSeeAll()} style={styles.Text_MoTa2}>
+                            {limitText(bookData.description, numSeeAll ? 250 : 1900)}
                         </Text>
                     </View>
                 </View>
                 <View style={styles.View_Click}>
-                    <TouchableOpacity onPress={Read} style={styles.View_Click1}>
-                        <Icon_1 name="document-text" size={16} color="white" />
-                        <Text style={styles.Text_Click}>Đọc</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.View_Click1} onPress={Play}>
-                        <Icon_1 name="play-circle" size={16} color="white" />
-                        <Text style={styles.Text_Click}>Nghe</Text>
-                    </TouchableOpacity>
+                    {!isfree ? (
+                        <TouchableOpacity onPress={goiapi} style={styles.View_Click11}>
+                            <Text style={styles.Text_Click}>Trở thành hội viên</Text>
+                        </TouchableOpacity>
+                    ) : (
+                        <>
+                            <TouchableOpacity onPress={Read} style={styles.View_Click1}>
+                                <Icon_1 name="document-text" size={16} color="white" />
+                                <Text style={styles.Text_Click}>Đọc</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.View_Click1} onPress={Play}>
+                                <Icon_1 name="play-circle" size={16} color="white" />
+                                <Text style={styles.Text_Click}>Nghe</Text>
+                            </TouchableOpacity>
+                        </>
+                    )}
                 </View>
                 <View style={styles.View_BinhLuan}>
                     <Text style={styles.Text_BinhLuan}>Bình luận</Text>
@@ -645,8 +716,8 @@ const BookDetail = (props) => {
                             <TouchableOpacity style={{
                                 padding: 5,
                                 marginTop: 5,
-                                borderRadius: 10, 
-                                borderWidth: 2, 
+                                borderRadius: 10,
+                                borderWidth: 2,
                                 borderColor: '#ccc',
                             }} onPress={() => setDobModalVisible1(true)}>
                                 <Text style={styles.Text_Danhgia12}>Viết bài đánh giá</Text>
@@ -868,6 +939,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#D45555',
         borderRadius: 10,
         width: '45%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row'
+    }, View_Click11: {
+        backgroundColor: '#D45555',
+        borderRadius: 10,
+        width: '65%',
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row'
