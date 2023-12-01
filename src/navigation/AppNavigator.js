@@ -33,6 +33,7 @@ import Theloai from '../components/tab_view/Theloai';
 import Viewauthor from '../components/tab_view/Viewauthor';
 import HomeDemo from '../components/HomeDemo';
 import BookDetailDemo from '../components/BookDetailDemo';
+import WelcomeGuess from '../components/guess/WelcomeGuess';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Users = () => {
@@ -96,10 +97,13 @@ const Library = () => {
 }
 const ManChao = () => {
     return (
-        <Stack.Navigator initialRouteName='Sign' screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName='Guess' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Guess" component={WelcomeGuess} />
             <Stack.Screen name="Sign" component={SignUpScreen} />
             <Stack.Screen name='Filter' component={CategoryFilterScreen} />
             <Stack.Screen name='Go' component={ReadyGoScreen} />
+            <Stack.Screen name='HomeDemo' component={HomeDemo} />
+            <Stack.Screen name='Home' component={Home} />
         </Stack.Navigator>
 
     )
@@ -246,13 +250,13 @@ const AppNavigator = () => {
         // <>
         //     {
         //         test ?
-        //             <>{!isLogin ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
+                     <>{!isLogin ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
 
         //             :
         //             <ChuaLogin />
         //     }
         // </>
-        <>{!isLogin ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
+        //<><ManChao/></>
     )
     // return(
     //     <ChuaLogin/>

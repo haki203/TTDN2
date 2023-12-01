@@ -59,6 +59,7 @@ const BookDetail = (props) => {
         AuthorBook(response.product.authorId)
         Relate(response.product.categoryId)
         Comment(response.product._id)
+        setIsLoading(false)
 
         // ---------------------
 
@@ -715,41 +716,7 @@ const BookDetail = (props) => {
 }
 
 export default BookDetail;
-// export const DetailBookCC = async (itemId) => {
-//     const response = await AxiosIntance().get("/product/" + itemId)
-//     const Data2 = {
-//         id: response.product._id,
-//         title: response.product.title,
-//         image: response.product.image,
-//         description: response.product.description,
-//         rate: response.product.rate,
-//         category: response.product.categoryId,
-//     }
-//     setBookData(Data2);
-//     AuthorBook(response.product.authorId)
-//     Relate(response.product.categoryId)
-//     Comment(response.product._id)
 
-//     // ---------------------
-//     console.log("------dang goi api getHeart-----");
-
-//     const res = await AxiosIntance().get("/product/favourite/get-book-by-user/" + infoUser.id);
-//     console.log("Sách nè: ", res);
-//     console.log("id sach detail ne ", Data2.id);
-//     for (let index = 0; index < res.data.length; index++) {
-//         console.log("id sach api ne ", res.data[index].favourite.bookId);
-//         if (res.data[index].favourite.bookId == Data2.id) {
-//             setIsHearted(true);
-//             console.log("id sach trung ne ", res.data[index].favourite.bookId);
-//             return;
-//         }
-//         else {
-//             setIsHearted(false);
-//         }
-//     }
-//     //------------------
-//     setIsLoading(false)
-// }
 const styles = StyleSheet.create({
     Container: {
         flex: 1,
