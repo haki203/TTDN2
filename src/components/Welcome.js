@@ -128,7 +128,8 @@ const Welcome = (props) => {
         <ImageBackground style={{ width: width, height: height }} source={require('../assets/images/bg_welcome.png')}>
           <View style={styles.body}>
             <View style={styles.title}>
-              <Image style={styles.image} source={require('../assets/images/logo-athens.png')} />
+              {/* <Image style={styles.image} source={require('../assets/images/logo-athens.png')} /> */}
+              <Image style={styles.image} source={require('../assets/images/logo2.png')} />
               <View style={styles.textView}>
                 <Text style={styles.textView_1}>Athens</Text>
                 <Text style={styles.textView_2}>
@@ -161,8 +162,6 @@ const Welcome = (props) => {
                   <Text style={styles.textView_GG}>Đăng nhập bằng Google</Text>
                 </TouchableOpacity>
               )}
-
-
             </View>
           </View>
         </ImageBackground>
@@ -193,7 +192,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   image: {
-    backgroundColor: '#D9D9D9',
+    // backgroundColor: '#D9D9D9',
     borderRadius: 150,
     width: 100,
     height: 100,
@@ -210,7 +209,7 @@ const styles = StyleSheet.create({
 
   },
   textView_1: {
-    color: color,
+    color: '#D45555',
     fontSize: 40,
     fontFamily: 'italic',
   },
@@ -231,12 +230,14 @@ const styles = StyleSheet.create({
   touchableFB: {
     width: 300,
     height: 63,
-    borderRadius: 50,
+    // borderRadius: 50,
+    borderRadius: 12,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: color,
+    // borderColor: color,
+    borderColor: '#D45555',
     flexDirection: 'row',
   },
   textView_FB: {
@@ -252,12 +253,14 @@ const styles = StyleSheet.create({
   touchableGG: {
     width: 300,
     height: 63,
-    borderRadius: 50,
+    // borderRadius: 50,
+    borderRadius: 12,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: color,
+    borderColor: '#D45555',
+    // borderColor: color,
     flexDirection: 'row',
 
   },
