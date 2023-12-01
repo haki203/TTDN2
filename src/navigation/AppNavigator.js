@@ -103,7 +103,7 @@ const ManChao = () => {
             <Stack.Screen name='Filter' component={CategoryFilterScreen} />
             <Stack.Screen name='Go' component={ReadyGoScreen} />
             <Stack.Screen name='HomeDemo' component={HomeDemo} />
-            <Stack.Screen name='Home' component={Home} />
+            <Stack.Screen name='Chao' component={ChaoBan} />
         </Stack.Navigator>
 
     )
@@ -243,20 +243,25 @@ const ChuaLogin = () => {
         </Stack.Navigator>
     )
 }
+
+const ChaoBan = () => {
+    const { isLogin, setIsLogin } = useContext(AppContext);
+    const { test } = useContext(AppContext);
+    return (
+        <>
+            {
+                <>{!isLogin ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
+            }
+        </>
+    )
+}
 const AppNavigator = () => {
     const { isLogin, setIsLogin } = useContext(AppContext);
     const { test } = useContext(AppContext);
     return (
-        // <>
-        //     {
-        //         test ?
-        //             <>{!isLogin ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
 
-        //             :
-        //             <ChuaLogin />
-        //     }
-        // </>
-        <><ManChao/></>
+        <ManChao/>
+        // <ChaoBan></ChaoBan>
     )
     // return(
     //     <ChuaLogin/>
