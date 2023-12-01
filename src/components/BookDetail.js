@@ -62,8 +62,8 @@ const BookDetail = (props) => {
         app_time: Date.now(),
         item: JSON.stringify(items),
         embed_data: JSON.stringify(embed_data),
-        amount: 50000,
-        description: `Demon - Payment for the order #${transID}`,
+        amount: 99000,
+        description: `Tro thanh hoi vien VIP #${transID}`,
         bank_code: 'zalopayapp',
     };
 
@@ -88,6 +88,7 @@ const BookDetail = (props) => {
             const response = await axios.post(config.endpoint, null, { params: order });
             console.log(response.data);
             Linking.openURL(response.data.order_url);
+
         } catch (error) {
             console.error(error);
         }
@@ -544,9 +545,25 @@ const BookDetail = (props) => {
                 </View>
                 <View style={styles.View_Click}>
                     {!isfree ? (
-                        <TouchableOpacity onPress={goiapi} style={styles.View_Click11}>
-                            <Text style={styles.Text_Click}>Trở thành hội viên</Text>
-                        </TouchableOpacity>
+                        <View style={styles.bodyhv}>
+                            <View style={styles.radius}>
+                                <View style={styles.header}>
+                                    <Text style={{ fontWeight: '700', fontSize: 15, color: 'black' }}>Hội viên</Text>
+                                    <Icon_2 style={{ marginTop: 3, marginRight: 55 }} name="diamond" size={16} color="orange" />
+                                    <Text style={{ fontWeight: 'blod', fontSize: 15, color: '#EE5D61', marginLeft: 40 }}>99,000 ₫</Text>
+                                </View>
+                                <Text style={{ fontSize: 14, color: '#908E8E' }}>Cuốn sách đã mua được giữ trọn đời</Text>
+                                <Text style={{ fontSize: 14, color: '#908E8E' }}>Tất cả cuốn sách sẽ được mở khóa</Text>
+                                <Text style={{ fontSize: 14, color: '#908E8E' }}>Bạn sẽ trở thành người quan trọng</Text>
+
+                                <View style={styles.View_Clickne}>
+                                    <TouchableOpacity onPress={goiapi}>
+                                        <Text style={styles.Text_Click}>Trở thành hội viên</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+
                     ) : (
                         <>
                             <TouchableOpacity onPress={Read} style={styles.View_Click1}>
@@ -943,7 +960,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row'
     }, View_Click11: {
-        backgroundColor: '#D45555',
         borderRadius: 10,
         width: '65%',
         alignItems: 'center',
@@ -953,17 +969,52 @@ const styles = StyleSheet.create({
     Text_Click: {
         color: '#FFFFFF',
         fontSize: 16,
-        paddingTop: 16,
-        paddingBottom: 16,
-        paddingLeft: 7,
         fontWeight: 'bold',
         fontFamily: 'Poppins',
+        paddingTop: 13
     },
     View_Click: {
         paddingLeft: 20,
         paddingRight: 20,
         flexDirection: 'row',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        height: 'auto',
+    },
+    View_Clickne: {
+        width: 250,
+        height: 50,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        backgroundColor: '#D45555',
+        borderRadius: 20,
+        marginTop: 15
+
+
+    },
+    bodyhv: {
+        width: '90%',
+        paddingLeft: 20,
+        paddingRight: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        height: 250,
+        backgroundColor: '#FEF5EC',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        borderRadius: 40
+    },
+    header: {
+        width: 250,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 5
+    },
+    radius: {
+        padding: 14,
+        backgroundColor: '#F7CFA6',
+        borderRadius: 20,
+        width: '100%',
+        height: '75%',
     },
     View_BinhLuan: {
         padding: 20,
