@@ -66,7 +66,7 @@ const Read = props => {
         authorId: response.product.authorId,
         category: response.product.categoryId,
       };
-      console.log(response.product.pdf);
+      //console.log(response.product.pdf);
       setBookData(Data2);
       setPdfResource(Data2.pdfLink);
       AuthorBook(Data2.authorId);
@@ -76,18 +76,34 @@ const Read = props => {
   const mucluc = async () => {
     try {
       const response = await AxiosIntance().get('/product/get-muc-luc/' + id);
-      console.log(response);
+      //console.log(response);
       if (response.result) {
         setDataMucluc(response.ml);
       }
       setIsLoading(false);
     } catch (error) {}
   };
+  const GetProgress = async () => {
+    try {
+      const response = await AxiosIntance().post(
+        'product/continue/getProgress',
+        {
+          userId: infoUser.id,
+          bookId: id,
+        },
+      );
+      // set cai page la respone.book[0].index, roi chuyen cai pdf ve trang day
+      setPage(response.book[0].index);
+      // console.log('index Getprogress ne````````````````', response);
+      // console.log(response);
+    } catch (error) {
+      console.log('loi getProgress: ----------------->', error);
+    }
+  };
   useEffect(() => {
     DetailBook();
+    GetProgress();
   }, []);
-
-  console.log('id book: ', id);
 
   const UpdateProgress = async () => {
     try {
@@ -101,9 +117,9 @@ const Read = props => {
       );
       console.log('id book:--------->', id);
       console.log('id user:--------->', infoUser.id);
-      console.log('book:--------->', numberOfPagehaha);
+      console.log('number of book:--------->', numberOfPagehaha);
 
-      console.log('UpdateProgress:--------->', response);
+      // console.log('UpdateProgress:--------->', response);
     } catch (error) {
       console.log('loi update progress', error);
     }
@@ -146,23 +162,6 @@ const Read = props => {
       setPage(item.position);
       console.log('chuyen sang trang doc', id);
     };
-
-    // useEffect(() => {
-    //   const GetProgress = async () => {
-    //     try {
-    //       const response = await AxiosIntance().post('product/continue/getProgress', {
-    //         userId: idUser,
-    //         bookId: id,
-    //         newIndex: page,
-    //       });
-    //       console.log(response);
-    //     } catch (error) {
-    //       console.log(error);
-    //     }
-    //   }
-    //   GetProgress();
-
-    // }, []);
 
     return (
       <View>
