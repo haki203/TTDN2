@@ -250,13 +250,13 @@ const AppNavigator = () => {
         // <>
         //     {
         //         test ?
-        //             <>{!isLogin ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
+                     <>{!isLogin ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
 
         //             :
         //             <ChuaLogin />
         //     }
         // </>
-        <><ManChao/></>
+        //<><ManChao/></>
     )
     // return(
     //     <ChuaLogin/>
