@@ -34,10 +34,9 @@ const Screen1 = ({ navigation, id }) => {
       let arrayData = [];
       const respone = await AxiosIntance().get("/product/get-by-category/" + id);
       setTextNoti("")
-      console.log(id);
-      console.log(respone.product);
+
       if (respone.product.length < 1) {
-        console.log("chua co sach");
+
         setTextHot("");
         setTextNew("");
         setTextNoti("Danh mục đang được cập nhật")
@@ -100,7 +99,7 @@ const Screen1 = ({ navigation, id }) => {
 
   const ItemBook = ({ item, navigation, isLoading }) => {
     const { _id, title, authorId, image, free } = item;
-    console.log('-------------->', free);
+
     const onPressItem = () => {
       navigation.navigate('Detail', { itemId: _id });
     }
@@ -143,8 +142,8 @@ const Screen1 = ({ navigation, id }) => {
   }
   const ItemBook1 = ({ }) => {
     return (
-      <View style={{ paddingRight: 7, paddingLeft: 7,width:width/2 }}>
-        <View style={[styles.renderImagePopularDeals, { justifyContent: 'center', backgroundColor: '#d6d6d6',width:'80%' }]}><ActivityIndicator size={25} color={'gray'} /></View>
+      <View style={{ paddingRight: 7, paddingLeft: 7, width: width / 2 }}>
+        <View style={[styles.renderImagePopularDeals, { justifyContent: 'center', backgroundColor: '#d6d6d6', width: '80%' }]}><ActivityIndicator size={25} color={'gray'} /></View>
       </View>
     );
   }

@@ -18,8 +18,6 @@ const Welcome = (props) => {
   const { navigation } = props;
   const { setIsLogin, setinfoUser } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoading1, setIsLoading1] = useState(false);
-  const [isLoading2, setIsLoading2] = useState(false);
 
 
 
@@ -27,7 +25,6 @@ const Welcome = (props) => {
   const onLoginGG = async () => {
     try {
       setIsLoading(true)
-      setIsLoading1(true)
 
       await GoogleSignin.hasPlayServices();
       console.log('LoginGG');
@@ -35,14 +32,13 @@ const Welcome = (props) => {
       const res = await AxiosIntance().post("/user/login", { email: userInfor.user.email });
       if (res.result) {
         const infoUser = {
-          name: res.user.full_name, avatar: res.user.avatar, id: res.user._id, phone: res.user.phone, email: res.user.email
+          name: res.user.full_name, premium: res.user.premium, avatar: res.user.avatar, id: res.user._id, phone: res.user.phone, email: res.user.email
         }
         setinfoUser(infoUser);
         console.log(res.user);
         ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
         setTimeout(() => {
           setIsLoading(false)
-          setIsLoading1(false)
         }, 3000)
         setIsLogin(true);
 
@@ -53,7 +49,7 @@ const Welcome = (props) => {
       }
 
     } catch (error) {
-      ToastAndroid.show("Đăng nhập thất bại,Lỗi mạng ", ToastAndroid.SHORT);
+      ToastAndroid.show("Đăng nhập thất bại ", ToastAndroid.SHORT);
       console.log(error);
     }
 
@@ -88,18 +84,16 @@ const Welcome = (props) => {
       console.log("data fb ne: ", data);
       // loginnnnnnnnnnnnnnnnnnnnnnn api
       setIsLoading(true)
-      setIsLoading2(true)
 
       const res = await AxiosIntance().post("/user/login", { email: data.userID });
       if (res.result) {
         setTimeout(() => {
           setIsLoading(false)
-          setIsLoading2(false)
         }, 3000)
         setIsLogin(true);
 
         const infoUser = {
-          name: res.user.full_name, avatar: res.user.avatar, id: res.user._id, phone: res.user.phone, email: res.user.email
+          name: res.user.full_name, premium: res.user.premium, avatar: res.user.avatar, id: res.user._id, phone: res.user.phone, email: res.user.email
         }
         setinfoUser(infoUser);
         console.log("result login fb ", res.user);
@@ -124,52 +118,47 @@ const Welcome = (props) => {
 
   return (
     <View>
-      <View style={styles.container}>
-        <ImageBackground style={{ width: width, height: height }} source={require('../assets/images/bg_welcome.png')}>
-          <View style={styles.body}>
-            <View style={styles.title}>
-              <Image style={styles.image} source={require('../assets/images/logo-athens.png')} />
-              <View style={styles.textView}>
-                <Text style={styles.textView_1}>Athens</Text>
-                <Text style={styles.textView_2}>
-                  Athens cho phép bạn nghe những cuốn sách yêu thích mọi lúc, mọi nơi
-                </Text>
-              </View>
-            </View>
+      {
+        isLoading ?
+          (
+            <View style={{ width: width, height: height, alignContent: 'center', justifyContent: 'center' }}><ActivityIndicator size={30} color={'black'} /></View>
+          ) :
+
+          (
+            <View style={styles.container}>
+              <ImageBackground style={{ width: width, height: height }} source={require('../assets/images/bg_welcome.png')}>
+                <View style={styles.body}>
+                  <View style={styles.title}>
+                    <Image style={styles.image} source={require('../assets/images/logo-athens.png')} />
+                    <View style={styles.textView}>
+                      <Text style={styles.textView_1}>Athens</Text>
+                      <Text style={styles.textView_2}>
+                        Athens cho phép bạn nghe những cuốn sách yêu thích mọi lúc, mọi nơi
+                      </Text>
+                    </View>
+                  </View>
 
 
-            <View style={styles.touchable}>
-              {isLoading2 ? (
-                <View style={styles.touchableGG} >
-                  <ActivityIndicator size={30} color={'white'} />
+                  <View style={styles.touchable}>
+                    <TouchableOpacity style={styles.touchableFB} onPress={() => onFacebookButtonPress()}>
+                      <Image style={styles.icon} source={require('../assets/images/ic_fb.png')}></Image>
+                      <Text style={styles.textView_GG}>Đăng nhập bằng Facebook</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.textView_3}>HOẶC</Text>
+                    <TouchableOpacity style={styles.touchableGG} onPress={onLoginGG}>
+                      <Image style={styles.icon} source={require('../assets/images/ic_gg.png')}></Image>
+                      <Text style={styles.textView_GG}>Đăng nhập bằng Google</Text>
+                    </TouchableOpacity>
+
+                  </View>
                 </View>
-              ) : (
-                <TouchableOpacity style={styles.touchableFB} onPress={() => onFacebookButtonPress()}>
-                  <Image style={styles.icon} source={require('../assets/images/ic_fb.png')}></Image>
-                  <Text style={styles.textView_GG}>Đăng nhập bằng Facebook</Text>
-                </TouchableOpacity>
-              )}
-
-              <Text style={styles.textView_3}>HOẶC</Text>
-              {isLoading1 ? (
-                <View style={styles.touchableGG} >
-                  <ActivityIndicator size={30} color={'white'} />
-                </View>
-              ) : (
-                <TouchableOpacity style={styles.touchableGG} onPress={onLoginGG}>
-                  <Image style={styles.icon} source={require('../assets/images/ic_gg.png')}></Image>
-                  <Text style={styles.textView_GG}>Đăng nhập bằng Google</Text>
-                </TouchableOpacity>
-              )}
-
-
+              </ImageBackground>
             </View>
-          </View>
-        </ImageBackground>
-      </View >
+          )
+      }
 
 
-    </View >
+    </View>
   );
 };
 

@@ -20,7 +20,7 @@ import axios from 'axios';
 
 
 const BookDetail = (props) => {
-    const { infoUser } = useContext(AppContext);
+    const { infoUser, setinfoUser } = useContext(AppContext);
     const [, updateState] = useState();
     const scrollViewRef = useRef()
     // Hàm để buộc render lại màn hình
@@ -35,6 +35,8 @@ const BookDetail = (props) => {
     const [numSeeAll, setNumSeeAll] = useState(true);
     const [numSeeAll1, setNumSeeAll1] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
+    const [introAuthor, setIntroAuthor] = useState('');
+    const [disBook, setDisBook] = useState('');
     const [isLoadingCMT, setIsLoadingCMT] = useState(true);
 
     const [RelateData2, setRelateData2] = useState([]);
@@ -87,14 +89,40 @@ const BookDetail = (props) => {
     const goiapi = async () => {
         try {
             const response = await axios.post(config.endpoint, null, { params: order });
-            console.log(response.data);
-            Linking.openURL(response.data.order_url);
+
+
+            const res = await AxiosIntance().get("/user/payment/" + infoUser.id)
+            if (res.result) {
+                Linking.openURL(response.data.order_url);
+                const updatedInfoUser = { ...infoUser };
+                updatedInfoUser.premium = true;
+                setinfoUser(updatedInfoUser);
+                forceUpdate();
+                Alert.alert(
+                    //title
+                    'Thông báo',
+                    //body
+                    'Đăng ký hội viên thành công',
+                    [
+                        {
+                            text: 'Có',
+
+                        },
+                        {
+                            text: 'Không',
+
+                        },
+                    ],
+                    { cancelable: false },
+                    //clicking out side of alert will not cancel
+                );
+
+            }
 
         } catch (error) {
             console.error(error);
         }
     };
-
 
 
 
@@ -110,10 +138,12 @@ const BookDetail = (props) => {
             authorname: response.author.name,
             introduce: response.author.introduce,
         }
+        setIntroAuthor(response.author.introduce)
         setAuthorData(Data1);
     }
     const DetailBook = async () => {
         const response = await AxiosIntance().get("/product/" + itemId)
+        setDisBook(response.product.description)
         const Data2 = {
             id: response.product._id,
             title: response.product.title,
@@ -150,24 +180,13 @@ const BookDetail = (props) => {
     }
 
     useEffect(() => {
-        setIsLoading(true)
-
+        console.log("--------------->", infoUser.premium);
         forceUpdate()
         scrollViewRef.current.scrollTo({ y: 0, animated: true });
 
         DetailBook();
 
     }, [route.params]);
-
-    // useFocusEffect(
-    //     React.useCallback(() => {
-    //         DetailBook();
-
-    //         return () => {
-    //             // Cleanup code (optional) when the screen loses focus
-    //         };
-    //     }, [])
-    // );
     const Relate = async (category) => {
         //setIsLoading(true);
         const response = await AxiosIntance().get('/product/get-by-category/' + category);
@@ -203,6 +222,8 @@ const BookDetail = (props) => {
                 }
                 setTbRate(parseFloat(parseFloat(tong) / parseFloat(sum)).toFixed(1))
                 setDataCmt(arraycmt)
+                setIsLoading(false)
+
             }
             else {
                 setIsLoading(false)
@@ -226,8 +247,7 @@ const BookDetail = (props) => {
         setNumSeeAll1(!numSeeAll1)
 
     }
-    const limitText = (text,num) => {
-        console.log(num);
+    const limitText = (text, num) => {
         try {
             if (text.length > num) {
                 return text.substring(0, num) + '...';
@@ -235,7 +255,7 @@ const BookDetail = (props) => {
                 return text;
             }
         } catch (error) {
-            console.log(error);
+            console.log("limitText->", error);
         }
     };
     // const { isTabVisible, setIsTabVisible } = useContext(AppContext);
@@ -323,9 +343,9 @@ const BookDetail = (props) => {
                     content: content,
                     rate: rating,
                 };
-                console.log("postData ne: ", postData);
+
                 const response = await AxiosIntance().post('/product/comment/new', postData);
-                console.log("Kết quả nè", response);
+
                 if (response.result) {
                     Alert.alert('Đăng thành công');
                     setTitle("")
@@ -532,36 +552,51 @@ const BookDetail = (props) => {
                     <View>
                         <Text style={styles.Text_MoTa1}>Giới thiệu về tác giả</Text>
                         <Text onPress={() => onSeeAll1()} style={styles.Text_MoTa2}>
-                            {limitText(authorData.introduce, numSeeAll1 ? 250 : 1900)}
+                            {limitText(introAuthor, numSeeAll1 ? 250 : 1900)}
                         </Text>
                     </View>
                     <View style={styles.View_Text3}>
                         <Text style={styles.Text_MoTa1}>Tổng quan về sách</Text>
                         <Text onPress={() => onSeeAll()} style={styles.Text_MoTa2}>
-                            {limitText(bookData.description, numSeeAll ? 250 : 1900)}
+                            {limitText(disBook, numSeeAll ? 250 : 1900)}
                         </Text>
                     </View>
                 </View>
                 <View style={styles.View_Click}>
                     {!isfree ? (
-                        <View style={styles.bodyhv}>
-                            <View style={styles.radius}>
-                                <View style={styles.header}>
-                                    <Text style={{ fontWeight: '700', fontSize: 15, color: 'black' }}>Hội viên</Text>
-                                    <Icon_2 style={{ marginTop: 3, marginRight: 55 }} name="diamond" size={16} color="orange" />
-                                    <Text style={{ fontWeight: 'blod', fontSize: 15, color: '#EE5D61', marginLeft: 40 }}>99,000 ₫</Text>
-                                </View>
-                                <Text style={{ fontSize: 14, color: '#908E8E' }}>Cuốn sách đã mua được giữ trọn đời</Text>
-                                <Text style={{ fontSize: 14, color: '#908E8E' }}>Tất cả cuốn sách sẽ được mở khóa</Text>
-                                <Text style={{ fontSize: 14, color: '#908E8E' }}>Bạn sẽ trở thành người quan trọng</Text>
+                        <>{
+                            !infoUser.premium ? (
+                                <View style={styles.bodyhv}>
+                                    <View style={styles.radius}>
+                                        <View style={styles.header}>
+                                            <Text style={{ fontWeight: '700', fontSize: 15, color: 'black' }}>Hội viên</Text>
+                                            <Icon_2 style={{ marginTop: 3, marginRight: 55 }} name="diamond" size={16} color="orange" />
+                                            <Text style={{ fontWeight: 'blod', fontSize: 15, color: '#EE5D61', marginLeft: 40 }}>99,000 ₫</Text>
+                                        </View>
+                                        <Text style={{ fontSize: 14, color: '#908E8E' }}>Cuốn sách đã mua được giữ trọn đời</Text>
+                                        <Text style={{ fontSize: 14, color: '#908E8E' }}>Tất cả cuốn sách sẽ được mở khóa</Text>
+                                        <Text style={{ fontSize: 14, color: '#908E8E' }}>Bạn sẽ trở thành người quan trọng</Text>
 
-                                <View style={styles.View_Clickne}>
-                                    <TouchableOpacity onPress={goiapi}>
-                                        <Text style={styles.Text_Click}>Trở thành hội viên</Text>
+                                        <View style={styles.View_Clickne}>
+                                            <TouchableOpacity onPress={goiapi}>
+                                                <Text style={styles.Text_Click}>Trở thành hội viên</Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </View>) : (
+                                <>
+                                    <TouchableOpacity onPress={Read} style={styles.View_Click1}>
+                                        <Icon_1 name="document-text" size={16} color="white" />
+                                        <Text style={styles.Text_Click}>Đọc</Text>
                                     </TouchableOpacity>
-                                </View>
-                            </View>
-                        </View>
+                                    <TouchableOpacity style={styles.View_Click1} onPress={Play}>
+                                        <Icon_1 name="play-circle" size={16} color="white" />
+                                        <Text style={styles.Text_Click}>Nghe</Text>
+                                    </TouchableOpacity>
+                                </>
+                            )
+                        }
+                        </>
 
                     ) : (
                         <>
@@ -937,7 +972,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         fontFamily: 'Poppins',
-        marginLeft: 5
+        marginLeft: 5,
+        marginTop: 13
     },
     View_Click: {
         paddingLeft: 20,
