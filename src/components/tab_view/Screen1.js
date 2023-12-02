@@ -102,12 +102,7 @@ const Screen1 = ({ navigation, id }) => {
     const { _id, title, authorId, image, free } = item;
     console.log('-------------->', free);
     const onPressItem = () => {
-      if (!free) {
-        ToastAndroid.show("Sách này cần đăng ký hội viên", ToastAndroid.SHORT);
-      } else {
-        navigation.navigate('Detail', { itemId: _id });
-
-      }
+      navigation.navigate('Detail', { itemId: _id });
     }
 
     return (
@@ -126,9 +121,15 @@ const Screen1 = ({ navigation, id }) => {
             <View style={[styles.renderImagePopularDeals, { justifyContent: 'center', backgroundColor: '#d6d6d6' }]}><ActivityIndicator size={25} color={'gray'} /></View>
           )
         }
-        {isHidden && !free && <View style={styles.bghoivien}>
-          <Text style={styles.hoivien}>HỘI VIÊN</Text>
-        </View>}
+        {!free ? (<View style={styles.bghoivien}>
+          <Text style={styles.hoivien}>Hội viên</Text>
+        </View>)
+          : (
+
+            <View style={styles.bghoivien}>
+              <Text style={styles.hoivien}>Miễn phí</Text>
+            </View>)
+        }
 
         {/* Text */}
         <View style={styles.containerText}>
@@ -235,17 +236,17 @@ const styles = StyleSheet.create({
   renderauthor: {
     color: 'black'
   }, hoivien: {
-    fontSize: 15,
+    fontSize: 12,
     fontWeight: '700',
     color: 'yellow',
-    padding: 7
+    padding: 4
   }, bghoivien: {
     backgroundColor: '#F79572',
-    width: 80,
+    width: 56,
     height: "auto",
     borderRadius: 7,
-    marginTop: -40,
-    marginLeft: 30,
+    marginTop: -30,
+    marginLeft: 46,
     marginBottom: 10
   }
 })
