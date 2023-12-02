@@ -578,8 +578,8 @@ const BookDetail = (props) => {
                                         <Text style={{ fontSize: 14, color: '#908E8E' }}>Bạn sẽ trở thành người quan trọng</Text>
 
                                         <View style={styles.View_Clickne}>
-                                            <TouchableOpacity onPress={goiapi}>
-                                                <Text style={styles.Text_Click}>Trở thành hội viên</Text>
+                                            <TouchableOpacity style={{alignItems:'center',justifyContent:'center'}} onPress={goiapi}>
+                                                <Text style={[styles.Text_Click]}>Trở thành hội viên</Text>
                                             </TouchableOpacity>
                                         </View>
                                     </View>
@@ -973,7 +973,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontFamily: 'Poppins',
         marginLeft: 5,
-        marginTop: 13
     },
     View_Click: {
         paddingLeft: 20,
