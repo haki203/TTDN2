@@ -99,10 +99,8 @@ const ManChao = () => {
     return (
         <Stack.Navigator initialRouteName='Guess' screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Guess" component={WelcomeGuess} />
-            <Stack.Screen name="Sign" component={SignUpScreen} />
-            <Stack.Screen name='Filter' component={CategoryFilterScreen} />
-            <Stack.Screen name='Go' component={ReadyGoScreen} />
             <Stack.Screen name='HomeDemo' component={HomeDemo} />
+            <Stack.Screen name='Home' component={Home} />
             <Stack.Screen name='Chao' component={ChaoBan} />
         </Stack.Navigator>
 
@@ -259,10 +257,10 @@ const AppNavigator = () => {
     const { isLogin, setIsLogin } = useContext(AppContext);
     const { test } = useContext(AppContext);
     return (
-        <>{!isLogin ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
+        //<>{!isLogin ? <ManChao /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
+         <ManChao/>
+        //<>{!isLogin ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
 
-        //<ManChao/>
-        // <ChaoBan></ChaoBan>
     )
     // return(
     //     <ChuaLogin/>

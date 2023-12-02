@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { View, Text } from 'react-native'
-import React from 'react'
+import React,{useContext} from 'react'
 import { createContext,useState } from 'react';
     // appContext la noi luu bien su dung chung cho cac man hinh
 export const AppContext = createContext();

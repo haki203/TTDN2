@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View, ToastAndroid, Image, ImageBac
 import React, { useContext, useState } from 'react';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { AppContext } from '../navigation/AppContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import AxiosIntance from '../axios/AxiosIntance';
@@ -37,6 +38,15 @@ const Welcome = (props) => {
         setinfoUser(infoUser);
         console.log(res.user);
         ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
+        //luu infouser vao asn
+        try {
+          const infoUserString = JSON.stringify(infoUser);
+          await AsyncStorage.setItem('infoUser', infoUserString);
+          console.log('Thông tin người dùng đã được lưu vào AsyncStorage.');
+        } catch (error) {
+          console.error('Lỗi khi lưu thông tin người dùng vào AsyncStorage:', error);
+        }
+
         setTimeout(() => {
           setIsLoading(false)
         }, 3000)
