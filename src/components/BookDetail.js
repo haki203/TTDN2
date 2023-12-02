@@ -169,7 +169,7 @@ const BookDetail = (props) => {
     // const { isTabVisible, setIsTabVisible } = useContext(AppContext);
     const longText = "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời.";
     const Read = () => {
-        navigation.navigate('Read', { id: bookData.id })
+        navigation.navigate('Read', { id: bookData.id, idUser: infoUser.id })
     }
     const Play = () => {
         navigation.navigate('Play' ,{ id: bookData.id })
@@ -188,8 +188,7 @@ const BookDetail = (props) => {
         setShowMore(prevShowMore => !prevShowMore);
     };
 
-    const [isHearted, setIsHearted] = useState(false);
-
+    const {isHearted, setIsHearted} = useContext(AppContext);
     const handleHeartPress = async () => {
         // setIsHearted(!isHearted);
         try {
