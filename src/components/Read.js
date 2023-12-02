@@ -29,9 +29,10 @@ const noidungColor = '#9D9D9D';
 
 const Read = props => {
   const {isTabVisible, setIsTabVisible} = useContext(AppContext);
+  const {infoUser} = useContext(AppContext);
   const {dulieu, navigation, reloadItem} = props;
 
-  const {id, idUser} = props.route.params;
+  const {id} = props.route.params;
   const route = props.route;
   const [isLoading, setIsLoading] = useState(true);
 
@@ -94,13 +95,13 @@ const Read = props => {
         '/product/library/updateProgress',
         {
           bookId: id,
-          userId: idUser,
+          userId: infoUser.id,
           newIndex: numberOfPagehaha,
         },
       );
       console.log('id book:--------->', id);
-      console.log('in user:--------->', idUser);
-      console.log('page:--------->', numberOfPagehaha);
+      console.log('id user:--------->', infoUser.id);
+      console.log('book:--------->', numberOfPagehaha);
 
       console.log('UpdateProgress:--------->', response);
     } catch (error) {
