@@ -53,6 +53,7 @@ const PlayScreen = props => {
   const [trackName, setTrackName] = useState('...');
   const [onVolume, setOnVolume] = useState(false);
   const [speed, setSpeed] = useState(0.5);
+  const [tenSach, setTenSach] = useState("");
   const [isPlay, setIsPlay] = useState(false);
   const [titleChuong, setTitleChuong] = useState('');
   const {isPlayAudio, setIsPlayAudio} = useContext(AppContext);
@@ -109,6 +110,7 @@ const PlayScreen = props => {
       setIsPlay(false);
       setIsPlayAudio(false);
       update();
+      
     }
   }, [position]);
   const handleSeek = value => {
@@ -152,6 +154,28 @@ const PlayScreen = props => {
         dataAudioNe.push(newBody2);
         dataAudioNe.push(newBody3);
       }
+      if (res.ml.length < 3) {
+        Alert.alert(
+            'Thông báo',
+            'Sách này đang cập nhật giọng nói, vui lòng thử lại sau',
+            [
+                {
+                    text: 'Hủy',
+                    style: 'cancel', // Đặt kiểu là cancel để làm cho nút "Hủy" có màu đặc biệt
+                },
+                {
+                    text: 'OK',
+                    onPress: () => {
+                        
+                        navigation.goBack()
+                        // Thêm mã lệnh xử lý sau khi nút OK được nhấn ở đây
+                    },
+                },
+
+
+            ],
+        );
+    }
     }
     setDataAudio(dataAudioNe);
     initDuration();
@@ -330,7 +354,9 @@ const PlayScreen = props => {
         audio: response.product.audio,
         description: response.product.description,
       };
+      console.log("ten sah ne ",response.product._id);
       setBookData(Data2);
+      setTenSach(response.product.title)
       setAudioUrl(Data2.audio);
       const res = await AxiosIntance().get('/product/author/' + id);
       const Data1 = {
@@ -373,13 +399,6 @@ const PlayScreen = props => {
       setIsPlayAudio(false);
       getInfo();
       setOnVolume(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const onClickSave = async () => {
-    try {
-      setState(state + 1);
     } catch (error) {
       console.log(error);
     }
@@ -452,7 +471,7 @@ const PlayScreen = props => {
           </View>
           <Notification
             key={state} // Sử dụng state làm key để render lại component khi state thay đổi
-            title={bookData.title}
+            title={tenSach}
             chuong={titleChuong}
             isPlay={isPlayAudio}
             state={state}
@@ -689,8 +708,8 @@ const PlayScreen = props => {
                       right: 5,
                       borderRadius: 20,
                       top: 5,
-                      width: 30,
-                      height: 30,
+                      width: 50,
+                      height: 50,
                       backgroundColor: '#f3f3f3',
                       alignItems: 'center',
                       justifyContent: 'center',

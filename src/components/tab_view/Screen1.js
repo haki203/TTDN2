@@ -90,7 +90,7 @@ const Screen1 = ({ navigation, id }) => {
       }
 
     }
-
+    setIsLoading(true)
     getAllCate();
 
 
@@ -125,7 +125,7 @@ const Screen1 = ({ navigation, id }) => {
         </View>)
           : (
 
-            <View style={styles.bghoivien}>
+            <View style={[styles.bghoivien,{backgroundColor:'green'}]}>
               <Text style={styles.hoivien}>Miễn phí</Text>
             </View>)
         }
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
   }, hoivien: {
     fontSize: 12,
     fontWeight: '700',
-    color: 'yellow',
+    color: 'white',
     padding: 4
   }, bghoivien: {
     backgroundColor: '#F79572',

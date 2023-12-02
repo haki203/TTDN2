@@ -3,16 +3,11 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, 
 import React, { useState, useContext, useEffect, useCallback, useRef } from 'react';
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/FontAwesome';
-import Icon_3 from 'react-native-vector-icons/AntDesign';
-import { AppContext } from '../navigation/AppContext'
-import ItemListComment from './ItemFlatList/ItemListComment';
 import AxiosIntance from '../axios/AxiosIntance';
 import { URI } from '../../server/public/assets/vendor/tinymce/tinymce';
 import ItemListRelate from './ItemFlatList/ItemListRelate';
 const { width, height } = Dimensions.get('window');
-import { useFocusEffect } from '@react-navigation/native';
-import { useRoute } from '@react-navigation/native';
-import { Alert } from 'react-native';
+
 const BookDetailDemo = (props) => {
     //const { infoUser } = useContext(AppContext);
     const [, updateState] = useState();
@@ -108,10 +103,10 @@ const BookDetailDemo = (props) => {
     // const { isTabVisible, setIsTabVisible } = useContext(AppContext);
     const longText = "Cuốn sách này thật sự xuất sắc! Nội dung sâu sắc, ngôn ngữ tinh tế và tạo cảm xúc mạnh mẽ. Đây là một tác phẩm đáng đọc và để lại ấn tượng sâu sắc.Đó là 1 quyển sách tuyệt vời.";
     const Read = () => {
-        navigation.navigate('GoLogin')
+        navigation.navigate('ReadDemo', { id: bookData.id})
     }
     const Play = () => {
-        navigation.navigate('GoLogin')
+        navigation.navigate('PlayDemo', { id: bookData.id })
     }
     const Back = useCallback(() => {
         if (route.params && route.params.fromItem) {

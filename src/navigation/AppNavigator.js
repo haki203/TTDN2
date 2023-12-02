@@ -34,6 +34,9 @@ import Viewauthor from '../components/tab_view/Viewauthor';
 import HomeDemo from '../components/HomeDemo';
 import BookDetailDemo from '../components/BookDetailDemo';
 import WelcomeGuess from '../components/guess/WelcomeGuess';
+import ReadDemo from '../components/guess/ReadDemo';
+import PlayDemo from '../components/guess/PlayDemo';
+import SearchDemo from '../components/guess/SearchDemo';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Users = () => {
@@ -56,7 +59,6 @@ const Mains = () => {
             <Stack.Screen name='Navigate' component={Navigate} />
             <Stack.Screen name='Play' component={PlayScreen} />
             <Stack.Screen name='Read' component={Read} />
-            <Stack.Screen name='Setting' component={SettingScreen} />
             <Stack.Screen name='SearchScreen' component={SearchScreen} />
             <Stack.Screen name='Profile' component={ProfileScreen} />
             <Stack.Screen name='Welcome' component={ManChao} />
@@ -72,7 +74,6 @@ const Favourite = () => {
             <Stack.Screen name='Favourite' component={FavouriteScreen} />
             <Stack.Screen name="SearchScreen" component={SearchScreen} />
             <Stack.Screen name="DetailScreen" component={BookDetail} />
-            <Stack.Screen name="SettingScreen" component={SettingScreen} />
         </Stack.Navigator>
     )
 }
@@ -80,7 +81,6 @@ const Hot = () => {
     return (
         <Stack.Navigator initialRouteName='HotScreen' screenOptions={{ headerShown: false }}>
             <Stack.Screen name='HotScreen' component={HotScreen} />
-            <Stack.Screen name='SettingHot' component={SettingScreen} />
             <Stack.Screen name="SearchHot" component={SearchScreen} />
             <Stack.Screen name="PlayHot" component={PlayScreen} />
             <Stack.Screen name="DetailHot" component={BookDetail} />
@@ -99,14 +99,23 @@ const ManChao = () => {
     return (
         <Stack.Navigator initialRouteName='Guess' screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Guess" component={WelcomeGuess} />
-            <Stack.Screen name='HomeDemo' component={HomeDemo} />
+            <Stack.Screen name='HomeDemo' component={ChuaLogin} />
             <Stack.Screen name='Home' component={Home} />
             <Stack.Screen name='Chao' component={ChaoBan} />
         </Stack.Navigator>
 
     )
 }
+const Librarycc = () => {
+    return (
+        <Stack.Navigator initialRouteName='Library' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Library" component={LibraryScreen} />
+            <Stack.Screen name='Detail' component={BookDetail} />
+            <Stack.Screen name='Read' component={Read} />
+        </Stack.Navigator>
 
+    )
+}
 
 const Home = ({ scrollY }) => {
     // const isTabVisibleRedux = useSelector(state => state.scroll.isTabVisible);
@@ -182,7 +191,7 @@ const Home = ({ scrollY }) => {
                 }}
             >
                 {() => (
-                    <Library />
+                    <Librarycc />
                 )}
             </Tab.Screen>
 
@@ -236,7 +245,10 @@ const ChuaLogin = () => {
         <Stack.Navigator initialRouteName='HomeDemo' screenOptions={{ headerShown: false }}>
             <Stack.Screen name='HomeDemo' component={HomeDemo} />
             <Stack.Screen name="DetailDemo" component={BookDetailDemo} />
-            <Stack.Screen name="SettingDemo" component={SettingScreen} />
+            <Stack.Screen name="PlayDemo" component={PlayDemo} />
+            <Stack.Screen name="ReadDemo" component={ReadDemo} />
+            <Stack.Screen name="Home" component={ChaoBan} />
+            <Stack.Screen name="SearchDemo" component={SearchDemo} />
             <Stack.Screen name="GoLogin" component={LoginUser} />
         </Stack.Navigator>
     )
@@ -258,12 +270,12 @@ const AppNavigator = () => {
     const { test } = useContext(AppContext);
     return (
         //<>{!isLogin ? <ManChao /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
-         <ManChao/>
+        <ManChao />
         //<>{!isLogin ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
 
     )
     // return(
-    //     <ChuaLogin/>
+    //     <ChuaLogin />
     // )
 }
 

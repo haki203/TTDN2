@@ -9,25 +9,38 @@ const bgcolor = "#FFFFFF";
 const pluscolor = "#CDCDCD";
 const color_logo = '#272956';
 const ItemListViewLibrary = (props) => {
-  const { dulieu, isLoading } = props;
+  const { dulieu, isLoading, navigation } = props;
   const progress = dulieu.progress + '%';
+  const goDetail = () => {
+    console.log(dulieu.id);
+    navigation.navigate('Read', { id: dulieu.id })
 
+
+  }
   try {
     return (
       <>
         {
           isLoading ? (
-            <View style={styles.book}>
+            <TouchableOpacity onPress={goDetail} style={styles.book}>
               <Image style={styles.imagebook} source={{ uri: dulieu.image }} />
               <View style={styles.in4book}>
                 <Text style={styles.nameBook}>{dulieu.title}</Text>
                 <Text style={styles.nameAuthor}>{dulieu.nameAuthor}</Text>
-                <View style={styles.doneprocess}>
-                  <Text style={{ marginStart: 7, marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-                  <View style={styles.process}>
-                    <Text style={{ color: '#272956', fontWeight: "500" }}>{dulieu.progress}%</Text>
-                  </View>
-                </View>
+                {
+                  !dulieu.progress > 99 ? (
+                    <View style={styles.doneprocess}>
+                      <Text style={{marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
+                      <View style={styles.process}>
+                        <Text style={{ color: '#272956', fontWeight: "500" }}>{dulieu.progress}%</Text>
+                      </View>
+                    </View>
+                  ) : (
+                    <View style={styles.doneprocess}>
+                      <Text style={{  marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc xong</Text>
+                    </View>
+                  )
+                }
                 <View style={styles.processbar}>
                   <View style={{ // Thanh màu xám
                     height: 10,
@@ -46,8 +59,8 @@ const ItemListViewLibrary = (props) => {
                   }} />
                 </View>
               </View>
-            </View>
-          ) : (<View style={{width:'100%',height:120,justifyContent:'center',alignItems:'center',backgroundColor:'#f3f3f3',marginTop:20,borderRadius:20}}><ActivityIndicator color={'gray'} size={30}/></View>)
+            </TouchableOpacity>
+          ) : (<View style={{ width: '100%', height: 120, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3f3f3', marginTop: 20, borderRadius: 20 }}><ActivityIndicator color={'gray'} size={30} /></View>)
         }
       </>
 
@@ -134,8 +147,7 @@ const styles = StyleSheet.create({
   },
   processbar: {
     flexDirection: 'row',
-    marginLeft: 7,
-    marginTop: 7,
+     marginTop: 7,
     borderRadius: 5,
 
     height: 10,
