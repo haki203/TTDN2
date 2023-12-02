@@ -9,7 +9,6 @@ import Screen1 from './tab_view/Screen1'
 import AxiosIntance from '../axios/AxiosIntance'
 import Theloai from './tab_view/Theloai'
 import Tacgia from './tab_view/Tacgia'
-import Screen1Demo from './tab_view/Screen1Demo'
 
 const color_txt1 = "#9D9D9D";
 const color_txt2 = "#272956";
@@ -20,9 +19,9 @@ const color_logo = '#272956';
 const color_text = "#272956";
 
 
-const HomeDemo = (props) => {
+const HomeScreen = (props) => {
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
-  const { test,setTest } = useContext(AppContext);
+  const { infoUser } = useContext(AppContext);
   const { navigation } = props;
   const [dataNe, setdataNe] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -42,7 +41,7 @@ const HomeDemo = (props) => {
 
 
   const search = () => (
-    navigation.navigate('GoLogin')
+    navigation.navigate('SearchScreen')
 
   );
   const settings = () => (
@@ -51,9 +50,8 @@ const HomeDemo = (props) => {
   );
   const RomanceRoute = (id) => (
     <ScrollView
-    showsVerticalScrollIndicator={false}
-     style={{marginStart:10}}>
-      <Screen1Demo navigation={navigation} id={id} />
+      showsVerticalScrollIndicator={false}>
+      <Screen1 navigation={navigation} id={id} />
     </ScrollView>
 
   );
@@ -122,11 +120,11 @@ const HomeDemo = (props) => {
 
     <TabBar
       {...props}
-      indicatorStyle={{ backgroundColor: '#FF5E00', height: 3, marginLeft:10    }}
+      indicatorStyle={{ backgroundColor: '#FF5E00', height: 3 }}
       style={{ backgroundColor: 'transparent' }}
       scrollEnabled={true}
       gap={10}
-      tabStyle={{ width:110 }}
+      tabStyle={{ width: 'auto' }}
       onLayout={event => {
         const { width } = event.nativeEvent.layout;
         props.setTabBarWidth(props.navigationState.index, width);
@@ -153,7 +151,7 @@ const HomeDemo = (props) => {
       style={{ backgroundColor: 'transparent' }}
       scrollEnabled={true}
 
-      tabStyle={{ width: "auto" }}
+      tabStyle={{ width: "auto", textAlign: 'left', alignItems: 'flex-start' }}
       onLayout={event => {
         const { width } = event.nativeEvent.layout;
         props.setTabBarWidth(props.navigationState.index, width);
@@ -190,8 +188,8 @@ const HomeDemo = (props) => {
         </View>
       </View>
       <View style={styles.title}>
-        <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Chào mừng bạn đến với Athens!</Text>
-        <View style={{flexDirection:'row',alignItems:'center'}}>
+        <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Chào mừng bạn trở lại, {infoUser.name}!</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>Bạn muốn đọc sách gì?</Text>
           <View style={styles.viewall}>
             <TouchableOpacity onPress={toggleModal}>
@@ -229,7 +227,7 @@ const HomeDemo = (props) => {
   )
 }
 
-export default HomeDemo
+export default HomeScreen
 
 const styles = StyleSheet.create({
   container: {
@@ -267,9 +265,8 @@ const styles = StyleSheet.create({
     marginTop: 14,
     color: icon_color
   }, tab: {
-    marginLeft: 10,
+    marginLeft: 20,
     height: 'auto',
-    marginRight:10
   },
   menu: {
     width: 40,
@@ -290,11 +287,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 16,
     color: '#cdcdcd',
+    textAlign: 'left',
+    marginLeft: -7
 
   },
   activeLabel: {
     color: 'black',
-
+    textAlign: 'left'
   }, menuall: {
 
   }, viewall: {

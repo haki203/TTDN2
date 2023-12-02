@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Animated, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect, useContext } from 'react'
 import Icon from "react-native-vector-icons/AntDesign"
 import AxiosIntance from '../../axios/AxiosIntance';
@@ -10,6 +10,7 @@ const ItemListView2 = (props) => {
     const [data, setData] = useState([]);
     const { infoUser } = useContext(AppContext);
     const [bookData, setBookData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const route = props.route;
     const [isHearted, setIsHearted] = useState(false);
@@ -36,6 +37,7 @@ const ItemListView2 = (props) => {
         const res = await AxiosIntance().get("/product/favourite/get-book-by-user/" + infoUser.id);
 
         for (let index = 0; index < res.data.length; index++) {
+            setIsLoading(false)
 
             if (res.data[index].favourite.bookId == Data2.id) {
                 setIsHearted(true);
@@ -87,30 +89,43 @@ const ItemListView2 = (props) => {
                         <Text style={{ color: "#000000", fontFamily: 'Poppins-Medium', fontSize: 15 }} >{dulieu.title}</Text>
                         <Text style={{ marginTop: 3, fontSize: 10, fontFamily: 'Poppins-Medium', color: 'black' }}>Sách nghe - Sách nói</Text>
                         <View style={{ width: 200, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <TouchableOpacity onPress={() => navigation.navigate('PlayHot',{ id: dulieu._id })} style={styles.click}>
-                                <Icon name="playcircleo" size={20} color='black'  />
+                            <TouchableOpacity onPress={() => navigation.navigate('PlayHot', { id: dulieu._id })} style={styles.click}>
+                                <Icon name="playcircleo" size={20} color='black' />
                                 <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
                                     Nghe
                                 </Text>
                             </TouchableOpacity>
-                            <View style={styles.click}>
-                                <TouchableOpacity onPress={handleHeartPress}>
-                                    <View >
-                                        <Icon
-                                            name={isHearted ? 'heart' : 'hearto'}
-                                            size={20}
-                                            color={isHearted ? 'black' : 'black'}
-                                        />
-                                    </View>
-                                </TouchableOpacity>
-                                {isHearted && <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
-                                    Đã thích
-                                </Text> || <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
-                                        Yêu thích
-                                    </Text>}
-                            </View>
+
+                            {
+                                isLoading ?
+                                    (
+                                        <View style={{
+                                            width: 'auto',
+                                            height: 50, alignContent: 'center', justifyContent: 'center'
+                                        }}><ActivityIndicator size={30} color={'black'} /></View>
+                                    ) :
+
+                                    (
+                                        <View style={styles.click}>
+                                            <TouchableOpacity onPress={handleHeartPress}>
+                                                <View >
+                                                    <Icon
+                                                        name={isHearted ? 'heart' : 'hearto'}
+                                                        size={20}
+                                                        color={isHearted ? 'black' : 'black'}
+                                                    />
+                                                </View>
+                                            </TouchableOpacity>
+                                            {isHearted && <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
+                                                Đã thích
+                                            </Text> || <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
+                                                    Yêu thích
+                                                </Text>}
+                                        </View>
+                                    )
+                            }
                             <TouchableOpacity onPress={() => navigation.navigate('DetailHot', { itemId: dulieu._id },)} style={styles.click}>
-                                <Icon name="infocirlceo" size={20} color='black'  />
+                                <Icon name="infocirlceo" size={20} color='black' />
 
                                 <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
                                     Chi tiết

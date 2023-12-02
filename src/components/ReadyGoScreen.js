@@ -1,14 +1,22 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, Dimensions } from 'react-native'
 import React, { useContext } from 'react'
 import { AppContext } from '../navigation/AppContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const { width, height } = Dimensions.get('window');
 const ReadyGoScreen = (props) => {
   const { navigation } = props
   const { isLogin, setIsLogin } = useContext(AppContext);
-  const login = () => (
-    navigation.navigate('WaitScreen')
-
-  );
+  const login = async () => {
+    try {
+      // Lưu trạng thái đăng nhập vào AsyncStorage
+      await AsyncStorage.setItem('isLoginGuess', 'true');
+      console.log('Trạng thái đăng nhập đã được lưu.');
+      // Chuyển đến màn hình HomeDemo
+      navigation.navigate('HomeDemo');
+    } catch (error) {
+      console.error('Lỗi khi lưu trạng thái đăng nhập:', error);
+    }
+  }
   return (
     <View style={styles.container}>
       <View>
@@ -31,7 +39,6 @@ const ReadyGoScreen = (props) => {
     </View>
   )
 }
-
 export default ReadyGoScreen
 
 const styles = StyleSheet.create({

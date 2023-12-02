@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, TextInput, Dimensions, FlatList, useWindowDimensions, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { Image, StyleSheet, Text, View, TextInput, Dimensions, FlatList, useWindowDimensions, TouchableOpacity, ActivityIndicator, ToastAndroid } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Icon from "react-native-vector-icons/Feather"
 import Icon2 from "react-native-vector-icons/AntDesign"
@@ -23,14 +23,20 @@ const Screen1 = ({ navigation, id }) => {
   const [textHot, setTextHot] = useState("Sách hot");
   const [textNew, setTextNew] = useState("Sách mới xuất bản");
   const [textNoti, setTextNoti] = useState("");
+  const [isHidden, setIsHidden] = useState(true);
+
+  const toggleVisibility = () => {
+    setIsHidden(!isHidden);
+  };
 
   useEffect(() => {
     const getAllCate = async () => {
       let arrayData = [];
       const respone = await AxiosIntance().get("/product/get-by-category/" + id);
       setTextNoti("")
+
       if (respone.product.length < 1) {
-        console.log("chua co sach");
+
         setTextHot("");
         setTextNew("");
         setTextNoti("Danh mục đang được cập nhật")
@@ -40,21 +46,26 @@ const Screen1 = ({ navigation, id }) => {
         setTextNew("");
         setIsLoading(false);
         for (let i = 0; i < respone.product.length; i++) {
+
           if (respone.product[i]) {
             let dataIndex = respone.product[i];
             // lay author
             const res = await AxiosIntance().get("/product/author/" + respone.product[i].authorId)
             dataIndex.authorId = res.author.name;
             arrayData.push(dataIndex);
+
+
           }
 
-        }
 
-        const sortedpublicAt = arrayData.slice().sort((a, b) => b.publicAt - a.publicAt);
+
+        }
         const sortedsearch = arrayData.slice().sort((a, b) => b.search - a.search);
         setDatasearch(sortedsearch);
         setDatapublicAt(null);
         setIsLoading(false)
+
+
       } else {
         for (let i = 0; i < respone.product.length; i++) {
           if (respone.product[i]) {
@@ -63,6 +74,8 @@ const Screen1 = ({ navigation, id }) => {
             const res = await AxiosIntance().get("/product/author/" + respone.product[i].authorId)
             dataIndex.authorId = res.author.name;
             arrayData.push(dataIndex);
+
+
           }
 
         }
@@ -72,6 +85,8 @@ const Screen1 = ({ navigation, id }) => {
         setDatasearch(sortedsearch);
         setDatapublicAt(sortedpublicAt);
         setIsLoading(false)
+
+
       }
 
     }
@@ -83,7 +98,8 @@ const Screen1 = ({ navigation, id }) => {
 
 
   const ItemBook = ({ item, navigation, isLoading }) => {
-    const { _id, title, authorId, image } = item;
+    const { _id, title, authorId, image, free } = item;
+
     const onPressItem = () => {
       navigation.navigate('Detail', { itemId: _id });
     }
@@ -104,7 +120,15 @@ const Screen1 = ({ navigation, id }) => {
             <View style={[styles.renderImagePopularDeals, { justifyContent: 'center', backgroundColor: '#d6d6d6' }]}><ActivityIndicator size={25} color={'gray'} /></View>
           )
         }
+        {!free ? (<View style={styles.bghoivien}>
+          <Text style={styles.hoivien}>Hội viên</Text>
+        </View>)
+          : (
 
+            <View style={styles.bghoivien}>
+              <Text style={styles.hoivien}>Miễn phí</Text>
+            </View>)
+        }
 
         {/* Text */}
         <View style={styles.containerText}>
@@ -118,8 +142,8 @@ const Screen1 = ({ navigation, id }) => {
   }
   const ItemBook1 = ({ }) => {
     return (
-      <View style={{ paddingRight: 7, paddingLeft: 7,width:width/2 }}>
-        <View style={[styles.renderImagePopularDeals, { justifyContent: 'center', backgroundColor: '#d6d6d6',width:'80%' }]}><ActivityIndicator size={25} color={'gray'} /></View>
+      <View style={{ paddingRight: 7, paddingLeft: 7, width: width / 2 }}>
+        <View style={[styles.renderImagePopularDeals, { justifyContent: 'center', backgroundColor: '#d6d6d6', width: '80%' }]}><ActivityIndicator size={25} color={'gray'} /></View>
       </View>
     );
   }
@@ -210,6 +234,19 @@ const styles = StyleSheet.create({
   },
   renderauthor: {
     color: 'black'
+  }, hoivien: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: 'yellow',
+    padding: 4
+  }, bghoivien: {
+    backgroundColor: '#F79572',
+    width: 56,
+    height: "auto",
+    borderRadius: 7,
+    marginTop: -30,
+    marginLeft: 46,
+    marginBottom: 10
   }
 })
 

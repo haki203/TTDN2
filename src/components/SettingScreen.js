@@ -64,25 +64,9 @@ const SettingScreen = (props) => {
                 </View>
             </TouchableOpacity>
 
-            <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
-
-            </View>
-            <View style={styles.body}>
-                <Text style={styles.body1}>Tùy chọn giao diện</Text>
-            </View>
-
+     
             <View style={{ backgroundColor: '#F5F5FA', height: 28, width: '100%' }}></View>
 
-            <View style={styles.body}>
-                <Text style={styles.body1}>Cài đặt âm thanh</Text>
-            </View>
-
-            <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
-
-            </View>
-            <View style={styles.body}>
-                <Text style={styles.body1}>Cài đặt thông báo</Text>
-            </View>
 
             <View style={{ backgroundColor: '#F5F5FA', height: 28, width: '100%' }}></View>
             {/* <View style={styles.body}>

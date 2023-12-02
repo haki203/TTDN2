@@ -15,8 +15,8 @@ import {
   FlatList,
   ToastAndroid,
 } from 'react-native';
-import React, { useContext, useState, useEffect } from 'react';
-import { AppContext } from '../navigation/AppContext';
+import React, {useContext, useState, useEffect} from 'react';
+import {AppContext} from '../navigation/AppContext';
 import PDF from 'react-native-pdf';
 import AxiosIntance from '../axios/AxiosIntance';
 import Icon2 from 'react-native-vector-icons/AntDesign';
@@ -28,10 +28,11 @@ const headerNameBoColorAu = '#9D9D9D';
 const noidungColor = '#9D9D9D';
 
 const Read = props => {
-  const { isTabVisible, setIsTabVisible } = useContext(AppContext);
-  const { dulieu, navigation, reloadItem } = props;
+  const {isTabVisible, setIsTabVisible} = useContext(AppContext);
+  const {infoUser} = useContext(AppContext);
+  const {dulieu, navigation, reloadItem} = props;
 
-  const { id } = props.route.params;
+  const {id} = props.route.params;
   const route = props.route;
   const [isLoading, setIsLoading] = useState(true);
 
@@ -40,21 +41,20 @@ const Read = props => {
   const [bookData, setBookData] = useState({});
   const [pdfResource, setPdfResource] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
-  const [page, setPage] = useState(1);
-  const AuthorBook = async (id) => {
+  const [page, setPage] = useState();
+  const [numberOfPagehaha, setNumberOfPagehaha] = useState();
+  const AuthorBook = async id => {
     try {
       const response = await AxiosIntance().get('/product/author/' + id);
       //console.log(response, 'author');
-      if(response.result){
+      if (response.result) {
         const Data1 = {
           authorname: response.author.name,
         };
         setAuthorData(Data1);
         mucluc();
       }
-    } catch (error) {
-
-    }
+    } catch (error) {}
   };
   const DetailBook = async () => {
     const response = await AxiosIntance().get('/product/' + id);
@@ -66,7 +66,7 @@ const Read = props => {
         authorId: response.product.authorId,
         category: response.product.categoryId,
       };
-      console.log(response.product.pdf);
+      //console.log(response.product.pdf);
       setBookData(Data2);
       setPdfResource(Data2.pdfLink);
       AuthorBook(Data2.authorId);
@@ -76,20 +76,60 @@ const Read = props => {
   const mucluc = async () => {
     try {
       const response = await AxiosIntance().get('/product/get-muc-luc/' + id);
-      console.log(response);
+      //console.log(response);
       if (response.result) {
         setDataMucluc(response.ml);
       }
       setIsLoading(false);
+    } catch (error) {}
+  };
+  const GetProgress = async () => {
+    try {
+      const response = await AxiosIntance().post(
+        'product/continue/getProgress',
+        {
+          userId: infoUser.id,
+          bookId: id,
+        },
+      );
+      // set cai page la respone.book[0].index, roi chuyen cai pdf ve trang day
+      setPage(response.book[0].index);
+      // console.log('index Getprogress ne````````````````', response);
+      // console.log(response);
     } catch (error) {
-
+      console.log('loi getProgress: ----------------->', error);
     }
   };
   useEffect(() => {
     DetailBook();
+    GetProgress();
   }, []);
 
+  const UpdateProgress = async () => {
+    try {
+      const response = await AxiosIntance().post(
+        '/product/library/updateProgress',
+        {
+          bookId: id,
+          userId: infoUser.id,
+          newIndex: numberOfPagehaha,
+        },
+      );
+      console.log('id book:--------->', id);
+      console.log('id user:--------->', infoUser.id);
+      console.log('number of book:--------->', numberOfPagehaha);
+
+      // console.log('UpdateProgress:--------->', response);
+    } catch (error) {
+      console.log('loi update progress', error);
+    }
+  };
+
+  // useEffect(() => {
+  // },[]);
+
   const Back = () => {
+    UpdateProgress();
     navigation.goBack();
   };
 
@@ -115,10 +155,10 @@ const Read = props => {
     setModalVisible(!isModalVisible);
   };
 
-  const ItemChuong = ({ item }) => {
-    const { id, title, chuong } = item;
+  const ItemChuong = ({item}) => {
+    const {id, title, chuong} = item;
     const onPressItem = () => {
-      setModalVisible(false)
+      setModalVisible(false);
       setPage(item.position);
       console.log('chuyen sang trang doc', id);
     };
@@ -126,9 +166,7 @@ const Read = props => {
     return (
       <View>
         <TouchableOpacity onPress={onPressItem}>
-          <Text style={styles.itemTxt}>
-            {title}
-          </Text>
+          <Text style={styles.itemTxt}>{title}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -138,23 +176,19 @@ const Read = props => {
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity style={{ padding: 10 }} onPress={Back}>
+          <TouchableOpacity style={{padding: 10}} onPress={Back}>
             <Image source={require('../assets/images/ic_left.png')} />
           </TouchableOpacity>
           <View style={styles.header_Name}>
             {isLoading ? (
-              <Text style={styles.header_Name_Bo}>
-                ...
-              </Text>
+              <Text style={styles.header_Name_Bo}>...</Text>
             ) : (
               <Text style={styles.header_Name_Bo}>
                 {limitText(bookData.title)}
               </Text>
             )}
             {isLoading ? (
-              <Text style={styles.header_Name_Au}>
-                ...
-              </Text>
+              <Text style={styles.header_Name_Au}>...</Text>
             ) : (
               <Text style={styles.header_Name_Au}>
                 {limitText(AuthorData.authorname)}
@@ -163,7 +197,7 @@ const Read = props => {
           </View>
 
           <TouchableOpacity
-            style={{ padding: 10 }}
+            style={{padding: 10}}
             onPress={() => setModalVisible(true)}>
             <Image source={require('../assets/images/ic_3cham.png')} />
           </TouchableOpacity>
@@ -184,7 +218,7 @@ const Read = props => {
                 <View style={styles.bodyModal}>
                   <FlatList
                     data={dataMucluc}
-                    renderItem={({ item }) => (
+                    renderItem={({item}) => (
                       <ItemChuong item={item} navigation={navigation} />
                     )}
                     keyExtractor={item => item.id}
@@ -211,7 +245,7 @@ const Read = props => {
                 height: '100%',
                 alignContent: 'center',
                 justifyContent: 'center',
-                backgroundColor: 'white'
+                backgroundColor: 'white',
               }}>
               <ActivityIndicator size={30} color={'black'} />
             </View>
@@ -239,11 +273,12 @@ const Read = props => {
                 console.log(
                   `---------------Loading complete. Number of pages: ${numberOfPage}`,
                 );
-                setIsLoading(false)
+                setIsLoading(false);
               }} // hiển thị khi load xong
-              onPageChanged={(page, totalPages) =>
-                console.log(`-----------------------${page}/${totalPages}`)
-              } //  hiển thị số trang
+              onPageChanged={(page, totalPages) => {
+                console.log(`-----------------------${page}/${totalPages}`);
+                setNumberOfPagehaha(page);
+              }} //  hiển thị số trang
               onError={error => setIsLoading(true)} // hiển thị lỗi
               // onPageSingleTap={page => alert(page)} // hiển thị khi click vào trang
               onPressLink={link => Linking.openURL(link)} // hiển thị khi click vào link
@@ -256,8 +291,8 @@ const Read = props => {
       </View>
     );
   } catch (error) {
-    console.log("loi ne: ", error);
-    setIsLoading(true)
+    console.log('loi ne: ', error);
+    setIsLoading(true);
   }
 };
 
@@ -359,7 +394,7 @@ const styles = StyleSheet.create({
 });
 
 const dataChuong = [
-  { id: 1, title: 'Chuyến hành trình của giấc mơ', chuong: 1, position: 1 },
-  { id: 2, title: 'Lời mách bảo của trái tim', chuong: 2, position: 9 },
-  { id: 3, title: 'Người bán dầu thơm', chuong: 3, position: 19 },
+  {id: 1, title: 'Chuyến hành trình của giấc mơ', chuong: 1, position: 1},
+  {id: 2, title: 'Lời mách bảo của trái tim', chuong: 2, position: 9},
+  {id: 3, title: 'Người bán dầu thơm', chuong: 3, position: 19},
 ];
