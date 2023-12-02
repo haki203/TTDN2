@@ -958,7 +958,8 @@ const styles = StyleSheet.create({
         width: '45%',
         alignItems: 'center',
         justifyContent: 'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        height: 50
     }, View_Click11: {
         borderRadius: 10,
         width: '65%',
@@ -971,7 +972,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         fontFamily: 'Poppins',
-        paddingTop: 13
+        marginLeft: 5
     },
     View_Click: {
         paddingLeft: 20,
