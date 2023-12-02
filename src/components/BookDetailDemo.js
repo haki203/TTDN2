@@ -171,30 +171,30 @@ const BookDetailDemo = (props) => {
                         <View style={styles.Star}>
                             {tbRate > 4.99 ? (
                                 <View style={styles.Star}>
-                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
                                 </View>
                             ) : (
                                 <View >
                                     {tbRate > 4.2 && tbRate < 4.99 ? (
                                         <View style={styles.Star}>
-                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
+                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#FFCC00" />
                                         </View>
                                     ) : (
                                         <View>
                                             {tbRate >= 3.7 && tbRate < 4.2 ? (
                                                 <View style={styles.Star}>
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
                                                     <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
 
                                                 </View>
@@ -202,10 +202,10 @@ const BookDetailDemo = (props) => {
                                                 <View>
                                                     {tbRate >= 3.2 && tbRate < 3.7 ? (
                                                         <View style={styles.Star}>
-                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
+                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#FFCC00" />
                                                             <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
 
                                                         </View>
@@ -213,9 +213,9 @@ const BookDetailDemo = (props) => {
                                                         <View>
                                                             {tbRate >= 2.7 && tbRate < 3.2 ? (
                                                                 <View style={styles.Star}>
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
                                                                     <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
                                                                     <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
 
@@ -224,9 +224,9 @@ const BookDetailDemo = (props) => {
                                                                 <View>
                                                                     {tbRate >= 2.2 && tbRate < 2.7 ? (
                                                                         <View style={styles.Star}>
-                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
+                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#FFCC00" />
                                                                             <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
                                                                             <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
 
@@ -235,8 +235,8 @@ const BookDetailDemo = (props) => {
                                                                         <View>
                                                                             {tbRate >= 1.7 && tbRate < 2.2 ? (
                                                                                 <View style={styles.Star}>
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
                                                                                     <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
                                                                                     <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
                                                                                     <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
@@ -246,8 +246,8 @@ const BookDetailDemo = (props) => {
                                                                                 <View>
                                                                                     {tbRate >= 1.2 && tbRate < 1.7 ? (
                                                                                         <View style={styles.Star}>
-                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
-                                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
+                                                                                            <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
+                                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#FFCC00" />
                                                                                             <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
                                                                                             <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
                                                                                             <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
@@ -256,7 +256,7 @@ const BookDetailDemo = (props) => {
                                                                                         <View>
                                                                                             {tbRate >= 0.7 && tbRate < 1.2 ? (
                                                                                                 <View style={styles.Star}>
-                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#272956" />
+                                                                                                    <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#FFCC00" />
                                                                                                     <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
                                                                                                     <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
                                                                                                     <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
@@ -266,7 +266,7 @@ const BookDetailDemo = (props) => {
                                                                                                 <View>
                                                                                                     {tbRate >= 0.1 && tbRate < 0.7 ? (
                                                                                                         <View style={styles.Star}>
-                                                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#272956" />
+                                                                                                            <Icon_2 style={styles.Star_Danhgia} name="star-half-full" size={18} color="#FFCC00" />
                                                                                                             <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
                                                                                                             <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />
                                                                                                             <Icon_2 style={styles.Star_Danhgia1} name="star" size={18} color="#CDCDCD" />

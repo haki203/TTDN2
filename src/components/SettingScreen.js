@@ -69,9 +69,7 @@ const SettingScreen = (props) => {
 
 
             <View style={{ backgroundColor: '#F5F5FA', height: 28, width: '100%' }}></View>
-            {/* <View style={styles.body}>
-                <Text style={styles.body1}>Thông tin ứng dụng</Text>
-            </View> */}
+            
             <View style={{ flexDirection: 'row', justifyContent: 'center', padding: 5 }}>
                 <Pressable style={styles.button} onPress={() => setIsLogin(false)}>
                     <Text style={{ textAlign: 'center', color: log_outcolor }}>Đăng xuất</Text>

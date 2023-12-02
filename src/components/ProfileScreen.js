@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, yourColorVariable, Image, TouchableOpacity, Pressable, TextInput, ToastAndroid, Modal } from 'react-native'
+import { StyleSheet, Text, View, yourColorVariable, Image, TouchableOpacity, Pressable, TextInput, ToastAndroid, Modal, ScrollView } from 'react-native'
 import React, { useContext, useState } from 'react'
 import Icon from "react-native-vector-icons/AntDesign"
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/AntDesign';
+import Icon_3 from 'react-native-vector-icons/FontAwesome5';
 const color_arrow = "#2E2E5D";
 const color_view = "#4838D1";
 const bgcolor = "#FFFFFF";
@@ -18,6 +19,7 @@ const log_outcolor = "#F77A55";
 const ProfileScreen = (props) => {
     const { navigation } = props;
     const { infoUser, setinfoUser } = useContext(AppContext);
+    const { IsLogin, setIsLogin } = useContext(AppContext);
     const [image, setshowImage] = useState('')
     const capture = async () => {
         const result = await launchCamera();
@@ -52,19 +54,19 @@ const ProfileScreen = (props) => {
     };
 
     const updateProfile = async () => {
-        console.log(name,phone,infoUser.avatar);
-        const body={id: infoUser.id, name: name, email: infoUser.email, phone:phone.toString(), avatar: infoUser.avatar};
-        console.log("body ne: ",body);
+        console.log(name, phone, infoUser.avatar);
+        const body = { id: infoUser.id, name: name, email: infoUser.email, phone: phone.toString(), avatar: infoUser.avatar };
+        console.log("body ne: ", body);
         try {
-            const responses = await AxiosIntance().post("/user/update-user", { id: infoUser.id, name: name, email: infoUser.email, phone:phone.toString(), avatar: infoUser.avatar })
-            const res = await AxiosIntance().post("/user/update-user", { id: infoUser.id, name: name, email: infoUser.email, phone:phone.toString(), avatar: infoUser.avatar })
+            const responses = await AxiosIntance().post("/user/update-user", { id: infoUser.id, name: name, email: infoUser.email, phone: phone.toString(), avatar: infoUser.avatar })
+            const res = await AxiosIntance().post("/user/update-user", { id: infoUser.id, name: name, email: infoUser.email, phone: phone.toString(), avatar: infoUser.avatar })
             console.log(res);
             if (res.result == true) {
                 ToastAndroid.show("Cập nhật thành công", ToastAndroid.SHORT);
                 console.log(res);
                 const infoUser = {
                     name: res.user.full_name, avatar: res.user.avatar, id: res.user._id, phone: res.user.phone, email: res.user.email
-                  }
+                }
                 setinfoUser(infoUser)
             } else {
                 ToastAndroid.show("Cập nhật thất bại", ToastAndroid.SHORT);
@@ -95,7 +97,7 @@ const ProfileScreen = (props) => {
         // setTempName(infoUser.name);
     };
 
- 
+
     const [tempPhone, setTempPhone] = useState(infoUser.phone);
     const [isPhonelModalVisible, setPhoneModalVisible] = useState(false);
     const handlePhoneSave = async () => {
@@ -107,130 +109,172 @@ const ProfileScreen = (props) => {
         setPhoneModalVisible(false);
     };
 
+    console.log(infoUser.premium);
+
     return (
-        <View style={styles.container}>
-            <View style={styles.View_Container}>
-                <View >
-                    <TouchableOpacity style={styles.View_Back1} onPress={() => navigation.goBack()}>
-                        <View>
-                            <Icon_1 style={{ color: '#000000' }} name="chevron-back" size={24} color="white" />
-                        </View>
-                    </TouchableOpacity>
+            <View style={styles.container}>
+                <View style={styles.View_Container}>
+                    <View >
+                        <TouchableOpacity style={styles.View_Back1} onPress={() => navigation.goBack()}>
+                            <View>
+                                <Icon_1 style={{ color: '#000000' }} name="chevron-back" size={24} color="white" />
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    <View>
+                        <Text style={styles.Text_Back1}>Thông tin người dùng</Text>
+                    </View>
+                    <View>
+                        <TouchableOpacity onPress={updateProfile}>
+                            <Text style={styles.Text_Back1}>Lưu</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <View>
-                    <Text style={styles.Text_Back1}>Thông tin người dùng</Text>
+        <ScrollView>
+                <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
                 </View>
-                <View>
-                    <TouchableOpacity onPress={updateProfile}>
-                        <Text style={styles.Text_Back1}>Lưu</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
-            <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
-            </View>
 
-            <View style={styles.avatarContainer}>
-                <Image
-                    source={{ uri: infoUser.avatar }}
-                    style={styles.avatar}
-                />
-                <TouchableOpacity style={styles.uploadIcon} onPress={getImageLibrary}>
-                    <Icon_2 name="upload" size={18} color="#FF97A3" />
+                <View style={styles.avatarContainer}>
+                    <Image
+                        source={{ uri: infoUser.avatar }}
+                        style={styles.avatar}
+                    />
+                    <View style={{ flexDirection: 'column' }}>
+                        {/* <TouchableOpacity style={styles.uploadCrown}>
+                        <Icon_3 name="crown" size={24} color="#D9D000" />
+                    </TouchableOpacity> */}
+                        {infoUser.premium ? (
+                            <TouchableOpacity style={styles.uploadCrown}>
+                                <Icon_3 name="crown" size={24} color="#D9D000" />
+                            </TouchableOpacity>
+                        ) : null}
+                        <TouchableOpacity style={styles.uploadIcon} onPress={getImageLibrary}>
+                            <Icon_2 name="upload" size={18} color="#FF97A3" />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
+
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                    <Text style={styles.Text_YourName}>Tên người dùng</Text>
+                    <View style={styles.View_Container1}>
+                        <View style={styles.View_Back2}>
+                            <View>
+                                <Text style={styles.Text_Back}>{tempName}</Text>
+                            </View>
+                        </View>
+                        <View>
+                            <Icon_1 name="chevron-forward-outline" size={24} color="#000000" />
+                        </View>
+                    </View>
                 </TouchableOpacity>
-            </View>
-            <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
+                <Modal animationType="slide" transparent={true} visible={isModalVisible}>
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.button_text1}>Chỉnh sửa tên</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Nhập tên mới"
+                                placeholderTextColor='black'
+                                onChangeText={(text) => setName(text)}
+                            >{name}</TextInput>
+                            <View style={{ flexDirection: 'row' }}>
+                                <TouchableOpacity onPress={handleSave} style={styles.button}>
+                                    <Text style={styles.button_text}>Lưu</Text>
+                                </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => setModalVisible(true)}>
-                <Text style={styles.Text_YourName}>Tên người dùng</Text>
-                <View style={styles.View_Container1}>
-                    <View style={styles.View_Back2}>
+                                <TouchableOpacity onPress={handleCancel} style={styles.button}>
+                                    <Text style={styles.button_text}>Hủy</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
+
+
+
+                <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
+
+
+
+                <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
+
+                <TouchableOpacity onPress={() => setPhoneModalVisible(true)}>
+                    <Text style={styles.Text_YourName}>Số điện thoại</Text>
+                    <View style={styles.View_Container1}>
+                        <View style={styles.View_Back2}>
+                            <View style={styles.View_Text_Profile}>
+                                <Text style={styles.Text_Back}>{tempPhone}</Text>
+                            </View>
+                        </View>
                         <View>
-                            <Text style={styles.Text_Back}>{tempName}</Text>
+                            <Icon_1 name="chevron-forward-outline" size={24} color="#000000" />
                         </View>
                     </View>
-                    <View>
-                        <Icon_1 name="chevron-forward-outline" size={24} color="#000000" />
-                    </View>
-                </View>
-            </TouchableOpacity>
-            <Modal animationType="slide" transparent={true} visible={isModalVisible}>
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.button_text1}>Chỉnh sửa tên</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Nhập tên mới"
-                            placeholderTextColor='black'
-                            onChangeText={(text) => setName(text)}
-                        >{name}</TextInput>
-                        <View style={{ flexDirection: 'row' }}>
-                            <TouchableOpacity onPress={handleSave} style={styles.button}>
-                                <Text style={styles.button_text}>Lưu</Text>
-                            </TouchableOpacity>
+                </TouchableOpacity>
+                <Modal animationType="slide" transparent={true} visible={isPhonelModalVisible}>
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.button_text1}>Chỉnh sửa số diện thoại</Text>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Nhập số điện thoại mới"
+                                placeholderTextColor='black'
+                                onChangeText={(text) => setPhone(text)}
+                            >{tempPhone}</TextInput>
 
-                            <TouchableOpacity onPress={handleCancel} style={styles.button}>
-                                <Text style={styles.button_text}>Hủy</Text>
-                            </TouchableOpacity>
+                            <View style={{ flexDirection: 'row' }}>
+                                <TouchableOpacity onPress={handlePhoneSave} style={styles.button}>
+                                    <Text style={styles.button_text}>Lưu</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={handlePhoneCancel} style={styles.button}>
+                                    <Text style={styles.button_text}>Hủy</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
                     </View>
-                </View>
-            </Modal>
+                </Modal>
 
-
-
-            <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
-
-         
-
-            <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
-
-            <TouchableOpacity onPress={() => setPhoneModalVisible(true)}>
-                <Text style={styles.Text_YourName}>Số điện thoại</Text>
-                <View style={styles.View_Container1}>
-                    <View style={styles.View_Back2}>
-                        <View style={styles.View_Text_Profile}>
-                            <Text style={styles.Text_Back}>{tempPhone}</Text>
-                        </View>
-                    </View>
-                    <View>
-                        <Icon_1 name="chevron-forward-outline" size={24} color="#000000" />
-                    </View>
-                </View>
-            </TouchableOpacity>
-            <Modal animationType="slide" transparent={true} visible={isPhonelModalVisible}>
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.button_text1}>Chỉnh sửa số diện thoại</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Nhập số điện thoại mới"
-                            placeholderTextColor='black'
-                            onChangeText={(text) => setPhone(text)}
-                        >{tempPhone}</TextInput>
-
-                        <View style={{ flexDirection: 'row' }}>
-                            <TouchableOpacity onPress={handlePhoneSave} style={styles.button}>
-                                <Text style={styles.button_text}>Lưu</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={handlePhoneCancel} style={styles.button}>
-                                <Text style={styles.button_text}>Hủy</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
-
-            {/* <View style={styles.body}>
+                {/* <View style={styles.body}>
                 <Text style={styles.body1}>Số điện thoại</Text>
                 <TextInput style={styles.body2} placeholder='+1234567890' onChangeText={(text) => setinfoUser({ ...infoUser, phone: text })}>{infoUser.phone}  </TextInput>
             </View> */}
 
-            <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
+                <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
 
-            <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
+                {!infoUser.premium ? (
+                    <View style={{
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        padding: 5, width: 330,
+                        borderColor: log_outcolor,
+                        borderWidth: 1, marginTop: 20,
+                        borderRadius: 10, marginLeft: 15, backgroundColor: '#93BBC8',
+                        flexDirection: 'column', justifyContent: 'center', alignItems: 'center'
+                    }}>
+                        <Text style={{
+                            textAlign: 'center', color: 'white',
+                            fontSize: 18, fontWeight: 'bold'
+                        }}>Mua gói hội viên</Text>
+                        <Text style={{
+                            textAlign: 'center', color: 'white',
+                            fontSize: 14
+                        }}>Nội dung độc quyền</Text>
+                        <TouchableOpacity style={styles.button1}>
+                            <Text style={{ textAlign: 'center', color: 'white', fontSize: 16, fontWeight: 'bold' }}>Mua ngay</Text>
+                        </TouchableOpacity>
+                    </View>
+                ) : null}
+
+                <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'center', padding: 5, }}>
+                    <TouchableOpacity style={styles.button2} onPress={() => setIsLogin(false)}>
+                        <Text style={{ textAlign: 'center', color: log_outcolor }}>Đăng xuất</Text>
+                    </TouchableOpacity>
+                </View>
+                </ScrollView>
             </View>
-
-        </View>
     )
 }
 
@@ -253,6 +297,29 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
 
+    button1: {
+        width: 200,
+        height: 60,
+        borderWidth: 1,
+        borderRadius: 10,
+        marginTop: 10,
+        borderColor: log_outcolor,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F77A55'
+    },
+
+    button2: {
+        width: 330,
+        height: 60,
+        borderWidth: 1,
+        borderRadius: 10,
+        marginTop: 10,
+        borderColor: log_outcolor,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
     View_Container: {
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -273,21 +340,24 @@ const styles = StyleSheet.create({
         color: '#000000',
     },
 
-    avatarContainer: {
-        position: 'relative',
-    },
     avatar: {
         width: 90,
         height: 90,
         borderRadius: 45,
     },
     uploadIcon: {
-        bottom: -30,
+        bottom: -15,
         right: 30,
         backgroundColor: '#FFFFFF',
         borderRadius: 20,
         width: 32,
         height: 32,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    uploadCrown: {
+        bottom: 45,
+        right: 60,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -393,6 +463,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 10,
+        height: 160
     },
     // avatar: {
     //     width: 180,
