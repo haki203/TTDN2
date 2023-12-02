@@ -53,7 +53,7 @@ const Welcome = (props) => {
       }
 
     } catch (error) {
-      ToastAndroid.show("Đăng nhập thất bại ", ToastAndroid.SHORT);
+      ToastAndroid.show("Đăng nhập thất bại,Lỗi mạng ", ToastAndroid.SHORT);
       console.log(error);
     }
 
