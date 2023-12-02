@@ -1,8 +1,10 @@
-import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity, FlatList } from 'react-native';
+import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity, FlatList,ActivityIndicator } from 'react-native';
 import { AppContext } from '../navigation/AppContext'
 import ItemListViewLibrary from './ItemFlatList/ItemListViewLibrary';
 import React, { useContext, useEffect, useState } from 'react'
 import AxiosIntance from '../axios/AxiosIntance';
+import { useFocusEffect } from '@react-navigation/native';
+
 const progress = '80%'
 const color_logo = '#272956';
 const LibraryScreen = (props) => {
@@ -13,7 +15,7 @@ const LibraryScreen = (props) => {
   const [sum, setSum] = useState(0);
   const [data, setData] = useState([]);
   const [arrayLB, setArrayLB] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [arrayBook, setArrayBook] = useState([]);
   const width = Dimensions.get('window').width;
   const height = Dimensions.get('window').height;
@@ -22,6 +24,7 @@ const LibraryScreen = (props) => {
 
   );
   const getLB = async () => {
+    setIsLoading(false)
     try {
       const response = await AxiosIntance().get('/product/library/' + infoUser.id);
       console.log(infoUser.id);
@@ -36,6 +39,7 @@ const LibraryScreen = (props) => {
         console.log("ress author ne: ", ress);
         const lb = {
           image: res.product.image,
+          id: res.product._id,
           nameAuthor: ress.author.name,
           title: res.product.title,
           userId: response.library[i].userId,
@@ -47,14 +51,26 @@ const LibraryScreen = (props) => {
       setSum(arrayBook.length)
       setData(arrayBook)
       console.log("data lb ne: ", data);
+      setIsLoading(true)
+
 
     } catch (error) {
       console.log("error: ", error);
     }
   };
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("reloadr ne: ");
+      getLB();
+
+      return () => {
+        // Cleanup code (optional) when the screen loses focus
+      };
+    }, [])
+  );
   useEffect(() => {
 
-    getLB();
+    
 
   }, []);
 
@@ -77,11 +93,15 @@ const LibraryScreen = (props) => {
           <Text onPress={() => getLB()} style={styles.textAll} >Tất cả ({sum})</Text>
 
         </View>
-        <FlatList
+        {isLoading?(
+          <FlatList
           data={data}
           keyExtractor={item => item.id}
-          renderItem={({ item }) => <ItemListViewLibrary dulieu={item} isLoading={isLoading} />}
+          renderItem={({ item }) => <ItemListViewLibrary dulieu={item} isLoading={isLoading} navigation={navigation} />}
         />
+        ):(
+          <View style={{width:'100%',height:'80%',justifyContent:'center',alignItems:'center'}}><ActivityIndicator size={30} color={'grey'}/></View>
+        )}
       </View>
     </View>
   )

@@ -5,7 +5,7 @@ import Icon2 from "react-native-vector-icons/AntDesign"
 import Icon3 from "react-native-vector-icons/FontAwesome"
 import { AppContext } from '../navigation/AppContext'
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
-import Screen1 from './tab_view/Screen1'
+import Screen1Demo from './tab_view/Screen1Demo'
 import AxiosIntance from '../axios/AxiosIntance'
 import Theloai from './tab_view/Theloai'
 import Tacgia from './tab_view/Tacgia'
@@ -19,7 +19,7 @@ const color_logo = '#272956';
 const color_text = "#272956";
 
 
-const HomeScreen = (props) => {
+const HomeDemo = (props) => {
   const { isTabVisible, setIsTabVisible } = useContext(AppContext);
   const { infoUser } = useContext(AppContext);
   const { navigation } = props;
@@ -41,7 +41,7 @@ const HomeScreen = (props) => {
 
 
   const search = () => (
-    navigation.navigate('SearchScreen')
+    navigation.navigate('SearchDemo')
 
   );
   const settings = () => (
@@ -51,7 +51,7 @@ const HomeScreen = (props) => {
   const RomanceRoute = (id) => (
     <ScrollView
       showsVerticalScrollIndicator={false}>
-      <Screen1 navigation={navigation} id={id} />
+      <Screen1Demo navigation={navigation} id={id} />
     </ScrollView>
 
   );
@@ -197,7 +197,8 @@ const HomeScreen = (props) => {
             </TouchableOpacity>
           </View>
         </View>
-        <Modal animationType="slide" transparent={true} visible={isModalVisible}>
+        {isLoading?(
+          <Modal animationType="slide" transparent={true} visible={isModalVisible}>
           <View style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', width: '100%', height: '100%' }}>
             <View style={styles.containerModal}>
               <TabView
@@ -210,6 +211,10 @@ const HomeScreen = (props) => {
             </View>
           </View>
         </Modal>
+        ):
+        (
+          <View><ActivityIndicator size={30} color={'black'}/></View>
+        )}
       </View>
       <>{
         routes.length > 0 &&
@@ -227,7 +232,7 @@ const HomeScreen = (props) => {
   )
 }
 
-export default HomeScreen
+export default HomeDemo
 
 const styles = StyleSheet.create({
   container: {

@@ -105,6 +105,14 @@ const Welcome = (props) => {
         const infoUser = {
           name: res.user.full_name, premium: res.user.premium, avatar: res.user.avatar, id: res.user._id, phone: res.user.phone, email: res.user.email
         }
+        try {
+          const infoUserString = JSON.stringify(infoUser);
+          await AsyncStorage.setItem('infoUser', infoUserString);
+          console.log('Thông tin người dùng đã được lưu vào AsyncStorage.');
+        } catch (error) {
+          console.error('Lỗi khi lưu thông tin người dùng vào AsyncStorage:', error);
+        }
+
         setinfoUser(infoUser);
         console.log("result login fb ", res.user);
         ToastAndroid.show("Đăng Nhập thành công", ToastAndroid.SHORT);
