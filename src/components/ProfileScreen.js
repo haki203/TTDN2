@@ -134,7 +134,7 @@ const ProfileScreen = (props) => {
                 <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}>
                 </View>
                 <View style={styles.avatarContainer}>
-                    {!infoUser.premium ? (
+                    {infoUser.premium ? (
                         <TouchableOpacity style={styles.uploadCrown}>
                             <Icon_3 name="crown" size={24} color="#D9D000" />
                         </TouchableOpacity>
