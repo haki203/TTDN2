@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View, Image } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { useSelector } from 'react-redux';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Icon1 from 'react-native-vector-icons/Ionicons';
+import Icon1 from 'react-native-vector-icons/AntDesign';
+import Icon2 from 'react-native-vector-icons/MaterialIcons';
+import Icon3 from 'react-native-vector-icons/Feather';
 import { connect } from 'react-redux';
 import HomeScreen from '../components/HomeScreen';
 import LoginScreen from '../components/LoginScreen';
@@ -25,6 +27,16 @@ import SettingScreen from '../components/SettingScreen';
 import ProfileScreen from '../components/ProfileScreen';
 import LoginUser from '../components/LoginUser';
 import WaitScreen from '../components/WaitScreen';
+import Navigate from '../components/Navigate';
+import Viewdetail from '../components/tab_view/Viewdetail';
+import Theloai from '../components/tab_view/Theloai';
+import Viewauthor from '../components/tab_view/Viewauthor';
+import HomeDemo from '../components/HomeDemo';
+import BookDetailDemo from '../components/BookDetailDemo';
+import WelcomeGuess from '../components/guess/WelcomeGuess';
+import ReadDemo from '../components/guess/ReadDemo';
+import PlayDemo from '../components/guess/PlayDemo';
+import SearchDemo from '../components/guess/SearchDemo';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Users = () => {
@@ -41,10 +53,12 @@ const Mains = () => {
     return (
         <Stack.Navigator initialRouteName='Home' screenOptions={{ headerShown: false }}>
             <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Viewauthor" component={Viewauthor} />
+            <Stack.Screen name="Viewdetail" component={Viewdetail} />
             <Stack.Screen name='Detail' component={BookDetail} />
+            <Stack.Screen name='Navigate' component={Navigate} />
             <Stack.Screen name='Play' component={PlayScreen} />
             <Stack.Screen name='Read' component={Read} />
-            <Stack.Screen name='Setting' component={SettingScreen} />
             <Stack.Screen name='SearchScreen' component={SearchScreen} />
             <Stack.Screen name='Profile' component={ProfileScreen} />
             <Stack.Screen name='Welcome' component={ManChao} />
@@ -57,8 +71,9 @@ const Mains = () => {
 const Favourite = () => {
     return (
         <Stack.Navigator initialRouteName='Favourite' screenOptions={{ headerShown: false }}>
-            <Stack.Screen name='FavouriteScreen' component={FavouriteScreen} />
+            <Stack.Screen name='Favourite' component={FavouriteScreen} />
             <Stack.Screen name="SearchScreen" component={SearchScreen} />
+            <Stack.Screen name="DetailScreen" component={BookDetail} />
         </Stack.Navigator>
     )
 }
@@ -66,7 +81,9 @@ const Hot = () => {
     return (
         <Stack.Navigator initialRouteName='HotScreen' screenOptions={{ headerShown: false }}>
             <Stack.Screen name='HotScreen' component={HotScreen} />
-            <Stack.Screen name="SearchScreen" component={SearchScreen} />
+            <Stack.Screen name="SearchHot" component={SearchScreen} />
+            <Stack.Screen name="PlayHot" component={PlayScreen} />
+            <Stack.Screen name="DetailHot" component={BookDetail} />
         </Stack.Navigator>
     )
 }
@@ -80,27 +97,37 @@ const Library = () => {
 }
 const ManChao = () => {
     return (
-        <Stack.Navigator initialRouteName='Sign' screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Sign" component={SignUpScreen} />
-            <Stack.Screen name='Filter' component={CategoryFilterScreen} />
-            <Stack.Screen name='Go' component={ReadyGoScreen} />
+        <Stack.Navigator initialRouteName='Guess' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Guess" component={WelcomeGuess} />
+            <Stack.Screen name='HomeDemo' component={ChuaLogin} />
+            <Stack.Screen name='Home' component={Home} />
+            <Stack.Screen name='Chao' component={ChaoBan} />
+        </Stack.Navigator>
+
+    )
+}
+const Librarycc = () => {
+    return (
+        <Stack.Navigator initialRouteName='Library' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Library" component={LibraryScreen} />
+            <Stack.Screen name='Detail' component={BookDetail} />
+            <Stack.Screen name='Read' component={Read} />
         </Stack.Navigator>
 
     )
 }
 
-
 const Home = ({ scrollY }) => {
     // const isTabVisibleRedux = useSelector(state => state.scroll.isTabVisible);
-    const {isTabVisible, setIsTabVisible} = useContext(AppContext);
+    const { isTabVisible, setIsTabVisible } = useContext(AppContext);
     const [display, setDisplay] = useState("");
-     
+
     // Sử dụng useEffect để theo dõi thay đổi của isTabVisible trong Redux
     useEffect(() => {
-        if(isTabVisible){
+        if (isTabVisible) {
             setDisplay('flex');
         }
-        else{
+        else {
             setDisplay('none');
         }
     }, [isTabVisible]);
@@ -108,10 +135,10 @@ const Home = ({ scrollY }) => {
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 headerShown: false,
-                color: 'red',
-                tabBarLabelStyle: { display:'none' },
-                tabBarActiveTintColor:'#D45555',
-                tabBarStyle: { height: 75, borderTopLeftRadius:40,borderTopRightRadius:40,display:display },
+                color: '#FF6347',
+                tabBarLabelStyle: { display: 'none' },
+                tabBarActiveTintColor: '#FF6347',
+                tabBarStyle: { height: 75, borderTopLeftRadius: 40, borderTopRightRadius: 40, display: display, backgroundColor: 'white' },
             })}
         >
             <Tab.Screen
@@ -119,7 +146,7 @@ const Home = ({ scrollY }) => {
                 options={{
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => (
-                        <Icon name="home" color={color} size={30} />
+                        <Icon3 name="home" color={color} size={30} />
                     ),
                 }}
             >
@@ -132,12 +159,12 @@ const Home = ({ scrollY }) => {
                 options={{
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => (
-                        <Icon name="heart" color={color} size={30} />
+                        <Icon name="heart-o" color={color} size={30} />
                     ),
                 }}
             >
                 {() => (
-                    <Favourite/>
+                    <Favourite />
                 )}
             </Tab.Screen>
             <Tab.Screen
@@ -145,7 +172,7 @@ const Home = ({ scrollY }) => {
                 options={{
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => (
-                        <Icon name="fire" color={color} size={30} />
+                        <Icon2 name="whatshot" color={color} size={30} />
                     ),
                 }}
             >
@@ -159,12 +186,12 @@ const Home = ({ scrollY }) => {
                 options={{
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => (
-                        <Icon name="bookmark" color={color} size={30} />
+                        <Icon2 name="book" color={color} size={30} />
                     ),
                 }}
             >
                 {() => (
-                    <Library />
+                    <Librarycc />
                 )}
             </Tab.Screen>
 
@@ -213,14 +240,43 @@ const Play = () => {
         </Stack.Navigator>
     );
 };
-const AppNavigator = () => {
+const ChuaLogin = () => {
+    return (
+        <Stack.Navigator initialRouteName='HomeDemo' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='HomeDemo' component={HomeDemo} />
+            <Stack.Screen name="DetailDemo" component={BookDetailDemo} />
+            <Stack.Screen name="PlayDemo" component={PlayDemo} />
+            <Stack.Screen name="ReadDemo" component={ReadDemo} />
+            <Stack.Screen name="Home" component={ChaoBan} />
+            <Stack.Screen name="SearchDemo" component={SearchDemo} />
+            <Stack.Screen name="GoLogin" component={LoginUser} />
+        </Stack.Navigator>
+    )
+}
+
+const ChaoBan = () => {
     const { isLogin, setIsLogin } = useContext(AppContext);
+    const { test } = useContext(AppContext);
     return (
         <>
-            {isLogin == false ? <Users /> : <Home />}
+            {
+                <>{!isLogin ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
+            }
         </>
+    )
+}
+const AppNavigator = () => {
+    const { isLogin, setIsLogin } = useContext(AppContext);
+    const { test } = useContext(AppContext);
+    return (
+        //<>{!isLogin ? <ManChao /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
+        <ManChao />
+        //<>{!isLogin ? <Users /> : <View style={{ flex: 1, backgroundColor: 'white' }}><Home /></View>}</>
 
     )
+    // return(
+    //     <ChuaLogin />
+    // )
 }
 
 export default AppNavigator;

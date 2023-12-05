@@ -1,4 +1,7 @@
 {
   "name": "TTDN2",
-  "displayName": "TTDN2"
+  "displayName": "TTDN2",
+  "plugins": [
+    "@notifee/react-native"
+  ]
 }

@@ -1,39 +1,29 @@
-/* eslint-disable prettier/prettier */
 import {
   Image,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
-  ScrollView,
   Dimensions,
   ActivityIndicator,
   Linking,
-  Alert,
-  fetch,
   Modal,
   FlatList,
-  ToastAndroid,
 } from 'react-native';
 import React, { useContext, useState, useEffect } from 'react';
-import { AppContext } from '../navigation/AppContext';
 import PDF from 'react-native-pdf';
-import AxiosIntance from '../axios/AxiosIntance';
+import AxiosIntance from '../../axios/AxiosIntance';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 const color_text = '#272956';
 
 const backgroundColor1 = '#FDFDFD';
 const headerNameBoColorBo = '#272956';
 const headerNameBoColorAu = '#9D9D9D';
-const noidungColor = '#9D9D9D';
 
-const Read = props => {
-  const { isTabVisible, setIsTabVisible } = useContext(AppContext);
-  const { infoUser } = useContext(AppContext);
+const ReadDemo = props => {
   const { dulieu, navigation, reloadItem } = props;
 
   const { id } = props.route.params;
-  const route = props.route;
   const [isLoading, setIsLoading] = useState(true);
 
   const [AuthorData, setAuthorData] = useState({});
@@ -41,11 +31,9 @@ const Read = props => {
   const [bookData, setBookData] = useState({});
   const [pdfResource, setPdfResource] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
-  const [page, setPage] = useState();
-  const [oldIndex, setOldIndex] = useState();
+  const [page, setPage] = useState(1);
   const [numberOfPagehaha, setNumberOfPagehaha] = useState();
-  const AuthorBook = async id => {
-    console.log("id ne: ", id);
+  const AuthorBook = async (id) => {
     try {
       const response = await AxiosIntance().get('/product/author/' + id);
       //console.log(response, 'author');
@@ -59,19 +47,24 @@ const Read = props => {
     } catch (error) { }
   };
   const DetailBook = async () => {
-    const response = await AxiosIntance().get('/product/' + id);
-    if (response.result) {
-      const Data2 = {
-        id: response.product._id,
-        title: response.product.title,
-        pdfLink: response.product.pdf,
-        authorId: response.product.authorId,
-        category: response.product.categoryId,
-      };
-      //console.log(response.product.pdf);
-      setBookData(Data2);
-      setPdfResource(Data2.pdfLink);
-      AuthorBook(Data2.authorId);
+    try {
+      const response = await AxiosIntance().get('/product/' + id);
+      if (response.result) {
+        const Data2 = {
+          id: response.product._id,
+          title: response.product.title,
+          pdfLink: response.product.pdf,
+          authorId: response.product.authorId,
+          category: response.product.categoryId,
+        };
+        console.log("data ne: ", Data2);
+        //console.log(response.product.pdf);
+        setBookData(Data2);
+        setPdfResource(Data2.pdfLink);
+        AuthorBook(Data2.authorId);
+      }
+    } catch (error) {
+
     }
     //setIsLoading(false);
   };
@@ -81,100 +74,50 @@ const Read = props => {
       //console.log(response);
       if (response.result) {
         setDataMucluc(response.ml);
+        if (response.ml.length < 3) {
+          setDataMucluc([
+            {
+              "_id": "656407d77c78bae18ed5a03c",
+              "bookId": "65618dcfb820d9a221624a88",
+              "title": "Chương 1",
+              "position": 1,
+              "chuong": 1,
+              "__v": 0
+            },
+            {
+              "_id": "656407d77c78bae18ed5a03e",
+              "bookId": "65618dcfb820d9a221624a88",
+              "title": "Chương 2",
+              "position": 3,
+              "chuong": 2,
+              "__v": 0
+            },
+            {
+              "_id": "656407d87c78bae18ed5a040",
+              "bookId": "65618dcfb820d9a221624a88",
+              "title": "Chương 3",
+              "position": 7,
+              "chuong": 3,
+              "__v": 0
+            }
+          ])
+        }
       }
       setIsLoading(false);
     } catch (error) { }
   };
-  const GetProgress = async () => {
-    console.log("id ne: ", id);
-    try {
-      const response = await AxiosIntance().post(
-        'product/continue/getProgress',
-        {
-          userId: infoUser.id,
-          bookId: id,
-        },
-      );
-      if (response.book[0].progress > 99) {
-        Alert.alert(
-          'Bạn đã đọc hết sách này',
-          'Bạn có muốn đọc lại không?',
-          [
-            {
-              text: 'Hủy',
-              style: 'cancel', // Đặt kiểu là cancel để làm cho nút "Hủy" có màu đặc biệt
-            },
-            {
-              text: 'OK',
-              onPress: () => {
-                setNumberOfPagehaha(1);
-                setPage(1);
-                saveProgress()
-                // Thêm mã lệnh xử lý sau khi nút OK được nhấn ở đây
-              },
-            },
 
-
-          ],
-        );
-      }
-      // set cai page la respone.book[0].index, roi chuyen cai pdf ve trang day
-      setPage(response.book[0].index);
-      setOldIndex(response.book[0].index);
-      // console.log('index Getprogress ne````````````````', response);
-      // console.log(response);
-    } catch (error) {
-      console.log('loi getProgress: ----------------->', error);
-    }
-  };
-  const saveProgress= async()=>{
-    const response = await AxiosIntance().post(
-      '/product/library/updateProgress',
-      {
-        bookId: id,
-        userId: infoUser.id,
-        newIndex: 1,
-      },
-    );
-    console.log(response);
-  }
   useEffect(() => {
+    try {
+      console.log("id ne: ", id);
+      DetailBook();
+    } catch (error) {
 
-    DetailBook();
-    GetProgress();
+    }
   }, []);
 
-  const UpdateProgress = async () => {
-    try {
-      if (oldIndex >= numberOfPagehaha) {
-
-      } else {
-
-
-        const response = await AxiosIntance().post(
-          '/product/library/updateProgress',
-          {
-            bookId: id,
-            userId: infoUser.id,
-            newIndex: numberOfPagehaha,
-          },
-        );
-        console.log('id book:--------->', id);
-        console.log('id user:--------->', infoUser.id);
-        console.log('number of book:--------->', numberOfPagehaha);
-        console.log(response.result);
-      }
-      // console.log('UpdateProgress:--------->', response);
-    } catch (error) {
-      console.log('loi update progress', error);
-    }
-  };
-
-  // useEffect(() => {
-  // },[]);
 
   const Back = () => {
-    UpdateProgress();
     navigation.goBack();
   };
 
@@ -217,7 +160,7 @@ const Read = props => {
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity style={{ padding: 10 }} onPress={Back}>
-            <Image source={require('../assets/images/ic_left.png')} />
+            <Image source={require('../../assets/images/ic_left.png')} />
           </TouchableOpacity>
           <View style={styles.header_Name}>
             {isLoading ? (
@@ -239,7 +182,7 @@ const Read = props => {
           <TouchableOpacity
             style={{ padding: 10 }}
             onPress={() => setModalVisible(true)}>
-            <Image source={require('../assets/images/ic_3cham.png')} />
+            <Image source={require('../../assets/images/ic_3cham.png')} />
           </TouchableOpacity>
 
           <Modal
@@ -290,42 +233,39 @@ const Read = props => {
               <ActivityIndicator size={30} color={'black'} />
             </View>
           ) : (
-            <PDF
-              style={styles.body_NoiDung}
-              trustAllCerts={false} // bỏ qua chứng chỉ ssl
-              source={{
-                uri: pdfResource,
-                cache: true,
-              }}
-              page={page} //hiển thị trang số 1 đầu tiên
-              scale={1} // tỉ lệ phóng ban đầu
-              minScale={1} // tỉ lệ phóng nhỏ nhất
-              maxScale={2.0} // tỉ lệ phóng lớn nhất
-              cache={true} // lưu trữ tệp PDF trong bộ nhớ cache
-              renderActivityIndicator={() => (
-                <ActivityIndicator color="black" size="large" />
-              )} // hiển thị loading
-              enablePaging={false} // bật chế độ phân trang
-              onLoadProgress={percentage =>
-                console.log(`---------------------Loading :${percentage}`)
-              } // hiển thị phần trăm loading
-              onLoadComplete={(numberOfPage, filePath) => {
-                console.log(
-                  `---------------Loading complete. Number of pages: ${numberOfPage}`,
-                );
-                setIsLoading(false);
-              }} // hiển thị khi load xong
-              onPageChanged={(page, totalPages) => {
-                console.log(`-----------------------${page}/${totalPages}`);
-                setNumberOfPagehaha(page);
-              }} //  hiển thị số trang
-              onError={error => setIsLoading(true)} // hiển thị lỗi
-              // onPageSingleTap={page => alert(page)} // hiển thị khi click vào trang
-              onPressLink={link => Linking.openURL(link)} // hiển thị khi click vào link
-              // onScaleChanged={scale => console.log(scale)} // hiển thị khi thay đổi tỉ lệ phóng
-              // singlePage={true}
-              spacing={5} // khoảng cách giữa 2 trang
-            />
+            <View>
+              <PDF
+                style={styles.body_NoiDung}
+                trustAllCerts={false} // bỏ qua chứng chỉ ssl
+                source={{
+                  uri: pdfResource,
+                  cache: true,
+                }}
+                page={page} //hiển thị trang số 1 đầu tiên
+                scale={1} // tỉ lệ phóng ban đầu
+                minScale={1} // tỉ lệ phóng nhỏ nhất
+                maxScale={2.0} // tỉ lệ phóng lớn nhất
+                cache={true} // lưu trữ tệp PDF trong bộ nhớ cache
+                renderActivityIndicator={() => (
+                  <ActivityIndicator color="black" size="large" />
+                )} // hiển thị loading
+                enablePaging={false} // bật chế độ phân trang
+                onLoadProgress={percentage =>
+                  console.log(`---------------------Loading :${percentage}`)
+                } // hiển thị phần trăm loading
+                onLoadComplete={(numberOfPage, filePath) => {
+                  setIsLoading(false);
+                }} // hiển thị khi load xong
+                onPageChanged={(page, totalPages) => {
+                  setNumberOfPagehaha(page);
+                }} //  hiển thị số trang
+                onError={error => setIsLoading(true)} // hiển thị lỗi
+                // onPageSingleTap={page => alert(page)} // hiển thị khi click vào trang
+                // onScaleChanged={scale => console.log(scale)} // hiển thị khi thay đổi tỉ lệ phóng
+                // singlePage={true}
+                spacing={5} // khoảng cách giữa 2 trang
+              />
+            </View>
           )}
         </View>
       </View>
@@ -336,7 +276,7 @@ const Read = props => {
   }
 };
 
-export default Read;
+export default ReadDemo;
 
 const styles = StyleSheet.create({
   container: {
@@ -409,7 +349,9 @@ const styles = StyleSheet.create({
     height: '100%',
     position: 'absolute',
     top: 50,
-    paddingLeft: 20,
+    paddingLeft: 10,
+    paddingRight:20,
+    textAlign:'justify',
     flexDirection: 'column',
     justifyContent: 'space-around',
   },

@@ -1,11 +1,12 @@
-import { Image, StyleSheet, Text, View, TextInput, Dimensions, FlatList, useWindowDimensions, TouchableOpacity, ActivityIndicator, ToastAndroid } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { Image, StyleSheet, Text, View, TextInput, Dimensions, FlatList, Alert, useWindowDimensions, TouchableOpacity, ActivityIndicator, ToastAndroid } from 'react-native'
+import React, { useEffect, useState, useContext } from 'react'
 import Icon from "react-native-vector-icons/Feather"
 import Icon2 from "react-native-vector-icons/AntDesign"
 import Icon3 from "react-native-vector-icons/FontAwesome"
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
 import { _isDomSupported } from '../../../server/public/assets/vendor/chart.js/helpers'
 import AxiosIntance from '../../axios/AxiosIntance'
+import { AppContext } from '../../navigation/AppContext'
 const { width, height } = Dimensions.get('window');
 
 const color_txt1 = "#9D9D9D";
@@ -14,7 +15,7 @@ const colorsearch = "#F2F2F2";
 const icon_color = "#C4C4C4";
 const namebook_color = "#272956";
 
-const Screen1 = ({ navigation, id }) => {
+const Screen1Demo = ({ navigation, id }) => {
 
   const [datasearch, setDatasearch] = useState([]);
   const [datapublicAt, setDatapublicAt] = useState([]);
@@ -24,7 +25,7 @@ const Screen1 = ({ navigation, id }) => {
   const [textNew, setTextNew] = useState("Sách mới xuất bản");
   const [textNoti, setTextNoti] = useState("");
   const [isHidden, setIsHidden] = useState(true);
-
+  const { setIsLogin } = useContext(AppContext)
   const toggleVisibility = () => {
     setIsHidden(!isHidden);
   };
@@ -90,7 +91,7 @@ const Screen1 = ({ navigation, id }) => {
       }
 
     }
-    setIsLoading(true)
+
     getAllCate();
 
 
@@ -101,8 +102,33 @@ const Screen1 = ({ navigation, id }) => {
     const { _id, title, authorId, image, free } = item;
 
     const onPressItem = () => {
-      navigation.navigate('Detail', { itemId: _id });
+      if (free) {
+        navigation.navigate('DetailDemo', { itemId: _id });
+      } else {
+        Alert.alert(
+          'Thông báo',
+          'Bạn cần đăng nhập để đọc sách này',
+          [
+            {
+              text: 'Hủy',
+              style: 'cancel', // Đặt kiểu là cancel để làm cho nút "Hủy" có màu đặc biệt
+            },
+            {
+              text: 'OK',
+              onPress: () => {
+                setIsLogin(false)
+                navigation.navigate('Home')
+                // Thêm mã lệnh xử lý sau khi nút OK được nhấn ở đây
+              },
+            },
+
+
+          ],
+        );
+
+      };
     }
+
 
     return (
       <TouchableOpacity onPress={() => onPressItem()} style={{}}>
@@ -125,8 +151,8 @@ const Screen1 = ({ navigation, id }) => {
         </View>)
           : (
 
-            <View style={[styles.bghoivien,{backgroundColor:'green'}]}>
-              <Text style={styles.hoivien}>Miễn phí</Text>
+            <View style={styles.bgfree}>
+              <Text style={styles.free}>Miễn phí</Text>
             </View>)
         }
 
@@ -209,7 +235,7 @@ const Screen1 = ({ navigation, id }) => {
   )
 }
 
-export default Screen1
+export default Screen1Demo
 
 const styles = StyleSheet.create({
   container: {
@@ -247,6 +273,21 @@ const styles = StyleSheet.create({
     marginTop: -30,
     marginLeft: 46,
     marginBottom: 10
-  }
+  },
+  bgfree: {
+    backgroundColor: 'green',
+    width: 56,
+    height: "auto",
+    borderRadius: 7,
+    marginTop: -30,
+    marginLeft: 46,
+    marginBottom: 10
+  },
+  free: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: 'white',
+    padding: 4
+  },
 })
 
