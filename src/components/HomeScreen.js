@@ -108,6 +108,8 @@ const HomeScreen = (props) => {
       }
       if (respone.result == true) {
         setdataNe(respone.category)
+        setIsLoading(false)
+
       } else {
         ToastAndroid.show("get data", ToastAndroid.SHORT);
       }
@@ -187,42 +189,52 @@ const HomeScreen = (props) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.title}>
-        <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Chào mừng bạn trở lại, {infoUser.name}!</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>Bạn muốn đọc sách gì?</Text>
-          <View style={styles.viewall}>
-            <TouchableOpacity onPress={toggleModal}>
-              <Icon style={styles.menuall} name="menu-book" size={20} color='#2D5ED5' />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <Modal animationType="slide" transparent={true} visible={isModalVisible}>
-          <View style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', width: '100%', height: '100%' }}>
-            <View style={styles.containerModal}>
-              <TabView
-                navigationState={{ index: secondTabIndex, routes: secondTabRoutes }}
-                renderScene={SecondTabRenderScene}
-                onIndexChange={setSecondTabIndex}
-                renderTabBar={renderTabBar2}
-              />
-              <Icon2 onPress={toggleModal} style={styles.Close} name="closecircleo" size={28} color="#272956" />
-            </View>
-          </View>
-        </Modal>
-      </View>
-      <>{
-        routes.length > 0 &&
-        <TabView
-          style={styles.tab}
-          navigationState={{ index, routes }}
-          onIndexChange={setIndex}
-          renderScene={renderScene}
-          renderTabBar={renderTabBar}
-          scrollEnabled={false}
-        />
-      }</>
+      {
+        !isLoading ? (
 
+          <>
+            <View style={styles.title}>
+              <Text style={{ fontSize: 16, fontWeight: '500', color: color_txt1 }}>Chào mừng bạn trở lại, {infoUser.name}!</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={{ fontSize: 26, fontWeight: '500', color: color_txt2 }}>Bạn muốn đọc sách gì?</Text>
+                <View style={styles.viewall}>
+                  <TouchableOpacity onPress={toggleModal}>
+                    <Icon style={styles.menuall} name="menu-book" size={20} color='#2D5ED5' />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <Modal animationType="slide" transparent={true} visible={isModalVisible}>
+                <View style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', width: '100%', height: '100%' }}>
+                  <View style={styles.containerModal}>
+                    <TabView
+                      navigationState={{ index: secondTabIndex, routes: secondTabRoutes }}
+                      renderScene={SecondTabRenderScene}
+                      onIndexChange={setSecondTabIndex}
+                      renderTabBar={renderTabBar2}
+                    />
+                    <Icon2 onPress={toggleModal} style={styles.Close} name="closecircleo" size={28} color="#272956" />
+                  </View>
+                </View>
+              </Modal>
+            </View>
+            <>{
+              routes.length > 0 &&
+              <TabView
+                style={styles.tab}
+                navigationState={{ index, routes }}
+                onIndexChange={setIndex}
+                renderScene={renderScene}
+                renderTabBar={renderTabBar}
+                scrollEnabled={false}
+              />
+            }</>
+
+          </>
+        )
+          : (
+            <View style={{width:'100%',height:'90%',backgroundColor:'green',justifyContent:'center',alignItems:'center'}}><ActivityIndicator  size={30} color={'black'}/></View>
+          )
+      }
     </View>
   )
 }
