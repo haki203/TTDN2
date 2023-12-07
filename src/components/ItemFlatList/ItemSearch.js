@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image,TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, ToastAndroid } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useRoute } from '@react-navigation/native';
 import AxiosIntance from '../../axios/AxiosIntance';
@@ -15,7 +15,7 @@ const ItemSearch = (props) => {
         if (product.authorId) {
           // console.log('author ne: ',product.authorId);
           const respone = await AxiosIntance().get(`/product/author/${product.authorId}`);
-          // console.log("author khi goi api ne: ", respone.author.name);
+          console.log("author khi goi api ne: ", respone);
           setName(respone.author.name)
         }
       } catch (error) {
@@ -39,16 +39,32 @@ const ItemSearch = (props) => {
     }
 
   }
+  const btnclick = () => {
+    ToastAndroid.show("Sách đang cập nhật", ToastAndroid.SHORT);
+
+  }
   return (
-    <TouchableOpacity onPress={() => onClickDetail()}>
-      <View style={{ flexDirection: 'row', marginTop: 15 }}>
-        <Image style={styles.image1} source={{ uri: product.image }}></Image>
-        <View style={{ justifyContent: 'center' }}>
-          <Text style={styles.nameBook}>{product.title}</Text>
-          <Text style={styles.category}>{name}</Text>
+
+    <>
+      {product.disable ? (<TouchableOpacity onPress={() => btnclick()} style={{ opacity: 0.5 }}>
+        <View style={{ flexDirection: 'row', marginTop: 15 }}>
+          <Image style={styles.image1} source={{ uri: product.image }}></Image>
+          <View style={{ justifyContent: 'center' }}>
+            <Text style={styles.nameBook}>{product.title}</Text>
+            <Text style={styles.category}>{name}</Text>
+          </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>) : (<TouchableOpacity onPress={() => onClickDetail()}>
+        <View style={{ flexDirection: 'row', marginTop: 15 }}>
+          <Image style={styles.image1} source={{ uri: product.image }}></Image>
+          <View style={{ justifyContent: 'center' }}>
+            <Text style={styles.nameBook}>{product.title}</Text>
+            <Text style={styles.category}>{name}</Text>
+          </View>
+        </View>
+      </TouchableOpacity>)}
+    </>
+
   )
 }
 
