@@ -232,7 +232,7 @@ const HomeScreen = (props) => {
           </>
         )
           : (
-            <View style={{ width: '100%', height: '90%', backgroundColor: 'green', justifyContent: 'center', alignItems: 'center' }}><ActivityIndicator size={30} color={'black'} /></View>
+            <View style={{ width: '100%', height: '90%', backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}><ActivityIndicator size={30} color={'black'} /></View>
           )
       }
     </View>

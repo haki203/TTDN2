@@ -20,6 +20,7 @@ import { AppContext } from '../navigation/AppContext';
 import PDF from 'react-native-pdf';
 import AxiosIntance from '../axios/AxiosIntance';
 import Icon2 from 'react-native-vector-icons/AntDesign';
+import { useFocusEffect } from '@react-navigation/native';
 const color_text = '#272956';
 
 const backgroundColor1 = '#FDFDFD';
@@ -119,15 +120,21 @@ const Read = props => {
         );
       }
       // set cai page la respone.book[0].index, roi chuyen cai pdf ve trang day
-      setPage(response.book[0].index);
-      setOldIndex(response.book[0].index);
+      if (!response.result) {
+        console.log("ban chua doc sach nay bao gio");
+        setPage(1);
+        setOldIndex(1);
+      } else {
+        setPage(response.book[0].index);
+        setOldIndex(response.book[0].index);
+      }
       // console.log('index Getprogress ne````````````````', response);
       // console.log(response);
     } catch (error) {
       console.log('loi getProgress: ----------------->', error);
     }
   };
-  const saveProgress= async()=>{
+  const saveProgress = async () => {
     const response = await AxiosIntance().post(
       '/product/library/updateProgress',
       {
@@ -143,14 +150,45 @@ const Read = props => {
     DetailBook();
     GetProgress();
   }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("vao ne");
+      return () => {
+        UpdateProgress();
+        console.log("out ne");
 
+        //await TrackPlayer.
+      };
+    }, []),
+  );
+  const saveFirst = async () => {
+    const ress = await AxiosIntance().post(
+      'product/continue/newLibrary',
+      {
+        userId: infoUser.id,
+        bookId: id,
+        index: numberOfPagehaha
+      },
+    );
+    if (ress) {
+      console.log("them thanh cong");
+    }
+  }
   const UpdateProgress = async () => {
+    const response = await AxiosIntance().post(
+      '/product/library/updateProgress',
+      {
+        bookId: id,
+        userId: infoUser.id,
+        newIndex: numberOfPagehaha,
+      },
+    );
+    if (!response.result) {
+      saveFirst();
+    }
     try {
       if (oldIndex >= numberOfPagehaha) {
-
       } else {
-
-
         const response = await AxiosIntance().post(
           '/product/library/updateProgress',
           {
@@ -162,7 +200,10 @@ const Read = props => {
         console.log('id book:--------->', id);
         console.log('id user:--------->', infoUser.id);
         console.log('number of book:--------->', numberOfPagehaha);
-        console.log(response.result);
+        if (!response.result) {
+          console.log("dang luu tien do lan dau tien doc---");
+          saveFirst();
+        }
       }
       // console.log('UpdateProgress:--------->', response);
     } catch (error) {

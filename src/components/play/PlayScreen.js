@@ -181,7 +181,10 @@ const PlayScreen = props => {
     initDuration();
     initPlayer(dataAudioNe);
     getInfo();
-    setIsLoading(false);
+    timeoutId = setTimeout(() => {
+      setIsLoading(false);
+      console.log('Đã gọi hàm playPlayer2(false) sau 5 giây');
+    }, 5000);
   };
   async function initDuration() {
     try {
