@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, yourColorVariable, Image, TouchableOpacity, ImageBackground, Pressable, TextInput, ToastAndroid, Modal, ScrollView } from 'react-native'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Icon from "react-native-vector-icons/AntDesign"
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/AntDesign';
@@ -13,6 +13,7 @@ import { AppContext } from '../navigation/AppContext';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import AxiosIntance from '../axios/AxiosIntance';
 import storage from '@react-native-firebase/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 
 const log_outcolor = "#F77A55";
@@ -108,7 +109,21 @@ const ProfileScreen = (props) => {
     const handlePhoneCancel = () => {
         setPhoneModalVisible(false);
     };
-
+    const handleLogount = async () => {
+        // setIsLogin(false);
+        try {
+            // Kiểm tra trạng thái đăng nhập từ AsyncStorage
+            // const infoUserNe = await AsyncStorage.getItem('infoUser');
+            await AsyncStorage.clear();
+            setIsLogin(false)
+            console.log('Tất cả dữ liệu đã được xóa khỏi AsyncStorage.');
+        } catch (error) {
+            console.error('Lỗi khi kiểm tra trạng thái đăng nhập:', error);
+        }
+    }
+    // useEffect(() => {
+    //     handleLogount();
+    // }, []);
     console.log(infoUser.premium);
 
     return (
@@ -258,7 +273,7 @@ const ProfileScreen = (props) => {
 
                 <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
 
-                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     {!infoUser.premium ? (
                         <View style={{
                             flexDirection: 'row',
@@ -287,7 +302,7 @@ const ProfileScreen = (props) => {
                 <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'center', padding: 5, }}>
-                    <TouchableOpacity style={styles.button2} onPress={() => setIsLogin(false)}>
+                    <TouchableOpacity style={styles.button2} onPress={() => handleLogount()}>
                         <Text style={{ textAlign: 'center', color: log_outcolor }}>Đăng xuất</Text>
                     </TouchableOpacity>
                 </View>
