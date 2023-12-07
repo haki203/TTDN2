@@ -705,30 +705,32 @@ const PlayScreen = props => {
                     borderTopLeftRadius: 30,
                     paddingTop: 20,
                   }}>
-                  <TouchableOpacity
-                    style={{
-                      position: 'absolute',
-                      right: 5,
-                      borderRadius: 20,
-                      top: 5,
-                      width: 50,
-                      height: 50,
-                      backgroundColor: '#f3f3f3',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                    onPress={() => setIsModalVisible(false)}>
-                    <Text style={{fontWeight: 'bold', fontSize: 18}}>x</Text>
-                  </TouchableOpacity>
-                  <Text
-                    style={[
-                      styles.nameTrack,
-                      {fontSize: 18, paddingStart: 10},
-                    ]}>
-                    Chọn chương
-                  </Text>
+                  <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
+                  }}>
+                    <Text
+                      style={[
+                        styles.nameTrack,
+                        { fontSize: 18, paddingStart: 10 },
+                      ]}>
+                      Chọn chương
+                    </Text>
+                    <TouchableOpacity
+                      style={{
+                        borderRadius: 35,
+                        width: 50,
+                        height: 50,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        right: 10,
+                        top: -15
+                      }}
+                      onPress={() => setIsModalVisible(false)}>
+                      <Icon name="close" color="black" size={sizeIcon} />
+                    </TouchableOpacity>
+                  </View>
                   <FlatList
-                    style={{marginTop: 20}}
                     data={dataAudio}
                     renderItem={({item}) => (
                       <TouchableOpacity
