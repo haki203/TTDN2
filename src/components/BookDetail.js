@@ -45,6 +45,7 @@ const BookDetail = (props) => {
     const [heightView, setHeightView] = useState(0);
     const [showFullText, setShowFullText] = useState(false);
     const [isfree, setIsfree] = useState(true);
+    const [textNoti, setTextNoti] = useState("Loading...");
 
 
     const config = {
@@ -70,6 +71,7 @@ const BookDetail = (props) => {
         bank_code: 'zalopayapp',
     };
 
+
     const data =
         config.app_id +
         '|' +
@@ -85,37 +87,19 @@ const BookDetail = (props) => {
         '|' +
         order.item;
     order.mac = crypto.HmacSHA256(data, config.key1).toString();
-
     const goiapi = async () => {
         try {
             const response = await axios.post(config.endpoint, null, { params: order });
-
-
+            console.log(response.data);
             const res = await AxiosIntance().get("/user/payment/" + infoUser.id)
             if (res.result) {
                 Linking.openURL(response.data.order_url);
-                const updatedInfoUser = { ...infoUser };
-                updatedInfoUser.premium = true;
-                setinfoUser(updatedInfoUser);
-                forceUpdate();
-                Alert.alert(
-                    //title
-                    'Thông báo',
-                    //body
-                    'Đăng ký hội viên thành công',
-                    [
-                        {
-                            text: 'Có',
-
-                        },
-                        {
-                            text: 'Không',
-
-                        },
-                    ],
-                    { cancelable: false },
-                    //clicking out side of alert will not cancel
-                );
+                setIsLoading(true)
+                setTextNoti('Đang thực hiện thanh toán')
+                setTimeout(() => {
+                    queryAPI();
+                    forceUpdate();
+                }, 20000)
 
             }
 
@@ -125,11 +109,45 @@ const BookDetail = (props) => {
     };
 
 
+    const queryconfig = {
+        app_id: '2553',
+        key1: 'PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL',
+        key2: 'kLtgPl8HHhfvMuDHPwKfgfsY4Ydm9eIz',
+        endpoint: 'https://sb-openapi.zalopay.vn/v2/query',
+    };
 
+    const app_trans_id = order.app_trans_id;
+    const querydata = `${queryconfig.app_id}|${app_trans_id}|${queryconfig.key1}`;
+    const mac = crypto.HmacSHA256(querydata, queryconfig.key1).toString();;
 
+    const params = {
+        app_id: queryconfig.app_id,
+        app_trans_id: app_trans_id,
+        mac: mac,
+    };
 
+    const queryAPI = async () => {
 
+        try {
+            const response = await axios.post(queryconfig.endpoint, null, { params: params });
+            const result = response.data;
+            console.log("result ne ---------->", result);
+            if (result.return_code == 1) {
+                setIsLoading(false);
+                const updatedInfoUser = { ...infoUser };
+                updatedInfoUser.premium = true;
+                setinfoUser(updatedInfoUser);
+                Alert.alert('Chúc mừng bạn đã là hội viên');
+            } else if (result.return_code == 2) {
+                ToastAndroid.show("Thanh toán thất bại", ToastAndroid.SHORT);
+            } else if (result.return_code == 3) {
+                ToastAndroid.show("Đang chờ thanh toán", ToastAndroid.SHORT);
+            }
 
+        } catch (error) {
+            console.error(",,,,,,,,,,,,,,,", error);
+        }
+    };
 
     const AuthorBook = async (id) => {
         //setIsLoading(true);
@@ -180,7 +198,6 @@ const BookDetail = (props) => {
     }
 
     useEffect(() => {
-        console.log("--------------->", infoUser.premium);
         forceUpdate()
         scrollViewRef.current.scrollTo({ y: 0, animated: true });
 
@@ -392,10 +409,11 @@ const BookDetail = (props) => {
     };
 
 
-
     return (
         <View style={styles.Container} >
-            {isLoading ? (<View style={styles.loading}><ActivityIndicator size={35} color={'black'} /></View>) : (<View></View>)}
+            {isLoading ? (<View style={styles.loading}><ActivityIndicator size={35} color={'black'} />
+                <Text style={styles.loadingText}>{textNoti}</Text>
+            </View>) : (<View></View>)}
             <View style={styles.Icon_Container}>
                 <TouchableOpacity onPress={Back}>
                     <Icon_1 name="chevron-back" size={30} color="black" />
@@ -865,6 +883,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     loading: { width: width, height: height, alignItems: 'center', justifyContent: 'center', backgroundColor: 'white' },
+    loadingText: {
+        marginTop: 10,
+        fontSize: 16,
+        color: 'black',
+    },
     modalContainer: {
         flex: 1,
         justifyContent: 'center',
