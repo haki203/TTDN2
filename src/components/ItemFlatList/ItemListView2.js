@@ -64,9 +64,9 @@ const ItemListView2 = (props) => {
                 idUser: infoUser.id,
                 idBook: bookData.id,
             };
-            console.log("favouriteData nè: ", favouriteData);
+
             const response = await AxiosIntance().post("/product/favourite/new/", favouriteData);
-            console.log("Data trả về nè: ", response);
+
 
             if (response.result) {
                 setIsHearted(!isHearted, true);

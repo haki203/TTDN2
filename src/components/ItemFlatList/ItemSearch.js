@@ -13,9 +13,9 @@ const ItemSearch = (props) => {
     const getAdmin = async () => {
       try {
         if (product.authorId) {
-          // console.log('author ne: ',product.authorId);
+
           const respone = await AxiosIntance().get(`/product/author/${product.authorId}`);
-          console.log("author khi goi api ne: ", respone);
+
           setName(respone.author.name)
         }
       } catch (error) {
@@ -30,7 +30,7 @@ const ItemSearch = (props) => {
 
   }, []);
   const onClickDetail = async () => {
-    // console.log(id);
+
     navigation.navigate('Detail', { itemId: id });
     const reponse = await AxiosIntance().get(`/product/search/select/${id}`);
     console.log("response day: ", reponse)

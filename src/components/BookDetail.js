@@ -90,7 +90,7 @@ const BookDetail = (props) => {
     const goiapi = async () => {
         try {
             const response = await axios.post(config.endpoint, null, { params: order });
-            console.log(response.data);
+
             const res = await AxiosIntance().get("/user/payment/" + infoUser.id)
             if (res.result) {
                 Linking.openURL(response.data.order_url);
@@ -131,7 +131,7 @@ const BookDetail = (props) => {
         try {
             const response = await axios.post(queryconfig.endpoint, null, { params: params });
             const result = response.data;
-            console.log("result ne ---------->", result);
+
             if (result.return_code == 1) {
                 setIsLoading(false);
                 const updatedInfoUser = { ...infoUser };

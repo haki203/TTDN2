@@ -97,7 +97,6 @@ const HomeScreen = (props) => {
   useEffect(() => {
     const getAllCate = async () => {
       const respone = await AxiosIntance().get("/product/category/getAlls");
-      console.log("sssssssssssss", respone);
       const newArray = [];
       for (const item of respone.category) {
         const newItem = { key: item._id, title: item.name };

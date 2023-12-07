@@ -24,14 +24,14 @@ const Viewauthor = ({ navigation, route }) => {
     navigation.goBack();
   }
 
-  console.log(name);
+
   useEffect(() => {
     const getAllCate = async () => {
       let arrayData = [];
       const respone = await AxiosIntance().get("/product/get-book-by-author/" + id);
       setTextNoti("")
       if (respone.products.length < 1) {
-        console.log("chua co sach");
+
         setTextNoti("Danh mục đang được cập nhật")
         setIsLoading(false);
       } else {

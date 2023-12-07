@@ -24,14 +24,13 @@ const Viewdetail = ({ navigation, route }) => {
     navigation.goBack();
   }
 
-  console.log(name);
+
   useEffect(() => {
     const getAllCate = async () => {
       let arrayData = [];
       const respone = await AxiosIntance().get("/product/get-by-category/" + id);
       setTextNoti("")
       if (respone.product.length < 1) {
-        console.log("chua co sach");
         setTextNoti("Danh mục đang được cập nhật")
         setIsLoading(false);
       } else {

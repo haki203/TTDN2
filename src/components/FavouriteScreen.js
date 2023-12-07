@@ -69,7 +69,7 @@ const FavouriteScreen = (props) => {
   useFocusEffect(
     React.useCallback(() => {
       setIsLoading(true)
-      console.log("reloadr ne: ");
+
       fetchData();
 
       return () => {
