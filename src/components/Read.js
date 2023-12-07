@@ -162,33 +162,38 @@ const Read = props => {
     }, []),
   );
   const saveFirst = async () => {
-    const ress = await AxiosIntance().post(
-      'product/continue/newLibrary',
-      {
-        userId: infoUser.id,
-        bookId: id,
-        index: numberOfPagehaha
-      },
-    );
-    if (ress) {
-      console.log("them thanh cong");
+    try {
+      const ress = await AxiosIntance().post(
+        'product/continue/newLibrary',
+        {
+          userId: infoUser.id,
+          bookId: id,
+          index: numberOfPagehaha
+        },
+      );
+      if (ress) {
+        console.log("them thanh cong");
+      }
+    } catch (error) {
+      console.log("loi khi luu lan dau: ",error);
     }
   }
   const UpdateProgress = async () => {
-    const response = await AxiosIntance().post(
-      '/product/library/updateProgress',
-      {
-        bookId: id,
-        userId: infoUser.id,
-        newIndex: numberOfPagehaha,
-      },
-    );
-    if (!response.result) {
-      saveFirst();
-    }
+    // const response = await AxiosIntance().post(
+    //   '/product/library/updateProgress',
+    //   {
+    //     bookId: id,
+    //     userId: infoUser.id,
+    //     newIndex: numberOfPagehaha,
+    //   },
+    // );
+    // if (!response.result) {
+    //   saveFirst();
+    // }
     try {
       if (oldIndex >= numberOfPagehaha) {
       } else {
+        console.log("dang luu tien do---");
         const response = await AxiosIntance().post(
           '/product/library/updateProgress',
           {
@@ -197,6 +202,7 @@ const Read = props => {
             newIndex: numberOfPagehaha,
           },
         );
+        console.log("kq api update ne: ",response);
         console.log('id book:--------->', id);
         console.log('id user:--------->', infoUser.id);
         console.log('number of book:--------->', numberOfPagehaha);

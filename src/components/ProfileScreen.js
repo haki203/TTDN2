@@ -65,7 +65,7 @@ const ProfileScreen = (props) => {
                 ToastAndroid.show("Cập nhật thành công", ToastAndroid.SHORT);
                 console.log(res);
                 const infoUser = {
-                    name: res.user.full_name, avatar: res.user.avatar, id: res.user._id, phone: res.user.phone, email: res.user.email
+                    name: res.user.full_name, avatar: res.user.avatar, id: res.user._id, phone: res.user.phone, email: res.user.email,premium:res.user.premium
                 }
                 setinfoUser(infoUser)
             } else {
@@ -88,7 +88,6 @@ const ProfileScreen = (props) => {
     const [isModalVisible, setModalVisible] = useState(false);
     const handleSave = async () => {
         console.log("ok");
-
         setModalVisible(false);
         setTempName(name);
     }
