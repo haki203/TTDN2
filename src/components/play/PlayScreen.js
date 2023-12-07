@@ -26,6 +26,7 @@ import AxiosIntance from '../../axios/AxiosIntance';
 import {err} from 'react-native-svg/lib/typescript/xml';
 import {useFocusEffect} from '@react-navigation/native';
 import Notification from '../notification/Notification';
+import dynamicLinks from '@react-native-firebase/dynamic-links';
 const colorTitle = '#272956';
 const colorContent = 'white';
 const {width, height} = Dimensions.get('window');
@@ -53,7 +54,7 @@ const PlayScreen = props => {
   const [trackName, setTrackName] = useState('...');
   const [onVolume, setOnVolume] = useState(false);
   const [speed, setSpeed] = useState(0.5);
-  const [tenSach, setTenSach] = useState("");
+  const [tenSach, setTenSach] = useState('');
   const [isPlay, setIsPlay] = useState(false);
   const [titleChuong, setTitleChuong] = useState('');
   const {isPlayAudio, setIsPlayAudio} = useContext(AppContext);
@@ -110,7 +111,6 @@ const PlayScreen = props => {
       setIsPlay(false);
       setIsPlayAudio(false);
       update();
-      
     }
   }, [position]);
   const handleSeek = value => {
@@ -156,26 +156,23 @@ const PlayScreen = props => {
       }
       if (res.ml.length < 3) {
         Alert.alert(
-            'Thông báo',
-            'Sách này đang cập nhật giọng nói, vui lòng thử lại sau',
-            [
-                {
-                    text: 'Hủy',
-                    style: 'cancel', // Đặt kiểu là cancel để làm cho nút "Hủy" có màu đặc biệt
-                },
-                {
-                    text: 'OK',
-                    onPress: () => {
-                        
-                        navigation.goBack()
-                        // Thêm mã lệnh xử lý sau khi nút OK được nhấn ở đây
-                    },
-                },
-
-
-            ],
+          'Thông báo',
+          'Sách này đang cập nhật giọng nói, vui lòng thử lại sau',
+          [
+            {
+              text: 'Hủy',
+              style: 'cancel', // Đặt kiểu là cancel để làm cho nút "Hủy" có màu đặc biệt
+            },
+            {
+              text: 'OK',
+              onPress: () => {
+                navigation.goBack();
+                // Thêm mã lệnh xử lý sau khi nút OK được nhấn ở đây
+              },
+            },
+          ],
         );
-    }
+      }
     }
     setDataAudio(dataAudioNe);
     initDuration();
@@ -357,9 +354,9 @@ const PlayScreen = props => {
         audio: response.product.audio,
         description: response.product.description,
       };
-      console.log("ten sah ne ",response.product._id);
+      console.log('ten sah ne ', response.product._id);
       setBookData(Data2);
-      setTenSach(response.product.title)
+      setTenSach(response.product.title);
       setAudioUrl(Data2.audio);
       const res = await AxiosIntance().get('/product/author/' + id);
       const Data1 = {
@@ -406,13 +403,41 @@ const PlayScreen = props => {
       console.log(error);
     }
   };
+
+  //create deep link
+  const genarateDeepLink = async () => {
+    try {
+      const deeplink = await dynamicLinks().buildShortLink(
+        {
+          link: 'https://ttdn2deeplink.page.link/athens?productID/' + id,
+          domainUriPrefix: 'https://ttdn2deeplink.page.link',
+          android: {
+            packageName: 'com.ttdn2',
+            fallbackUrl: 'https://thonguyen.onrender.com',
+          },
+          ios: {
+            bundleId: 'com.bookapp',
+            fallbackUrl: 'https://thonguyen.onrender.com',
+          },
+        },
+        dynamicLinks.ShortLinkType.SHORT,
+      );
+      console.log('genarateDeepLink:----->', deeplink);
+      return deeplink;
+    } catch (error) {
+      console.log('genarateDeepLink:----->', error);
+    }
+  };
+
   // share ne
   const onShare = async () => {
+    const dmlinklon = await genarateDeepLink();
     try {
       const result = await Share.share({
-        title: bookData.title,
-        message: bookData.title + '\n' + bookData.description,
-        url: 'https://thonguyen.onrender.com',
+        // title: bookData.title,
+        // message: bookData.title + '\n' + bookData.description,
+        // url: 'https://thonguyen.onrender.com',
+        message: dmlinklon,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -705,14 +730,15 @@ const PlayScreen = props => {
                     borderTopLeftRadius: 30,
                     paddingTop: 20,
                   }}>
-                  <View style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between'
-                  }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
                     <Text
                       style={[
                         styles.nameTrack,
-                        { fontSize: 18, paddingStart: 10 },
+                        {fontSize: 18, paddingStart: 10},
                       ]}>
                       Chọn chương
                     </Text>
@@ -724,7 +750,7 @@ const PlayScreen = props => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         right: 10,
-                        top: -15
+                        top: -15,
                       }}
                       onPress={() => setIsModalVisible(false)}>
                       <Icon name="close" color="black" size={sizeIcon} />
