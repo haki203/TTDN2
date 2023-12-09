@@ -16,19 +16,21 @@ console.disableYellowBox = true;
 import {LogBox} from 'react-native';
 import Notification from './components/notification/Notification';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+
 LogBox.ignoreAllLogs(true);
 
 const App = () => {
   const HandleDeepLinking = () => {
     const {navigate} = useNavigation();
+
     const handleDynamicLinks = async link => {
       console.log('Foreground link handling:', link);
 
-      // let productId = link.url.split('=').pop();
-      // console.log('productId:', productId);
-      // navigate('ProductDetail', { productId: productId });
+      let productId = link.url.split('=').pop();
+      console.log('productId:', productId);
+      navigate('BookDetail', {itemId: productId});
 
-      navigate('HomeScreen');
+      // navigate('HomeScreen');
     };
     useEffect(() => {
       const unsubscribe = dynamicLinks().onLink(handleDynamicLinks);

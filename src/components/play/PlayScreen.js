@@ -409,7 +409,7 @@ const PlayScreen = props => {
     try {
       const deeplink = await dynamicLinks().buildShortLink(
         {
-          link: 'https://ttdn2deeplink.page.link/athens?productID/' + id,
+          link: 'https://ttdn2deeplink.page.link/athens?productID=' + id,
           domainUriPrefix: 'https://ttdn2deeplink.page.link',
           android: {
             packageName: 'com.ttdn2',
