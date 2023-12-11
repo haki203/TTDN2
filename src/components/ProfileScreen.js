@@ -116,9 +116,9 @@ const ProfileScreen = (props) => {
             // const infoUserNe = await AsyncStorage.getItem('infoUser');
             await AsyncStorage.clear();
             setIsLogin(false)
-            console.log('Tất cả dữ liệu đã được xóa khỏi AsyncStorage.');
+            console.log('Bạn đã! Đăng xuất thành công');
         } catch (error) {
-            console.error('Lỗi khi kiểm tra trạng thái đăng nhập:', error);
+            console.error('Lỗi khi kiểm tra trạng thái đăng xuất:', error);
         }
     }
     // useEffect(() => {
