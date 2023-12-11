@@ -597,14 +597,14 @@ const BookDetail = (props) => {
                                         <View style={styles.header}>
                                             <Text style={{ fontWeight: '700', fontSize: 15, color: 'black' }}>Hội viên</Text>
                                             <Icon_2 style={{ marginTop: 3, marginRight: 55 }} name="diamond" size={16} color="orange" />
-                                            <Text style={{ fontWeight: 'blod', fontSize: 15, color: '#EE5D61', marginLeft: 40 }}>99,000 ₫</Text>
+                                            <Text style={{ fontWeight: 'blod', fontSize: 15, color: '#EE5D61', marginRight: 40 }}>99,000 ₫</Text>
                                         </View>
                                         <Text style={{ fontSize: 14, color: '#908E8E' }}>Cuốn sách đã mua được giữ trọn đời</Text>
                                         <Text style={{ fontSize: 14, color: '#908E8E' }}>Tất cả cuốn sách sẽ được mở khóa</Text>
                                         <Text style={{ fontSize: 14, color: '#908E8E' }}>Bạn sẽ trở thành người quan trọng</Text>
 
                                         <View style={styles.View_Clickne}>
-                                            <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center' }} onPress={goiapi}>
+                                            <TouchableOpacity  onPress={goiapi}>
                                                 <Text style={[styles.Text_Click]}>Trở thành hội viên</Text>
                                             </TouchableOpacity>
                                         </View>
@@ -1013,14 +1013,14 @@ const styles = StyleSheet.create({
         height: 'auto',
     },
     View_Clickne: {
-        width: 250,
+        width: "100%",
         height: 50,
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: '#D45555',
         borderRadius: 20,
         marginTop: 15
-
 
     },
     bodyhv: {
@@ -1199,7 +1199,7 @@ const styles = StyleSheet.create({
         marginLeft: 20,
     },
     View_SachLienQuan: {
-        padding: 20
+        padding: 20,
     },
     toggleButtonText_1: {
         fontWeight: 'bold',
