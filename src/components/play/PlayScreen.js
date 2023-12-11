@@ -404,7 +404,11 @@ const PlayScreen = props => {
     }
   };
 
-  //create deep link
+
+
+  // share ne
+  const onShare = async () => {
+      //create deep link
   const genarateDeepLink = async () => {
     try {
       const deeplink = await dynamicLinks().buildShortLink(
@@ -428,13 +432,10 @@ const PlayScreen = props => {
       console.log('genarateDeepLink:----->', error);
     }
   };
-
-  // share ne
-  const onShare = async () => {
     const dmlinklon = await genarateDeepLink();
     try {
       const result = await Share.share({
-        // title: bookData.title,
+        title: bookData.title,
         // message: bookData.title + '\n' + bookData.description,
         // url: 'https://thonguyen.onrender.com',
         message: dmlinklon,
