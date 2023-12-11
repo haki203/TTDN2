@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button, Modal, } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, FlatList, Dimensions, Button, Modal, ToastAndroid } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react';
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/FontAwesome';
@@ -9,19 +9,46 @@ import AxiosIntance from '../../axios/AxiosIntance';
 import { URI } from '../../server/public/assets/vendor/tinymce/tinymce';
 const { width, height } = Dimensions.get('window');
 const ItemListRelate = (props) => {
-    const {dulieu,navigation} = props;
-    const OnClick=() =>{
-        navigation.navigate('Navigate', { itemId:dulieu._id, navigation: navigation })
+    const { dulieu, navigation } = props;
+    const OnClick = () => {
+        navigation.navigate('Navigate', { itemId: dulieu._id, navigation: navigation })
+    }
+    const btnDisable = () => {
+        ToastAndroid.show("Sách đang cập nhật", ToastAndroid.SHORT);
+
     }
     return (
         <View>
-            <View>
-                <TouchableOpacity onPress={()=>OnClick()}>
-                    <Image source={{uri: dulieu.image}} style={styles.FlatList_Image} />
-                    <Text style={styles.FlatList_Name1}>{dulieu.title}</Text>
-                    {/* <Text style={styles.FlatList_Name2}>{dulieu.authorId}</Text> */}
-                </TouchableOpacity>
-            </View>
+            {
+                dulieu.disable ? (<TouchableOpacity onPress={() => btnDisable()} style={{ opacity: 0.5 }}>
+                    <Image source={{ uri: dulieu.image }} style={styles.FlatList_Image} />
+                    {!dulieu.free ? (<View style={styles.bghoivien}>
+                        <Text style={styles.hoivien}>Hội viên</Text>
+                    </View>)
+                        : (
+
+                            <View style={[styles.bghoivien, { backgroundColor: 'red' }]}>
+                                <Text style={styles.hoivien}>Miễn phí</Text>
+                            </View>)
+                    }
+                    <Text numberOfLines={1} style={styles.FlatList_Name1}>{dulieu.title}</Text>
+                   
+                </TouchableOpacity>) : (<TouchableOpacity onPress={() => OnClick()}>
+                    <Image source={{ uri: dulieu.image }} style={styles.FlatList_Image} />
+                    {!dulieu.free ? (<View style={styles.bghoivien}>
+                        <Text style={styles.hoivien}>Hội viên</Text>
+                    </View>)
+                        : (
+
+                            <View style={[styles.bghoivien, { backgroundColor: 'green' }]}>
+                                <Text style={styles.hoivien}>Miễn phí</Text>
+                            </View>)
+                    }
+                    <Text numberOfLines={1} style={styles.FlatList_Name1}>{dulieu.title}</Text>
+                  
+                </TouchableOpacity>)
+
+            }
         </View>
     )
 }
@@ -32,6 +59,20 @@ const styles = StyleSheet.create({
     Container: {
         flex: 1,
         backgroundColor: 'white',
+    },
+    hoivien: {
+        fontSize: 12,
+        fontWeight: '700',
+        color: 'white',
+        padding: 4
+    },
+    bghoivien: {
+        backgroundColor: '#F79572',
+        width: 56,
+        height: "auto",
+        borderRadius: 7,
+        marginTop: -15,
+        marginLeft: 46,
     },
     modalContainer: {
         flex: 1,
@@ -290,21 +331,11 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     FlatList_Name1: {
-        paddingTop: 10,
         fontWeight: 'bold',
         fontSize: 16,
         fontFamily: 'Poppins',
         textAlign: 'center',
         width: 145,
-        color: '#272956'
-    },
-    FlatList_Name2: {
-        paddingTop: 10,
-        fontWeight: 'bold',
-        fontSize: 14,
-        fontFamily: 'Poppins',
-        textAlign: 'center',
-        width: 145,
-        color: '#272956'
+        color: '#272956',
     },
 })

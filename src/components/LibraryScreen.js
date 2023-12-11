@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity, FlatList,ActivityIndicator } from 'react-native';
+import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { AppContext } from '../navigation/AppContext'
 import ItemListViewLibrary from './ItemFlatList/ItemListViewLibrary';
 import React, { useContext, useEffect, useState } from 'react'
@@ -24,19 +24,17 @@ const LibraryScreen = (props) => {
 
   );
   const getLB = async () => {
+    console.log("....");
     setIsLoading(false)
     try {
       const response = await AxiosIntance().get('/product/library/' + infoUser.id);
-      console.log(infoUser.id);
-      console.log(response);
+      console.log("respone ", response.result);
       let arrayBook = [];
       for (let i = 0; i < response.library.length; i++) {
         const res = await AxiosIntance().get('/product/' + response.library[i].bookId);
-        console.log(res);
-
+        console.log("res ", res.result);
         const ress = await AxiosIntance().get('/product/author/' + res.product.authorId);
-        console.log(" author ne: ", res.product.authorId);
-        console.log("ress author ne: ", ress);
+        console.log("ress ", ress.result);
         const lb = {
           image: res.product.image,
           id: res.product._id,
@@ -50,17 +48,19 @@ const LibraryScreen = (props) => {
       }
       setSum(arrayBook.length)
       setData(arrayBook)
-      console.log("data lb ne: ", data);
+      console.log("fetch api thanh cong");
       setIsLoading(true)
 
 
     } catch (error) {
       console.log("error: ", error);
+      setIsLoading(true)
+
     }
   };
   useFocusEffect(
     React.useCallback(() => {
-      console.log("reloadr ne: ");
+      //console.log("reloadr ne: ");
       getLB();
 
       return () => {
@@ -68,12 +68,6 @@ const LibraryScreen = (props) => {
       };
     }, [])
   );
-  useEffect(() => {
-
-    
-
-  }, []);
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -93,14 +87,14 @@ const LibraryScreen = (props) => {
           <Text onPress={() => getLB()} style={styles.textAll} >Tất cả ({sum})</Text>
 
         </View>
-        {isLoading?(
+        {isLoading ? (
           <FlatList
-          data={data}
-          keyExtractor={item => item.id}
-          renderItem={({ item }) => <ItemListViewLibrary dulieu={item} isLoading={isLoading} navigation={navigation} />}
-        />
-        ):(
-          <View style={{width:'100%',height:'80%',justifyContent:'center',alignItems:'center'}}><ActivityIndicator size={30} color={'grey'}/></View>
+            data={data}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => <ItemListViewLibrary dulieu={item} isLoading={isLoading} navigation={navigation} />}
+          />
+        ) : (
+          <View style={{ width: '100%', height: '80%', justifyContent: 'center', alignItems: 'center' }}><ActivityIndicator size={30} color={'grey'} /></View>
         )}
       </View>
     </View>
