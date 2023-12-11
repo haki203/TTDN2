@@ -54,6 +54,8 @@ const LibraryScreen = (props) => {
 
     } catch (error) {
       console.log("error: ", error);
+      setIsLoading(true)
+
     }
   };
   useFocusEffect(
