@@ -97,25 +97,34 @@ const HomeScreen = (props) => {
   useEffect(() => {
     const getAllCate = async () => {
       const respone = await AxiosIntance().get("/product/category/getAlls");
-      const newArray = [];
-      for (const item of respone.category) {
-        const newItem = { key: item._id, title: item.name };
-        newArray.push(newItem);
-      }
-      if (newArray.length > 0) {
-        setRoutes(newArray);
+
+      const promises = respone.category.map(async (category) => {
+        const response = await AxiosIntance().get("/product/get-by-category/" + category._id);
+        return {
+          key: category._id,
+          title: category.name,
+          hasProducts: response.product.length > 0,
+        };
+      });
+      const newArray = await Promise.all(promises);
+      const filteredArray = newArray.filter(item => item.hasProducts);
+      console.log(newArray);
+      if (filteredArray.length > 0) {
+        setRoutes(filteredArray);
         setIndex(0);
       }
-      if (respone.result == true) {
+
+      if (respone.result === true) {
         setdataNe(respone.category)
         setIsLoading(false)
-
       } else {
         ToastAndroid.show("get data", ToastAndroid.SHORT);
       }
     }
+
     getAllCate();
   }, [])
+
 
 
   const renderTabBar = props => (
