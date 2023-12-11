@@ -51,44 +51,29 @@ const Welcome = props => {
           id: res.user._id,
           phone: res.user.phone,
           email: res.user.email,
-          banStatus: res.user.ban,
+          
         };
         setinfoUser(infoUser);
         console.log(res.user);
-        if (res.user.ban == true) {
-          Alert.alert(
-            'Thông báo',
-            'Bạn đã bị cấm. Vui lòng liên hệ với quản trị viên.',
-            [
-              {
-                text: 'OK',
-                onPress: () => {
-                  setIsLoading(false);
-                },
-              },
-            ],
-            {cancelable: false},
+
+        ToastAndroid.show('Đăng Nhập thành công', ToastAndroid.SHORT);
+        //luu infouser vao asn
+        try {
+          const infoUserString = JSON.stringify(infoUser);
+          await AsyncStorage.setItem('infoUser', infoUserString);
+          console.log('Thông tin người dùng đã được lưu vào AsyncStorage.');
+        } catch (error) {
+          console.error(
+            'Lỗi khi lưu thông tin người dùng vào AsyncStorage:',
+            error,
           );
-        } else {
-          ToastAndroid.show('Đăng Nhập thành công', ToastAndroid.SHORT);
-          //luu infouser vao asn
-          try {
-            const infoUserString = JSON.stringify(infoUser);
-            await AsyncStorage.setItem('infoUser', infoUserString);
-            console.log('Thông tin người dùng đã được lưu vào AsyncStorage.');
-          } catch (error) {
-            console.error(
-              'Lỗi khi lưu thông tin người dùng vào AsyncStorage:',
-              error,
-            );
-          }
-
-          setTimeout(() => {
-            setIsLoading(false);
-          }, 3000);
-
-          setIsLogin(true);
         }
+
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 3000);
+
+        setIsLogin(true);
       } else {
         ToastAndroid.show('Đăng nhập thất bại ', ToastAndroid.SHORT);
       }
