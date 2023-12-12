@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, yourColorVariable, Image, TouchableOpacity, ImageBackground, Pressable, TextInput, ToastAndroid, Modal, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, ActivityIndicator, yourColorVariable, Image, TouchableOpacity, ImageBackground, Pressable, TextInput, ToastAndroid, Modal, ScrollView } from 'react-native'
 import React, { useContext, useState } from 'react'
 import Icon from "react-native-vector-icons/AntDesign"
 import Icon_1 from 'react-native-vector-icons/Ionicons';
@@ -20,6 +20,7 @@ const ProfileScreen = (props) => {
     const { navigation } = props;
     const { infoUser, setinfoUser } = useContext(AppContext);
     const { IsLogin, setIsLogin } = useContext(AppContext);
+    const [isLoading, setIsLoading] = useState(false);
     const [image, setshowImage] = useState('')
     const capture = async () => {
         const result = await launchCamera();
@@ -38,19 +39,22 @@ const ProfileScreen = (props) => {
 
         const storageRef = storage().ref('images/' + filename);
         const task = storageRef.putFile(imageUri);
-
+        setIsLoading(true);
         task.on('state_changed', snapshot => {
 
         }, error => {
             console.error('Firebase storage error:', error);
         }, async () => {
+            setIsLoading(false);
             // up thành công dowload link ảnh về
             const downloadURL = await storageRef.getDownloadURL();
             console.log('File available at:', downloadURL);
 
             // sửa dụng dowmloadURL để update thông tin 
             setinfoUser({ ...infoUser, avatar: downloadURL });
+
         });
+
     };
 
     const updateProfile = async () => {
@@ -139,10 +143,14 @@ const ProfileScreen = (props) => {
                             <Icon_3 name="crown" size={24} color="#D9D000" />
                         </TouchableOpacity>
                     ) : null}
-                    <Image
-                        source={{ uri: infoUser.avatar }}
-                        style={styles.avatar}
-                    />
+                    {isLoading ? (
+                        <ActivityIndicator size={40} color="grey" style={{width: 90,height: 90,}}/>
+                    ) : (
+                        <Image
+                            source={{ uri: infoUser.avatar }}
+                            style={styles.avatar}
+                        />
+                    )}
                     <TouchableOpacity style={styles.uploadIcon} onPress={getImageLibrary}>
                         <Icon_2 name="upload" size={18} color="#FF97A3" />
                     </TouchableOpacity>
@@ -258,7 +266,7 @@ const ProfileScreen = (props) => {
 
                 <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
 
-                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                     {!infoUser.premium ? (
                         <View style={{
                             flexDirection: 'row',
