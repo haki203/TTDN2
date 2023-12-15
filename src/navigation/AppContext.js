@@ -15,12 +15,15 @@ export const AppContextProvider = (props) =>{
     const [dataAudio, setDataAudio] = useState([]);
     const [data,setdata] = useState("false");
     const [isHearted, setIsHearted] = useState(false);
+    const [idBookLink, setIdBookLink] = useState('');
 
     // them in4 user de them thong tin ng dung luc login
     const [infoUser,setinfoUser] = useState({});
     const [passwordNe,setpasswordNe] = useState({});
     return (
-        <AppContext.Provider value={{isLogin,setIsLogin,data,setdata,infoUser,setinfoUser,passwordNe,setpasswordNe,isTabVisible,setIsTabVisible,test,setTest,isPlayAudio,setIsPlayAudio,lastIdPlay,setLastIdPlay,isHearted,setIsHearted,dataAudio, setDataAudio}}>
+        <AppContext.Provider value={{isLogin,setIsLogin,data,setdata,infoUser,setinfoUser,passwordNe,setpasswordNe,
+        isTabVisible,setIsTabVisible,test,setTest,isPlayAudio,setIsPlayAudio,lastIdPlay,setLastIdPlay,isHearted,setIsHearted,dataAudio,
+         setDataAudio, idBookLink, setIdBookLink}}>
             {children}
             {/*     // children la man hinh cho kho context
                     // value la du lieu sd chung */}

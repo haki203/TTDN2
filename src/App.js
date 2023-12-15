@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, {useEffect} from 'react';
+import React, {useEffect, useContext} from 'react';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import {Provider} from 'react-redux';
 import store from './store/store';
@@ -16,19 +16,22 @@ console.disableYellowBox = true;
 import {LogBox} from 'react-native';
 import Notification from './components/notification/Notification';
 import dynamicLinks from '@react-native-firebase/dynamic-links';
+import {AppContext} from './navigation/AppContext';
 
 LogBox.ignoreAllLogs(true);
 
 const App = () => {
   const HandleDeepLinking = () => {
     const {navigate} = useNavigation();
+    const {idBookLink, setIdBookLink} = useContext(AppContext);
 
     const handleDynamicLinks = async link => {
       console.log('Foreground link handling:', link);
 
       let productId = link.url.split('=').pop();
       console.log('productId:', productId);
-      navigate('BookDetail', {itemId: productId});
+      // navigate('BookDetail', {itemId: productId});
+      setIdBookLink(productId);
 
       // navigate('HomeScreen');
     };

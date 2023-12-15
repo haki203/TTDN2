@@ -482,13 +482,15 @@ const PlayScreen = props => {
     }
   };
 
+
+
   try {
     return (
       <TouchableWithoutFeedback onPress={handlePressScreen}>
         <View style={styles.container}>
           <View style={styles.headerContainer}>
             <Icon
-              onPress={() => navigation.goBack()}
+              onPress={() => navigation.navigate('Detail', { itemId: id })}
               name="caret-down"
               color={colorTitle}
               size={sizeIcon}
