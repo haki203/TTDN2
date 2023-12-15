@@ -125,6 +125,9 @@ const PlayScreen = props => {
     if (response.result) {
       const res = await AxiosIntance().get('/product/get-muc-luc/' + id);
       if (res.result) {
+        console.log(response.audios[0].audio0);
+        console.log(response.audios[0].audio1);
+        console.log(response.audios[0].audio2);
         const newBody0 = {
           id: '0',
           chuong: 0,
