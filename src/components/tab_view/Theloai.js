@@ -47,7 +47,7 @@ const Theloai = (props) => {
 
     const onPressItem = () => {
       navigation.navigate('Viewdetail', { id: _id, name: name });
-      console.log(_id);
+
       toggleModal();
     }
 

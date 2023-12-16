@@ -20,8 +20,9 @@ import { AppContext } from '../navigation/AppContext';
 import PDF from 'react-native-pdf';
 import AxiosIntance from '../axios/AxiosIntance';
 import Icon2 from 'react-native-vector-icons/AntDesign';
+import { useFocusEffect } from '@react-navigation/native';
 const color_text = '#272956';
-
+let indexNe=0;
 const backgroundColor1 = '#FDFDFD';
 const headerNameBoColorBo = '#272956';
 const headerNameBoColorAu = '#9D9D9D';
@@ -113,68 +114,75 @@ const Read = props => {
                 // Thêm mã lệnh xử lý sau khi nút OK được nhấn ở đây
               },
             },
-
-
           ],
         );
       }
       // set cai page la respone.book[0].index, roi chuyen cai pdf ve trang day
-      setPage(response.book[0].index);
-      setOldIndex(response.book[0].index);
+      if (!response.result) {
+        console.log("ban chua doc sach nay bao gio");
+        setPage(1);
+        setOldIndex(1);
+      } else {
+        setPage(response.book[0].index);
+        setOldIndex(response.book[0].index);
+      }
       // console.log('index Getprogress ne````````````````', response);
       // console.log(response);
     } catch (error) {
       console.log('loi getProgress: ----------------->', error);
+      console.log("ban chua doc sach nay bao gio");
+        setPage(1);
+        setOldIndex(1);
     }
   };
-  const saveProgress= async()=>{
-    const response = await AxiosIntance().post(
-      '/product/library/updateProgress',
-      {
-        bookId: id,
-        userId: infoUser.id,
-        newIndex: 1,
-      },
-    );
-    console.log(response);
-  }
-  useEffect(() => {
 
+  useEffect(() => {
     DetailBook();
     GetProgress();
   }, []);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("vao ne");
+      return () => {
+        UpdateProgress();
+        console.log("out ne");
+        //await TrackPlayer.
+      };
+    }, []),
+  );
+
   const UpdateProgress = async () => {
     try {
+    console.log("index ne: ",indexNe);
+      console.log("vi tri cu ne: ",oldIndex);
+      console.log("vi tri moi ne: ",numberOfPagehaha);
       if (oldIndex >= numberOfPagehaha) {
-
       } else {
-
-
+        console.log("dang luu tien do---");
         const response = await AxiosIntance().post(
           '/product/library/updateProgress',
           {
             bookId: id,
             userId: infoUser.id,
-            newIndex: numberOfPagehaha,
+            newIndex: indexNe
           },
         );
+        console.log("kq api update ne: ",response);
+        if(response.result){
+          ToastAndroid.show("Lưu tiến độ thành công", ToastAndroid.SHORT);
+        }
         console.log('id book:--------->', id);
         console.log('id user:--------->', infoUser.id);
         console.log('number of book:--------->', numberOfPagehaha);
-        console.log(response.result);
+
       }
-      // console.log('UpdateProgress:--------->', response);
     } catch (error) {
       console.log('loi update progress', error);
     }
   };
 
-  // useEffect(() => {
-  // },[]);
-
   const Back = () => {
-    UpdateProgress();
     navigation.goBack();
   };
 
@@ -318,6 +326,7 @@ const Read = props => {
               onPageChanged={(page, totalPages) => {
                 console.log(`-----------------------${page}/${totalPages}`);
                 setNumberOfPagehaha(page);
+                indexNe=page;
               }} //  hiển thị số trang
               onError={error => setIsLoading(true)} // hiển thị lỗi
               // onPageSingleTap={page => alert(page)} // hiển thị khi click vào trang
@@ -378,7 +387,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-    fontSize: 12,
   },
   containerModal: {
     width: '100%',

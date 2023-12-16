@@ -69,7 +69,7 @@ const FavouriteScreen = (props) => {
   useFocusEffect(
     React.useCallback(() => {
       setIsLoading(true)
-      console.log("reloadr ne: ");
+
       fetchData();
 
       return () => {
@@ -166,7 +166,8 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#FFFFFF',
     borderTopLeftRadius: 30,
-    borderTopRightRadius: 30
+    borderTopRightRadius: 30,
+    paddingBottom: 20
 
   }, plus: {
     width: 290,

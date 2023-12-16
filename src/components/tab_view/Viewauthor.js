@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View, TextInput, Dimensions, FlatList, useWindowDimensions, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { Image, StyleSheet, Text, View, TextInput, Dimensions, FlatList, useWindowDimensions, TouchableOpacity, ActivityIndicator, ToastAndroid } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
 import { _isDomSupported } from '../../../server/public/assets/vendor/chart.js/helpers'
@@ -24,14 +24,14 @@ const Viewauthor = ({ navigation, route }) => {
     navigation.goBack();
   }
 
-  console.log(name);
+
   useEffect(() => {
     const getAllCate = async () => {
       let arrayData = [];
       const respone = await AxiosIntance().get("/product/get-book-by-author/" + id);
       setTextNoti("")
       if (respone.products.length < 1) {
-        console.log("chua co sach");
+
         setTextNoti("Danh mục đang được cập nhật")
         setIsLoading(false);
       } else {
@@ -56,32 +56,55 @@ const Viewauthor = ({ navigation, route }) => {
 
 
   const ItemBook = ({ item, navigation }) => {
-    const { _id, title, authorId, image } = item;
+    const { _id, title, authorId, image, disable } = item;
     const onPressItem = () => {
       navigation.navigate('Detail', { itemId: _id });
     }
+    const btnDisable = () => {
+      ToastAndroid.show("Sách đang cập nhật", ToastAndroid.SHORT);
 
+    }
     return (
-      <TouchableOpacity onPress={() => onPressItem()} style={{}}>
-        {/* Image */}
+      <>
+        {disable ? (<TouchableOpacity onPress={() => btnDisable()} style={{ opacity: 0.5 }}>
+          {/* Image */}
 
-        <Image
-          source={{ uri: image }}
-          style={[styles.renderImagePopularDeals,]}
-          shadowColor="black"
-          shadowOffset={[5, 5]}
-          shadowOpacity={1}
-          shadowRadius={5}
-        />
+          <Image
+            source={{ uri: image }}
+            style={[styles.renderImagePopularDeals,]}
+            shadowColor="black"
+            shadowOffset={[5, 5]}
+            shadowOpacity={1}
+            shadowRadius={5}
+          />
+          {/* Text */}
+          <View style={styles.containerText}>
+            <Text style={styles.rendername}>{title.substring(0, 20)}</Text>
 
-        {/* Text */}
-        <View style={styles.containerText}>
-          <Text style={styles.rendername}>{title.substring(0, 20)}</Text>
+            <Text style={styles.renderauthor}>{authorId}</Text>
+          </View>
+          {/* IconAdd */}
+        </TouchableOpacity>) : (<TouchableOpacity onPress={() => onPressItem()} style={{}}>
+          {/* Image */}
 
-          <Text style={styles.renderauthor}>{authorId}</Text>
-        </View>
-        {/* IconAdd */}
-      </TouchableOpacity>
+          <Image
+            source={{ uri: image }}
+            style={[styles.renderImagePopularDeals,]}
+            shadowColor="black"
+            shadowOffset={[5, 5]}
+            shadowOpacity={1}
+            shadowRadius={5}
+          />
+          {/* Text */}
+          <View style={styles.containerText}>
+            <Text style={styles.rendername}>{title.substring(0, 20)}</Text>
+
+            <Text style={styles.renderauthor}>{authorId}</Text>
+          </View>
+          {/* IconAdd */}
+        </TouchableOpacity>)}
+      </>
+
     );
   }
 

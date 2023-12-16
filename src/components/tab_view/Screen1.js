@@ -46,19 +46,13 @@ const Screen1 = ({ navigation, id }) => {
         setTextNew("");
         setIsLoading(false);
         for (let i = 0; i < respone.product.length; i++) {
-
           if (respone.product[i]) {
             let dataIndex = respone.product[i];
             // lay author
             const res = await AxiosIntance().get("/product/author/" + respone.product[i].authorId)
             dataIndex.authorId = res.author.name;
             arrayData.push(dataIndex);
-
-
           }
-
-
-
         }
         const sortedsearch = arrayData.slice().sort((a, b) => b.search - a.search);
         setDatasearch(sortedsearch);
@@ -81,12 +75,13 @@ const Screen1 = ({ navigation, id }) => {
         }
 
         const sortedpublicAt = arrayData.slice().sort((a, b) => b.publicAt - a.publicAt);
+
+        const filteredDatapublicAt = sortedpublicAt ? sortedpublicAt.filter(item => !item.disable) : [];
+
         const sortedsearch = arrayData.slice().sort((a, b) => b.search - a.search);
         setDatasearch(sortedsearch);
-        setDatapublicAt(sortedpublicAt);
+        setDatapublicAt(filteredDatapublicAt);
         setIsLoading(false)
-
-
       }
 
     }
@@ -98,46 +93,88 @@ const Screen1 = ({ navigation, id }) => {
 
 
   const ItemBook = ({ item, navigation, isLoading }) => {
-    const { _id, title, authorId, image, free } = item;
+    const { _id, title, authorId, image, free, disable } = item;
 
     const onPressItem = () => {
       navigation.navigate('Detail', { itemId: _id });
     }
+    const btnDisable = () => {
+      ToastAndroid.show("Sách đang cập nhật", ToastAndroid.SHORT);
+
+    }
 
     return (
-      <TouchableOpacity onPress={() => onPressItem()} style={{}}>
-        {
-          !isLoading ? (
-            <Image
-              source={{ uri: image }}
-              style={[styles.renderImagePopularDeals,]}
-              shadowColor="black"
-              shadowOffset={[5, 5]}
-              shadowOpacity={1}
-              shadowRadius={5}
-            />
-          ) : (
-            <View style={[styles.renderImagePopularDeals, { justifyContent: 'center', backgroundColor: '#d6d6d6' }]}><ActivityIndicator size={25} color={'gray'} /></View>
-          )
-        }
-        {!free ? (<View style={styles.bghoivien}>
-          <Text style={styles.hoivien}>Hội viên</Text>
-        </View>)
-          : (
+      <>
+        {disable ? (<TouchableOpacity onPress={() => btnDisable()} style={{ opacity: 0.5 }}>
 
-            <View style={[styles.bghoivien,{backgroundColor:'green'}]}>
-              <Text style={styles.hoivien}>Miễn phí</Text>
-            </View>)
-        }
+          {
+            !isLoading ? (
+              <Image
+                source={{ uri: image }}
+                style={[styles.renderImagePopularDeals,]}
+                shadowColor="black"
+                shadowOffset={[5, 5]}
+                shadowOpacity={1}
+                shadowRadius={5}
+              />
+            ) : (
+              <View style={[styles.renderImagePopularDeals, { justifyContent: 'center', backgroundColor: '#d6d6d6' }]}><ActivityIndicator size={25} color={'gray'} /></View>
+            )
+          }
+          {!free ? (<View style={styles.bghoivien}>
+            <Text style={styles.hoivien}>Hội viên</Text>
+          </View>)
+            : (
 
-        {/* Text */}
-        <View style={styles.containerText}>
-          <Text numberOfLines={1} style={styles.rendername}>{title}</Text>
+              <View style={[styles.bghoivien, { backgroundColor: 'red' }]}>
+                <Text style={styles.hoivien}>Miễn phí</Text>
+              </View>)
+          }
 
-          <Text style={styles.renderauthor}>{authorId}</Text>
-        </View>
-        {/* IconAdd */}
-      </TouchableOpacity>
+          {/* Text */}
+          <View style={styles.containerText}>
+            <Text numberOfLines={1} style={styles.rendername}>{title}</Text>
+
+            <Text style={styles.renderauthor}>{authorId}</Text>
+          </View>
+
+
+        </TouchableOpacity>) : (<TouchableOpacity onPress={() => onPressItem()} style={{}}>
+
+          {
+            !isLoading ? (
+              <Image
+                source={{ uri: image }}
+                style={[styles.renderImagePopularDeals,]}
+                shadowColor="black"
+                shadowOffset={[5, 5]}
+                shadowOpacity={1}
+                shadowRadius={5}
+              />
+            ) : (
+              <View style={[styles.renderImagePopularDeals, { justifyContent: 'center', backgroundColor: '#d6d6d6' }]}><ActivityIndicator size={25} color={'gray'} /></View>
+            )
+          }
+          {!free ? (<View style={styles.bghoivien}>
+            <Text style={styles.hoivien}>Hội viên</Text>
+          </View>)
+            : (
+
+              <View style={[styles.bghoivien, { backgroundColor: 'green' }]}>
+                <Text style={styles.hoivien}>Miễn phí</Text>
+              </View>)
+          }
+
+          {/* Text */}
+          <View style={styles.containerText}>
+            <Text numberOfLines={1} style={styles.rendername}>{title}</Text>
+
+            <Text style={styles.renderauthor}>{authorId}</Text>
+          </View>
+
+
+        </TouchableOpacity>)}
+      </>
     );
   }
   const ItemBook1 = ({ }) => {
@@ -148,6 +185,7 @@ const Screen1 = ({ navigation, id }) => {
     );
   }
   return (
+
     <View style={styles.container}>
       {
         isLoading ?

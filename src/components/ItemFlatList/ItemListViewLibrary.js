@@ -37,7 +37,7 @@ const ItemListViewLibrary = (props) => {
                     </View>
                   ) : (
                     <View style={styles.doneprocess}>
-                      <Text style={{  marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc xong</Text>
+                      <Text style={{  marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
                     </View>
                   )
                 }

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, Animated, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Animated, ActivityIndicator, ToastAndroid } from 'react-native'
 import React, { useState, useEffect, useContext } from 'react'
 import Icon from "react-native-vector-icons/AntDesign"
 import AxiosIntance from '../../axios/AxiosIntance';
@@ -64,9 +64,9 @@ const ItemListView2 = (props) => {
                 idUser: infoUser.id,
                 idBook: bookData.id,
             };
-            console.log("favouriteData nè: ", favouriteData);
+
             const response = await AxiosIntance().post("/product/favourite/new/", favouriteData);
-            console.log("Data trả về nè: ", response);
+
 
             if (response.result) {
                 setIsHearted(!isHearted, true);
@@ -80,71 +80,138 @@ const ItemListView2 = (props) => {
 
 
     return (
-        <View style={styles.container}>
+        <>
+            {dulieu.disable ? (<TouchableOpacity style={[styles.container, { opacity: 0.5 }]} onPress={() =>
+                ToastAndroid.show("Sách đang cập nhật", ToastAndroid.SHORT)
+            }>
+                <View style={styles.body}>
+                    <View style={styles.bodyimage}>
+                        <Image style={styles.image} source={{ uri: dulieu.image }} />
+                        <View style={styles.iconimage}>
+                            <Text style={{ color: "#000000", fontFamily: 'Poppins-Medium', fontSize: 15 }} >{dulieu.title}</Text>
+                            <Text style={{ marginTop: 3, fontSize: 10, fontFamily: 'Poppins-Medium', color: 'black' }}>Sách nghe - Sách nói</Text>
+                            <View style={{ width: 200, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <TouchableOpacity style={styles.click}>
+                                    <Icon name="playcircleo" size={20} color='black' />
+                                    <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
+                                        Nghe
+                                    </Text>
+                                </TouchableOpacity>
 
-            <View style={styles.body}>
-                <View style={styles.bodyimage}>
-                    <Image style={styles.image} source={{ uri: dulieu.image }} />
-                    <View style={styles.iconimage}>
-                        <Text style={{ color: "#000000", fontFamily: 'Poppins-Medium', fontSize: 15 }} >{dulieu.title}</Text>
-                        <Text style={{ marginTop: 3, fontSize: 10, fontFamily: 'Poppins-Medium', color: 'black' }}>Sách nghe - Sách nói</Text>
-                        <View style={{ width: 200, flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <TouchableOpacity onPress={() => navigation.navigate('PlayHot', { id: dulieu._id })} style={styles.click}>
-                                <Icon name="playcircleo" size={20} color='black' />
-                                <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
-                                    Nghe
-                                </Text>
-                            </TouchableOpacity>
+                                {
+                                    isLoading ?
+                                        (
+                                            <View style={{
+                                                width: 'auto',
+                                                height: 50, alignContent: 'center', justifyContent: 'center'
+                                            }}><ActivityIndicator size={30} color={'black'} /></View>
+                                        ) :
 
-                            {
-                                isLoading ?
-                                    (
-                                        <View style={{
-                                            width: 'auto',
-                                            height: 50, alignContent: 'center', justifyContent: 'center'
-                                        }}><ActivityIndicator size={30} color={'black'} /></View>
-                                    ) :
+                                        (
+                                            <View style={styles.click}>
+                                                <TouchableOpacity >
+                                                    <View >
+                                                        <Icon
+                                                            name={isHearted ? 'heart' : 'hearto'}
+                                                            size={20}
+                                                            color={isHearted ? 'black' : 'black'}
+                                                        />
+                                                    </View>
+                                                </TouchableOpacity>
+                                                {isHearted && <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
+                                                    Đã thích
+                                                </Text> || <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
+                                                        Yêu thích
+                                                    </Text>}
+                                            </View>
+                                        )
+                                }
+                                <TouchableOpacity style={styles.click}>
+                                    <Icon name="infocirlceo" size={20} color='black' />
 
-                                    (
-                                        <View style={styles.click}>
-                                            <TouchableOpacity onPress={handleHeartPress}>
-                                                <View >
-                                                    <Icon
-                                                        name={isHearted ? 'heart' : 'hearto'}
-                                                        size={20}
-                                                        color={isHearted ? 'black' : 'black'}
-                                                    />
-                                                </View>
-                                            </TouchableOpacity>
-                                            {isHearted && <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
-                                                Đã thích
-                                            </Text> || <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
-                                                    Yêu thích
-                                                </Text>}
-                                        </View>
-                                    )
-                            }
-                            <TouchableOpacity onPress={() => navigation.navigate('DetailHot', { itemId: dulieu._id },)} style={styles.click}>
-                                <Icon name="infocirlceo" size={20} color='black' />
+                                    <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
+                                        Chi tiết
+                                    </Text>
+                                </TouchableOpacity>
 
-                                <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
-                                    Chi tiết
-                                </Text>
-                            </TouchableOpacity>
+                            </View>
+
 
                         </View>
-
-
                     </View>
-                </View>
-                <View style={styles.bodytext}>
-                    <Text style={styles.namebook}>Tổng quan về sách</Text>
-                    <Text numberOfLines={2} style={styles.content}>{dulieu.description}</Text>
+                    <View style={styles.bodytext}>
+                        <Text style={styles.namebook}>Tổng quan về sách</Text>
+                        <Text numberOfLines={2} style={styles.content}>{dulieu.description}</Text>
+                    </View>
+
                 </View>
 
-            </View>
+            </TouchableOpacity >) : (<View style={styles.container}>
+                <View style={styles.body}>
+                    <View style={styles.bodyimage}>
+                        <Image style={styles.image} source={{ uri: dulieu.image }} />
+                        <View style={styles.iconimage}>
+                            <Text style={{ color: "#000000", fontFamily: 'Poppins-Medium', fontSize: 15 }} >{dulieu.title}</Text>
+                            <Text style={{ marginTop: 3, fontSize: 10, fontFamily: 'Poppins-Medium', color: 'black' }}>Sách nghe - Sách nói</Text>
+                            <View style={{ width: 200, flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <TouchableOpacity onPress={() => navigation.navigate('PlayHot', { id: dulieu._id })} style={styles.click}>
+                                    <Icon name="playcircleo" size={20} color='black' />
+                                    <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
+                                        Nghe
+                                    </Text>
+                                </TouchableOpacity>
 
-        </View >
+                                {
+                                    isLoading ?
+                                        (
+                                            <View style={{
+                                                width: 'auto',
+                                                height: 50, alignContent: 'center', justifyContent: 'center'
+                                            }}><ActivityIndicator size={30} color={'black'} /></View>
+                                        ) :
+
+                                        (
+                                            <View style={styles.click}>
+                                                <TouchableOpacity onPress={handleHeartPress}>
+                                                    <View >
+                                                        <Icon
+                                                            name={isHearted ? 'heart' : 'hearto'}
+                                                            size={20}
+                                                            color={isHearted ? 'black' : 'black'}
+                                                        />
+                                                    </View>
+                                                </TouchableOpacity>
+                                                {isHearted && <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
+                                                    Đã thích
+                                                </Text> || <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
+                                                        Yêu thích
+                                                    </Text>}
+                                            </View>
+                                        )
+                                }
+                                <TouchableOpacity onPress={() => navigation.navigate('DetailHot', { itemId: dulieu._id },)} style={styles.click}>
+                                    <Icon name="infocirlceo" size={20} color='black' />
+
+                                    <Text style={{ fontSize: 12, textAlign: 'center', fontFamily: 'Poppins-Medium', color: 'black' }}>
+                                        Chi tiết
+                                    </Text>
+                                </TouchableOpacity>
+
+                            </View>
+
+
+                        </View>
+                    </View>
+                    <View style={styles.bodytext}>
+                        <Text style={styles.namebook}>Tổng quan về sách</Text>
+                        <Text numberOfLines={2} style={styles.content}>{dulieu.description}</Text>
+                    </View>
+
+                </View>
+
+            </View >)}
+
+        </>
     )
 }
 
