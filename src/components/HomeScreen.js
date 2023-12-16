@@ -43,32 +43,7 @@ const HomeScreen = props => {
   const {IsLogin, setIsLogin} = useContext(AppContext);
 
 
-  const {idBookLink, setIdBookLink} = useContext(AppContext);
 
-  const onFocus = () => {
-    console.log('Màn hình được focus, thực hiện các tác vụ cần thiết');
-    // Ví dụ: Lấy dữ liệu từ API khi màn hình được focus
-    console.log('idBookLink Home--------------->:', idBookLink);
-
-      if (idBookLink) {
-        navigation.navigate('Play', {id: idBookLink});
-      }
-  };
-
-  useFocusEffect(
-    React.useCallback(() => {
-      // Một hàm callback sẽ được gọi khi màn hình được focus
-      onFocus();
-
-      // Một hàm callback sẽ được gọi khi màn hình mất focus hoặc component bị unmounted
-      return () => {
-        setIdBookLink(null);
-        console.log(
-          'Màn hình bị mất focus, thực hiện các tác vụ cần thiết',
-        );
-      };
-    }, []) // Tham số thứ hai của useCallback rỗng để đảm bảo hàm chỉ được tạo một lần
-  );
 
   // Render component
 

@@ -45,13 +45,13 @@ const ProfileScreen = (props) => {
         }, error => {
             console.error('Firebase storage error:', error);
         }, async () => {
-            setIsLoading(false);
             // up thành công dowload link ảnh về
             const downloadURL = await storageRef.getDownloadURL();
             console.log('File available at:', downloadURL);
 
             // sửa dụng dowmloadURL để update thông tin 
             setinfoUser({ ...infoUser, avatar: downloadURL });
+            setIsLoading(false);
 
         });
 

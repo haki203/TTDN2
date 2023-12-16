@@ -419,11 +419,11 @@ const PlayScreen = props => {
             domainUriPrefix: 'https://ttdn2deeplink.page.link',
             android: {
               packageName: 'com.ttdn2',
-              fallbackUrl: 'https://thonguyen.onrender.com',
+              fallbackUrl: 'https://thonguyen.onrender.com/download',
             },
             ios: {
-              bundleId: 'com.bookapp',
-              fallbackUrl: 'https://thonguyen.onrender.com',
+              bundleId: 'com.ttdn2',
+              fallbackUrl: 'https://thonguyen.onrender.com/download',
             },
           },
           dynamicLinks.ShortLinkType.SHORT,

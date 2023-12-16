@@ -23,7 +23,6 @@ LogBox.ignoreAllLogs(true);
 const App = () => {
   const HandleDeepLinking = () => {
     const {navigate} = useNavigation();
-    const {idBookLink, setIdBookLink} = useContext(AppContext);
 
     const handleDynamicLinks = async link => {
       console.log('Foreground link handling:', link);
@@ -31,9 +30,8 @@ const App = () => {
       let productId = link.url.split('=').pop();
       console.log('productId:', productId);
       // navigate('BookDetail', {itemId: productId});
-      setIdBookLink(productId);
 
-      // navigate('HomeScreen');
+      navigate('Detail', {itemId: productId});
     };
     useEffect(() => {
       const unsubscribe = dynamicLinks().onLink(handleDynamicLinks);
