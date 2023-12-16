@@ -46,6 +46,7 @@ const BookDetail = (props) => {
     const [showFullText, setShowFullText] = useState(false);
     const [isfree, setIsfree] = useState(true);
     const [textNoti, setTextNoti] = useState("Loading...");
+    const [textrale, setTextrale] = useState("Những sách liên quan");
 
 
     const config = {
@@ -177,7 +178,7 @@ const BookDetail = (props) => {
 
         setBookData(Data2);
         AuthorBook(response.product.authorId)
-        Relate(response.product.categoryId)
+        Relate(response.product.categoryId, response.product._id);
         Comment(response.product._id)
 
         // ---------------------
@@ -204,16 +205,21 @@ const BookDetail = (props) => {
         DetailBook();
 
     }, [route.params]);
-    const Relate = async (category) => {
+    const Relate = async (category, currentBookId) => {
         //setIsLoading(true);
         const response = await AxiosIntance().get('/product/get-by-category/' + category);
-        const dataa = response.product;
-        let datarelate = [];
-        for (let i = 0; i < dataa.length; i++) {
-            datarelate.push(dataa[i]);
-
+        if (response.product.length < 2) {
+            setTextrale("");
+            const dataa = response.product;
+            const datarelate = dataa.filter(item => item.categoryId === category && item._id !== currentBookId);
+            setRelateData2(datarelate);
         }
-        setRelateData2(datarelate);
+        else {
+            const dataa = response.product;
+            const datarelate = dataa.filter(item => item.categoryId === category && item._id !== currentBookId);
+            setRelateData2(datarelate);
+        }
+
 
         // setIsLoading(false)
     }
@@ -604,7 +610,7 @@ const BookDetail = (props) => {
                                         <Text style={{ fontSize: 14, color: '#908E8E' }}>Bạn sẽ trở thành người quan trọng</Text>
 
                                         <View style={styles.View_Clickne}>
-                                            <TouchableOpacity  onPress={goiapi}>
+                                            <TouchableOpacity onPress={goiapi}>
                                                 <Text style={[styles.Text_Click]}>Trở thành hội viên</Text>
                                             </TouchableOpacity>
                                         </View>
@@ -861,7 +867,7 @@ const BookDetail = (props) => {
                 </View>
                 <View style={styles.Separator}></View>
                 <View style={styles.View_SachLienQuan}>
-                    <Text style={styles.Text_BinhLuan}>Những sách liên quan</Text>
+                    <Text style={styles.Text_BinhLuan}>{textrale}</Text>
                     <FlatList
                         showsHorizontalScrollIndicator={false}
                         data={RelateData2}
