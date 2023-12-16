@@ -34,6 +34,7 @@ export default function Notification(props) {
       body: 'Đang phát...',
       android: {
         channelId,
+        autoCancel:false,
         smallIcon: 'ic_launcher', // optional, defaults to 'ic_launcher'.
         // pressAction is needed if you want the notification to open the app when pressed
         pressAction: {
@@ -74,6 +75,7 @@ export default function Notification(props) {
         body: 'Đang phát...',
         android: {
           channelId,
+          autoCancel:false,
           smallIcon: 'ic_launcher', // optional, defaults to 'ic_launcher'.
           // pressAction is needed if you want the notification to open the app when pressed
           pressAction: {
@@ -89,6 +91,7 @@ export default function Notification(props) {
       body: 'Đang phát...',
       android: {
         channelId,
+        autoCancel:false,
         smallIcon: 'ic_launcher', // optional, defaults to 'ic_launcher'.
         // pressAction is needed if you want the notification to open the app when pressed
         pressAction: {
