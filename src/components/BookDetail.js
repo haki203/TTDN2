@@ -138,9 +138,19 @@ const BookDetail = (props) => {
                 const updatedInfoUser = { ...infoUser };
                 updatedInfoUser.premium = true;
                 setinfoUser(updatedInfoUser);
+
+                console.log(infoUser._id);
+
+                const dataPayment = {
+                    userId: infoUser.id,
+                    money: order.amount
+                }
+
+                const res = await AxiosIntance().post("/user/doanhthu/new/", dataPayment);
                 Alert.alert('Chúc mừng bạn đã là hội viên');
             } else if (result.return_code == 2) {
                 ToastAndroid.show("Thanh toán thất bại", ToastAndroid.SHORT);
+                setIsLoading(false);
             } else if (result.return_code == 3) {
                 ToastAndroid.show("Đang chờ thanh toán", ToastAndroid.SHORT);
             }
@@ -376,7 +386,6 @@ const BookDetail = (props) => {
                     setRating(0)
                     setDobModalVisible1(false);
                     Comment(postData.bookId)
-
                 }
                 else {
                     Alert.alert('Đăng thất bại', response.message);
