@@ -43,6 +43,7 @@ const Welcome = props => {
       const res = await AxiosIntance().post('/user/login', {
         email: userInfor.user.email,
       });
+      console.log(res.user.avatar);
       if (res.result) {
         const infoUser = {
           name: res.user.full_name,

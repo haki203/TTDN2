@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, yourColorVariable, Image, TouchableOpacity, ImageBackground, Pressable, TextInput, ToastAndroid, Modal, ScrollView } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import { StyleSheet, Text, View, ActivityIndicator, yourColorVariable, Image, TouchableOpacity, ImageBackground, Pressable, TextInput, ToastAndroid, Modal, ScrollView } from 'react-native'
+import React, { useContext, useState } from 'react'
 import Icon from "react-native-vector-icons/AntDesign"
 import Icon_1 from 'react-native-vector-icons/Ionicons';
 import Icon_2 from 'react-native-vector-icons/AntDesign';
@@ -13,7 +13,6 @@ import { AppContext } from '../navigation/AppContext';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import AxiosIntance from '../axios/AxiosIntance';
 import storage from '@react-native-firebase/storage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 
 const log_outcolor = "#F77A55";
@@ -21,6 +20,7 @@ const ProfileScreen = (props) => {
     const { navigation } = props;
     const { infoUser, setinfoUser } = useContext(AppContext);
     const { IsLogin, setIsLogin } = useContext(AppContext);
+    const [isLoading, setIsLoading] = useState(false);
     const [image, setshowImage] = useState('')
     const capture = async () => {
         const result = await launchCamera();
@@ -39,7 +39,7 @@ const ProfileScreen = (props) => {
 
         const storageRef = storage().ref('images/' + filename);
         const task = storageRef.putFile(imageUri);
-
+        setIsLoading(true);
         task.on('state_changed', snapshot => {
 
         }, error => {
@@ -51,7 +51,10 @@ const ProfileScreen = (props) => {
 
             // sửa dụng dowmloadURL để update thông tin 
             setinfoUser({ ...infoUser, avatar: downloadURL });
+            setIsLoading(false);
+
         });
+
     };
 
     const updateProfile = async () => {
@@ -108,21 +111,7 @@ const ProfileScreen = (props) => {
     const handlePhoneCancel = () => {
         setPhoneModalVisible(false);
     };
-    const handleLogount = async () => {
-        // setIsLogin(false);
-        try {
-            // Kiểm tra trạng thái đăng nhập từ AsyncStorage
-            // const infoUserNe = await AsyncStorage.getItem('infoUser');
-            await AsyncStorage.clear();
-            setIsLogin(false)
-            console.log('Bạn đã! Đăng xuất thành công');
-        } catch (error) {
-            console.error('Lỗi khi kiểm tra trạng thái đăng xuất:', error);
-        }
-    }
-    // useEffect(() => {
-    //     handleLogount();
-    // }, []);
+
     console.log(infoUser.premium);
 
     return (
@@ -153,10 +142,14 @@ const ProfileScreen = (props) => {
                             <Icon_3 name="crown" size={24} color="#D9D000" />
                         </TouchableOpacity>
                     ) : null}
-                    <Image
-                        source={{ uri: infoUser.avatar }}
-                        style={styles.avatar}
-                    />
+                    {isLoading ? (
+                        <ActivityIndicator size={40} color="grey" style={{width: 90,height: 90,}}/>
+                    ) : (
+                        <Image
+                            source={{ uri: infoUser.avatar }}
+                            style={styles.avatar}
+                        />
+                    )}
                     <TouchableOpacity style={styles.uploadIcon} onPress={getImageLibrary}>
                         <Icon_2 name="upload" size={18} color="#FF97A3" />
                     </TouchableOpacity>
@@ -301,7 +294,7 @@ const ProfileScreen = (props) => {
                 <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'center', padding: 5, }}>
-                    <TouchableOpacity style={styles.button2} onPress={() => handleLogount()}>
+                    <TouchableOpacity style={styles.button2} onPress={() => setIsLogin(false)}>
                         <Text style={{ textAlign: 'center', color: log_outcolor }}>Đăng xuất</Text>
                     </TouchableOpacity>
                 </View>

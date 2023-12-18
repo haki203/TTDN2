@@ -13,7 +13,7 @@ import {
   Modal,
   Alert,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState, } from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import Icon3 from 'react-native-vector-icons/FontAwesome';
@@ -24,7 +24,7 @@ import AxiosIntance from '../axios/AxiosIntance';
 import Theloai from './tab_view/Theloai';
 import Tacgia from './tab_view/Tacgia';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { useFocusEffect } from '@react-navigation/native';
 const color_txt1 = '#9D9D9D';
 const color_txt2 = '#272956';
 const colorsearch = '#e6e6e6';
@@ -41,6 +41,14 @@ const HomeScreen = props => {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalVisible, setModalVisible] = useState(false);
   const {IsLogin, setIsLogin} = useContext(AppContext);
+
+
+
+
+  // Render component
+
+
+
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -150,6 +158,8 @@ const HomeScreen = props => {
     };
 
     checkIsbanned();
+
+    
   }, []);
 
 

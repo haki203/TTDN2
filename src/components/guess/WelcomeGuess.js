@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AppContext } from '../../navigation/AppContext';
 const { width, height } = Dimensions.get('window')
+import AxiosIntance from '../../axios/AxiosIntance';
 const color = '#FFFFFF';
 const WelcomeGuess = (props) => {
   const { navigation } = props;
@@ -51,7 +52,23 @@ const WelcomeGuess = (props) => {
           console.log('log day ne:', infoUserObject)
           console.log(infoUserObject.name);
           setIsLogin(true)
-          setinfoUser(infoUserObject)
+          const res = await AxiosIntance().post('/user/login', {
+            email: infoUserObject.email,
+          });
+          console.log(res.user.avatar);
+          if (res.result) {
+            const infoUser = {
+              name: res.user.full_name,
+              premium: res.user.premium,
+              avatar: res.user.avatar,
+              id: res.user._id,
+              phone: res.user.phone,
+              email: res.user.email,
+              
+            };
+            setinfoUser(infoUser);
+          }
+          //setinfoUser(infoUserObject)
           navigation.navigate('Chao');
           ToastAndroid.show("Chào mừng bạn đã trở lại", ToastAndroid.SHORT);
         }
