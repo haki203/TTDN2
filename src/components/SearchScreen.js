@@ -15,7 +15,7 @@ const SearchScreen = (props) => {
   const { navigation } = props;
   // const { isTabVisible, setIsTabVisible } = useContext(AppContext);
   const [dataNe, setdataNe] = useState([]);
-  const [data1Ne, setdata1Ne] = useState([]);
+  // const [data1Ne, setdata1Ne] = useState([]);
   const [imagee, setImagee] = useState([]);
   const [nameauthor, setNameauthor] = useState([]);
   const [isLoading, setisLoading] = useState(true);
@@ -33,7 +33,7 @@ const SearchScreen = (props) => {
   //       searchPerformed = true;
   //     }, 3000);
   //   }
-    
+
   // }
   const search = async (text) => {
     setdataNe([]);
@@ -44,8 +44,7 @@ const SearchScreen = (props) => {
       if (respone.result == true) {
         // lay du lieu
         setdataNe(respone.product);
-        setdata1Ne(respone.product);
-        console.log("data neee " + respone.product)
+        // console.log("data neee " + respone.product)
         setisLoading(false);
       }
       else {
@@ -66,19 +65,29 @@ const SearchScreen = (props) => {
     setisLoading(true);
 
     setSearchText(text)
-    if(!text){
+    if (!text) {
       getNews()
     }
   }
 
   const getNews = async () => {
     setisLoading(true);
-    const respone = await AxiosIntance().get("/product/search/recent");
-    if (respone.result == true) {
-      setdataNe(respone.top5Products)
+    try {
+      const respone = await AxiosIntance().get("/product/search/recent");
+      if (respone.result === true) {
+        if (respone.top5Products) {
+          const filteredData = respone.top5Products.filter(product => !product.disable);
+          setdataNe(filteredData);
+          console.log("recent: ", filteredData)
+        }
+
+      } else {
+        ToastAndroid.show("get product recent", ToastAndroid.SHORT);
+      }
+    } catch (error) {
+      ToastAndroid.show("Error getting recent products", ToastAndroid.SHORT);
+    } finally {
       setisLoading(false);
-    } else {
-      ToastAndroid.show("get product recent", ToastAndroid.SHORT);
     }
   }
   useEffect(() => {
@@ -249,13 +258,13 @@ const styles = StyleSheet.create({
     // marginRight: 12,
     // top: '40%'
     left: '18%'
-  }, 
-  texxt:{
+  },
+  texxt: {
     fontSize: 14,
     fontFamily: 'Poppins',
     fontStyle: 'normal',
     fontWeight: '400',
-    width:'80%',
+    width: '80%',
     color: '#000'
   }
 })
