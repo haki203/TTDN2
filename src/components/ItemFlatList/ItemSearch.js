@@ -30,7 +30,6 @@ const ItemSearch = (props) => {
 
   }, []);
   const onClickDetail = async () => {
-
     navigation.navigate('Detail', { itemId: id });
     const reponse = await AxiosIntance().get(`/product/search/select/${id}`);
     console.log("response day: ", reponse)
