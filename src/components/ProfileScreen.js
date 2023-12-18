@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ActivityIndicator, yourColorVariable, Image, TouchableOpacity, ImageBackground, Pressable, TextInput, ToastAndroid, Modal, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, ActivityIndicator, yourColorVariable, Image, TouchableOpacity, ImageBackground, Pressable, TextInput, ToastAndroid, Linking, Modal, ScrollView } from 'react-native'
 import React, { useContext, useState } from 'react'
 import Icon from "react-native-vector-icons/AntDesign"
 import Icon_1 from 'react-native-vector-icons/Ionicons';
@@ -14,6 +14,10 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import AxiosIntance from '../axios/AxiosIntance';
 import storage from '@react-native-firebase/storage';
 import { Alert } from 'react-native';
+import crypto from 'crypto-js';
+import moment from 'moment';
+import axios from 'axios';
+
 
 const log_outcolor = "#F77A55";
 const ProfileScreen = (props) => {
@@ -29,6 +33,120 @@ const ProfileScreen = (props) => {
         console.log("hinh ne: ", result.assets[0].uri);
     };
 
+
+
+    const config = {
+        app_id: '2553',
+        key1: 'PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL',
+        key2: 'kLtgPl8HHhfvMuDHPwKfgfsY4Ydm9eIz',
+        endpoint: 'https://sb-openapi.zalopay.vn/v2/create',
+    };
+
+    const embed_data = {};
+
+    const items = [{}];
+    const transID = Math.floor(Math.random() * 1000000);
+    const order = {
+        app_id: config.app_id,
+        app_trans_id: `${moment().format('YYMMDD')}_${transID}`,
+        app_user: 'user123',
+        app_time: Date.now(),
+        item: JSON.stringify(items),
+        embed_data: JSON.stringify(embed_data),
+        amount: 99000,
+        description: `Tro thanh hoi vien VIP #${transID}`,
+        bank_code: 'zalopayapp',
+    };
+
+
+    const data =
+        config.app_id +
+        '|' +
+        order.app_trans_id +
+        '|' +
+        order.app_user +
+        '|' +
+        order.amount +
+        '|' +
+        order.app_time +
+        '|' +
+        order.embed_data +
+        '|' +
+        order.item;
+    order.mac = crypto.HmacSHA256(data, config.key1).toString();
+    const goiapi = async () => {
+        try {
+            const response = await axios.post(config.endpoint, null, { params: order });
+
+            const res = await AxiosIntance().get("/user/payment/" + infoUser.id)
+            if (res.result) {
+                Linking.openURL(response.data.order_url);
+                setIsLoading(true)
+                setTimeout(() => {
+                    queryAPI();
+                }, 20000)
+
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+
+    const queryconfig = {
+        app_id: '2553',
+        key1: 'PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL',
+        key2: 'kLtgPl8HHhfvMuDHPwKfgfsY4Ydm9eIz',
+        endpoint: 'https://sb-openapi.zalopay.vn/v2/query',
+    };
+
+    const app_trans_id = order.app_trans_id;
+    const querydata = `${queryconfig.app_id}|${app_trans_id}|${queryconfig.key1}`;
+    const mac = crypto.HmacSHA256(querydata, queryconfig.key1).toString();;
+
+    const params = {
+        app_id: queryconfig.app_id,
+        app_trans_id: app_trans_id,
+        mac: mac,
+    };
+
+    const queryAPI = async () => {
+
+        try {
+            const response = await axios.post(queryconfig.endpoint, null, { params: params });
+            const result = response.data;
+
+            if (result.return_code == 1) {
+                setIsLoading(false);
+                const updatedInfoUser = { ...infoUser };
+                updatedInfoUser.premium = true;
+                setinfoUser(updatedInfoUser);
+                const dataPayment = {
+                    userId: infoUser.id,
+                    money: order.amount
+                }
+                const res = await AxiosIntance().post("/user/doanhthu/new/", dataPayment);
+                Alert.alert('Thông báo', 'Chúc mừng bạn đã là hội viên', [
+
+                    { text: 'OK', onPress: () => navigation.navigate("Home") },
+                ]);
+            } else if (result.return_code == 2) {
+                ToastAndroid.show("Thanh toán thất bại", ToastAndroid.SHORT);
+                setIsLoading(false);
+            } else if (result.return_code == 3) {
+                ToastAndroid.show("Đang chờ thanh toán", ToastAndroid.SHORT);
+            }
+
+        } catch (error) {
+            console.error(",,,,,,,,,,,,,,,", error);
+        }
+    };
+
+
+    const primium = async () => {
+        const res = await AxiosIntance().get("/user/delete-premium/" + infoUser.id);
+    }
     const getImageLibrary = async () => {
         const result = await launchImageLibrary();
         console.log(result.assets[0].uri);
@@ -69,7 +187,7 @@ const ProfileScreen = (props) => {
                 ToastAndroid.show("Cập nhật thành công", ToastAndroid.SHORT);
                 console.log(res);
                 const infoUser = {
-                    name: res.user.full_name, avatar: res.user.avatar, id: res.user._id, phone: res.user.phone, email: res.user.email,premium:res.user.premium
+                    name: res.user.full_name, avatar: res.user.avatar, id: res.user._id, phone: res.user.phone, email: res.user.email, premium: res.user.premium
                 }
                 setinfoUser(infoUser)
             } else {
@@ -143,7 +261,7 @@ const ProfileScreen = (props) => {
                         </TouchableOpacity>
                     ) : null}
                     {isLoading ? (
-                        <ActivityIndicator size={40} color="grey" style={{width: 90,height: 90,}}/>
+                        <ActivityIndicator size={40} color="grey" style={{ width: 90, height: 90, }} />
                     ) : (
                         <Image
                             source={{ uri: infoUser.avatar }}
@@ -222,8 +340,9 @@ const ProfileScreen = (props) => {
 
                 <View style={{ backgroundColor: '#F5F5FA', height: 2, width: '100%' }}></View>
 
+
+                <Text style={styles.Text_YourName} onPress={primium}>Số điện thoại</Text>
                 <TouchableOpacity onPress={() => setPhoneModalVisible(true)}>
-                    <Text style={styles.Text_YourName}>Số điện thoại</Text>
                     <View style={styles.View_Container1}>
                         <View style={styles.View_Back2}>
                             <View style={styles.View_Text_Profile}>
@@ -284,7 +403,7 @@ const ProfileScreen = (props) => {
                                 textAlign: 'center', color: 'black',
                                 fontSize: 14
                             }}>Nội dung độc quyền</Text>
-                            <TouchableOpacity style={styles.button1}>
+                            <TouchableOpacity style={styles.button1} onPress={goiapi}>
                                 <Text style={{ textAlign: 'center', color: 'white', fontSize: 16, fontWeight: 'bold' }}>Mua ngay</Text>
                             </TouchableOpacity>
                         </View>

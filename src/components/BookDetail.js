@@ -139,15 +139,17 @@ const BookDetail = (props) => {
                 updatedInfoUser.premium = true;
                 setinfoUser(updatedInfoUser);
 
-                console.log(infoUser._id);
-
                 const dataPayment = {
                     userId: infoUser.id,
                     money: order.amount
                 }
 
                 const res = await AxiosIntance().post("/user/doanhthu/new/", dataPayment);
-                Alert.alert('Chúc mừng bạn đã là hội viên');
+
+                Alert.alert('Thông báo', 'Chúc mừng bạn đã là hội viên', [
+
+                    { text: 'OK', onPress: () => navigation.navigate("Home") },
+                ]);
             } else if (result.return_code == 2) {
                 ToastAndroid.show("Thanh toán thất bại", ToastAndroid.SHORT);
                 setIsLoading(false);
@@ -423,6 +425,10 @@ const BookDetail = (props) => {
         return stars;
     };
 
+    const tb = () => {
+        ToastAndroid.show("Sách này cần mở hội viên để đánh giá", ToastAndroid.SHORT);
+
+    }
 
     return (
         <View style={styles.Container} >
@@ -805,7 +811,15 @@ const BookDetail = (props) => {
                                 </View>
                             </View>
                             <View style={{ borderBottomWidth: 1, width: '80%', borderBottomColor: 'grey', paddingTop: 10 }}></View>
-                            <TouchableOpacity style={{
+                            {!infoUser.premium ? (<TouchableOpacity style={{
+                                padding: 5,
+                                marginTop: 5,
+                                borderRadius: 10,
+                                borderWidth: 2,
+                                borderColor: '#ccc',
+                            }} onPress={() => tb()}>
+                                <Text style={styles.Text_Danhgia12}>Viết bài đánh giá</Text>
+                            </TouchableOpacity>) : (<TouchableOpacity style={{
                                 padding: 5,
                                 marginTop: 5,
                                 borderRadius: 10,
@@ -813,7 +827,8 @@ const BookDetail = (props) => {
                                 borderColor: '#ccc',
                             }} onPress={() => setDobModalVisible1(true)}>
                                 <Text style={styles.Text_Danhgia12}>Viết bài đánh giá</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity>)}
+
                             <Modal animationType="slide" transparent={true} visible={isDobModalVisible1}>
                                 <View style={styles.modalContainer}>
                                     <View style={styles.modalContent}>
