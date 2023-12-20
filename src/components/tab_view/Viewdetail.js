@@ -55,7 +55,7 @@ const Viewdetail = ({ navigation, route }) => {
 
 
   const ItemBook = ({ item, navigation }) => {
-    const { _id, title, authorId, image, disable } = item;
+    const { _id, title, authorId, image, disable, free } = item;
     const onPressItem = () => {
       navigation.navigate('Detail', { itemId: _id });
     }
@@ -77,11 +77,20 @@ const Viewdetail = ({ navigation, route }) => {
             shadowOpacity={1}
             shadowRadius={5}
           />
+          {!free ? (<View style={styles.bghoivien}>
+            <Text style={styles.hoivien}>Hội viên</Text>
+          </View>)
+            : (
+
+              <View style={[styles.bghoivien, { backgroundColor: 'green' }]}>
+                <Text style={styles.hoivien}>Miễn phí</Text>
+              </View>)
+          }
           {/* Text */}
           <View style={styles.containerText}>
             <Text style={styles.rendername}>{title.substring(0, 20)}</Text>
 
-            <Text style={styles.renderauthor}>{authorId}</Text>
+            <Text style={{ color: 'black' }}>{authorId}</Text>
           </View>
           {/* IconAdd */}
         </TouchableOpacity>) : (<TouchableOpacity onPress={() => onPressItem()} style={{}}>
@@ -95,11 +104,20 @@ const Viewdetail = ({ navigation, route }) => {
             shadowOpacity={1}
             shadowRadius={5}
           />
+          {!free ? (<View style={styles.bghoivien}>
+            <Text style={styles.hoivien}>Hội viên</Text>
+          </View>)
+            : (
+
+              <View style={[styles.bghoivien, { backgroundColor: 'green' }]}>
+                <Text style={styles.hoivien}>Miễn phí</Text>
+              </View>)
+          }
           {/* Text */}
           <View style={styles.containerText}>
             <Text style={styles.rendername}>{title.substring(0, 20)}</Text>
 
-            <Text style={styles.renderauthor}>{authorId}</Text>
+            <Text style={{ color: 'black' }}>{authorId}</Text>
           </View>
           {/* IconAdd */}
         </TouchableOpacity>)}
@@ -180,6 +198,19 @@ const styles = StyleSheet.create({
     color: 'black',
     textAlign: 'center',
     marginRight: '15%',
+  }, hoivien: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: 'white',
+    padding: 4
+  }, bghoivien: {
+    backgroundColor: '#F79572',
+    width: 56,
+    height: "auto",
+    borderRadius: 7,
+    marginTop: -30,
+    marginLeft: 65,
+    marginBottom: 10
   }
 })
 

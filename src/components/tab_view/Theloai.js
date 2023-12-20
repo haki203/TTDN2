@@ -69,7 +69,6 @@ const Theloai = (props) => {
             <View style={{ width: '100%', height: '100%', alignContent: 'center', justifyContent: 'center' }}><ActivityIndicator size={30} color={'black'} /></View>
           ) :
           (
-
             <FlatList
               style={{ flexGrow: 0, paddingBottom: 20 }}
               data={dataNe}
