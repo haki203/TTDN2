@@ -22,7 +22,7 @@ import AxiosIntance from '../axios/AxiosIntance';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import { useFocusEffect } from '@react-navigation/native';
 const color_text = '#272956';
-let indexNe=0;
+let indexNe = 0;
 const backgroundColor1 = '#FDFDFD';
 const headerNameBoColorBo = '#272956';
 const headerNameBoColorAu = '#9D9D9D';
@@ -110,7 +110,6 @@ const Read = props => {
               onPress: () => {
                 setNumberOfPagehaha(1);
                 setPage(1);
-                saveProgress()
                 // Thêm mã lệnh xử lý sau khi nút OK được nhấn ở đây
               },
             },
@@ -131,8 +130,8 @@ const Read = props => {
     } catch (error) {
       console.log('loi getProgress: ----------------->', error);
       console.log("ban chua doc sach nay bao gio");
-        setPage(1);
-        setOldIndex(1);
+      setPage(1);
+      setOldIndex(1);
     }
   };
 
@@ -154,9 +153,9 @@ const Read = props => {
 
   const UpdateProgress = async () => {
     try {
-    console.log("index ne: ",indexNe);
-      console.log("vi tri cu ne: ",oldIndex);
-      console.log("vi tri moi ne: ",numberOfPagehaha);
+      console.log("index ne: ", indexNe);
+      console.log("vi tri cu ne: ", oldIndex);
+      console.log("vi tri moi ne: ", numberOfPagehaha);
       if (oldIndex >= numberOfPagehaha) {
       } else {
         console.log("dang luu tien do---");
@@ -168,8 +167,8 @@ const Read = props => {
             newIndex: indexNe
           },
         );
-        console.log("kq api update ne: ",response);
-        if(response.result){
+        console.log("kq api update ne: ", response);
+        if (response.result) {
           ToastAndroid.show("Lưu tiến độ thành công", ToastAndroid.SHORT);
         }
         console.log('id book:--------->', id);
@@ -326,7 +325,7 @@ const Read = props => {
               onPageChanged={(page, totalPages) => {
                 console.log(`-----------------------${page}/${totalPages}`);
                 setNumberOfPagehaha(page);
-                indexNe=page;
+                indexNe = page;
               }} //  hiển thị số trang
               onError={error => setIsLoading(true)} // hiển thị lỗi
               // onPageSingleTap={page => alert(page)} // hiển thị khi click vào trang
