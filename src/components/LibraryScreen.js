@@ -63,7 +63,7 @@ const LibraryScreen = (props) => {
 
   const settings = () =>
     // navigation.navigate('Setting')
-    navigation.navigate('Profile');
+    navigation.navigate('Setting');
   useFocusEffect(
     React.useCallback(() => {
       //console.log("reloadr ne: ");

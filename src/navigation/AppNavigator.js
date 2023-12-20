@@ -112,6 +112,7 @@ const Librarycc = () => {
             <Stack.Screen name="Library" component={LibraryScreen} />
             <Stack.Screen name='Detail' component={BookDetail} />
             <Stack.Screen name='Read' component={Read} />
+            <Stack.Screen name='Setting' component={ProfileScreen} />
         </Stack.Navigator>
 
     )
