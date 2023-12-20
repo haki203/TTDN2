@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { Button, StyleSheet, Text, View, Switch, Image, Dimensions, TouchableOpacity, ActivityIndicator, ToastAndroid } from 'react-native'
 import React, { useEffect } from 'react'
 
 
@@ -17,52 +17,102 @@ const ItemListViewLibrary = (props) => {
 
 
   }
+  const btnDisable = () => {
+    ToastAndroid.show("Sách đang cập nhật", ToastAndroid.SHORT);
+
+  }
   try {
     return (
       <>
-        {
-          isLoading ? (
-            <TouchableOpacity onPress={goDetail} style={styles.book}>
-              <Image style={styles.imagebook} source={{ uri: dulieu.image }} />
-              <View style={styles.in4book}>
-                <Text style={styles.nameBook}>{dulieu.title}</Text>
-                <Text style={styles.nameAuthor}>{dulieu.nameAuthor}</Text>
-                {
-                  !dulieu.progress > 99 ? (
-                    <View style={styles.doneprocess}>
-                      <Text style={{marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-                      <View style={styles.process}>
-                        <Text style={{ color: '#272956', fontWeight: "500" }}>{dulieu.progress}%</Text>
+        {dulieu.disable ? (<>
+          {
+            isLoading ? (
+              <TouchableOpacity onPress={btnDisable} style={[styles.book, { opacity: 0.5 }]} >
+                <Image style={styles.imagebook} source={{ uri: dulieu.image }} />
+                <View style={styles.in4book}>
+                  <Text style={styles.nameBook}>{dulieu.title}</Text>
+                  <Text style={styles.nameAuthor}>{dulieu.nameAuthor}</Text>
+                  {
+                    !dulieu.progress > 99 ? (
+                      <View style={styles.doneprocess}>
+                        <Text style={{ marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
+                        <View style={styles.process}>
+                          <Text style={{ color: '#272956', fontWeight: "500" }}>{dulieu.progress}%</Text>
+                        </View>
                       </View>
-                    </View>
-                  ) : (
-                    <View style={styles.doneprocess}>
-                      <Text style={{  marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
-                    </View>
-                  )
-                }
-                <View style={styles.processbar}>
-                  <View style={{ // Thanh màu xám
-                    height: 10,
-                    width: progress,
-                    position: 'absolute',
-                    left: 0,
-                    backgroundColor: 'red',
-                    borderRadius: 5
-                  }} />
-                  <View style={{
-                    height: 10,
-                    width: '20%',
-                    right: 0,
-                    position: 'absolute',
+                    ) : (
+                      <View style={styles.doneprocess}>
+                        <Text style={{ marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
+                      </View>
+                    )
+                  }
+                  <View style={styles.processbar}>
+                    <View style={{ // Thanh màu xám
+                      height: 10,
+                      width: progress,
+                      position: 'absolute',
+                      left: 0,
+                      backgroundColor: 'red',
+                      borderRadius: 5
+                    }} />
+                    <View style={{
+                      height: 10,
+                      width: '20%',
+                      right: 0,
+                      position: 'absolute',
 
-                  }} />
+                    }} />
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          ) : (<View style={{ width: '100%', height: 120, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3f3f3', marginTop: 20, borderRadius: 20 }}><ActivityIndicator color={'gray'} size={30} /></View>)
-        }
+              </TouchableOpacity >
+            ) : (<View style={{ width: '100%', height: 120, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3f3f3', marginTop: 20, borderRadius: 20 }}><ActivityIndicator color={'gray'} size={30} /></View>)
+          }
+        </>) : (<>
+          {
+            isLoading ? (
+              <TouchableOpacity onPress={goDetail} style={styles.book} >
+                <Image style={styles.imagebook} source={{ uri: dulieu.image }} />
+                <View style={styles.in4book}>
+                  <Text style={styles.nameBook}>{dulieu.title}</Text>
+                  <Text style={styles.nameAuthor}>{dulieu.nameAuthor}</Text>
+                  {
+                    !dulieu.progress > 99 ? (
+                      <View style={styles.doneprocess}>
+                        <Text style={{ marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
+                        <View style={styles.process}>
+                          <Text style={{ color: '#272956', fontWeight: "500" }}>{dulieu.progress}%</Text>
+                        </View>
+                      </View>
+                    ) : (
+                      <View style={styles.doneprocess}>
+                        <Text style={{ marginTop: 15, color: '#272956', fontWeight: "500" }}>Đã đọc</Text>
+                      </View>
+                    )
+                  }
+                  <View style={styles.processbar}>
+                    <View style={{ // Thanh màu xám
+                      height: 10,
+                      width: progress,
+                      position: 'absolute',
+                      left: 0,
+                      backgroundColor: 'red',
+                      borderRadius: 5
+                    }} />
+                    <View style={{
+                      height: 10,
+                      width: '20%',
+                      right: 0,
+                      position: 'absolute',
+
+                    }} />
+                  </View>
+                </View>
+              </TouchableOpacity >
+            ) : (<View style={{ width: '100%', height: 120, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f3f3f3', marginTop: 20, borderRadius: 20 }}><ActivityIndicator color={'gray'} size={30} /></View>)
+          }
+        </>)}
       </>
+
 
 
     )
@@ -147,7 +197,7 @@ const styles = StyleSheet.create({
   },
   processbar: {
     flexDirection: 'row',
-     marginTop: 7,
+    marginTop: 7,
     borderRadius: 5,
 
     height: 10,

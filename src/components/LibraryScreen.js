@@ -42,8 +42,10 @@ const LibraryScreen = (props) => {
           title: res.product.title,
           userId: response.library[i].userId,
           progress: response.library[i].progress,
-          bookId: response.library[i].bookId
+          bookId: response.library[i].bookId,
+          disable: res.product.disable
         }
+        console.log('ddd', lb);
         arrayBook.push(lb)
       }
       setSum(arrayBook.length)
@@ -58,6 +60,10 @@ const LibraryScreen = (props) => {
 
     }
   };
+
+  const settings = () =>
+    // navigation.navigate('Setting')
+    navigation.navigate('Profile');
   useFocusEffect(
     React.useCallback(() => {
       //console.log("reloadr ne: ");
@@ -79,7 +85,11 @@ const LibraryScreen = (props) => {
           <TouchableOpacity onPress={search}>
             <Image style={styles.tok} source={require('../assets/images/search.png')} />
           </TouchableOpacity>
-          <Image style={{ width: 40, height: 40, borderRadius: 30 }} source={{ uri: infoUser.avatar }} />
+          <TouchableOpacity onPress={settings}>
+
+            <Image style={{ width: 40, height: 40, borderRadius: 30 }} source={{ uri: infoUser.avatar }} />
+          </TouchableOpacity>
+
         </View>
       </View>
       <View View style={styles.bodyContainer}>
