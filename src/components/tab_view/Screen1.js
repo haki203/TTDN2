@@ -126,7 +126,7 @@ const Screen1 = ({ navigation, id }) => {
           </View>)
             : (
 
-              <View style={[styles.bghoivien, { backgroundColor: 'red' }]}>
+              <View style={[styles.bghoivien, { backgroundColor: 'green' }]}>
                 <Text style={styles.hoivien}>Miễn phí</Text>
               </View>)
           }
