@@ -25,13 +25,8 @@ const ProfileScreen = (props) => {
     const { infoUser, setinfoUser } = useContext(AppContext);
     const { IsLogin, setIsLogin } = useContext(AppContext);
     const [isLoading, setIsLoading] = useState(false);
-    const [image, setshowImage] = useState('')
-    const capture = async () => {
-        const result = await launchCamera();
-        console.log(result.assets[0].uri);
-        setshowImage(result.assets[0].uri);
-        console.log("hinh ne: ", result.assets[0].uri);
-    };
+    const [image, setshowImage] = useState(false)
+
 
 
 
@@ -150,7 +145,6 @@ const ProfileScreen = (props) => {
     const getImageLibrary = async () => {
         const result = await launchImageLibrary();
         console.log(result.assets[0].uri);
-        setshowImage(result.assets[0].uri);
 
         const imageUri = result.assets[0].uri;
         const filename = imageUri.substring(imageUri.lastIndexOf('/') + 1);
@@ -166,9 +160,10 @@ const ProfileScreen = (props) => {
             // up thành công dowload link ảnh về
             const downloadURL = await storageRef.getDownloadURL();
             console.log('File available at:', downloadURL);
+            setshowImage(downloadURL);
 
             // sửa dụng dowmloadURL để update thông tin 
-            setinfoUser({ ...infoUser, avatar: downloadURL });
+            //setinfoUser({ ...infoUser, avatar: downloadURL });
             setIsLoading(false);
 
         });
@@ -180,9 +175,10 @@ const ProfileScreen = (props) => {
         const body = { id: infoUser.id, name: name, email: infoUser.email, phone: phone.toString(), avatar: infoUser.avatar };
         console.log("body ne: ", body);
         try {
-            const responses = await AxiosIntance().post("/user/update-user", { id: infoUser.id, name: name, email: infoUser.email, phone: phone.toString(), avatar: infoUser.avatar })
-            const res = await AxiosIntance().post("/user/update-user", { id: infoUser.id, name: name, email: infoUser.email, phone: phone.toString(), avatar: infoUser.avatar })
-            console.log(res);
+            const res1 = await AxiosIntance().post("/user/update-user", { id: infoUser.id, name: name, email: infoUser.email, phone: phone.toString(), avatar: !image ? infoUser.avatar : image })
+            console.log(res1);
+
+            const res = await AxiosIntance().post("/user/update-user", { id: infoUser.id, name: name, email: infoUser.email, phone: phone.toString(), avatar: !image ? infoUser.avatar : image })
             if (res.result == true) {
                 ToastAndroid.show("Cập nhật thành công", ToastAndroid.SHORT);
                 console.log(res);
@@ -264,7 +260,7 @@ const ProfileScreen = (props) => {
                         <ActivityIndicator size={40} color="grey" style={{ width: 90, height: 90, }} />
                     ) : (
                         <Image
-                            source={{ uri: infoUser.avatar }}
+                            source={{ uri: !image ? infoUser.avatar : image }}
                             style={styles.avatar}
                         />
                     )}
