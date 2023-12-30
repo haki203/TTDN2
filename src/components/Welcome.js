@@ -43,7 +43,7 @@ const Welcome = props => {
       const res = await AxiosIntance().post('/user/login', {
         email: userInfor.user.email,
       });
-      console.log(res.user.avatar);
+      console.log("tt ne: ",res);
       if (res.result) {
         const infoUser = {
           name: res.user.full_name,
@@ -76,9 +76,12 @@ const Welcome = props => {
 
         setIsLogin(true);
       } else {
+        setIsLoading(false)
         ToastAndroid.show('Đăng nhập thất bại ', ToastAndroid.SHORT);
       }
     } catch (error) {
+      setIsLoading(false)
+
       ToastAndroid.show('Đăng nhập thất bại ', ToastAndroid.SHORT);
       console.log(error);
     }

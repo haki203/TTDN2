@@ -186,6 +186,8 @@ const ProfileScreen = (props) => {
                     name: res.user.full_name, avatar: res.user.avatar, id: res.user._id, phone: res.user.phone, email: res.user.email, premium: res.user.premium
                 }
                 setinfoUser(infoUser)
+                navigation.goBack()
+
             } else {
                 ToastAndroid.show("Cập nhật thất bại", ToastAndroid.SHORT);
             }
